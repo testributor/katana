@@ -4,6 +4,8 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.3'
 gem 'pg'
 
+
+gem 'haml-rails'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
