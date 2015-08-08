@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   root 'home#index'
 
+  get 'dashboard' => 'dashboard#index', as: :dashboard
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
