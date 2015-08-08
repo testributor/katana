@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  database: katana
+  username: katana
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: katana_test
+
+production:
+  url:  <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV["DB_POOL"] || ENV['MAX_THREADS'] || 5 %>
