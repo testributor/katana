@@ -17,3 +17,9 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore local/development database.yml
+/config/database.yml
+
+# Other files
+/.idea
