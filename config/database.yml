@@ -1,15 +1,19 @@
 default: &default
   adapter: postgresql
   encoding: utf8
-  database: katana
-  username: katana
 
 development:
   <<: *default
+  database: <%= LOCAL_DB[:dev_database] %>
+  username: <%= LOCAL_DB[:dev_database_username] %>
+  password: <%= LOCAL_DB[:dev_database_password] %>
 
 test:
   <<: *default
-  database: katana_test
+  database: <%= TEST_DATABASE %>
+  database: <%= LOCAL_DB[:test_database] %>
+  username: <%= LOCAL_DB[:test_database_username] %>
+  password: <%= LOCAL_DB[:test_database_password] %>
 
 production:
   url:  <%= ENV["DATABASE_URL"] %>

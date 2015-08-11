@@ -12,14 +12,12 @@
 /db/*.sqlite3-journal
 .ruby-version
 .ruby-gemset
+config/initializers/database_credentials.rb
 
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
 /tmp
-
-# Ignore local/development database.yml
-/config/database.yml
 
 # Other files
 /.idea
