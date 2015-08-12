@@ -1,0 +1,29 @@
+%nav.navbar.navbar-inverse.navbar-fixed-top
+  .container
+    .navbar-header
+      %button.navbar-toggle.collapsed{ data: { toggle: 'collapse', target: '#navbar' },
+        "aria-expanded" => "false", "aria-controls" => 'navbar' }
+        %span.sr-only
+          Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to brand_name, root_path, class: "navbar-brand"
+    #navbar.collapse.navbar-collapse
+      - if user_signed_in?
+        %ul.nav.navbar-nav
+          %li.active= link_to "Home", '#'
+          %li= link_to "About", '#'
+          %li= link_to "Contact", '#'
+      %ul.nav.navbar-nav.navbar-right
+        %li.dropdown
+          %a.dropdown-toggle{ data: { toggle: 'dropdown' }, role: 'button',
+            "aria_haspopup" => "true", "aria_expanded" => "false" }
+            = user_signed_in? ? current_user.email : 'Dropdown'
+            %span.caret
+          %ul.dropdown-menu
+            - unless user_signed_in?
+              %li= link_to 'Sign in', new_user_session_path
+              %li= link_to 'Sign up', new_user_registration_path
+            - else
+              %li= link_to('Sign out', destroy_user_session_path, :method => :delete)
