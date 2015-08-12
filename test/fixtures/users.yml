@@ -1,0 +1,3 @@
+dimitris:
+  email: "jimmykarily@gmail.com"
+  confirmed_at: <%= Date.current %>
