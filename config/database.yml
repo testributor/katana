@@ -5,6 +5,7 @@
 
   development:
     <<: *default
+    host: <%= LOCAL_DB[:host] %>
     database: <%= LOCAL_DB[:dev_database] %>
     username: <%= LOCAL_DB[:dev_database_username] %>
     password: <%= LOCAL_DB[:dev_database_password] %>
