@@ -18,6 +18,7 @@ config/initializers/database_credentials.rb
 /log/*
 !/log/.keep
 /tmp
+*.swp
 
 # Other files
 /.idea
