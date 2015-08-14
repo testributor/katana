@@ -1,0 +1,19 @@
+%h1 Listing test_job_files
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @test_job_files.each do |test_job_file|
+      %tr
+        %td= link_to 'Show', test_job_file
+        %td= link_to 'Edit', edit_test_job_file_path(test_job_file)
+        %td= link_to 'Destroy', test_job_file, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Test job file', new_test_job_file_path

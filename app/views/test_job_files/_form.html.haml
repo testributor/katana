@@ -1,0 +1,10 @@
+= form_for @test_job_file do |f|
+  - if @test_job_file.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@test_job_file.errors.count, "error")} prohibited this test_job_file from being saved:"
+      %ul
+        - @test_job_file.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'
