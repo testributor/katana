@@ -40,4 +40,13 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  ActionMailer::Base.smtp_settings = {
+    address: ENV["MAIL_ADDRESS"] || "in-v3.mailjet.com",
+    port: ENV["MAIL_PORT"] || 25,
+    user_name: ENV["MAILJET_USERNAME"] || "7963392a7c6c4975905b609d341a5c6e",
+    password: ENV["MAILJET_PASSWORD"] || "9cb23e6d75078fce94c9a37c3c788c55",
+    authentication: ENV["MAIL_AUTHENTICATION"] || "plain",
+    enable_starttls_auto: true
+  }
 end
