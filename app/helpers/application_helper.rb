@@ -1,5 +1,5 @@
 module ApplicationHelper
   def brand_name
-    'Katanomeus'
+    'Testributor'
   end
 end
