@@ -16,6 +16,34 @@ ActiveRecord::Schema.define(version: 20150822162749) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "test_job_files", force: :cascade do |t|
+    t.integer  "test_job_id"
+    t.string   "file_name",    default: "", null: false
+    t.text     "result",       default: "", null: false
+    t.integer  "status",       default: 0,  null: false
+    t.integer  "test_errors",  default: 0,  null: false
+    t.integer  "failures",     default: 0,  null: false
+    t.integer  "count",        default: 0,  null: false
+    t.integer  "assertions",   default: 0,  null: false
+    t.integer  "skips",        default: 0,  null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "test_jobs", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "git_ref"
+    t.integer  "status",           default: 0, null: false
+    t.integer  "test_job_file_id", default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "test_jobs", ["test_job_file_id"], name: "index_test_jobs_on_test_job_file_id", using: :btree
+  add_index "test_jobs", ["user_id"], name: "index_test_jobs_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
     t.string   "encrypted_password",     default: "",    null: false

@@ -1,0 +1,20 @@
+.container.test-jobs-container
+  .row
+    .col-xs-12
+      %table.table.table-striped.table-bordered.table-condensed.table-hover
+        %thead
+          %tr
+            %th= "Git reference"
+            %th= "Status"
+            %th= "Current Total time"
+            %th= "Details"
+            %th= "Cancel"
+
+        %tbody
+          - @test_jobs.each do |test_job|
+            %tr{class: test_job.css_class}
+              %td= test_job.git_ref
+              %td= test_job.status_text
+              %td= distance_of_time_in_words(test_job.total_running_time) if test_job.total_running_time
+              %td= link_to 'Details', test_job
+              %td= link_to 'Cancel', test_job, :method => :delete, :data => { :confirm => 'Are you sure?' }
