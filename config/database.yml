@@ -1,20 +1,5 @@
 <% if %w(development test).include?(Rails.env) %>
-  default: &default
-    adapter: postgresql
-    encoding: utf8
-
-  development:
-    <<: *default
-    host: <%= LOCAL_DB[:host] %>
-    database: <%= LOCAL_DB[:dev_database] %>
-    username: <%= LOCAL_DB[:dev_database_username] %>
-    password: <%= LOCAL_DB[:dev_database_password] %>
-
-  test:
-    <<: *default
-    database: <%= LOCAL_DB[:test_database] %>
-    username: <%= LOCAL_DB[:test_database_username] %>
-    password: <%= LOCAL_DB[:test_database_password] %>
+<%= IO.read('config/database.local.yml') %>
 <% end %>
 
 production:
