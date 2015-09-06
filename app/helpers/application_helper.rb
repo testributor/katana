@@ -15,4 +15,15 @@ module ApplicationHelper
       ''
     end
   end
+
+  def controller_and_action
+    "#{controller_path.split("/").join(' ')} #{action_name.gsub('_','-')}"
+  end
+
+  def page_data_attrs
+    {
+      "js-class" => controller_path.camelize.gsub("::", "."),
+      "js-method" => action_name.camelize(:lower)
+    }
+  end
 end
