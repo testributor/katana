@@ -19,7 +19,7 @@
         %li.dropdown
           %a.dropdown-toggle{ data: { toggle: 'dropdown' }, role: 'button',
             "aria_haspopup" => "true", "aria_expanded" => "false" }
-            = user_signed_in? ? current_user.email : 'Dropdown'
+            = user_signed_in? ? current_user.email : 'Account'
             %span.caret
           %ul.dropdown-menu
             - unless user_signed_in?
