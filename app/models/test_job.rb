@@ -4,24 +4,33 @@ class TestJob < ActiveRecord::Base
   belongs_to :user
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
+  delegate :completed_at, to: :last_file_run
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
+  scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def status_text
+    if status == TestStatus::COMPLETE
+      return failed? ? 'Failed' : 'Passed'
+    end
+
     TestStatus::STATUS_MAP[status]
   end
 
   def css_class
     case status
+    when TestStatus::PENDING
+      'pending'
     when TestStatus::RUNNING
-      'warning'
+      'running'
     when TestStatus::COMPLETE
-      failed? ? 'danger' : 'success'
+      failed? ? 'failed' : 'success'
     end
   end
 
+  # TODO : Write unit tests for this one, write doc
   def total_running_time
     completed_at_times = test_job_files.order("completed_at ASC").
       pluck(:completed_at)
@@ -48,7 +57,15 @@ class TestJob < ActiveRecord::Base
 
   private
 
+  def last_file_run
+    test_job_files.order(:completed_at).last
+  end
+
   def github_client
     tracked_branch.project.user.github_client
+  end
+
+  def failed?
+    test_job_files.any? { |file| file.failed? }
   end
 end

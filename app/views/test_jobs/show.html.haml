@@ -9,7 +9,6 @@
       %table.table.table-bordered.table-striped.table-condensed.table-hover
         %thead
           %tr
-            %th='id'
             %th='File'
             %th='Status'
             %th='Errors'
@@ -24,9 +23,8 @@
         %tbody
           - @job_files.each do |job_file|
             %tr{ class: job_file.css_class }
-              %td{ rowspan: (job_file.result.present? ? 2 : 1) }= job_file.id
               %td= job_file.file_name
-              %td= job_file.text_status
+              %td= job_file.status_text
               %td= job_file.test_errors
               %td= job_file.failures
               %td= job_file.count
