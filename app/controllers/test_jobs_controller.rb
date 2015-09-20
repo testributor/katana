@@ -1,9 +1,11 @@
 class TestJobsController < DashboardController
+  include Controllers::EnsureProject
+
   before_action :set_test_job, only: [:show, :update, :destroy]
 
   def index
     @test_jobs =
-      current_user.tracked_branches.find(params[:tracked_branch_id]).test_jobs
+      current_user.tracked_branches.find(params[:branch_id]).test_jobs
   end
 
   def show
@@ -32,7 +34,8 @@ class TestJobsController < DashboardController
 
   def destroy
     @test_job.destroy
-    redirect_to test_jobs_url, notice: 'Test job was successfully cancelled.'
+    redirect_to project_branch_test_jobs_url(current_project, @test_job.tracked_branch_id),
+      notice: 'Test job was successfully cancelled.'
   end
 
   private

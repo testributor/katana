@@ -16,5 +16,6 @@
               %td= test_job.commit_sha
               %td= test_job.status_text
               %td= distance_of_time_in_words(test_job.total_running_time) if test_job.total_running_time
-              %td= link_to 'Details', test_job
-              %td= link_to 'Cancel', test_job, :method => :delete, :data => { :confirm => 'Are you sure?' }
+              %td= link_to 'Details', project_branch_test_job_path(current_project, test_job.tracked_branch_id, test_job)
+              %td= link_to 'Cancel', project_branch_test_job_path(current_project, test_job.tracked_branch_id, test_job),
+                :method => :delete, :data => { :confirm => 'Are you sure?' }

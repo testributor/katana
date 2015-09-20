@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
 
@@ -9,9 +9,12 @@ class User < ActiveRecord::Base
     mode: :per_attribute_iv_and_salt)
   attr_encryptor :github_access_token
 
-  has_many :projects
-  has_many :tracked_branches, through: :projects
+  belongs_to :invited_by, class_name: "Project"
+  has_many :projects # on which this user is an owner
+  has_and_belongs_to_many :participating_projects, class_name: "Project"
+  has_many :tracked_branches, through: :participating_projects
   has_many :test_jobs, through: :tracked_branches
+
 
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
 

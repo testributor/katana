@@ -4,4 +4,5 @@
 
 = link_to 'Show', @test_job
 \|
-= link_to 'Back', test_jobs_path
+= link_to 'Back',
+  project_branch_test_jobs_path(current_project, @test_job.tracked_branch_id)

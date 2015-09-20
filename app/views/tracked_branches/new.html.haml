@@ -2,9 +2,9 @@
   - if @branches.empty?
     %p
       %h2 No branches found! None. Zero. Zilch. Nada.
-      We were unable to find any branches in the '#{@project.repository_name}'. That's weird...
+      We were unable to find any branches in the '#{current_project.repository_name}'. That's weird...
   - else
-    %h2 The branches of '#{@project.repository_name}' repository on Github
+    %h2 The branches of '#{current_project.repository_name}' repository on Github
     %ul
       - @branches.each do |branch|
         %li

@@ -2,7 +2,7 @@
   .row
     .col-xs-12
       %h1 Test Job ##{@job.id}
-      = link_to "Back to test jobs", test_jobs_path
+      = link_to "Back to test jobs", project_branch_test_jobs_path(current_project, @job.tracked_branch_id)
       %div= "Git commit: #{@job.commit_sha}"
   .row
     .col-xs-12

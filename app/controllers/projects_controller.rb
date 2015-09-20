@@ -1,6 +1,6 @@
 class ProjectsController < DashboardController
   def show
-    @project = current_user.projects.find(params[:id])
+    ActiveRecord::RecordNotFound unless @project = current_project
   end
 
   def new
@@ -24,6 +24,7 @@ class ProjectsController < DashboardController
         # of the supplied identifier and create a new Project record.
         repo = client.repo(project_params[:repository_id].to_i)
         project = current_user.projects.create!(
+          name: repo.name,
           repository_provider: 'github',
           repository_id: repo.id,
           repository_name: repo.name
@@ -97,6 +98,11 @@ class ProjectsController < DashboardController
   end
 
   private
+
+  def current_project
+    super(:id)
+  end
+
   def project_params
     params.require(:project).permit(:repository_id)
   end

@@ -1,4 +1,6 @@
 class TestJobFilesController < DashboardController
+  include Controllers::EnsureProject
+
   # Here, we use update to retry a failed
   # test job file
   def update

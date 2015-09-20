@@ -5,7 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-user = User.create(email: 'pakallis@gmail.com',
+user = User.create(email: 'admin@testributor.com',
             password: '12345678',
             password_confirmation: '12345678')
 user.confirm
@@ -57,3 +57,5 @@ test_job_file = TestJobFile.create({
 })
 test_job.test_job_files << test_job_file
 test_job.save
+
+ProjectRole.find_or_create_by(name: 'Admin')
