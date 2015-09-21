@@ -5,12 +5,14 @@ class ProjectsController < DashboardController
 
   def new
     if client = current_user.github_client
-      @repos = client.repos.
-        reject do |r|
-          r.fork? ||
-            r.id.in?(current_user.projects.pluck(:repository_id)) ||
-            r.full_name =~ /incrediblue/i
-        end.map { |r| Project.new(repository_id: r.id, repository_name: r.name) }
+      owner = client.user
+      @repos = client.repos.reject do |r|
+        r.owner.login != owner.login ||
+          r.id.in?(current_user.projects.pluck(:repository_id))
+      end.map do |r|
+        Project.new(repository_id: r.id, repository_name: r.name,
+          fork: r.fork?)
+      end
     end
   end
 

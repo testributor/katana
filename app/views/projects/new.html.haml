@@ -13,7 +13,7 @@
         %li
           = form_for repo, url: { action: :create } do |f|
             = f.hidden_field :repository_id
-            = f.submit repo.repository_name
+            = "#{f.submit repo.repository_name} #{'(fork)' if repo.fork}".html_safe
 - else
   %h2 Your Testributor account is not connected to GitHub.
   %p
