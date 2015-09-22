@@ -279,15 +279,12 @@ DEPENDENCIES
   cancancan (~> 1.10)
   coffee-rails (~> 4.1.0)
   devise
+  doorkeeper
   exception_notification
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
   mocha
-  doorkeeper
-  haml-rails
-  jbuilder (~> 2.0)
-  jquery-rails
   oauth2
   octokit (~> 4.0)
   pg
