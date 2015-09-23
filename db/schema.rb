@@ -138,10 +138,10 @@ ActiveRecord::Schema.define(version: 20150921185227) do
     t.string   "unconfirmed_email"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
+    t.boolean  "admin",                              default: false
     t.string   "encrypted_github_access_token"
     t.string   "encrypted_github_access_token_salt"
     t.string   "encrypted_github_access_token_iv"
-    t.boolean  "admin",                              default: false
     t.integer  "projects_limit",                     default: 0,     null: false
     t.string   "invitation_token"
     t.datetime "invitation_created_at"
