@@ -27,7 +27,8 @@ class ProjectsController < DashboardController
           name: repo.name,
           repository_provider: 'github',
           repository_id: repo.id,
-          repository_name: repo.name
+          repository_name: repo.name,
+          user: current_user
         )
 
         # Create a Webhook on the same GitHub repo for communicating
