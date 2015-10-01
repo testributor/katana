@@ -16,7 +16,7 @@ class TestJobsController < DashboardController
 
   def create
     @test_job = TestJob.new(test_job_params)
-
+    @test_job.build_test_job_files
     if @test_job.save
       redirect_to @test_job, notice: 'Test job was successfully created.'
     else
