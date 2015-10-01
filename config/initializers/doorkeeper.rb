@@ -3,6 +3,7 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
+  # TODO: This does not seem relevant to the "client credentials" flow. Remove?
   resource_owner_from_credentials do |routes|
     # Put your resource owner authentication logic here.
     # Example implementation:
@@ -40,7 +41,7 @@ Doorkeeper.configure do
 
   # Reuse access token for the same resource owner within an application (disabled by default)
   # Rationale: https://github.com/doorkeeper-gem/doorkeeper/issues/383
-  # reuse_access_token
+  reuse_access_token
 
   # Issue access tokens with refresh token (disabled by default)
   # use_refresh_token
@@ -49,7 +50,7 @@ Doorkeeper.configure do
   # Optional parameter :confirmation => true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
-  # enable_application_owner :confirmation => false
+  enable_application_owner :confirmation => false
 
   # Define access token scopes for your provider
   # For more information go to
@@ -111,4 +112,4 @@ Doorkeeper.configure do
   # realm "Doorkeeper"
 end
 
-Doorkeeper.configuration.token_grant_types << "password"
+Doorkeeper.configuration.token_grant_types << "client_credentials"
