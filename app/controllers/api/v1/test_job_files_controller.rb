@@ -19,6 +19,34 @@ module Api
 
         render json: TestJobFile.find_by_sql(sql).first, include: "test_job.project"
       end
+
+      def update
+        # TODO: only update running files?
+        file = current_project.test_job_files.running.find(params[:id])
+
+        # TODO: Change status to either FAIL or SUCCESS (or ERROR ?)
+        # TODO: Store total_time
+        if file.update(test_job_file_params.merge(completed_at: Time.current,
+            status: TestStatus::COMPLETE))
+          head 200
+        else
+          render json: { error: file.errors.full_messages.join(', ') }
+        end
+      end
+
+      private
+
+      def test_job_file_params
+        new_params = params.require(:test_job_file).permit(:result, :failures,
+          :errors, :failures, :count, :assertions, :skips, :total_time)
+
+        # TODO: Remove this when we store total_time
+        new_params.delete(:total_time)
+
+        # Replace "errors" with "test_errors" because we can't have an
+        # errors attribute (it conflicts with ActiveRecord's errors method)
+        new_params.merge(test_errors: new_params.delete(:errors))
+      end
     end
   end
 end

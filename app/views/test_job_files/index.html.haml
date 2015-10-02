@@ -1,19 +1,25 @@
 %h1 Listing test_job_files
 
-%table
+%table.table.table-striped.table-bordered.table-condensed.table-hover
   %thead
     %tr
-      %th
-      %th
-      %th
-
+      %th= "File"
+      %th= "Result"
+      %th= "Count"
+      %th= "Assertions"
+      %th= "Skips"
+      %th= "Errors"
+      %th= "Failures"
+      %th= "Status"
   %tbody
     - @test_job_files.each do |test_job_file|
       %tr
-        %td= link_to 'Show', test_job_file
-        %td= link_to 'Edit', edit_test_job_file_path(test_job_file)
-        %td= link_to 'Destroy', test_job_file, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New Test job file', new_test_job_file_path
+        %td= test_job_file.file_name
+        %td= test_job_file.result
+        %td= test_job_file.count
+        %td= test_job_file.assertions
+        %td= test_job_file.skips
+        %td= test_job_file.test_errors
+        %td= test_job_file.failures
+        %td= test_job_file.status
+        %td= link_to 'Retry', '#' # TODO

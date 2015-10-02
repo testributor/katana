@@ -12,7 +12,7 @@ Rails.application.routes.draw do
         end
       end
       resources :test_jobs
-      resources :test_job_files do
+      resources :test_job_files, only: [:update] do
         collection do
           patch :bind_next_pending
         end
