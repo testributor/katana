@@ -6,6 +6,7 @@ class Project < ActiveRecord::Base
   belongs_to :user # this is the owner of the project
   has_many :tracked_branches, dependent: :destroy
   has_many :test_jobs, through: :tracked_branches
+  has_many :test_job_files, through: :test_jobs
   has_and_belongs_to_many :members, class_name: "User"
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy

@@ -3,6 +3,10 @@ class TestJobFile < ActiveRecord::Base
 
   validates :test_job, presence: true
 
+  scope :pending, -> { where(status: TestStatus::PENDING) }
+  scope :running, -> { where(status: TestStatus::RUNNING) }
+  scope :complete, -> { where(status: TestStatus::COMPLETE) }
+
   def css_class
     case status
     when TestStatus::RUNNING
