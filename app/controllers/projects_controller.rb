@@ -59,7 +59,7 @@ class ProjectsController < DashboardController
         # Create the projects oauth application
         app = Doorkeeper::Application.new(
           :name => project.repository_id,
-          :redirect_uri => root_url)
+          :redirect_uri => heroku_url)
         app.owner_id = project.id
         app.owner_type = 'Project'
         app.save
