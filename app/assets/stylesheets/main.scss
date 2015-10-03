@@ -2,11 +2,18 @@ body {
   padding-top: 50px;
 }
 
+* {
+  font-family: 'Lato', sans-serif;
+}
 h1, h2 {
   text-align: center;
   padding: 40px 15px;
 }
 
+h2 {
+  font-size: 29px;
+  font-weight: 900;
+}
 
 .test-jobs-container {
   margin-top: 40px;
