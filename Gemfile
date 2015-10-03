@@ -29,7 +29,7 @@ gem 'octokit', '~> 4.0'
 gem 'attr_encrypted'
 gem 'doorkeeper'
 gem 'oauth2'
-gem 'active_model_serializers'
+gem 'active_model_serializers', :git => 'git@github.com:rails-api/active_model_serializers.git', :ref => '1f0886' # 0.10 rc version
 
 group :production do
   gem 'rails_12factor'

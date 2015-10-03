@@ -2,6 +2,12 @@ class TestJob < ActiveRecord::Base
   has_many :test_job_files, dependent: :delete_all
   belongs_to :tracked_branch
   belongs_to :user
+  belongs_to :tracked_branch
+  has_one :project, through: :tracked_branch
+
+  scope :pending, -> { where(status: TestStatus::PENDING) }
+  scope :running, -> { where(status: TestStatus::RUNNING) }
+  scope :complete, -> { where(status: TestStatus::COMPLETE) }
 
   def status_text
     TestStatus::STATUS_MAP[status]

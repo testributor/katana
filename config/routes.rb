@@ -6,7 +6,17 @@ Rails.application.routes.draw do
 
   namespace :api, default: { format: 'json' } do
     namespace :v1 do
+      resources :projects, only: [] do
+        collection do
+          get :current
+        end
+      end
       resources :test_jobs
+      resources :test_job_files, only: [:update] do
+        collection do
+          patch :bind_next_pending
+        end
+      end
     end
   end
 

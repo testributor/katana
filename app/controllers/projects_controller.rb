@@ -11,7 +11,7 @@ class ProjectsController < DashboardController
           r.id.in?(current_user.projects.pluck(:repository_id))
       end.map do |r|
         Project.new(repository_id: r.id, repository_name: r.name,
-          fork: r.fork?)
+          repository_owner: owner.login, fork: r.fork?)
       end
     end
   end
@@ -25,10 +25,11 @@ class ProjectsController < DashboardController
         repo = client.repo(project_params[:repository_id].to_i)
         project = current_user.projects.create!(
           name: repo.name,
+          user: current_user,
           repository_provider: 'github',
           repository_id: repo.id,
           repository_name: repo.name,
-          user: current_user
+          repository_owner: repo.owner.login
         )
 
         # Create a Webhook on the same GitHub repo for communicating

@@ -3,7 +3,6 @@ class DashboardController < ApplicationController
   before_filter :check_for_active_providers, except: [:create, :destroy]
 
   def show
-
   end
 
   protected
