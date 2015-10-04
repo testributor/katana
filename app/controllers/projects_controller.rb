@@ -1,4 +1,6 @@
 class ProjectsController < DashboardController
+  include ApplicationHelper
+
   def show
     ActiveRecord::RecordNotFound unless @project = current_project
   end
