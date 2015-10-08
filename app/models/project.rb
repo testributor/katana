@@ -12,7 +12,7 @@ class Project < ActiveRecord::Base
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
 
   validates :name, :user, presence: true
-  validates :name, uniqueness: true
+  validates :name, uniqueness: { scope: :user }
 
   before_create :set_secure_random
   before_save :check_user_limit
