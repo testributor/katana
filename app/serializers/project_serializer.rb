@@ -12,6 +12,7 @@ class ProjectSerializer < ActiveModel::Serializer
       mkdir -p config
       echo '#{database_yml}' > config/database.yml
 
+      RAILS_ENV=test rake db:create
       RAILS_ENV=test rake db:reset
     TEXT
   end
@@ -22,8 +23,8 @@ class ProjectSerializer < ActiveModel::Serializer
     "test: \n"\
     "  adapter: postgresql\n"\
     "  database: testributor_test\n"\
-    "  username: testributor\n"\
-    "  password: testributor_password\n"\
-    "  host: localhost"
+    "  username: postgres\n"\
+    "  password: \n"\
+    "  host: db"
   end
 end
