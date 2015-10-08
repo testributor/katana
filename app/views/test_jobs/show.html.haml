@@ -37,8 +37,14 @@
               %td= distance_of_time_in_words(0, job_file.total_running_time, include_seconds: true) if job_file.total_running_time
               - if job_file.status != TestStatus::PENDING
                 %td
+                  - # TODO: tracked branch and test_job nesting seems unecessary
+                  - # for the test_job resource. We only need the project for
+                  - # validation/authorization purposes (to let it work in the
+                  - # same way the rest of the routes work).
                   = button_to 'Retry',
-                    test_job_file_path(job_file, status: TestStatus::PENDING),
+                    project_branch_test_job_test_job_file_path(current_project,
+                      job_file.test_job.tracked_branch.id,
+                      job_file.test_job.id, job_file, status: TestStatus::PENDING),
                     class: 'btn btn-primary', method: :put
             - if job_file.result.present?
               %tr.danger
