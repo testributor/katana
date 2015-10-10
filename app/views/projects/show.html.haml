@@ -1,8 +1,9 @@
 - if @project.tracked_branches.empty?
-  %h2 No branches are tracked! None. Zero. Zilch. Nada.
-  Please
-  = link_to 'add', new_project_branch_path(@project)
-  at least one branch to this project.
+  %h2 Your master branch is getting cooked.
+  %h3
+    Please reload the page to check if it's done or
+    = link_to 'add', new_project_branch_path(@project)
+    another branch.
 - else
   %h2= "Your tracked branches in project '#{@project.repository_name}'"
   %h3 Select which branch you want to manage

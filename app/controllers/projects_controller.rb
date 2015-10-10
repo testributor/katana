@@ -21,6 +21,9 @@ class ProjectsController < DashboardController
   def create
     if project_params[:repository_id].present?
       if (project = create_project).persisted?
+        # Track master branch by default
+        TrackMasterJob.perform_later(project.id)
+
         flash[:notice] =
           "Successfully created '#{project.repository_name}' project."
       else

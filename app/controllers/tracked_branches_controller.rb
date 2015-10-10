@@ -13,6 +13,11 @@ class TrackedBranchesController < DashboardController
     if branch_params[:branch_name].present? && (client = current_user.github_client)
       branch = client.branch(current_project.repository_id, branch_params[:branch_name])
       tracked_branch = current_project.tracked_branches.create!(branch_name: branch.name)
+
+      #create a test job for the tracked branch
+      head_sha = branch[:commit][:sha]
+      tracked_branch.test_jobs.create!(commit_sha: head_sha, status: TestStatus::PENDING)
+
       flash[:notice] = "Successfull started tracking '#{tracked_branch.branch_name}' branch."
     end
 

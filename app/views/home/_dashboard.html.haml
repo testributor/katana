@@ -13,23 +13,27 @@
           = link_to "Add", new_project_branch_path(project), class: 'smaller'
       - if project.tracked_branches.empty?
         %i.small-margin
-          = "You haven't added any branches to this project yet."
-        = link_to "Add a new branch", new_project_branch_path(project)
-      - project.tracked_branches.each do |branch|
-        .branch
-          .row
-            .col-xs-3
-              .cell
-                = link_to branch.branch_name,
-                  project_branch_test_jobs_path(branch.project, branch)
-            .col-xs-4
-              .cell
-                = link_to branch.last_run.try(:commit_sha), '#'
-            .col-xs-2
-              .cell
-                = branch.last_run.try(:completed_at)
-            .col-xs-2
-              .cell.status{class: branch.status_text}
-                = branch.status_text if branch.status_text
-            .col-xs-1
-              = branch_cta(branch.status)
+          %p Your master branch is getting cooked.
+          %p
+            Please reload the page to check if it's done or
+            = link_to 'add', new_project_branch_path(project)
+            another branch.
+      - else
+        - project.tracked_branches.each do |branch|
+          .branch
+            .row
+              .col-xs-3
+                .cell
+                  = link_to branch.branch_name,
+                    project_branch_test_jobs_path(branch.project, branch)
+              .col-xs-4
+                .cell
+                  = link_to branch.last_run.try(:commit_sha), '#'
+              .col-xs-2
+                .cell
+                  = branch.last_run.try(:completed_at)
+              .col-xs-2
+                .cell.status{class: branch.status_text}
+                  = branch.status_text if branch.status_text
+              .col-xs-1
+                = branch_cta(branch.status)
