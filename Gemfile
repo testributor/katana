@@ -31,6 +31,7 @@ gem 'attr_encrypted'
 gem 'doorkeeper'
 gem 'oauth2'
 gem 'active_model_serializers', :github => 'rails-api/active_model_serializers', :ref => '1f0886' # 0.10 rc version
+gem 'simple_form'
 
 group :production do
   gem 'rails_12factor'

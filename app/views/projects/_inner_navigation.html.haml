@@ -1,0 +1,5 @@
+%ul.nav.nav-tabs.inner-navigation
+  %li{ class: current_page?(project_path(current_project)) ? 'active' : nil }
+    = link_to "Tracked branches", project_path(current_project)
+  %li{ class: current_page?(project_files_path(current_project)) ? 'active' : nil }
+    = link_to "Files", project_files_path(current_project)

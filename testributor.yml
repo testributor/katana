@@ -1,0 +1,10 @@
+# http://stackoverflow.com/questions/3790454/in-yaml-how-do-i-break-a-string-over-multiple-lines
+each:
+  file: 'test/*/**_test.rb'
+  command: 'bin/rake test %{file}'
+  setup: |
+    bundle install
+    bin/rake db:reset
+jasmine:
+  command: 'bin/rake jasmine_or_whatever'
+  setup: ''

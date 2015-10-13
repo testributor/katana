@@ -41,5 +41,7 @@ Rails.application.routes.draw do
         resources :test_job_files
       end
     end
+
+    resources :project_files, as: :files, path: :files, except: [:show, :new, :edit]
   end
 end

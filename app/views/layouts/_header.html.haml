@@ -13,6 +13,17 @@
       - if user_signed_in?
         %ul.nav.navbar-nav
           %li= link_to 'Dashboard', dashboard_path
+          - if current_project
+            %li.dropdown
+              %a.dropdown-toggle{ href: "#", data: { toggle: "dropdown" },
+                role: "button", "aria-haspopup" => "true",
+                "aria-expanded" => "false" }
+                = current_project.name
+                %span.caret
+              %ul.dropdown-menu
+                - current_user.participating_projects.each do |project|
+                  %li{ class: current_page?(project_path(project)) ? 'active' : nil }
+                    = link_to project.name, project_path(project)
       %ul.nav.navbar-nav.navbar-right
         %li.dropdown
           %a.dropdown-toggle{ data: { toggle: 'dropdown' }, role: 'button',

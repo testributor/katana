@@ -6,14 +6,14 @@ class DashboardControllerTest < ActionController::TestCase
 
   describe "GET#index" do
     it "should prevent not logged users" do
-      get :show, project: project.name
+      get :show
       response.status.must_equal 302
       response.redirect_url.must_match /users\/sign_in/
     end
 
     it "should allow logged users" do
       sign_in :user, user
-      get :show, project: project.name
+      get :show
       assert_response :success
     end
   end
