@@ -15,22 +15,8 @@ class ProjectSerializer < ActiveModel::Serializer
   def build_commands
     <<-TEXT
       bundle install
-      mkdir -p config
-      echo '#{database_yml}' > config/database.yml
-
       RAILS_ENV=test rake db:create
       RAILS_ENV=test rake db:reset
     TEXT
-  end
-
-  private
-
-  def database_yml
-    "test: \n"\
-    "  adapter: postgresql\n"\
-    "  database: testributor_test\n"\
-    "  username: postgres\n"\
-    "  password: \n"\
-    "  host: db"
   end
 end
