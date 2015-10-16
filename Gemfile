@@ -40,6 +40,7 @@ end
 group :test do
   gem "factory_girl_rails"
   gem "capybara"
+  gem 'poltergeist'
   gem 'minitest-rails'
   gem 'minitest-rails-capybara'
   gem 'minitest-spec-rails'
