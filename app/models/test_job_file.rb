@@ -12,6 +12,10 @@ class TestJobFile < ActiveRecord::Base
     TestStatus.new(status, failed?).css_class
   end
 
+  def status_text
+    TestStatus.new(status, failed?).text
+  end
+
   # Returns the total time it took for a TestJobFile to run
   # If completed_at is not provided, the total time is calculated
   # from the current moment.
@@ -23,10 +27,6 @@ class TestJobFile < ActiveRecord::Base
     else
       (Time.current - started_at).round
     end
-  end
-
-  def status_text
-    TestStatus.new(status, failed?).text
   end
 
   def failed?

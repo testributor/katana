@@ -5,22 +5,13 @@ class TestJob < ActiveRecord::Base
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
 
-  delegate :completed_at, to: :last_file_run
+  delegate :completed_at, to: :last_file_run, allow_nil: true
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
-  def status_text
-    TestStatus.new(status, failed?).text
-  end
-
-  def css_class
-    TestStatus.new(status, failed?).css_class
-  end
-
-  # TODO : Write unit tests for this one, write doc
   def total_running_time
     completed_at_times = test_job_files.order("completed_at ASC").
       pluck(:completed_at)
@@ -34,6 +25,14 @@ class TestJob < ActiveRecord::Base
     end
 
     time.round
+  end
+
+  def status_text
+    TestStatus.new(status, failed?).text
+  end
+
+  def css_class
+    TestStatus.new(status, failed?).css_class
   end
 
   def build_test_job_files
