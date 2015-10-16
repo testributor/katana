@@ -6,6 +6,7 @@ class TestJobFile < ActiveRecord::Base
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
+  scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def css_class
     TestStatus.new(status, failed?).css_class
