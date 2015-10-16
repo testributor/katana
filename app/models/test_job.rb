@@ -12,22 +12,11 @@ class TestJob < ActiveRecord::Base
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def status_text
-    if status == TestStatus::COMPLETE
-      return failed? ? 'Failed' : 'Passed'
-    end
-
-    TestStatus::STATUS_MAP[status]
+    TestStatus.new(status, failed?).text
   end
 
   def css_class
-    case status
-    when TestStatus::PENDING
-      'pending'
-    when TestStatus::RUNNING
-      'running'
-    when TestStatus::COMPLETE
-      failed? ? 'failed' : 'success'
-    end
+    TestStatus.new(status, failed?).css_class
   end
 
   # TODO : Write unit tests for this one, write doc

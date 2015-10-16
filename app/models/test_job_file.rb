@@ -7,14 +7,8 @@ class TestJobFile < ActiveRecord::Base
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
 
-  # TODO : Replace this with TestJob#css_class
   def css_class
-    case status
-    when TestStatus::RUNNING
-      'warning'
-    when TestStatus::COMPLETE
-      failed? ? 'danger' : 'success'
-    end
+    TestStatus.new(status, failed?).css_class
   end
 
   # Returns the total time it took for a TestJobFile to run
@@ -30,14 +24,8 @@ class TestJobFile < ActiveRecord::Base
     end
   end
 
-  # TODO : This is duplicated in TestJob.
-  # DRY code
   def status_text
-    if status == TestStatus::COMPLETE
-      return failed? ? 'Failed' : 'Passed'
-    end
-
-    TestStatus::STATUS_MAP[status]
+    TestStatus.new(status, failed?).text
   end
 
   def failed?
