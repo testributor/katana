@@ -2,15 +2,9 @@ class TrackedBranch < ActiveRecord::Base
   belongs_to :project
   has_many :test_jobs, dependent: :destroy
 
+  delegate :status_text, :status, to: :last_run, allow_nil: true
+
   def last_run
     test_jobs.sort_by(&:created_at).last
-  end
-
-  def status_text
-    last_run.status_text if last_run
-  end
-
-  def status
-    last_run.status if last_run
   end
 end
