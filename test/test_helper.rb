@@ -4,6 +4,17 @@ require 'rails/test_help'
 require "minitest/rails"
 require "minitest/rails/capybara"
 require "minitest/pride"
+require 'capybara/poltergeist'
+
+# VCR to playback HTTP responses without making actual connections
+require 'vcr'
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'test/vcr_cassettes'
+  c.hook_into :webmock
+  c.ignore_localhost = true
+  c.allow_http_connections_when_no_cassette = true
+end
 
 class ActionController::TestCase
   include Devise::TestHelpers
@@ -28,6 +39,7 @@ end
 class Capybara::Rails::TestCase
   include Warden::Test::Helpers
   Warden.test_mode!
+  Capybara.javascript_driver = :poltergeist
 
   def teardown
     Warden.test_reset!
