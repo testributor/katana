@@ -1,18 +1,38 @@
-%h1
-  Welcome to the dashboard
-- if current_user.participating_projects.empty?
-  = link_to 'Add', new_project_path
-  your first project and start testing!
-- else
-  %h3
-    Select which projects you want to manage
-  %ol
-    - current_user.participating_projects.each do |p|
-      %li
-        = link_to p.repository_name, project_path(p)
-        - if p.user_id == current_user.id
-          = button_to 'Destroy', project_path(p), method: :delete
-  %p
-    or
-    = link_to 'add', new_project_path
-    a new project.
+.projects-header
+  %span.projects-title
+    Your projects
+  = link_to 'add', new_project_path
+.container.projects-container
+  - if @projects.empty?
+    %h3
+      = "You haven't added any projects yet."
+      = link_to "Click here", new_project_path
+      = "to add a new project"
+  .projects-inner-container
+    - @projects.each do |project|
+      .project-title
+        = project.repository_name
+        - if project.tracked_branches.any?
+          = link_to "Add", new_project_branch_path(project), class: 'smaller'
+      - if project.tracked_branches.empty?
+        %i.small-margin
+          = "You haven't added any branches to this project yet."
+        = link_to "Add a new branch", new_project_branch_path(project)
+      - project.tracked_branches.each do |branch|
+        .branch
+          .row
+            .col-xs-3
+              .cell
+                = link_to branch.branch_name,
+                  project_branch_test_jobs_path(branch.project, branch)
+            .col-xs-4
+              .cell
+                = link_to branch.last_run.try(:commit_sha), '#'
+            .col-xs-2
+              .cell
+                = branch.last_run.try(:completed_at)
+            .col-xs-2
+              .cell.status{class: branch.status_text}
+                = branch.status_text if branch.status_text
+            .col-xs-1
+              = branch_cta(branch.status)

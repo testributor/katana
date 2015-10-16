@@ -8,14 +8,22 @@ body {
 }
 h1, h2 {
   text-align: center;
+}
+
+h1 {
   padding: 40px 15px;
 }
 
 h2 {
   font-size: 29px;
   font-weight: 900;
+  padding: 10px 15px;
 }
 
 .test-jobs-container {
   margin-top: 40px;
+}
+
+.small-margin {
+  margin-left: 9px;
 }

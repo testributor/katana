@@ -3,16 +3,16 @@ module ApplicationHelper
     'Testributor'
   end
 
-  def job_class(status)
+  def branch_cta(status)
     case status
-    when 'Pending'
-      'warning'
-    when 'Passed'
-      'success'
-    when 'Failed'
-      'danger'
+    when TestStatus::PENDING, TestStatus::RUNNING
+      button_text = "Cancel"
     else
-      ''
+      button_text = "Retry"
+    end
+
+    if button_text
+      button_tag button_text, class: 'btn btn-primary retry'
     end
   end
 

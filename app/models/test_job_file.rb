@@ -6,28 +6,27 @@ class TestJobFile < ActiveRecord::Base
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
+  scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def css_class
-    case status
-    when TestStatus::RUNNING
-      'warning'
-    when TestStatus::COMPLETE
-      failed? ? 'danger' : 'success'
-    end
+    TestStatus.new(status, failed?).css_class
   end
 
+  def status_text
+    TestStatus.new(status, failed?).text
+  end
+
+  # Returns the total time it took for a TestJobFile to run
+  # If completed_at is not provided, the total time is calculated
+  # from the current moment.
+  # @return [ActiveSupport::Duration]
   def total_running_time
     return unless started_at
     if completed_at
-      completed_at - started_at
+      (completed_at - started_at).round
     else
-      Time.now - started_at
+      (Time.current - started_at).round
     end
-  end
-
-  def text_status
-    return TestStatus::STATUS_MAP[status] unless status == TestStatus::COMPLETE
-    failed? ? 'Failed' : 'Passed'
   end
 
   def failed?

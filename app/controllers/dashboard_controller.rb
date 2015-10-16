@@ -3,9 +3,12 @@ class DashboardController < ApplicationController
   before_filter :check_for_active_providers, except: [:create, :destroy]
 
   def show
+    @projects = current_user.
+      projects.includes(tracked_branches: { test_jobs: :test_job_files })
   end
 
   protected
+
   def check_for_active_providers
     unless current_user.github_access_token.blank? || current_user.github_client
       flash.now[:alert] =
