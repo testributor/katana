@@ -25,38 +25,11 @@ class ProjectsController < DashboardController
         # Retrieve the repo from GitHub to verify the validity
         # of the supplied identifier and create a new Project record.
         repo = client.repo(project_params[:repository_id].to_i)
-        project = current_user.projects.create!(
-          name: repo.name,
-          user: current_user,
-          repository_provider: 'github',
-          repository_id: repo.id,
-          repository_name: repo.name,
-          repository_owner: repo.owner.login
-        )
+        project = current_user.projects.
+          create!(project_params_from_repo(repo))
 
-        # Create a Webhook on the same GitHub repo for communicating
-        # various events to our server and store its id with the Project.
-        #
-        # We listen for 'push' and 'delete' events
-        # https://developer.github.com/webhooks/#events
-        #
-        # If the Webhook already exists, this step is skipped.
-        # https://developer.github.com/v3/repos/hooks/#create-a-hook
-        begin
-          url = ENV['GITHUB_WEBHOOK_URL'] || github_webhook_url
-          hook = client.create_hook(project.repository_id, 'web',
-            {secret: ENV['GITHUB_WEBHOOK_SECRET'],
-             url: url, content_type: 'json'}, events: %w(push delete))
-        rescue Octokit::UnprocessableEntity => e
-          if e.message =~ /hook already exists/i
-            hooks = client.hooks(project.repository_id)
-            hook = hooks.select do |h|
-              h.config.url == url && h.events == %w(push delete)
-            end.first
-          else
-            raise e
-          end
-        end
+        hook = GithubWebhookService.
+          new(project, github_webhook_url).create_hooks
         project.update_attributes!(webhook_id: hook.id)
 
         # Create the projects oauth application
@@ -109,5 +82,16 @@ class ProjectsController < DashboardController
 
   def project_params
     params.require(:project).permit(:repository_id)
+  end
+
+  def project_params_from_repo(repo)
+    {
+      name: repo.name,
+      user: current_user,
+      repository_provider: 'github',
+      repository_id: repo.id,
+      repository_name: repo.name,
+      repository_owner: repo.owner.login
+    }
   end
 end
