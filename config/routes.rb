@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   # the "project" param from create action resulting in error.
   resources :projects, except: [:index, :edit, :update] do
     member do
+      get :api_credentials
+    end
+    member do
       devise_scope :user do
         resources :invitations, controller: "users/invitations",
           only: [:new, :create], as: :project_invitations
