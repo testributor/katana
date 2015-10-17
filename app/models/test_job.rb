@@ -24,7 +24,7 @@ class TestJob < ActiveRecord::Base
       time = Time.now - time_first_job_started
     end
 
-    time.round
+    time.round if time
   end
 
   def status_text

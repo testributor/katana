@@ -26,6 +26,16 @@ class TestJobTest < ActiveSupport::TestCase
 
       job.total_running_time.must_equal 2.hours
     end
+
+    it "returns nil when completed_at, started_at are missing" do
+      times = [
+        { started_at: nil, completed_at: nil },
+      ]
+      create_times(times, job)
+      job.save!
+
+      job.total_running_time.must_equal nil
+    end
   end
 
   private
