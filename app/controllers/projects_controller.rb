@@ -19,15 +19,16 @@ class ProjectsController < DashboardController
   end
 
   def create
-    if project_params[:repository_id].present?
-      if client = current_user.github_client
+    if project_params[:repository_id].present?  &&
+      client = current_user.github_client
 
-        # Retrieve the repo from GitHub to verify the validity
-        # of the supplied identifier and create a new Project record.
-        repo = client.repo(project_params[:repository_id].to_i)
-        project = current_user.projects.
-          create!(project_params_from_repo(repo))
+      # Retrieve the repo from GitHub to verify the validity
+      # of the supplied identifier and create a new Project record.
+      repo = client.repo(project_params[:repository_id].to_i)
+      project = current_user.projects.
+        create(project_params_from_repo(repo))
 
+      if project.persisted?
         hook = GithubWebhookService.
           new(project, github_webhook_url).create_hooks
         project.update_attributes!(webhook_id: hook.id)
@@ -42,6 +43,8 @@ class ProjectsController < DashboardController
 
         flash[:notice] =
           "Successfully created '#{project.repository_name}' project."
+      else
+        flash[:error] = project.errors.full_messages.to_sentence
       end
     end
 
