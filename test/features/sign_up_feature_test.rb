@@ -14,9 +14,12 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
       end
 
       it 'asks for e-mail confirmation' do
-        page.current_url.must_equal 'http://www.example.com/'
         ActionMailer::Base.deliveries.select { |m| m.subject.match(/Confirmation/) }.
           wont_be :empty?
+      end
+
+      it "signs in user" do
+        page.must_have_content "Dashboard"
       end
     end
 
