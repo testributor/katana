@@ -5,9 +5,10 @@ require "minitest/rails"
 require "minitest/rails/capybara"
 require "minitest/pride"
 require 'capybara/poltergeist'
-
 # VCR to playback HTTP responses without making actual connections
 require 'vcr'
+# Cleanup database between tests (Only for JS tests)
+require 'database_cleaner'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'test/vcr_cassettes'
@@ -38,10 +39,29 @@ end
 
 class Capybara::Rails::TestCase
   include Warden::Test::Helpers
+
   Warden.test_mode!
   Capybara.javascript_driver = :poltergeist
 
+  # Transactional fixtures do not work with Selenium tests, because Capybara
+  # # uses a separate server thread, which the transactions would be hidden
+  # from. We hence use DatabaseCleaner to truncate our test database.
+  # @see http://stackoverflow.com/questions/10904996/difference-between-truncation-transaction-and-deletion-database-strategies
+  self.use_transactional_fixtures = false
+
+  before do
+    # No javascript tests
+    if Capybara.current_driver == :rack_test
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.start
+    else # Javascript tests
+      # @see http://stackoverflow.com/questions/10904996/difference-between-truncation-transaction-and-deletion-database-strategies
+      DatabaseCleaner.strategy = :deletion
+    end
+  end
+
   def teardown
+    DatabaseCleaner.clean
     Warden.test_reset!
   end
 end
