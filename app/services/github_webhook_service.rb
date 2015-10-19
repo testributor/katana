@@ -14,7 +14,7 @@ class GithubWebhookService
   # https://developer.github.com/v3/repos/hooks/#create-a-hook
   def create_hooks
     begin
-      github_client.create_hook(
+      hook = github_client.create_hook(
         @project.repository_id, 'web',
         {
           secret: ENV['GITHUB_WEBHOOK_SECRET'],
