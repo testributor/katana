@@ -123,6 +123,7 @@ GEM
     connection_pool (2.2.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    database_cleaner (1.5.1)
     debug_inspector (0.0.2)
     devise (3.5.1)
       bcrypt (~> 3.0)
@@ -351,6 +352,7 @@ DEPENDENCIES
   cancancan (~> 1.10)
   capybara
   coffee-rails (~> 4.1.0)
+  database_cleaner
   devise
   devise_invitable (~> 1.5.3)
   doorkeeper

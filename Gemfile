@@ -47,6 +47,7 @@ group :test do
   gem 'mocha'
   gem 'vcr'
   gem 'webmock'
+  gem 'database_cleaner'
 end
 
 group :development, :test do
