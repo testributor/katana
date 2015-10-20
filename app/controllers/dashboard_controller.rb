@@ -4,11 +4,6 @@ class DashboardController < ApplicationController
 
   layout "dashboard"
 
-  def show
-    @projects = current_user.
-      projects.includes(tracked_branches: { test_jobs: :test_job_files })
-  end
-
   protected
 
   def check_for_active_providers

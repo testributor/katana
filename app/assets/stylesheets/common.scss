@@ -31,3 +31,21 @@ h2 {
 .inner-navigation {
   margin-top: 10px;
 }
+
+.cd-side-nav {
+  position: relative;
+  float: left;
+  top: auto;
+  width: 200px;
+  min-height: 100vh;
+  padding-top: 30px;
+  visibility: visible;
+  opacity: 1;
+  overflow: visible;
+  max-height: none;
+  background-color: #2c3136;
+
+  a {
+    color: white;
+  }
+}

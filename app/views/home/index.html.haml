@@ -1,5 +1,4 @@
-%h1 This is the sales page!
-.cta-container
-  = link_to "Sign in", new_user_session_path
-  or
-  = link_to "Sign up", new_user_registration_path, class: 'btn btn-primary'
+- if user_signed_in?
+  = render "dashboard"
+- else
+  = render "sales"

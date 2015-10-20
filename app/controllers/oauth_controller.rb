@@ -7,7 +7,7 @@ class OauthController < ApplicationController
       response = Octokit.exchange_code_for_token(params[:code])
     rescue Octokit::Error => e
       # TODO Replace with a friendly message and send exception to admins
-      redirect_to dashboard_path, alert: e.message and return
+      redirect_to root_path, alert: e.message and return
     end
     current_user.update_attributes!(github_access_token: response.access_token)
 

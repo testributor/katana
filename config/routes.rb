@@ -20,7 +20,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'dashboard' => 'dashboard#show', as: :dashboard
   get 'oauth/github_callback' => 'oauth#github_callback'
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
 

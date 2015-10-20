@@ -2,9 +2,9 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title= brand_name
-    = stylesheet_link_tag    'application', media: 'all'
+    = stylesheet_link_tag    'front', media: 'all'
     %link{href:'http://fonts.googleapis.com/css?family=Lato:400,700', rel:'stylesheet', type:'text/css'}
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'front'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
     = render partial: 'layouts/header'
@@ -13,5 +13,4 @@
     - if alert
       %p.alert.alert-danger= alert
     .container
-      = flash_messages
       = yield

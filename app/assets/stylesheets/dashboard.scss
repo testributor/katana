@@ -1,6 +1,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import "main";
-@import "pages/dashboard";
-@import "pages/home";
-@import "pages/project_files";
+@import "common";
+@import "pages/dashboard/common";
+@import "pages/dashboard/dashboard";
+@import "pages/dashboard/project_files";

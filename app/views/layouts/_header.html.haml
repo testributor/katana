@@ -12,7 +12,6 @@
     #navbar.collapse.navbar-collapse
       - if user_signed_in?
         %ul.nav.navbar-nav
-          %li= link_to 'Dashboard', dashboard_path
           - if current_project
             %li.dropdown
               %a.dropdown-toggle{ href: "#", data: { toggle: "dropdown" },

@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_project
 
+  layout 'front'
+
   # When project_id is set in params, set current_project if current_user
   # is a participant. If project is specified with a different name
   # (as in ProjectsController with :id), this method should be overridden.
