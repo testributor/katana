@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   has_many :test_job_files, through: :test_jobs
   has_and_belongs_to_many :members, class_name: "User"
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
+  has_many :project_files, dependent: :destroy
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
 
   validates :name, :user, presence: true

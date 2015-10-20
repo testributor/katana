@@ -1,0 +1,32 @@
+= render "projects/inner_navigation"
+
+.container-fluid
+  The following files are added to the specified path before any job is run.
+  The paths should be relative to the project's root.
+
+  .col-sm-6
+    %h3 New File
+    = simple_form_for [current_project, current_project.project_files.new],
+      wrapper: :horizontal_form, url: project_files_path,
+      html: { class: "horizontal-form file-form" } do |f|
+      = f.input :path
+      = f.input :contents
+      .form-group
+        .col-sm-9.col-sm-offset-3
+          .pull-right
+            = f.submit "Save", class: 'btn btn-sm btn-default'
+  .col-sm-6
+    %h3 Files
+    - @project_files.each do |file|
+      = simple_form_for [current_project, file], wrapper: :horizontal_form,
+        url: project_file_path(current_project, file),
+        html: { class: "horizontal-form file-form" } do |f|
+        = f.input :path
+        = f.input :contents
+        .form-group
+          .col-sm-9.col-sm-offset-3
+            .pull-right
+              = f.submit "Save", class: 'btn btn-sm btn-default'
+              = link_to "Delete", project_file_path(current_project, file),
+                :method => :delete, class: 'btn btn-danger btn-sm',
+                data: { confirm: "Are you sure?" }

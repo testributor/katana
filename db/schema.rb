@@ -59,6 +59,14 @@ ActiveRecord::Schema.define(version: 20151019145044) do
   add_index "oauth_applications", ["owner_id", "owner_type"], name: "index_oauth_applications_on_owner_id_and_owner_type", using: :btree
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
 
+  create_table "project_files", force: :cascade do |t|
+    t.integer  "project_id"
+    t.string   "path",       null: false
+    t.text     "contents",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id",                          null: false
     t.string   "repository_provider"
