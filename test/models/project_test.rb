@@ -1,16 +1,51 @@
 require 'test_helper'
 
 class ProjectTest < ActiveSupport::TestCase
-  let(:user) { FactoryGirl.create(:user, projects_limit: 1) }
-  let(:project) { FactoryGirl.create(:project, user: user) }
+  let(:project) { FactoryGirl.build(:project) }
+  let(:owner) { project.user }
+  let(:new_owner) { FactoryGirl.create(:user) }
 
-  describe "project_limit on user" do
-    before { project }
+  describe "project limit on user validation" do
+    it "doesn't get called when user id hasn't changed" do
+      owner.update_column(:projects_limit, 2)
+      owner.reload
+      project.save!
+      project.expects(:check_user_limit).never
+      project.save!
+    end
 
-    it "won't assign to a user who reached the projects_limit" do
-      project2 = FactoryGirl.build(:project, user: user)
-      assert_not project2.save
-      assert project2.errors.keys.include?(:base)
+    it "gets called when user id has changed" do
+      owner.update_column(:projects_limit, 2)
+      owner.reload
+      project.user = new_owner
+      project.expects(:check_user_limit).once
+      project.save!
+    end
+
+    it "gets called when project is created" do
+      skip "Write this test"
+    end
+
+    it "is valid if projects limit is greater than user's projects" do
+      owner.update_column(:projects_limit, 2)
+      owner.reload
+
+      project.valid?.must_equal true
+    end
+
+    it "is valid if projects limit is equal to user's projects" do
+      owner.update_column(:projects_limit, 1)
+      owner.reload
+
+      project.valid?.must_equal true
+    end
+
+    it "is invalid if projects limit is less than user's projects" do
+      owner.update_column(:projects_limit, 0)
+      owner.reload
+
+      project.valid?.must_equal false
+      project.errors.keys.must_include :base
     end
   end
 

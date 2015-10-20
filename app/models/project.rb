@@ -13,9 +13,9 @@ class Project < ActiveRecord::Base
 
   validates :name, :user, presence: true
   validates :name, uniqueness: { scope: :user }
+  validate :check_user_limit, if: :user_id_changed?
 
   before_create :set_secure_random
-  before_save :check_user_limit
   # TODO: Run cron job to ensure all owners are also participants
   after_create :add_owner_to_participants
 
@@ -27,14 +27,12 @@ class Project < ActiveRecord::Base
 
   private
 
-  # Don't let an project be assigned to a user if projects limit
+  # Don't let a project be assigned to a user if projects limit
   # has been reached
   def check_user_limit
     if user &&
       user.projects_limit < Project.where(user_id: user.id).count + 1
-      self.errors.add(:base, "Project limit reached")
-
-      return false
+      errors.add(:base, "Project limit reached")
     end
   end
 
