@@ -32,7 +32,7 @@ class Project < ActiveRecord::Base
   def check_user_limit
     if user &&
       user.projects_limit < Project.where(user_id: user.id).count + 1
-      errors.add(:base, "Project limit reached")
+      errors.add(:base, :project_limit_exceeded)
     end
   end
 

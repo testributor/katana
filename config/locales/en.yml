@@ -20,6 +20,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    errors:
+      models:
+        project:
+          attributes:
+            base:
+              project_limit_exceeded: "You cannot add other projects
+                as you have exceeded you project limit.
+                Please upgrade your plan"
   hello: "Hello world"
   time:
     formats:
