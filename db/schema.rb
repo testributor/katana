@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151019145044) do
+ActiveRecord::Schema.define(version: 20151022171731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,8 +94,8 @@ ActiveRecord::Schema.define(version: 20151019145044) do
   add_index "projects_users", ["project_id"], name: "index_projects_users_on_project_id", using: :btree
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id", using: :btree
 
-  create_table "test_job_files", force: :cascade do |t|
-    t.integer  "test_job_id"
+  create_table "test_jobs", force: :cascade do |t|
+    t.integer  "test_run_id"
     t.string   "file_name",    default: "", null: false
     t.text     "result",       default: "", null: false
     t.integer  "status",       default: 0,  null: false
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 20151019145044) do
     t.datetime "updated_at"
   end
 
-  create_table "test_jobs", force: :cascade do |t|
+  create_table "test_runs", force: :cascade do |t|
     t.integer  "tracked_branch_id"
     t.string   "commit_sha"
     t.integer  "status",            default: 0, null: false
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20151019145044) do
     t.datetime "updated_at"
   end
 
-  add_index "test_jobs", ["tracked_branch_id"], name: "index_test_jobs_on_tracked_branch_id", using: :btree
+  add_index "test_runs", ["tracked_branch_id"], name: "index_test_runs_on_tracked_branch_id", using: :btree
 
   create_table "tracked_branches", force: :cascade do |t|
     t.integer  "project_id",  null: false
@@ -147,10 +147,10 @@ ActiveRecord::Schema.define(version: 20151019145044) do
     t.string   "unconfirmed_email"
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
-    t.boolean  "admin",                              default: false
     t.string   "encrypted_github_access_token"
     t.string   "encrypted_github_access_token_salt"
     t.string   "encrypted_github_access_token_iv"
+    t.boolean  "admin",                              default: false
     t.integer  "projects_limit",                     default: 1,     null: false
     t.string   "invitation_token"
     t.datetime "invitation_created_at"

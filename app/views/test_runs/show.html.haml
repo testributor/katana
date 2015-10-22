@@ -1,0 +1,49 @@
+.container
+  .row
+    .col-xs-12
+      %h1 Test Job ##{@job.id}
+      = link_to "Back to test jobs", project_branch_test_jobs_path(current_project, @job.tracked_branch_id)
+      %div= "Git commit: #{@job.commit_sha}"
+  .row
+    .col-xs-12
+      %table.table.table-bordered.table-striped.table-condensed.table-hover
+        %thead
+          %tr
+            %th='File'
+            %th='Status'
+            %th='Errors'
+            %th='Failures'
+            %th='Tests'
+            %th='Assertions'
+            %th='Skips'
+            %th='Started at (UTC)'
+            %th='Completed at (UTC)'
+            %th='Total running time'
+            %th='Actions'
+        %tbody
+          - @job_files.each do |job_file|
+            %tr{ class: job_file.css_class }
+              %td= job_file.file_name
+              %td= job_file.status_text
+              %td= job_file.test_errors
+              %td= job_file.failures
+              %td= job_file.count
+              %td= job_file.assertions
+              %td= job_file.skips
+              %td= l(job_file.started_at, format: :no_utc) if job_file.started_at
+              %td= l(job_file.completed_at, format: :no_utc) if job_file.completed_at
+              %td= distance_of_time_in_words(0, job_file.total_running_time, include_seconds: true) if job_file.total_running_time
+              - if job_file.status != TestStatus::PENDING
+                %td
+                  - # TODO: tracked branch and test_job nesting seems unecessary
+                  - # for the test_job resource. We only need the project for
+                  - # validation/authorization purposes (to let it work in the
+                  - # same way the rest of the routes work).
+                  = button_to 'Retry',
+                    project_branch_test_job_test_job_file_path(current_project,
+                      job_file.test_job.tracked_branch.id,
+                      job_file.test_job.id, job_file, status: TestStatus::PENDING),
+                    class: 'btn btn-primary', method: :put
+            - if job_file.result.present?
+              %tr.danger
+                %td{ colspan: 10, style: "text-align: left" }=simple_format(job_file.result)

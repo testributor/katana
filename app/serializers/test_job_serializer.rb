@@ -1,5 +1,5 @@
 class TestJobSerializer < ActiveModel::Serializer
-  attributes :commit_sha, :id
-  
-  belongs_to :project
+  attributes :file_name, :created_at, :id
+
+  belongs_to :test_run
 end

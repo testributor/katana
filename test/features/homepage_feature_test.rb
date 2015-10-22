@@ -33,7 +33,7 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
 
       branches.each do |branch|
         tracked_branch = TrackedBranch.new({branch_name: branch[:name]})
-        tracked_branch.test_jobs.
+        tracked_branch.test_runs.
           build(commit_sha: branch[:commit_sha], status: branch[:status])
         project.tracked_branches << tracked_branch
       end

@@ -26,10 +26,10 @@ class WebhooksController < ApplicationController
       projects.each do |project|
         branch_name = params[:ref].split('/').last
         if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
-          test_job = tracked_branch.
-            test_jobs.build(commit_sha: params[:head_commit][:id])
-          test_job.build_test_job_files
-          test_job.save!
+          test_run = tracked_branch.
+            test_runs.build(commit_sha: params[:head_commit][:id])
+          test_run.build_test_jobs
+          test_run.save!
         end
       end
     end

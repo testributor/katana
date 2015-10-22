@@ -1,63 +1,35 @@
 class TestJob < ActiveRecord::Base
-  has_many :test_job_files, dependent: :delete_all
-  belongs_to :tracked_branch
-  belongs_to :user
-  belongs_to :tracked_branch
-  has_one :project, through: :tracked_branch
+  belongs_to :test_run
 
-  delegate :completed_at, to: :last_file_run, allow_nil: true
+  validates :test_run, presence: true
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
-  def total_running_time
-    completed_at_times = test_job_files.order("completed_at ASC").
-      pluck(:completed_at)
-    started_at_times = test_job_files.order("started_at ASC").
-      pluck(:started_at)
-
-    if completed_at_times.length == completed_at_times.compact.length
-      time = completed_at_times.last - started_at_times.first
-    elsif time_first_job_started = started_at_times.compact.first
-      time = Time.now - time_first_job_started
-    end
-
-    time.round if time
+  def css_class
+    TestStatus.new(status, failed?).css_class
   end
 
   def status_text
     TestStatus.new(status, failed?).text
   end
 
-  def css_class
-    TestStatus.new(status, failed?).css_class
-  end
-
-  def build_test_job_files
-    test_file_names.map { |file_name| test_job_files.build(file_name: file_name) }
-  end
-
-  # This method returns all test filenames
-  # for a given TestJob from github.
-  def test_file_names
-    repo = tracked_branch.project.repository_id
-    github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path).
-      select { |path| path.match(/_test\.rb/) }
-  end
-
-  private
-
-  def last_file_run
-    test_job_files.order(:completed_at).last
-  end
-
-  def github_client
-    tracked_branch.project.user.github_client
+  # Returns the total time it took for a TestJob to run
+  # If completed_at is not provided, the total time is calculated
+  # from the current moment.
+  # @return [ActiveSupport::Duration]
+  def total_running_time
+    return unless started_at
+    if completed_at
+      (completed_at - started_at).round
+    else
+      (Time.current - started_at).round
+    end
   end
 
   def failed?
-    test_job_files.any? { |file| file.failed? }
+    test_errors > 0 || failures > 0
   end
 end

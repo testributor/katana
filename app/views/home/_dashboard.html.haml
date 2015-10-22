@@ -25,7 +25,7 @@
               .col-xs-3
                 .cell
                   = link_to branch.branch_name,
-                    project_branch_test_jobs_path(branch.project, branch)
+                    project_branch_test_runs_path(branch.project, branch)
               .col-xs-4
                 .cell
                   = link_to branch.last_run.try(:commit_sha), '#'

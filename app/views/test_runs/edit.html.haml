@@ -1,0 +1,8 @@
+%h1 Editing test_job
+
+= render 'form'
+
+= link_to 'Show', @test_job
+\|
+= link_to 'Back',
+  project_branch_test_jobs_path(current_project, @test_job.tracked_branch_id)

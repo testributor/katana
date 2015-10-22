@@ -14,7 +14,7 @@ class HomeController < ApplicationController
 
   def dashboard
     @projects = current_user.participating_projects.
-      includes(tracked_branches: { test_jobs: :test_job_files })
+      includes(tracked_branches: { test_runs: :test_jobs })
   end
 
   def front

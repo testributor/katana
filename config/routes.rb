@@ -11,8 +11,8 @@ Rails.application.routes.draw do
           get :current
         end
       end
-      resources :test_jobs
-      resources :test_job_files, only: [:update] do
+      resources :test_runs
+      resources :test_jobs, only: [:update] do
         collection do
           patch :bind_next_pending
         end
@@ -36,8 +36,8 @@ Rails.application.routes.draw do
 
     resources :tracked_branches, only: [:new, :create], path: :branches,
       as: :branches do
-      resources :test_jobs do
-        resources :test_job_files
+      resources :test_runs do
+        resources :test_jobs
       end
     end
 

@@ -1,0 +1,22 @@
+= form_for @test_run do |f|
+  - if @test_run.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@test_run.errors.count, "error")} prohibited this test run from being saved:"
+      %ul
+        - @test_run.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :user
+    = f.collection_select :user_id, User.all, :id, :id
+
+  .field
+    = f.label :git_ref
+    = f.text_field :git_ref
+
+  .field
+    = f.label :status
+    = f.text_field :status
+
+  .actions
+    = f.submit 'Save'

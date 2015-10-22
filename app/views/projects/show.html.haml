@@ -9,7 +9,7 @@
   %h3 Select which branch you want to manage
   %ol
     - @project.tracked_branches.each do |b|
-      %li= link_to b.branch_name, project_branch_test_jobs_path(@project, b.id)
+      %li= link_to b.branch_name, project_branch_test_runs_path(@project, b.id)
   %p
     or
     = link_to 'add', new_project_branch_path(@project)

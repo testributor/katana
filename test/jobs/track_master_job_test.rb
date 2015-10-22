@@ -15,7 +15,7 @@ class TrackMasterJobTest < ActiveJob::TestCase
     it "creates the initial test run's objects" do
       project = Project.last
       project.tracked_branches.length.must_equal 1
-      project.test_jobs.length.must_equal 1
+      project.test_runs.length.must_equal 1
     end
 
     describe 'when master is already tracked' do
@@ -25,7 +25,7 @@ class TrackMasterJobTest < ActiveJob::TestCase
         end
         project = Project.last
         project.tracked_branches.length.must_equal 1
-        project.test_jobs.length.must_equal 1
+        project.test_runs.length.must_equal 1
       end
     end
   end

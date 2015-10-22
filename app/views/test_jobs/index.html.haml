@@ -1,21 +1,25 @@
-.container.test-jobs-container
-  .row
-    .col-xs-12
-      %table.table.table-striped.table-bordered.table-condensed.table-hover
-        %thead
-          %tr
-            %th= "Git reference"
-            %th= "Status"
-            %th= "Current Total time"
-            %th= "Details"
-            %th= "Cancel"
+%h1 Listing test jobs
 
-        %tbody
-          - @test_jobs.each do |test_job|
-            %tr{class: test_job.css_class}
-              %td= test_job.commit_sha
-              %td= test_job.status_text
-              %td= distance_of_time_in_words(test_job.total_running_time) if test_job.total_running_time
-              %td= link_to 'Details', project_branch_test_job_path(current_project, test_job.tracked_branch_id, test_job)
-              %td= link_to 'Cancel', project_branch_test_job_path(current_project, test_job.tracked_branch_id, test_job),
-                :method => :delete, :data => { :confirm => 'Are you sure?' }
+%table.table.table-striped.table-bordered.table-condensed.table-hover
+  %thead
+    %tr
+      %th= "File"
+      %th= "Result"
+      %th= "Count"
+      %th= "Assertions"
+      %th= "Skips"
+      %th= "Errors"
+      %th= "Failures"
+      %th= "Status"
+  %tbody
+    - @test_jobs.each do |test_job|
+      %tr
+        %td= test_job.file_name
+        %td= test_job.result
+        %td= test_job.count
+        %td= test_job.assertions
+        %td= test_job.skips
+        %td= test_job.test_errors
+        %td= test_job.failures
+        %td= test_job.status
+        %td= link_to 'Retry', '#' # TODO

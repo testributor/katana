@@ -5,8 +5,8 @@ class Project < ActiveRecord::Base
   devise :database_authenticatable
   belongs_to :user # this is the owner of the project
   has_many :tracked_branches, dependent: :destroy
-  has_many :test_jobs, through: :tracked_branches
-  has_many :test_job_files, through: :test_jobs
+  has_many :test_runs, through: :tracked_branches
+  has_many :test_jobs, through: :test_runs
   has_and_belongs_to_many :members, class_name: "User"
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
   has_many :project_files, dependent: :destroy

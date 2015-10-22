@@ -12,11 +12,11 @@ class TrackMasterJob < ActiveJob::Base
       tracked_master = TrackedBranch.create!(project_id: project.id,
                                              branch_name: repo[:default_branch])
       # Create test job for master
-      test_job = tracked_master.test_jobs.build(
+      test_run = tracked_master.test_runs.build(
         commit_sha: master[:commit][:sha],
         status: TestStatus::PENDING)
-      test_job.build_test_job_files
-      test_job.save!
+      test_run.build_test_jobs
+      test_run.save!
     end
   end
 end

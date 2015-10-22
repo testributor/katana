@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
   has_many :projects # on which this user is an owner
   has_and_belongs_to_many :participating_projects, class_name: "Project"
   has_many :tracked_branches, through: :participating_projects
-  has_many :test_jobs, through: :tracked_branches
+  has_many :test_runs, through: :tracked_branches
 
 
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
