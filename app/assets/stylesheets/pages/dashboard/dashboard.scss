@@ -1,4 +1,4 @@
-.dashboard.show {
+.home.index {
   .projects-container {
     background-color: #FDFDFD;
     box-shadow: 1px 1px 1px 1px silver;
@@ -10,7 +10,6 @@
 
   .projects-header {
     text-align: center;
-    padding: 13px;
   }
 
   .projects-inner-container {
@@ -54,10 +53,6 @@
   .passed {
     background-color: #96FF9E;
     border: 1px solid #04FB67;
-  }
-
-  .projects-title {
-    font-size: 28px;
   }
 
   a.smaller {

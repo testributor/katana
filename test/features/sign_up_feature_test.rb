@@ -19,7 +19,7 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
       end
 
       it "signs in user" do
-        page.must_have_content "Dashboard"
+        page.must_have_selector 'a[href="/users/sign_out"]'
       end
     end
 

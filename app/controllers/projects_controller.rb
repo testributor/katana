@@ -28,7 +28,7 @@ class ProjectsController < DashboardController
       end
     end
 
-    redirect_to dashboard_path
+    redirect_to root_path
   end
 
   def destroy
@@ -54,7 +54,7 @@ class ProjectsController < DashboardController
         "Successfully destroyed '#{project.repository_name}' project."
     end
 
-    redirect_to dashboard_path
+    redirect_to root_path
   end
 
   private

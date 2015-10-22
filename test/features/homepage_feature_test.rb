@@ -40,7 +40,7 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
 
       project.save!
       login_as owner, scope: :user
-      visit dashboard_path
+      visit root_path
 
       page.must_have_content "Pending"
       page.must_have_content "Passed"

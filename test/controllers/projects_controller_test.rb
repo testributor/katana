@@ -23,12 +23,12 @@ class ProjectsControllerTest < ActionController::TestCase
       flash[:error].wont_be :empty?
     end
 
-    it "redirects to dashboard_path on error" do
+    it "redirects to root_path on error" do
       @controller.stubs(:create_project).returns(unpersisted_project)
       user.update_column(:projects_limit, 1)
       post :create, project_params
 
-      assert_redirected_to dashboard_path
+      assert_redirected_to root_path
     end
 
     it "displays flash notice on success" do
@@ -38,11 +38,11 @@ class ProjectsControllerTest < ActionController::TestCase
       flash[:notice].wont_be :empty?
     end
 
-    it "redirects to dashboard_path on success" do
+    it "redirects to root_path on success" do
       @controller.stubs(:create_project).returns(persisted_project)
       post :create, project_params
 
-      assert_redirected_to dashboard_path
+      assert_redirected_to root_path
     end
   end
 end

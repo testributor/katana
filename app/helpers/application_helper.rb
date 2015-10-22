@@ -3,31 +3,6 @@ module ApplicationHelper
     'Testributor'
   end
 
-  def flash_messages(map = {})
-    # overridable flash type to bootstrap alert class mapping
-    # http://getbootstrap.com/components/#alerts
-    map = Hash.new { |hash, key| hash[key.to_s] = key.to_s }
-    map = map.merge({
-      'error' => 'danger',
-      'alert' => 'warning',
-      'notice' => 'success'
-    }).merge(map)
-    if flash.present?
-      flash.map do |type, msg|
-        # keys starting with underscore are not meant for display,
-        # as we use them to pass values between requests
-        unless type.to_s.starts_with?('_')
-          content_tag(:div, class: "alert alert-dismissable alert-#{map[type.to_s]}") do
-            content_tag(:button, :class => 'close', :type => 'button',
-                        'aria-hidden' => 'true', 'data-dismiss' => 'alert') do
-              content_tag(:i, '', :class => 'icon-cancel-circle')
-            end +
-            content_tag(:p, msg)
-          end
-        end
-      end.join.html_safe
-    end
-  end
   def branch_cta(status)
     case status
     when TestStatus::PENDING, TestStatus::RUNNING

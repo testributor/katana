@@ -2,10 +2,7 @@ class DashboardController < ApplicationController
   before_filter :authenticate_user!
   before_filter :check_for_active_providers, except: [:create, :destroy]
 
-  def show
-    @projects = current_user.
-      projects.includes(tracked_branches: { test_jobs: :test_job_files })
-  end
+  layout "dashboard"
 
   protected
 
