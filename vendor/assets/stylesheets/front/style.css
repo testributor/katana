@@ -424,6 +424,14 @@ ul.social-icons li a i {
   }
 }
 
+.navbar-brand.text-right-logo {
+  margin-top: -12px;
+
+  h2 {
+    padding-left: 10px;
+  }
+}
+
 /* LOGIN PAGE */
 
 .wrapper-page {
@@ -432,18 +440,15 @@ ul.social-icons li a i {
 }
 
 .text-right-logo {
-  height: 52px;
-  width: 167px;
-  margin-left: 100px;
+  color: #fff;
 
   img {
-    width: 55px;
     float: left;
-    margin-top: -3px;
+    width: 70px;
   }
 
-  h3 {
-    margin-top: 12px;
-    float: right;
+  h2 {
+    display: inline-block;
+    vertical-align: middle;
   }
 }

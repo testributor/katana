@@ -67,3 +67,12 @@ class Capybara::Rails::TestCase
 end
 require 'minitest/unit'
 require 'mocha/mini_test'
+
+OmniAuth.config.test_mode = true
+OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new({
+  :provider => 'github',
+  :uid => '123545',
+  :info => {
+    :email => 'spyros@github.com'
+  }
+})

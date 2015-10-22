@@ -40,5 +40,15 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
           must_be :empty?
       end
     end
+
+    describe 'sign_up with github' do
+      before { visit new_user_registration_path }
+
+      it 'allows the user to sign up with their github account' do
+        first('.btn-github').click
+        page.must_have_content 'spyros@github.com'
+        page.must_have_selector 'a[href="/users/sign_out"]'
+      end
+    end
   end
 end

@@ -171,6 +171,8 @@ ActiveRecord::Schema.define(version: 20151111152216) do
     t.datetime "invitation_accepted_at"
     t.datetime "invitation_sent_at"
     t.integer  "invited_by_id"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

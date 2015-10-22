@@ -9,6 +9,6 @@
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
     - flash.each do |name, msg|
-      = content_tag :div, msg, id: "flash_#{name}", class: "alert alert-#{name == 'alert' ? 'danger' : 'notice' }"
+      = content_tag :div, msg, id: "flash_#{name}", class: "alert alert-#{name == 'alert' ? 'danger' : 'info' }"
     = yield
     = javascript_include_tag 'front'

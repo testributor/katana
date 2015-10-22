@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   # :lockable, :timeoutable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable
+         :confirmable, :omniauthable, omniauth_providers: %w(github)
 
   attr_encrypted_options.merge!(key: ENV['ENCRYPTED_TOKEN_SECRET'],
     mode: :per_attribute_iv_and_salt)
@@ -31,5 +31,23 @@ class User < ActiveRecord::Base
     end
   rescue Octokit::Unauthorized
     return
+  end
+
+  def self.from_omniauth(auth)
+    if user = User.find_by(email: auth.info.email)
+      user.update(provider: auth.provider,
+                  uid: auth.uid,
+                  confirmed_at: user.confirmed_at || Date.current)
+
+      user
+    else
+      where(provider: auth.provider, uid: auth.uid).first_or_create! do |auth_user|
+        auth_user.provider = auth.provider
+        auth_user.uid = auth.uid
+        auth_user.email = auth.info.email
+        auth_user.confirmed_at = Date.current
+        auth_user.password = Devise.friendly_token[0,20]
+      end
+    end
   end
 end

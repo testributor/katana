@@ -1,15 +1,11 @@
 .wrapper-page.animated.fadeInDown
-  .text-center
-    = link_to root_path do
-      %div.text-right-logo
-        %img{alt: "logo", src: image_path("logo.png")}
-        %h3 Testributor
-    %h4 Test your code faster than ever
-    %br
   .panel.panel-color.panel-primary
     .panel-heading
       %h3.text-center.m-t-10
-        Forgot your password?
+        = link_to root_path do
+          %div.text-right-logo
+            %img{alt: "logo", src: image_path("logo.png")}
+            %h2 Log in to Testributor
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!
       .form-group
@@ -18,7 +14,5 @@
             type: "text", placeholder: 'E-mail', required: true
       .form-group.text-right
         .col-xs-12
-          = f.submit "Send me reset password instructions", class: "btn btn-purple w-md"
-      .form-group.m-t-30
-        .col-sm-7
-          = render "devise/shared/links"
+          = f.submit "Send me reset password instructions", class: "btn btn-primary w-md"
+      = render "devise/shared/links"

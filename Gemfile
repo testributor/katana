@@ -15,6 +15,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'bootstrap-sass'
+gem 'bootstrap-social-rails'
 gem 'font-awesome-rails'
 gem 'exception_notification'
 gem 'gretel'
@@ -35,6 +36,7 @@ gem 'attr_encrypted'
 # commit that fixes the creation of tokens in client_credentials flow
 gem 'doorkeeper', github: 'doorkeeper-gem/doorkeeper', ref: ' f9d5e3d'
 gem 'oauth2'
+gem 'omniauth-github'
 gem 'active_model_serializers', :github => 'rails-api/active_model_serializers', :ref => '1f0886' # 0.10 rc version
 gem 'simple_form'
 

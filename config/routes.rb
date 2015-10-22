@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   use_doorkeeper
 
-  devise_for :users, :controllers => { :invitations => 'users/invitations' }
   devise_for :projects
+  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks",
+                                       :invitations => 'users/invitations' }
 
   namespace :api, default: { format: 'json' } do
     namespace :v1 do
@@ -24,12 +25,13 @@ Rails.application.routes.draw do
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
 
   authenticated :user do
-   root to: "dashboard#index", as: :authenticated_root
+    root to: "dashboard#index", as: :authenticated_root
   end
 
   unauthenticated do
-   root to: "home#index"
+    root to: "home#index"
   end
+
   # If you put this in the defaults(project: nil) block above it will erase
   # the "project" param from create action resulting in error.
   resources :projects, except: [:index, :edit, :update] do
