@@ -17,6 +17,10 @@
   - if current_project
     %li{ class: current_page?(project_path(current_project)) ? 'active' : nil }
       = link_to "Tracked branches", project_path(current_project)
+      %ul
+        - current_project.tracked_branches.each do |branch|
+          %li= link_to branch.branch_name,
+            project_branch_test_runs_path(branch, current_project)
     %li{ class: current_page?(project_files_path(current_project)) ? 'active' : nil }
       = link_to "Files", project_files_path(current_project)
   - else
