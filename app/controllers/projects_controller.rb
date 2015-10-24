@@ -18,6 +18,10 @@ class ProjectsController < DashboardController
     end
   end
 
+  def api_credentials
+    @project = current_user.projects.find(params[:id])
+  end
+
   def create
     if project_params[:repository_id].present?
       if (project = create_project).persisted?

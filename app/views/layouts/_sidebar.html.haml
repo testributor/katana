@@ -27,5 +27,9 @@
     - if current_user.participating_projects.any?
       - current_user.participating_projects.each do |project|
         %li= link_to project.name, project_path(project)
+
   - if current_project && current_project.user_id == current_user.id
     %li= link_to t('invite_users'), new_project_invitation_path(current_project)
+
+  - if current_project
+    %li= link_to "API Credentials", api_credentials_project_path(current_project)
