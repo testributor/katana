@@ -8,36 +8,45 @@ class WebhooksController < ApplicationController
     # https://developer.github.com/v3/repos/hooks/#webhook-headers
     if request.headers['HTTP_X_GITHUB_EVENT'] == 'delete' &&
       params[:ref_type] == 'branch'
-      repository_id = params[:repository][:id]
-      branch_name = params[:ref]
-      # TODO Do any pre-branch removal tasks
-      projects = Project.where(repository_provider: 'github',
-        repository_id: repository_id)
-      projects.each do |project|
-        if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
-          tracked_branch.destroy!
-        end
-      end
+      handle_delete
     elsif request.headers['HTTP_X_GITHUB_EVENT'] == 'push' &&
       params[:head_commit].present?
-      repository_id = params[:repository][:id]
-      projects = Project.where(repository_provider: 'github',
-        repository_id: repository_id)
-      projects.each do |project|
-        branch_name = params[:ref].split('/').last
-        if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
-          test_run = tracked_branch.
-            test_runs.build(commit_sha: params[:head_commit][:id])
-          test_run.build_test_jobs
-          test_run.save!
-        end
-      end
+      handle_push
     end
 
     head :ok
   end
 
   private
+
+  def handle_push
+    repository_id = params[:repository][:id]
+    projects = Project.where(repository_provider: 'github',
+      repository_id: repository_id)
+    projects.each do |project|
+      branch_name = params[:ref].split('/').last
+      if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
+        test_run = tracked_branch.
+          test_runs.build(commit_sha: params[:head_commit][:id])
+        test_run.build_test_jobs
+        test_run.save!
+      end
+    end
+  end
+
+  def handle_delete
+    repository_id = params[:repository][:id]
+    branch_name = params[:ref]
+    # TODO Do any pre-branch removal tasks
+    projects = Project.where(repository_provider: 'github',
+      repository_id: repository_id)
+    projects.each do |project|
+      if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
+        tracked_branch.destroy!
+      end
+    end
+  end
+
   def verify_request_from_github!(request_body=request.body.read)
     signature = 'sha1=' + OpenSSL::HMAC.hexdigest(
       OpenSSL::Digest.new('sha1'),
