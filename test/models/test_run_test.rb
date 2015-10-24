@@ -27,6 +27,10 @@ class TestRunTest < ActiveSupport::TestCase
       _test_run.total_running_time.must_equal 2.hours
     end
 
+    it "returns nil when TestJob doesn't exist" do
+      _test_run.total_running_time.must_equal nil
+    end
+
     it "returns nil when completed_at, started_at are missing" do
       times = [
         { started_at: nil, completed_at: nil },
