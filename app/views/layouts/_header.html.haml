@@ -10,19 +10,6 @@
         %span.icon-bar
       = link_to brand_name, root_path, class: "navbar-brand"
     #navbar.collapse.navbar-collapse
-      - if user_signed_in?
-        %ul.nav.navbar-nav
-          - if current_project
-            %li.dropdown
-              %a.dropdown-toggle{ href: "#", data: { toggle: "dropdown" },
-                role: "button", "aria-haspopup" => "true",
-                "aria-expanded" => "false" }
-                = current_project.name
-                %span.caret
-              %ul.dropdown-menu
-                - current_user.participating_projects.each do |project|
-                  %li{ class: current_page?(project_path(project)) ? 'active' : nil }
-                    = link_to project.name, project_path(project)
       %ul.nav.navbar-nav.navbar-right
         %li.dropdown
           %a.dropdown-toggle{ data: { toggle: 'dropdown' }, role: 'button',
@@ -30,8 +17,6 @@
             = user_signed_in? ? current_user.email : 'Account'
             %span.caret
           %ul.dropdown-menu
-            - if current_project && current_project.user_id == current_user.id
-              %li= link_to I18n.t('.invite_user'), new_project_invitation_path(current_project)
             - unless user_signed_in?
               %li= link_to 'Sign in', new_user_session_path
               %li= link_to 'Sign up', new_user_registration_path

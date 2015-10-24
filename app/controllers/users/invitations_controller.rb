@@ -1,5 +1,6 @@
 class Users::InvitationsController < Devise::InvitationsController
   include Controllers::EnsureProject
+  layout 'dashboard'
 
   before_action :authenticate_user!
   before_action :ensure_project_exists!, except: [:edit, :update]
