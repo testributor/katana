@@ -18,6 +18,8 @@ class TestRun < ActiveRecord::Base
     started_at_times = test_jobs.order("started_at ASC").
       pluck(:started_at)
 
+    return if completed_at_times.blank? || started_at_times.blank?
+
     if completed_at_times.length == completed_at_times.compact.length
       time = completed_at_times.last - started_at_times.first
     elsif time_first_job_started = started_at_times.compact.first
