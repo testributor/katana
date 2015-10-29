@@ -27,12 +27,8 @@ class TestRun < ActiveRecord::Base
     time.round if time
   end
 
-  def status_text
-    TestStatus.new(status, failed?).text
-  end
-
-  def css_class
-    TestStatus.new(status, failed?).css_class
+  def status
+    TestStatus.new(read_attribute(:status), failed?)
   end
 
   def build_test_jobs

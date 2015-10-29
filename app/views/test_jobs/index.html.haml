@@ -1,25 +1,29 @@
-%h1 Listing test jobs
-
-%table.table.table-striped.table-bordered.table-condensed.table-hover
-  %thead
-    %tr
-      %th= "File"
-      %th= "Result"
-      %th= "Count"
-      %th= "Assertions"
-      %th= "Skips"
-      %th= "Errors"
-      %th= "Failures"
-      %th= "Status"
-  %tbody
-    - @test_jobs.each do |test_job|
-      %tr
-        %td= test_job.file_name
-        %td= test_job.result
-        %td= test_job.count
-        %td= test_job.assertions
-        %td= test_job.skips
-        %td= test_job.test_errors
-        %td= test_job.failures
-        %td= test_job.status
-        %td= link_to 'Retry', '#' # TODO
+.panel-heading
+  %h1 Listing test jobs
+.panel-body
+  .row
+    .col-md-12.col-sm-12.col-xs-12
+      .table-responsive
+        %table.table
+          %thead
+            %tr
+              %th= "File"
+              %th= "Result"
+              %th= "Count"
+              %th= "Assertions"
+              %th= "Skips"
+              %th= "Errors"
+              %th= "Failures"
+              %th= "Status"
+          %tbody
+            - @test_jobs.each do |test_job|
+              %tr
+                %td= test_job.file_name
+                %td= test_job.result
+                %td= test_job.count
+                %td= test_job.assertions
+                %td= test_job.skips
+                %td= test_job.test_errors
+                %td= test_job.failures
+                %td= test_job.status
+                %td= link_to 'Retry', '#' # TODO

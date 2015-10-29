@@ -24,7 +24,7 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
         patch :bind_next_pending, default: { format: :json }
         result = JSON.parse(response.body)
         result["file_name"].must_equal _test_jobs[-1].file_name
-        _test_jobs[-1].reload.status.must_equal TestStatus::RUNNING
+        _test_jobs[-1].reload.status.code.must_equal TestStatus::RUNNING
       end
     end
   end

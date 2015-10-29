@@ -12,5 +12,9 @@
       = branch.commit_sha
       = branch.started_at
       = branch.total_running_time
-      %span{class: branch.css_class}
-        = branch.status_text
+      %span{class: branch.status.css_class}
+        = branch.status.text
+      %span
+        = button_to branch.status.cta_text,
+          project_branch_test_run_path(current_project, branch.id, branch.try(:last_run).try(:id), status: branch.status.status_to_set),
+          class: 'btn btn-primary', method: :put

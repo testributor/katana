@@ -3,19 +3,6 @@ module ApplicationHelper
     'Testributor'
   end
 
-  def branch_cta(status)
-    case status
-    when TestStatus::PENDING, TestStatus::RUNNING
-      button_text = "Cancel"
-    else
-      button_text = "Retry"
-    end
-
-    if button_text
-      button_tag button_text, class: 'btn btn-primary retry'
-    end
-  end
-
   def controller_and_action
     "#{controller_path.split("/").join(' ')} #{action_name.gsub('_','-')}"
   end

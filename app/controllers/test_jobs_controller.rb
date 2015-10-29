@@ -11,6 +11,7 @@ class TestJobsController < DashboardController
     end
   end
 
+  # TODO : remove, not used
   def index
     @test_jobs = current_project.test_runs.find(params[:test_run_id]).test_jobs
   end
