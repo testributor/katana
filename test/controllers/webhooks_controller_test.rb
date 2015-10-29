@@ -15,6 +15,23 @@ class WebhooksControllerTest < ActionController::TestCase
   end
 
   describe "POST#github" do
+    describe "delete event" do
+      before do
+        request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
+        @controller.stubs(:verify_request_from_github!).returns(nil)
+        TestRun.any_instance.stubs(:test_file_names).returns(
+          [filename_1, filename_2 ])
+        post :github,
+          { repository: { id: project.repository_id },
+            ref_type: 'branch',
+            ref: "#{tracked_branch.branch_name}" }
+      end
+
+      it "destroys the branch" do
+        TrackedBranch.count.must_equal 0
+      end
+    end
+
     describe "push event" do
       before do
         request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
