@@ -12,6 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require pace.min
+//= require wow.min
+//= require jquery.nicescroll.js
+//= require jquery.app
 //= require underscore
 //= require bootstrap-sprockets
 //= require init

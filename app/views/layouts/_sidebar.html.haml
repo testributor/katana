@@ -1,29 +1,34 @@
-.collapse.navbar-collapse.navbar-ex1-collapse
-  - if user_signed_in?
-    %ul.nav.navbar-nav.side-nav
-      %li
-        = link_to root_url do
-          %i.fa.fa-fw.fa-dashboard
-          Dashboard
-      - current_user.projects.each do |project|
-        %li
-          = link_to "javascript:;", data: { toggle: "collapse", target: "##{project.name}" } do
-            %i.fa.fa-fw.fa-list-ul.fa-flip-horizontal
-            %span= project.name
-            %i.fa.fa-fw.fa-caret-down
-          %ul.collapse{ id: project.name}
-            %li{ class: current_page?(project_path(project)) ? 'active' : nil }
-              %ul
-                - project.tracked_branches.each do |branch|
-                  %li= link_to branch.branch_name,
-                    project_branch_test_runs_path(project, branch)
-            %li{ class: current_page?(project_files_path(project)) ? 'active' : nil }
-              = link_to "Files", project_files_path(project)
-            %li= link_to t('invite_users'), new_project_invitation_path(project)
-            %li= link_to "API Credentials", api_credentials_project_path(project)
+%aside.left-panel
+  .logo
+    = link_to root_url, class: "logo-expanded" do
+      %i.ion-social-buffer
+      %span.nav-label Testributor
 
-      %li
-        =link_to new_project_path do
-          %i.fa.fa-fw.fa-plus
-          Add a project
+  %nav.navigation
+    - if user_signed_in?
+      %ul.list-unstyled
+        %li.active
+          = link_to root_url do
+            %i.fa.fa-fw.fa-dashboard
+            %span.nav-label Dashboard
+
+        - current_user.projects.each do |project|
+          %li
+            = link_to "javascript:;", data: { toggle: "collapse", target: "##{project.name}" } do
+              %span= project.name
+              %i.fa.fa-fw.fa-caret-down
+            %ul.collapse{ id: project.name}
+              %li{ class: current_page?(project_path(project)) ? 'active' : nil }
+                %ul
+                  - project.tracked_branches.each do |branch|
+                    %li= link_to branch.branch_name,
+                      project_branch_test_runs_path(project, branch)
+              %li{ class: current_page?(project_files_path(project)) ? 'active' : nil }
+                = link_to "Files", project_files_path(project)
+              %li= link_to t('invite_users'), new_project_invitation_path(project)
+              %li= link_to "API Credentials", api_credentials_project_path(project)
+        %li
+          =link_to new_project_path do
+            %i.fa.fa-fw.fa-plus
+            Add a project
 

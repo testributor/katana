@@ -1,6 +1,7 @@
-@import "bootstrap-sprockets";
+@import "style";
+@import "animate";
+@import "bootstrap-theme";
 @import "bootstrap";
-@import "common";
-@import "pages/dashboard/dashboard";
-@import "pages/dashboard/project_files";
+@import "bootstrap-reset";
 @import "font-awesome";
+@import "helper"

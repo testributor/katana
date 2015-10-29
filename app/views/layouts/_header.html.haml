@@ -1,21 +1,132 @@
-.navbar-header
-  %button.navbar-toggle.collapsed{ data: { toggle: 'collapse', target: '#navbar' },
-    "aria-expanded" => "false", "aria-controls" => 'navbar' }
-    %span.sr-only
-      Toggle navigation
+%header.top-head.container-fluid
+  %button.navbar-toggle.pull-left{:type => "button"}
+    %span.sr-only Toggle navigation
     %span.icon-bar
     %span.icon-bar
     %span.icon-bar
-  = link_to brand_name, root_path, class: "navbar-brand"
-%ul.nav.navbar-right.top-nav
-  %li.dropdown
-    %a.dropdown-toggle{ data: { toggle: 'dropdown' }, role: 'button',
-      "aria_haspopup" => "true", "aria_expanded" => "false" }
-      = user_signed_in? ? current_user.email : 'Account'
-      %span.caret
-    %ul.dropdown-menu
-      - unless user_signed_in?
-        %li= link_to 'Sign in', new_user_session_path
-        %li= link_to 'Sign up', new_user_registration_path
-      - else
-        %li= link_to('Sign out', destroy_user_session_path, :method => :delete)
+  / Search
+  %form.navbar-left.app-search.pull-left.hidden-xs{:role => "search"}
+    %input.form-control{:placeholder => "Search...", :type => "text"}
+      %a{:href => ""}
+        %i.fa.fa-search
+  / Left navbar
+  %nav.navbar-default.hidden-xs{:role => "navigation"}
+    %ul.nav.navbar-nav
+      %li.dropdown
+        %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+          English
+          %span.caret
+        %ul.dropdown-menu{:role => "menu"}
+          %li
+            %a{:href => "#"} German
+          %li
+            %a{:href => "#"} French
+          %li
+            %a{:href => "#"} Italian
+          %li
+            %a{:href => "#"} Spanish
+      %li
+        %a{:href => "#"} Files
+  / Right navbar
+  %ul.list-inline.navbar-right.top-menu.top-right-menu
+    / mesages
+    %li.dropdown
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        %i.fa.fa-envelope-o
+        %span.badge.badge-sm.up.bg-purple.count 4
+      %ul.dropdown-menu.extended.fadeInUp.animated.nicescroll{:tabindex => "5001"}
+        %li
+          %p Messages
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %img.img-circle.thumb-sm.m-r-15{:alt => "img", :src => "img/avatar-2.jpg"}/
+            %span.block
+              %strong John smith
+            %span.media-body.block
+              New tasks needs to be done
+              %br
+                %small.text-muted 10 seconds ago
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %img.img-circle.thumb-sm.m-r-15{:alt => "img", :src => "img/avatar-3.jpg"}/
+            %span.block
+              %strong John smith
+            %span.media-body.block
+              New tasks needs to be done
+              %br
+                %small.text-muted 3 minutes ago
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %img.img-circle.thumb-sm.m-r-15{:alt => "img", :src => "img/avatar-4.jpg"}/
+            %span.block
+              %strong John smith
+            %span.media-body.block
+              New tasks needs to be done
+              %br
+                %small.text-muted 10 minutes ago
+        %li
+          %p
+            %a.text-right{:href => "inbox.html"} See all Messages
+    / /messages
+    / Notification
+    %li.dropdown
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        %i.fa.fa-bell-o
+        %span.badge.badge-sm.up.bg-pink.count 3
+      %ul.dropdown-menu.extended.fadeInUp.animated.nicescroll{:tabindex => "5002"}
+        %li.noti-header
+          %p Notifications
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %i.fa.fa-user-plus.fa-2x.text-info
+            %span
+              New user registered
+              %br
+                %small.text-muted 5 minutes ago
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %i.fa.fa-diamond.fa-2x.text-primary
+            %span
+              Use animate.css
+              %br
+                %small.text-muted 5 minutes ago
+        %li
+          %a{:href => "#"}
+            %span.pull-left
+              %i.fa.fa-bell-o.fa-2x.text-danger
+            %span
+              Send project demo files to client
+              %br
+                %small.text-muted 1 hour ago
+        %li
+          %p
+            %a.text-right{:href => "#"} See all notifications
+    / /Notification
+    / user login dropdown start
+    %li.dropdown.text-center
+      %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+        %img.img-circle.profile-img.thumb-sm{:alt => "", :src => "img/avatar-2.jpg"}
+          %span.username= current_user.email
+          %span.caret
+      %ul.dropdown-menu.extended.pro-menu.fadeInUp.animated{:style => "overflow: hidden; outline: none;", :tabindex => "5003"}
+        - unless user_signed_in?
+          %li= link_to 'Sign in', new_user_session_path
+          %li= link_to 'Sign up', new_user_registration_path
+        - else
+          %li
+            %a{:href => "profile.html"}
+              %i.fa.fa-briefcase>
+              Profile
+          %li
+            %a{:href => "#"}
+              %i.fa.fa-cog
+              Settings
+          %li
+            = link_to(destroy_user_session_path, :method => :delete) do
+              %i.fa.fa-sign-out
+              Sign out
