@@ -7,10 +7,13 @@
     = javascript_include_tag 'front'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
-    = render partial: 'layouts/header'
-    - if notice
-      %p.alert.alert-success= notice
-    - if alert
-      %p.alert.alert-danger= alert
-    .container
-      = yield
+    %nav.navbar.navbar-inverse.navbar-fixed-top{ role: "navigation" }
+      = render partial: 'layouts/header'
+    .container-fluid
+      .row
+        - if notice
+          %p.alert.alert-success= notice
+        - if alert
+          %p.alert.alert-danger= alert
+        .container
+          = yield

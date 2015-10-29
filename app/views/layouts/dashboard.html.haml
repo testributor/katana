@@ -2,21 +2,20 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title= brand_name
     = stylesheet_link_tag    'dashboard', media: 'all'
     %link{href:'http://fonts.googleapis.com/css?family=Lato:400,700', rel:'stylesheet', type:'text/css'}
     = javascript_include_tag 'dashboard'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
-    = render partial: 'layouts/header'
-    .container-fluid
-      .row
-        .sidebar.col-sm-3.col-md-2
-          = render partial: 'layouts/sidebar'
-        .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
-          - if notice
-            %p.alert.alert-success= notice
-          - if alert
-            %p.alert.alert-danger= alert
-          .container-fluid
+    #wrapper
+      %nav.navbar.navbar-inverse.navbar-fixed-top{ role: "navigation" }
+        = render partial: 'layouts/header'
+        = render partial: 'layouts/sidebar'
+      #page-wrapper
+        .container-fluid
+          .row
+            - if notice
+              %p.alert.alert-success= notice
+            - if alert
+              %p.alert.alert-danger= alert
             = yield
