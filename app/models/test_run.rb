@@ -33,8 +33,56 @@ class TestRun < ActiveRecord::Base
     TestStatus.new(read_attribute(:status), failed?)
   end
 
+  # Example yml file:
+  # each:
+  #   pattern: 'test/*/**_test.rb'
+  #   command: 'bin/rake test %{file}'
+  #   before: 'some_command'
+  # javascript:
+  #   command: 'bin/rake test_javascript'
+  #   after: "some_cleanup_command"
+  #
+  # Return value meaning:
+  #   - Hash with errors key: syntax error in yml pattern missing or other
+  #   - nil: no yml file found
+  #   - true: jobs built successfully
   def build_test_jobs
-    test_file_names.map { |file_name| test_jobs.build(file_name: file_name) }
+    yml_contents = jobs_yml
+    return nil unless yml_contents
+
+    begin
+      jobs_description = YAML.load(yml_contents)
+    rescue Psych::SyntaxError
+      return { errors: "yml syntax error" }
+    end
+
+    if (each_description = jobs_description.delete("each"))
+      pattern = each_description["pattern"]
+      command = each_description["command"]
+      before = each_description["before"].to_s
+      after = each_description["after"].to_s
+
+      return { errors: '"each" block defined but no "pattern"' } unless pattern
+      return { errors: '"each" block defined but no "command"' } unless command
+
+      file_names = project_file_names
+      file_names.select{|f| f.match(pattern)}.each do |f|
+        test_jobs.build(
+          command: command.gsub(/%{file}/, f), before: before, after: after)
+      end
+    end
+
+    jobs_description.each do |job_name, description|
+      command = description["command"]
+      before = description["before"].to_s
+      after = description["after"].to_s
+
+      return { errors: "#{job_name} is missing \"command\" key" } unless command
+
+      test_jobs.build(command: command, before: before, after: after)
+    end
+
+    true
   end
 
   # Returns the content of JOBS_YML_PATH file. The file can either be defined
@@ -67,12 +115,13 @@ class TestRun < ActiveRecord::Base
     file
   end
 
-  # This method returns all test filenames
-  # for a given TestJob from github.
-  def test_file_names
+  # This method returns all filenames for this repo and ref from github.
+  # TODO: Github limit is something like 1000 files per request.
+  # Refactor this method so that it always returns all filenames no matter
+  # how many (or find some better solution).
+  def project_file_names
     repo = tracked_branch.project.repository_id
-    github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path).
-      select { |path| path.match(/_test\.rb/) }
+    github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path)
   end
 
   private

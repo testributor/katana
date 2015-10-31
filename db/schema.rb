@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20151111152216) do
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"
-    t.string   "file_name",    default: "", null: false
+    t.string   "command",      default: "", null: false
     t.text     "result",       default: "", null: false
     t.integer  "status",       default: 0,  null: false
     t.integer  "test_errors",  default: 0,  null: false
@@ -120,6 +120,8 @@ ActiveRecord::Schema.define(version: 20151111152216) do
     t.datetime "completed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "before",       default: "", null: false
+    t.text     "after",        default: "", null: false
   end
 
   create_table "test_runs", force: :cascade do |t|
