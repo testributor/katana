@@ -11,8 +11,8 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
-//= require underscore
-//= require bootstrap-sprockets
+//= require bootstrap
+//= require front/jquery.easing.1.3.min
+//= require front/SmoothScroll
 //= require init
 //= require_tree .

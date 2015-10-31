@@ -111,7 +111,7 @@
     %li.dropdown.text-center
       %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
         %img.img-circle.profile-img.thumb-sm{:alt => "", :src => "img/avatar-2.jpg"}
-          %span.username= current_user.email
+          %span.username= current_user.email if user_signed_in?
           %span.caret
       %ul.dropdown-menu.extended.pro-menu.fadeInUp.animated{:style => "overflow: hidden; outline: none;", :tabindex => "5003"}
         - unless user_signed_in?
