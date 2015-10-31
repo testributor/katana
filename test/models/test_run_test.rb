@@ -42,6 +42,84 @@ class TestRunTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#jobs_yml" do
+    subject { FactoryGirl.create(:test_run) }
+    let(:client) { Octokit::Client.new(access_token: "some_token") }
+    let(:file) do
+      file = mock
+      file.stubs(:content).returns(Base64.encode64("repo version"))
+
+      file
+    end
+
+    before do
+      subject.stubs(:github_client).returns(client)
+    end
+
+    describe "when file exists both in project_files and repo" do
+      before do
+        # project_files version
+        subject.project.project_files.create(
+          path: TestRun::JOBS_YML_PATH, contents: "project_files version")
+
+        # Stub repo version
+        client.stubs(:contents).
+          with(subject.tracked_branch.project.repository_id,
+               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+          returns(file)
+      end
+
+      it "returns the repo version" do
+        subject.jobs_yml.must_equal 'repo version'
+      end
+    end
+
+    describe "when file only exists in the repo" do
+      before do
+        # Stub repo version
+        client.stubs(:contents).
+          with(subject.tracked_branch.project.repository_id,
+               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+          returns(file)
+      end
+
+      it "returns the repo version" do
+        subject.jobs_yml.must_equal 'repo version'
+      end
+    end
+
+    describe "when file only exists in project_files" do
+      before do
+        # project_files version
+        subject.project.project_files.create(
+          path: TestRun::JOBS_YML_PATH, contents: "project_files version")
+
+        client.stubs(:contents).
+          with(subject.tracked_branch.project.repository_id,
+               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+          raises(Octokit::NotFound)
+      end
+
+      it "returns the project_files version" do
+        subject.jobs_yml.must_equal 'project_files version'
+      end
+    end
+
+    describe "when file does not exist" do
+      before do
+        # Stub repo version
+        client.stubs(:contents).
+          with(subject.tracked_branch.project.repository_id,
+               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+          raises(Octokit::NotFound)
+      end
+
+      it "returns nil" do
+        subject.jobs_yml.must_be :nil?
+      end
+    end
+  end
+
   private
 
   def create_times(times, _test_run)

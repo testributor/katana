@@ -1,4 +1,6 @@
 class TestRun < ActiveRecord::Base
+  JOBS_YML_PATH = "testributor.yml"
+
   has_many :test_jobs, dependent: :delete_all
   belongs_to :tracked_branch
   belongs_to :user
@@ -33,6 +35,36 @@ class TestRun < ActiveRecord::Base
 
   def build_test_jobs
     test_file_names.map { |file_name| test_jobs.build(file_name: file_name) }
+  end
+
+  # Returns the content of JOBS_YML_PATH file. The file can either be defined
+  # in Project's files (project_files association) or it can be checked in the
+  # git repository. If defined both ways the repo version wins to let the users
+  # use a customized file in specific branches (e.g. if they don't want to run
+  # all tests on some feature branch they can commit this file to override the
+  # global project configuration).
+  def jobs_yml
+    file = nil
+
+    if github_client.present?
+      repo = tracked_branch.project.repository_id
+      file = 
+        begin
+          file =
+            github_client.contents(repo, path: JOBS_YML_PATH, ref: commit_sha)
+
+          Base64.decode64(file.content)
+        rescue Octokit::NotFound
+          nil
+        end
+    end
+
+    if file.blank?
+      file =
+        project.project_files.where(path: JOBS_YML_PATH).first.try(:contents)
+    end
+
+    file
   end
 
   # This method returns all test filenames
