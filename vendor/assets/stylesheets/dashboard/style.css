@@ -1,20 +1,61 @@
-@import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500,700);
+/*
+Template Name: Velonic Dashboard build with Bootstrap v3.3.4
+Template Version: 1.0
+Author: CoderThemes
+Email: coderthemes@gmail.com
+Date: Jan 2015
+*/
 
+
+
+/* TABLE OF CONTENTS
+    1) General
+        1.1 Loader
+    2) Left Panel
+        2.1 Logo
+        2.2 Navigation
+        2.3 Sub-menu
+    3) Top Header
+    4) Content Area
+    5) Footer
+    6) Panel-Tab-Accordions
+    7) Portlets
+    8) Widgets
+    9) Chat / Todo
+   10) Calendar
+   11) Forms
+       11.1 Form wizard
+   12) Datatable
+   13) Chart
+   14) Mail
+   15) Maps
+   16) Profile
+   17) Timeline
+   18) Pages (Log-in,Register Etc....)
+
+   ======= Version 1.1 ======
+   19) Flot-chart / Rickshaw
+
+*/
+
+
+/******** 1. General ********/
 body {
   color: #797979;
-  background-color: #f5f5f5;
-  font-family: 'Roboto', sans-serif;
+  background-color: #edf0f0;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 0px !important;
   margin: 0px !important;
   font-size: 14px;
-}
-html {
-  overflow-x: hidden;
   position: relative;
-  min-height: 100%;
+}
+
+body, html {
+  overflow-x: hidden;
 }
 
 
+/* 1.1 Loader */
 .pace {
   -webkit-pointer-events: none;
   pointer-events: none;
@@ -28,7 +69,7 @@ html {
 }
 
 .pace .pace-progress {
-  background: #6e8cd7;
+  background: #3bc0c3;
   position: fixed;
   z-index: 2000;
   top: 0;
@@ -43,7 +84,7 @@ html {
   right: 0px;
   width: 100px;
   height: 100%;
-  box-shadow: 0 0 10px #6e8cd7, 0 0 5px #6e8cd7;
+  box-shadow: 0 0 10px #3bc0c3, 0 0 5px #3bc0c3;
   opacity: 1.0;
   -webkit-transform: rotate(3deg) translate(0px, -4px);
   -moz-transform: rotate(3deg) translate(0px, -4px);
@@ -61,8 +102,8 @@ html {
   width: 30px;
   height: 30px;
   border: solid 2px transparent;
-  border-top-color: #6e8cd7;
-  border-left-color: #6e8cd7;
+  border-top-color: #3bc0c3;
+  border-left-color: #3bc0c3;
   border-radius: 50px;
   -webkit-animation: pace-spinner 400ms linear infinite;
   -moz-animation: pace-spinner 400ms linear infinite;
@@ -93,9 +134,10 @@ html {
 }
 
 
+/******** 2. Left Panel (aside navigation) ********/
 aside.left-panel {
-  background-color: #2f353f;
-  width: 250px;
+  background-color: #1a2942;
+  width: 230px;
   position: fixed;
   height: 100%;
   top: 0px;
@@ -107,7 +149,7 @@ aside.left-panel.collapsed {
   position: absolute;
   bottom: 0px;
 }
-
+    
 aside.left-panel.lg {
   width: 250px;
 }
@@ -115,26 +157,26 @@ aside.left-panel.lg {
 aside.left-panel.lg + .content {
   margin-left: 250px;
 }
-
+    
+/***** 2.1 LOGO *****/
 .logo {
   padding-top: 20px;
-  text-align: center;
 }
 
 .logo-expanded {
   font-size: 20px;
   letter-spacing: .05em;
   color: #fff !important;
+  padding: 0px 25px;
   font-weight: 700;
   text-transform: uppercase;
 }
-.logo-expanded i {
-  font-size: 28px;
+
+.logo-expanded span {
   vertical-align: middle;
-  color: #6e8cd7;
-  display: block;
 }
 
+/******** 2.2 Navigation *******/
 
 .navigation {
   margin: 50px 0px 20px;
@@ -151,7 +193,7 @@ aside.left-panel.lg + .content {
 
 .navigation > ul > li > a {
   display: block;
-  padding: 12px 25px;
+  padding: 15px 25px;
   color: #b4b6bd;
   font-size: 15px;
   text-decoration: none;
@@ -161,26 +203,16 @@ aside.left-panel.lg + .content {
   -o-transition: all 0.4s;
   font-weight: 400;
   outline: none !important;
-  border-left: 3px solid #2f353f;
-}
-.navigation > ul > li > a .badge {
-  margin-top: 5px;
-  float: right;
-}
-aside.left-panel.collapsed .navigation > ul > li > a .badge {
-  display: none;
 }
 
 .navigation > ul > li > a:hover {
   color: #fff;
 }
 
-.navigation > ul > li:hover > a,
 .navigation > ul > li.active:hover > a,
-.navigation > ul > li.active > a{
-  color: #fff;
-  background: #272c35;
-  border-left: 3px solid #6e8cd7;
+.navigation > ul > li.active > a {
+  color: #3bc0c3;
+  background: #162338;
 }
 
 .navigation ul li a i {
@@ -199,9 +231,10 @@ aside.left-panel.collapsed .navigation > ul > li > a .badge {
 }
 
 
+/*** 2.3 Sub Menu ***/
 .navigation ul li ul {
   display: none;
-  background-color: #272c35;
+  background-color: #162338;
   padding-bottom: 10px;
 }
 
@@ -211,7 +244,7 @@ aside:not(.collapsed) .navigation ul li.active ul {
 
 .navigation ul li ul li a {
   padding: 8px 25px 8px 55px;
-  color: #9E9E9E;
+  color: #75798B;
   text-decoration: none;
   white-space: nowrap;
   transition: all 0.2s;
@@ -219,7 +252,7 @@ aside:not(.collapsed) .navigation ul li.active ul {
   -webkit-transition: all 0.2s;
   -o-transition: all 0.2s;
   font-size: 14px;
-  border-left: 0px solid #9E9E9E;
+  border-left: 0px solid #75798B;
   text-align: left;
   display: block;
   outline: none !important;
@@ -230,13 +263,15 @@ aside:not(.collapsed) .navigation ul li.active ul {
 }
 
 .navigation ul li ul li.active a {
-  color: #eeeeee !important;
+  color: #fff !important;
 }
 
 
-
+/******************** 3.Top Header ****************/
+    
 header {
   background-color: #fff;
+  border-bottom: 1px solid #ececee;
   padding-top: 4px;
   padding-bottom: 4px;
 }
@@ -257,30 +292,35 @@ header {
   margin-bottom: 8px;
   margin-right: 15px;
 }
-.app-search a {
-  position: absolute;
-  top: 8px;
-  right: 15px;
-  color: #c4c4cd;
-}
 
 .app-search .form-control,
 .app-search .form-control:focus {
   border: none;
   font-size: 13px;
   color: #444444;
-  padding-left: 20px;
+  padding-left: 40px;
   background: #edf1f2;
   box-shadow: none;
   border-radius: 34px;
   margin-top: 1px;
 }
 
+.app-search:before {
+  content: "\f002";
+  position: absolute;
+  left: 12px;
+  font-family: FontAwesome;
+  cursor: pointer;
+  top: 7px;
+  color: #c4c4cd;
+  display: inline-block;
+}
+
 .app-search .form-control::-moz-placeholder {
   color: #c4c4cd;
 }
 .top-nav .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-    background: #f5f5f5;
+    background: #edf1f2;
 }
 
 .dropdown .extended {
@@ -292,7 +332,6 @@ header {
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   border: none;
   max-height: 330px;
-  margin-top: 4px;
 }
 
 .dropdown .extended li {
@@ -314,7 +353,7 @@ header {
 
 .dropdown .extended p {
   font-weight: 600;
-  background-color: #F5F5F5;
+  background-color: #E4E9ED;
   padding: 10px 15px 11px 15px;
   margin-bottom: 0px;
 }
@@ -358,7 +397,7 @@ header {
 }
 
 .top-menu li >a:hover,.top-menu li >a:focus,.top-menu li >a:active {
-  background-color: #F5F5F5;
+  background-color: #edf1f2;
 }
 
 .top-menu .dropdown-menu li {
@@ -383,40 +422,40 @@ header {
 }
 
 
+/***************** 4.Content Area (right) ****************/
 
 .content {
-  margin-left: 250px;
+  margin-left: 230px;
 }
 
 .content > .container-fluid {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 .wraper {
   padding-top: 20px;
+  padding-bottom: 20px;
   min-height: 550px;
-  padding-bottom: 70px;
 }
 .page-title {
-  padding: 0px 0px 20px;
+  padding: 10px 0px 30px;
 }
 .page-title h3 {
   margin: 0px;
-  font-size: 20px;
 }
 
 
+/***************** 5.Footer ****************/
 .footer {
   color: #58666e;
-  position: absolute;
-  width: 100%;
-  bottom: 0px;
   padding: 20px 30px;
-  background-color: #f9f9f9;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 600;
+  background-color: #e6eaed;
+  border-top: 1px solid #ddd;
 }
 
+/***************** 6.Panel-Tab-Accordions ****************/
 .nav.nav-tabs+.tab-content,.tabs-vertical-env .tab-content {
   background: #FFF;
   padding: 30px;
@@ -505,6 +544,7 @@ header {
 .table>thead>tr>td.middle-align, .table>tbody>tr>td.middle-align, .table>tfood>tr>td.middle-align, .table>thead>tr>th.middle-align, .table>tbody>tr>th.middle-align, .table>tfood>tr>th.middle-align {
   vertical-align: middle;
 }
+/* Modal-use */
 .modal-content .nav.nav-tabs+.tab-content, .tabs-vertical-env .tab-content, .modal-content .panel-group {
   margin-bottom: 0px;
 }
@@ -514,6 +554,7 @@ header {
 }
 
 
+/***************** 7.Portlets ****************/
 .portlet {
   margin-bottom: 20px;
   background: #fff;
@@ -521,7 +562,6 @@ header {
   -moz-transition: all 0.4s;
   -webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
-  border: 1px solid rgba(0,0,0,0.08);
 }
 
 .portlet .portlet-heading {
@@ -736,23 +776,25 @@ lesshat-selector {
 
 @keyframes loaderAnimate2 {
   0% {
-    box-shadow: inset #2f353f 0 0 0 17px;
+    box-shadow: inset #fff 0 0 0 17px;
     transform: rotate(-140deg);
   }
 
   50% {
-    box-shadow: inset #2f353f 0 0 0 2px;
+    box-shadow: inset #fff 0 0 0 2px;
   }
 
   100% {
-    box-shadow: inset #2f353f 0 0 0 17px;
+    box-shadow: inset #fff 0 0 0 17px;
     transform: rotate(140deg);
   }
 }
 
+/***************** 8.Widget  ****************/
 .widget-panel {
   padding: 40px 20px;
   border-radius: 4px;
+  color: #ffffff;
   position: relative;
   margin-bottom: 20px;
 }
@@ -779,16 +821,17 @@ lesshat-selector {
   padding-left: 30px;
 }
 .widget-style-2 i {
-  font-size: 48px;
+  font-size: 60px;
   float: right;
-  padding: 35px 35px 29px;
+  padding: 30px;
   margin-top: -40px;
   margin-right: -20px;
-  background: rgba(33,33,33,0.018);
+  color: #edf0f0;
+  background: rgba(255,255,255,0.2);
 }
 .widget-style-2 h2 {
   font-weight: 600;
-  font-size: 28px;
+  font-size: 32px;
 }
 
 .profile-widget {
@@ -872,9 +915,7 @@ lesshat-selector {
 }
 
 
-#todo-message {
-  font-size: 16px;
-}
+/************* 9.Chat / Todo **********/
 
 .conversation-list {
   list-style: none;
@@ -922,7 +963,7 @@ lesshat-selector {
 
 .conversation-list .ctext-wrap {
   padding: 10px;
-  background: #f5f5f5;
+  background: #d8f2f3;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -945,7 +986,7 @@ lesshat-selector {
   position: absolute;
   pointer-events: none;
   border-color: rgba(213,242,239,0);
-  border-right-color: #f5f5f5;
+  border-right-color: #d8f2f3;
   border-width: 5px;
   margin-top: -5px;
 }
@@ -988,6 +1029,7 @@ lesshat-selector {
 .chat-inputbar {
   padding-left: 30px;
 }
+/****ToDo List****/
 .todoapp {
   padding: 10px 30px 20px 30px !important;
 }
@@ -1006,6 +1048,7 @@ lesshat-selector {
 .todo-send {
   padding-left: 0px;
 }
+/************* 10.Calendar **********/
 .calendar {
   margin-bottom: 0px;
   float: left;
@@ -1085,7 +1128,7 @@ lesshat-selector {
 }
 
 #external-events .fc-event {
-  background: #6e8cd7;
+  background: #3bc0c3;
 }
 
 .new-event-form {
@@ -1097,12 +1140,16 @@ lesshat-selector {
 }
 
 
+/************* 11.Forms **********/
+/* Form-validation */
 .error {
   color: #ff0000;
 }
+/* Datapicker */
 .datepicker {
   border: 1px solid #ddd;
 }
+/* Multiple Select */
 .search-input {
   margin-bottom: 10px;
 }
@@ -1117,8 +1164,9 @@ lesshat-selector {
 }
 
 .ms-container .ms-selectable li.ms-hover, .ms-container .ms-selection li.ms-hover {
-  background-color: #6e8cd7;
+  background-color: #3bc0c3;
 }
+/* spinner */
 .spinner-buttons.btn-group-vertical .btn {
   height: 17px;
   margin: 0;
@@ -1143,6 +1191,7 @@ lesshat-selector {
   -webkit-border-radius: 0 0 4px !important;
 }
 
+/* summernote */
 .note-editor .note-toolbar {
   background-color: #f3f3f3;
   border-bottom: 1px solid #dfdfdf;
@@ -1168,6 +1217,7 @@ lesshat-selector {
   padding: 5px 0 10px 5px;
 }
 
+/* Code Editer */
 .code-edit-wrap {
   padding-top: 0px !important;
   margin-left: -30px;
@@ -1219,7 +1269,7 @@ lesshat-selector {
 .wizard > .steps .current a,
 .wizard > .steps .current a:hover,
 .wizard > .steps .current a:active {
-  background: #6e8cd7;
+  background: #3bc0c3;
 }
 
 .wizard > .steps .current a .number,
@@ -1243,7 +1293,7 @@ lesshat-selector {
 }
 
 .wizard > .actions a, .wizard > .actions a:hover, .wizard > .actions a:active {
-  background: #6e8cd7;
+  background: #3bc0c3;
   color: #fff;
   border-radius: 2px;
 }
@@ -1280,40 +1330,6 @@ div.dataTables_paginate ul.pagination {
 
 div.dataTables_info {
   padding-top: 38px;
-}
-/* Responsive Table */
-table.focus-on tbody tr.focused th, table.focus-on tbody tr.focused td {
-    background-color: #6e8cd7;
-  color: #ffffff;
-}
-.table-rep-plugin tbody th {
-  font-weight: normal;
-  font-size: 14px;
-}
-/* Editable Table */
-.modal-block {
-  background: transparent;
-  padding: 0;
-  text-align: left;
-  max-width: 600px;
-  margin: 40px auto;
-  position: relative;
-}
-#datatable-editable .actions a {
-  padding: 5px;
-}
-#datatable-editable .form-control {
-  background-color: #ffffff;
-  width: 100%;
-}
-#datatable-editable .fa-trash-o ,#datatable-editable .fa-times{
-  color: #ef5350;
-}
-#datatable-editable .fa-pencil {
-  color: #29b6f6;
-}
-#datatable-editable .fa-save {
-  color: #33b86c;
 }
 
 
@@ -1360,7 +1376,7 @@ table.focus-on tbody tr.focused th, table.focus-on tbody tr.focused td {
 
 
 /************* 14.Mail **********/
-
+    
 .mails .mail-rateing {
   color: #9d9ea5;
   width: 1%;
@@ -1649,7 +1665,7 @@ ul.social-icons li a i {
 }
 
 .timeline-badge.primary {
-  background-color: #6e8cd7 !important;
+  background-color: #3bc0c3 !important;
 }
 
 .timeline-badge.success {
@@ -1817,7 +1833,6 @@ ul.p-social-link li a {
   line-height: 150px;
   font-weight: 700;
   color: #252932;
-  text-shadow: rgba(61, 61, 61, 0.3) 1px 1px, rgba(61, 61, 61, 0.2) 2px 2px, rgba(61, 61, 61, 0.3) 3px 3px;
 }
 
 /* Sweet-alert **/
@@ -1853,7 +1868,7 @@ ul.p-social-link li a {
 .bg-picture {
   position: relative;
   min-height: 300px;
-  margin: -20px -25px 0px -20px;
+  margin: -20px -25px 0px -25px;
   background-repeat: no-repeat;
   background-position: center;
   -webkit-background-size: cover;
@@ -1938,127 +1953,12 @@ ul.p-social-link li a {
   margin:0 auto;
 }
 
-#legend {
-  background: white;
-  position: absolute;
-  top: 0;
-  right: 15px;
+#legend { 
+  background: white; 
+  position: absolute; 
+  top: 0; 
+  right: 15px; 
 }
 #legend .line {
-  color: #333;
-}
-
-
-
-
-/* =============== RESPONSIVE =================== */
-
-
-
-/*** Aside Collapsed ***/
-@media (min-width: 769px) {
-  aside.left-panel.collapsed {
-    width: 75px;
-    text-align: center;
-  }
-
-  aside.left-panel.collapsed + .content {
-    margin-left: 75px;
-  }
-
-  aside.left-panel.collapsed .user .user-login,
-aside.left-panel.collapsed span.nav-label {
-    display: none;
-  }
-
-  aside.left-panel.collapsed .navigation > ul > li > a {
-    padding: 15px;
-  }
-  aside.left-panel.collapsed .navigation > ul > li > a:hover {
-    background-color: #272c35;
-    border-left: 3px solid #6e8cd7;
-  }
-
-  aside.left-panel.collapsed i.fa {
-    font-size: 22px;
-  }
-
-  aside.left-panel.collapsed .navigation > ul > li.has-submenu:after {
-    display: none;
-  }
-}
-
-/*** Aside Collapsed Sub Menu ***/
-@media (min-width: 769px) {
-  aside.left-panel.collapsed .navigation ul li ul {
-    position: absolute;
-    z-index: 3;
-    left: 100%;
-    top: 0px;
-    background-color: #272c35;
-    box-shadow: none;
-    padding: 10px 0px;
-    min-width: 200px;
-  }
-
-  aside.left-panel.collapsed .navigation > ul > li:hover > ul {
-    display: block !important;
-  }
-  aside.left-panel.collapsed .navigation > ul > li:hover > ul
-
-  aside.left-panel.collapsed .navigation ul li ul li a {
-    border: 0px;
-    color: #b4b6bd;
-    padding: 8px 25px 8px 40px;
-  }
-
-  aside.left-panel.collapsed .navigation ul li ul li a:hover {
-    color: #fff;
-  }
-}
-@media (max-width: 768px) {
-
-
-
-  aside.left-panel.collapsed {
-    width: 250px;
-    left: 0px;
-    overflow: hidden !important;
-  }
-
-  aside.left-panel.collapsed + .content {
-    margin-left: 0px;
-    transform: translate3d(250px, 0px, 0px);
-    -ms-transform: translate3d(250px, 0px, 0px);
-    -webkit-transform: translate3d(250px, 0px, 0px);
-    -moz-transition: translate3d(250px, 0px, 0px);
-    -o-transition: translate3d(250px, 0px, 0px);
-  }
-
-  aside.left-panel {
-    left: 100%;
-  }
-
-  section.content {
-    margin-left: 0px;
-  }
-
-  .content > .container-fluid {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .page-header h1 {
-    margin-top: 0px;
-  }
-}
-
-@media (max-width: 450px) {
-
-  .username {
-    display: none;
-  }
-  .dropdown .extended i {
-    display: none;
-  }
+  color: #333; 
 }

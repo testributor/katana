@@ -1,15 +1,20 @@
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
+    %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
     = stylesheet_link_tag    'dashboard', media: 'all'
-    %link{href:'http://fonts.googleapis.com/css?family=Lato:400,700', rel:'stylesheet', type:'text/css'}
-    = javascript_include_tag 'dashboard'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
     = render partial: 'layouts/sidebar'
     %section.content
       = render partial: 'layouts/header'
-      %wrapper.container-fluid
-        = yield
+      .wraper.container-fluid
+        .page-title= yield :page_title
+        .row
+          .col-md-12
+            .panel.panel-default
+              = yield
 
+    = javascript_include_tag 'dashboard'

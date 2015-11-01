@@ -13,7 +13,7 @@
 }
 .bx-s,
 .panel,
-.portlet, 
+.portlet,
 .nav.nav-tabs+.tab-content,
 .tabs-vertical-env .tab-content,
 .widget-panel,
@@ -23,9 +23,9 @@
 .tile-stats,
 .mini-stat,
 header {
-    -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .br-radius,
 .tiles,
@@ -231,8 +231,8 @@ header {
     content: "\f111";
 }
 .cr-styled input:checked + i {
-    border-color: #6e8cd7;
-    color: #6e8cd7;
+    border-color: #3bc0c3;
+    color: #3bc0c3;
 }
 /* Icon-list (Used Icon-page only) */
 

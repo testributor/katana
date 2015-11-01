@@ -2,24 +2,25 @@
   .logo
     = link_to root_url, class: "logo-expanded" do
       %i.ion-social-buffer
+      %img{alt: "logo", src: image_path("single-logo.png")}
       %span.nav-label Testributor
 
   %nav.navigation
     - if user_signed_in?
       %ul.list-unstyled
-        %li.active
+        %li
           = link_to root_url do
             %i.fa.fa-fw.fa-dashboard
             %span.nav-label Dashboard
 
         - current_user.projects.each do |project|
-          %li
+          %li.has-submenu
             = link_to "javascript:;", data: { toggle: "collapse", target: "##{project.name}" } do
               %span= project.name
               %i.fa.fa-fw.fa-caret-down
-            %ul.collapse{ id: project.name}
+            %ul.list-unstyled.collapse{ id: project.name}
               %li{ class: current_page?(project_path(project)) ? 'active' : nil }
-                %ul
+                %ul.list-unstyled
                   - project.tracked_branches.each do |branch|
                     %li= link_to branch.branch_name,
                       project_branch_test_runs_path(project, branch)

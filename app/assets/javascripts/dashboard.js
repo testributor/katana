@@ -12,11 +12,13 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require pace.min
-//= require wow.min
-//= require jquery.nicescroll.js
-//= require jquery.app
+//= require bootstrap
 //= require underscore
-//= require bootstrap-sprockets
+//= require dashboard/modernizr.min
+//= require dashboard/pace.min
+//= require dashboard/wow.min
+//= require dashboard/jquery.scrollTo.min.js
+//= require dashboard/jquery.nicescroll.js
+//= require dashboard/jquery.app
 //= require init
 //= require_tree .

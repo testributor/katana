@@ -1,19 +1,17 @@
-.col-lg-12
-  %h1.page-header
-    Dashboard
-    %small Project overview
-  .container
-    - if @projects.empty?
-      %h3
-        = "You haven't added any projects yet."
-        = link_to "Click here", new_project_path
-        = "to add a new project"
-    .projects-inner-container
-      - @projects.each do |project|
-        .project-title
-          = project.repository_name
-          - if project.tracked_branches.any?
-            = link_to "Add", new_project_branch_path(project), class: 'smaller'
+= content_for :page_title do
+  %h3= "Your branches"
+- if @projects.empty?
+  .panel-heading
+    %h3
+      = "You haven't added any projects yet."
+      = link_to "Click here", new_project_path
+      = "to add a new project"
+- @projects.each do |project|
+  .panel-heading
+    %h4=project.repository_name
+  .panel-body
+    .row
+      .col-md-12.col-sm-12.col-xs-12
         - if project.tracked_branches.empty?
           %i.small-margin
             %p Your master branch is getting cooked.
@@ -22,21 +20,23 @@
               = link_to 'add', new_project_branch_path(project)
               another branch.
         - else
-          - project.tracked_branches.each do |branch|
-            .branch
-              .row
-                .col-xs-3
-                  .cell
-                    = link_to branch.branch_name,
-                      project_branch_test_runs_path(branch.project, branch)
-                .col-xs-4
-                  .cell
-                    = link_to branch.last_run.try(:commit_sha), '#'
-                .col-xs-2
-                  .cell
-                    = branch.last_run.try(:completed_at)
-                .col-xs-2
-                  .cell.status{class: branch.status_text}
-                    = branch.status_text if branch.status_text
-                .col-xs-1
-                  = branch_cta(branch.status)
+          .table-responsive
+            %table.table
+              %thead
+                %tr
+                  %th Branch
+                  %th Commit
+                  %th Completed at
+                  %th Status
+                  %th Actions
+              %tbody
+                - project.tracked_branches.each do |branch|
+                  %tr
+                    %td= link_to branch.branch_name,
+                        project_branch_test_runs_path(branch.project, branch)
+                    %td= link_to branch.last_run.try(:commit_sha), '#'
+                    %td= branch.last_run.try(:completed_at)
+                    %td
+                      .status{class: branch.status_text}
+                        = branch.status_text if branch.status_text
+                    %td= branch_cta(branch.status)
