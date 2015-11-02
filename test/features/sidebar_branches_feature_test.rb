@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class SidebarBranchesFeatureTest < Capybara::Rails::TestCase
-  let(:tracked_branch) { FactoryGirl.create(:tracked_branch) }
+  let(:_test_run) { FactoryGirl.create(:test_run) }
+  let(:tracked_branch) { _test_run.tracked_branch }
   let(:project) { tracked_branch.project }
   let(:owner) { project.user }
 

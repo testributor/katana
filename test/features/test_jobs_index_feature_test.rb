@@ -47,7 +47,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       cancelled = find("tr.cancelled")
       pending = find("tr.pending")
       failed = find("tr.failed")
-      success = find("tr.failed")
+      success = find("tr.success")
       running = find("tr.running")
 
       cancelled.must_have_content "Cancelled"
