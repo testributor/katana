@@ -12,9 +12,10 @@
 
         %tbody
           - @test_runs.each do |test_run|
-            %tr{class: test_run.status.css_class}
+            %tr
               %td= test_run.commit_sha
-              %td= test_run.status.text
+              %td
+                %span{class: test_run.status.css_class}= test_run.status.text
               %td= distance_of_time_in_words(test_run.total_running_time) if test_run.total_running_time
               %td= link_to 'Details',
                 project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run),
