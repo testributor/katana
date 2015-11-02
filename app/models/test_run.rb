@@ -5,7 +5,7 @@ class TestRun < ActiveRecord::Base
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
 
-  delegate :completed_at, to: :last_file_run, allow_nil: true
+  delegate :started_at, :completed_at, to: :last_file_run, allow_nil: true
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
@@ -13,14 +13,12 @@ class TestRun < ActiveRecord::Base
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def total_running_time
-    completed_at_times = test_jobs.order("completed_at ASC").
-      pluck(:completed_at)
-    started_at_times = test_jobs.order("started_at ASC").
-      pluck(:started_at)
+    completed_at_times = test_jobs.map(&:completed_at).compact.sort
+    started_at_times = test_jobs.map(&:started_at).sort
 
     return if completed_at_times.blank? || started_at_times.blank?
 
-    if completed_at_times.length == completed_at_times.compact.length
+    if completed_at_times.length == started_at_times.length
       time = completed_at_times.last - started_at_times.first
     elsif time_first_job_started = started_at_times.compact.first
       time = Time.now - time_first_job_started
@@ -29,12 +27,8 @@ class TestRun < ActiveRecord::Base
     time.round if time
   end
 
-  def status_text
-    TestStatus.new(status, failed?).text
-  end
-
-  def css_class
-    TestStatus.new(status, failed?).css_class
+  def status
+    TestStatus.new(read_attribute(:status), failed?)
   end
 
   def build_test_jobs
@@ -52,7 +46,7 @@ class TestRun < ActiveRecord::Base
   private
 
   def last_file_run
-    test_jobs.order(:completed_at).last
+    test_jobs.sort_by(&:completed_at).last
   end
 
   def github_client

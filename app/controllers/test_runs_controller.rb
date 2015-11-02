@@ -13,6 +13,7 @@ class TestRunsController < DashboardController
     @test_jobs = @run.test_jobs.order("status DESC, started_at ASC, id ASC")
   end
 
+  # TODO : remove, not used
   def create
     @test_run = TestRun.new(test_run_params)
     @test_run.build_test_jobs
@@ -25,12 +26,13 @@ class TestRunsController < DashboardController
 
   def update
     if @test_run.update(test_run_params)
-      redirect_to @test_run, notice: 'Test run was successfully updated.'
+      redirect_to :back, notice: 'Test run was successfully updated.'
     else
       render :edit
     end
   end
 
+  # TODO : remove, not used
   def destroy
     @test_run.destroy
     redirect_to project_branch_test_runs_url(current_project, @test_run.tracked_branch_id),
@@ -44,9 +46,6 @@ class TestRunsController < DashboardController
   end
 
   def test_run_params
-    params[:test_run].permit(
-      :user_id, :git_ref, :status,
-      :result_id, :created_at, :updated_at,
-      :started_at, :completed_at)
+    params.permit(:status)
   end
 end

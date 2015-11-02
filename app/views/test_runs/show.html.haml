@@ -1,50 +1,49 @@
-.container
+= link_to "Back to test jobs",
+  project_branch_test_runs_path(current_project, @run.tracked_branch_id)
+.panel-heading
+  %h3 Commit #{@run.commit_sha}
+.panel-body
   .row
     .col-xs-12
-      %h1 Test Job ##{@run.id}
-      = link_to "Back to test jobs",
-        project_branch_test_runs_path(current_project, @run.tracked_branch_id)
-      %div= "Git commit: #{@run.commit_sha}"
-  .row
-    .col-xs-12
-      %table.table.table-bordered.table-striped.table-condensed.table-hover
-        %thead
-          %tr
-            %th='File'
-            %th='Status'
-            %th='Errors'
-            %th='Failures'
-            %th='Tests'
-            %th='Assertions'
-            %th='Skips'
-            %th='Started at (UTC)'
-            %th='Completed at (UTC)'
-            %th='Total running time'
-            %th='Actions'
-        %tbody
-          - @test_jobs.each do |test_job|
-            %tr{ class: test_job.css_class }
-              %td= test_job.file_name
-              %td= test_job.status_text
-              %td= test_job.test_errors
-              %td= test_job.failures
-              %td= test_job.count
-              %td= test_job.assertions
-              %td= test_job.skips
-              %td= l(test_job.started_at, format: :no_utc) if test_job.started_at
-              %td= l(test_job.completed_at, format: :no_utc) if test_job.completed_at
-              %td= distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true) if test_job.total_running_time
-              - if test_job.status != TestStatus::PENDING
+      .table-responsive
+        %table.table
+          %thead
+            %tr
+              %th='File'
+              %th='Status'
+              %th='Errors'
+              %th='Failures'
+              %th='Tests'
+              %th='Assertions'
+              %th='Skips'
+              %th='Started at (UTC)'
+              %th='Completed at (UTC)'
+              %th='Total running time'
+              %th='Actions'
+          %tbody
+            - @test_jobs.each do |test_job|
+              %tr{ class: test_job.status.css_class }
+                %td= test_job.file_name
+                %td= test_job.status.text
+                %td= test_job.test_errors
+                %td= test_job.failures
+                %td= test_job.count
+                %td= test_job.assertions
+                %td= test_job.skips
+                %td= l(test_job.started_at, format: :no_utc) if test_job.started_at
+                %td= l(test_job.completed_at, format: :no_utc) if test_job.completed_at
+                %td= distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true) if test_job.total_running_time
                 %td
-                  - # TODO: tracked branch and test_job nesting seems unecessary
+                  - # TODO: tracked branch and test_run nesting seems unecessary
                   - # for the test_job resource. We only need the project for
                   - # validation/authorization purposes (to let it work in the
                   - # same way the rest of the routes work).
-                  = button_to 'Retry',
-                    project_branch_test_job_test_job_file_path(current_project,
-                      test_job.test_job.tracked_branch.id,
-                      test_job.test_job.id, test_job, status: TestStatus::PENDING),
+                  = button_to test_job.status.cta_text,
+                    project_branch_test_run_test_job_path(current_project,
+                    test_job.test_run.tracked_branch.id,
+                    test_job.test_run.id, test_job,
+                    status: test_job.status.status_to_set),
                     class: 'btn btn-primary', method: :put
-            - if test_job.result.present?
-              %tr.danger
-                %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)
+              - if test_job.result.present?
+                %tr.danger
+                  %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)

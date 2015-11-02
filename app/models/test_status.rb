@@ -1,4 +1,5 @@
 class TestStatus
+  attr_reader :code
   PENDING = 0
   RUNNING = 1
   COMPLETE = 2
@@ -11,21 +12,40 @@ class TestStatus
     CANCELLED => 'Cancelled'
   }
 
-  def initialize(status, failed)
-    @status = status
+  def initialize(code, failed)
+    @code = code
     @failed = failed
   end
 
+  def cta_text
+    case @code
+    when PENDING, RUNNING
+      "cancel"
+    else
+      "retry"
+    end
+  end
+
+  def status_to_set
+    if cta_text == "cancel"
+      CANCELLED
+    else
+      PENDING
+    end
+  end
+
   def text
-    if @status == COMPLETE
+    if @code == COMPLETE
       return @failed ? 'Failed' : 'Passed'
     end
 
-    STATUS_MAP[@status]
+    STATUS_MAP[@code]
   end
 
   def css_class
-    case @status
+    case @code
+    when CANCELLED
+      'cancelled'
     when PENDING
       'pending'
     when RUNNING

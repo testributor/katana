@@ -1,5 +1,6 @@
 = content_for :page_title do
   %h3= "Your branches"
+
 - if @projects.empty?
   .panel-heading
     %h3
@@ -34,9 +35,13 @@
                   %tr
                     %td= link_to branch.branch_name,
                         project_branch_test_runs_path(branch.project, branch)
-                    %td= link_to branch.last_run.try(:commit_sha), '#'
+                    %td= branch.last_run.try(:commit_sha)
                     %td= branch.last_run.try(:completed_at)
                     %td
-                      .status{class: branch.status_text}
-                        = branch.status_text if branch.status_text
-                    %td= branch_cta(branch.status)
+                      .status{class: branch.status.text}
+                        = branch.status.text if branch.status.text
+                    %td= button_to branch.status.cta_text,
+                      project_branch_test_run_path(project.id,
+                      branch.id, branch.try(:last_run).try(:id),
+                      status: branch.status.status_to_set),
+                      class: 'btn btn-primary', method: :put

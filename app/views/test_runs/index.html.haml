@@ -1,21 +1,21 @@
-.container.test-jobs-container
+.panel-heading
+.panel-body
   .row
-    .col-xs-12
-      %table.table.table-striped.table-bordered.table-condensed.table-hover
+    .col-md-12.col-sm-12.col-xs-12
+      %table.table
         %thead
           %tr
             %th= "Git reference"
             %th= "Status"
             %th= "Current Total time"
             %th= "Details"
-            %th= "Cancel"
 
         %tbody
           - @test_runs.each do |test_run|
-            %tr{class: test_run.css_class}
+            %tr{class: test_run.status.css_class}
               %td= test_run.commit_sha
-              %td= test_run.status_text
+              %td= test_run.status.text
               %td= distance_of_time_in_words(test_run.total_running_time) if test_run.total_running_time
-              %td= link_to 'Details', project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run)
-              %td= link_to 'Cancel', project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run),
-                :method => :delete, :data => { :confirm => 'Are you sure?' }
+              %td= link_to 'Details',
+                project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run),
+                class: 'btn btn-primary'

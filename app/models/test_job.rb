@@ -8,12 +8,8 @@ class TestJob < ActiveRecord::Base
   scope :complete, -> { where(status: TestStatus::COMPLETE) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
-  def css_class
-    TestStatus.new(status, failed?).css_class
-  end
-
-  def status_text
-    TestStatus.new(status, failed?).text
+  def status
+    TestStatus.new(read_attribute(:status), failed?)
   end
 
   # Returns the total time it took for a TestJob to run

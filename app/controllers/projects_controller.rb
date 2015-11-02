@@ -2,7 +2,9 @@ class ProjectsController < DashboardController
   include ApplicationHelper
 
   def show
-    ActiveRecord::RecordNotFound unless @project = current_project
+    ActiveRecord::RecordNotFound unless current_project
+    @branches = current_project.tracked_branches.
+      includes(test_runs: :test_jobs)
   end
 
   def new
