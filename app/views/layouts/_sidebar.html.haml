@@ -1,35 +1,35 @@
-- if user_signed_in?
-  %ul.nav.nav-sidebar
-    - if current_project
-      %li.dropdown
-        %a.dropdown-toggle{ href: "#", data: { toggle: "dropdown" },
-          role: "button", "aria-haspopup" => "true",
-          "aria-expanded" => "false" }
-          %span.project-name= current_project.name
-          %span.caret
-        %ul.dropdown-menu
-          - current_user.participating_projects.each do |project|
-            %li{ class: current_page?(project_path(project)) ? 'active' : nil }
-              = link_to project.name, project_path(project)
-%ul.nav.nav-sidebar
-  %li= link_to "Add a project", new_project_path
+%aside.left-panel
+  .logo
+    = link_to root_url, class: "logo-expanded" do
+      %i.ion-social-buffer
+      %img{alt: "logo", src: image_path("single-logo.png")}
+      %span.nav-label Testributor
 
-  - if current_project
-    %li{ class: current_page?(project_path(current_project)) ? 'active' : nil }
-      = link_to "Tracked branches", project_path(current_project)
-      %ul
-        - current_project.tracked_branches.each do |branch|
-          %li= link_to branch.branch_name,
-            project_branch_test_runs_path(current_project, branch)
-    %li{ class: current_page?(project_files_path(current_project)) ? 'active' : nil }
-      = link_to "Files", project_files_path(current_project)
-  - else
-    - if current_user.participating_projects.any?
-      - current_user.participating_projects.each do |project|
-        %li= link_to project.name, project_path(project)
+  %nav.navigation
+    - if user_signed_in?
+      %ul.list-unstyled
+        %li
+          = link_to root_url do
+            %i.fa.fa-fw.fa-dashboard
+            %span.nav-label Dashboard
 
-  - if current_project && current_project.user_id == current_user.id
-    %li= link_to t('invite_users'), new_project_invitation_path(current_project)
+        - current_user.projects.each do |project|
+          %li.has-submenu
+            = link_to "javascript:;", data: { toggle: "collapse", target: "##{project.name}" } do
+              %span= project.name
+              %i.fa.fa-fw.fa-caret-down
+            %ul.list-unstyled.collapse{ id: project.name}
+              %li{ class: current_page?(project_path(project)) ? 'active' : nil }
+                %ul.list-unstyled
+                  - project.tracked_branches.each do |branch|
+                    %li= link_to branch.branch_name,
+                      project_branch_test_runs_path(project, branch)
+              %li{ class: current_page?(project_files_path(project)) ? 'active' : nil }
+                = link_to "Files", project_files_path(project)
+              %li= link_to t('invite_users'), new_project_invitation_path(project)
+              %li= link_to "API Credentials", api_credentials_project_path(project)
+        %li
+          =link_to new_project_path do
+            %i.fa.fa-fw.fa-plus
+            Add a project
 
-  - if current_project
-    %li= link_to "API Credentials", api_credentials_project_path(current_project)

@@ -15,7 +15,7 @@ class SidebarBranchesFeatureTest < Capybara::Rails::TestCase
     login_as owner, scope: :user
     visit root_path
 
-    sidebar = find(".sidebar")
+    sidebar = find("aside.left-panel")
 
     sidebar.click_on project.name
 

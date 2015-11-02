@@ -1,5 +1,97 @@
-%h1 This is the sales page!
-.cta-container
-  = link_to "Sign in", new_user_session_path
-  or
-  = link_to "Sign up", new_user_registration_path, class: 'btn btn-primary'
+%section#how.section.features
+  .container.text-center
+    .row
+      .col-sm-12
+        %h2.title How It Works ?
+        %p.slogan Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.
+    .row.pt80
+      .col-sm-4
+        .features-2
+          %img{alt: "", src: image_path("drawing-tablet.png")}
+        %div
+          %h3 Responsive Design
+          %p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      .col-sm-4
+        .features-2
+          %img{alt: "", src: image_path("code-window.png")}
+        %div
+          %h3 Clean Code
+          %p Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.Ut enim ad minim veniam, quis.
+      .col-sm-4
+        .features-2
+          %img{alt: "", src: image_path("clock.png")}
+        %div
+          %h3 Easy Customize
+          %p Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Ut enim ad minim veniam.
+%section#features.content-wrap.bg-light.section.pb0
+  .container
+    .row
+      .col-sm-6
+        .feature-sec
+          %h3 Inbox &amp; Contact-list App
+          %p Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae. Vivamus eu sollicitudin lacus, nec ultricies lorem.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed feugiat arcu ut orci porta, eget porttitor felis suscipit. Sed a nisl ullamcorper, tempus augue at, rutrum lacus.
+          %a.use-btn.btn-primary{href: "#"} Get Started
+      .col-sm-6.featured-img
+        %img.img-responsive{alt: "Features-img", src: image_path("screen-3.png")}
+%section#pricing.section
+  .container
+    .row.text-center
+      .col-sm-12
+        %h2.title Simple Pricing
+        %p.slogan Work on joint projects. Access time entries of your fellow team members and run reports for the entire team.
+    .row.pt80
+      .col-md-10.col-md-offset-1
+        .row
+          .col-sm-4
+            .price_card.text-center
+              .header.bg-info
+                %span.price $10
+                %span.name Starter Pack
+              %ul.price-features
+                %li 5 Projects
+                %li 1 GB Storage
+                %li No Domain
+                %li 1 User
+              %button.btn.btn-info.w-md Sign Up
+          .col-sm-4
+            .price_card.text-center
+              .header.bg-pink
+                %span.price $20
+                %span.name Professional Pack
+              %ul.price-features
+                %li 15 Projects
+                %li 5 GB Storage
+                %li 2 Domain
+                %li 10 User
+              %button.btn.btn-pink.w-md Sign Up
+            %span.tip * Most popular!
+          .col-sm-4
+            .price_card.text-center
+              .header.bg-purple
+                %span.price $30
+                %span.name Enterprise Pack
+              %ul.price-features
+                %li Unlimited Projects
+                %li 10 GB Storage
+                %li 10 Domain
+                %li 100 User
+              %button.btn.btn-purple.w-md Sign Up
+%section#clients.bg-light.section
+  .container
+    .row.text-center
+      .col-sm-12
+        %h2.title Trusted by Thousands
+        %p.slogan Lorem ipsum dolor sit amet, consectetur adipis.
+        %ul.list-inline.client-list.pt40
+          %li
+            %a{href: "", title: "Microsoft"}
+              %img{alt: "clients", src: image_path("clients/microsoft.png")}
+          %li
+            %a{href: "", title: "Google"}
+              %img{alt: "clients", src: image_path("clients/google.png")}
+          %li
+            %a{href: "", title: "Instagram"}
+              %img{alt: "clients", src: image_path("clients/instagram.png")}
+          %li
+            %a{href: "", title: "Converse"}
+              %img{alt: "clients", src: image_path("clients/converse.png")}
