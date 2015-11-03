@@ -38,7 +38,7 @@
                     %td= branch.last_run.try(:commit_sha)
                     %td= branch.last_run.try(:completed_at)
                     %td
-                      .status{class: branch.status.text}
+                      %span{class: branch.status.css_class}
                         = branch.status.text if branch.status.text
                     %td= button_to branch.status.cta_text,
                       project_branch_test_run_path(project.id,

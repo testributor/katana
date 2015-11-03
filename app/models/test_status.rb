@@ -45,13 +45,13 @@ class TestStatus
   def css_class
     case @code
     when CANCELLED
-      'cancelled'
+      'label label-default'
     when PENDING
-      'pending'
+      'label label-info'
     when RUNNING
-      'running'
+      'label label-running'
     when COMPLETE
-      @failed ? 'failed' : 'success'
+      @failed ? 'label label-danger' : 'label label-success'
     end
   end
 end

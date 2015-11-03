@@ -22,9 +22,10 @@
               %th='Actions'
           %tbody
             - @test_jobs.each do |test_job|
-              %tr{ class: test_job.status.css_class }
+              %tr
                 %td= test_job.file_name
-                %td= test_job.status.text
+                %td
+                  %span{class: test_job.status.css_class}= test_job.status.text
                 %td= test_job.test_errors
                 %td= test_job.failures
                 %td= test_job.count
