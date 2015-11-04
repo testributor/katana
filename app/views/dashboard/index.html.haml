@@ -1,0 +1,47 @@
+= content_for :page_title do
+  %h3= "Your projects"
+
+- if @projects.empty?
+  .panel-heading
+    %h3
+      = "You haven't added any projects yet."
+      = link_to "Click here", new_project_path
+      = "to add a new project"
+- @projects.each do |project|
+  .panel-heading
+    %h4= link_to project.repository_name, project_path(project)
+  .panel-body
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        - if project.tracked_branches.empty?
+          %i.small-margin
+            %p Your master branch is getting cooked.
+            %p
+              Please reload the page to check if it's done or
+              = link_to 'add', new_project_branch_path(project)
+              another branch.
+        - else
+          .table-responsive
+            %table.table
+              %thead
+                %tr
+                  %th Branch
+                  %th Commit
+                  %th Completed at
+                  %th Status
+                  %th Actions
+              %tbody
+                - project.tracked_branches.each do |branch|
+                  %tr
+                    %td= link_to branch.branch_name,
+                        project_branch_test_runs_path(branch.project, branch)
+                    %td= branch.last_run.try(:commit_sha)
+                    %td= branch.last_run.try(:completed_at)
+                    %td
+                      %span{class: branch.status.css_class}
+                        = branch.status.text if branch.status.text
+                    %td= button_to branch.status.cta_text,
+                      project_branch_test_run_path(project.id,
+                      branch.id, branch.try(:last_run).try(:id),
+                      status: branch.status.status_to_set),
+                      class: 'btn btn-primary', method: :put

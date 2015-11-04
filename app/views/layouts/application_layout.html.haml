@@ -1,0 +1,14 @@
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %title= brand_name
+    = stylesheet_link_tag    'front', media: 'all'
+    %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
+    %link{href: "http://fonts.googleapis.com/css?family=Cuprum:400,700", rel: "stylesheet", type: "text/css"}
+
+    = csrf_meta_tags
+  %body{class: controller_and_action, data: page_data_attrs}
+    - flash.each do |name, msg|
+      = content_tag :div, msg, id: "flash_#{name}", class: "alert alert-#{name == 'alert' ? 'danger' : 'notice' }"
+    = yield
+    = javascript_include_tag 'front'

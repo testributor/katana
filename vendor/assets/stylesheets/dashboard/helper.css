@@ -23,9 +23,9 @@
 .tile-stats,
 .mini-stat,
 header {
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 .br-radius,
 .tiles,
@@ -288,8 +288,8 @@ header {
 
 
 /* Only Mozila */
-@-moz-document url-prefix() { 
-    
+@-moz-document url-prefix() {
+
     .cr-styled i {
         padding-top: 0px;
     }

@@ -26,9 +26,9 @@ en:
         project:
           attributes:
             base:
-              project_limit_reached: "You cannot add other projects
-                as you have reached you project limit.
-                Please upgrade your plan"
+              project_limit_reached: >
+                You can't add other projects as you have reached your <strong>project limit</strong>.
+                Please upgrade your plan.
   add_project: "Select a repo"
   add_branches: "Select branches"
   configure_testributor: "Configure testributor.yml"

@@ -14,7 +14,7 @@
         - if flash[:notice].present?
           .alert.alert-info= flash[:notice]
         - if flash[:alert].present?
-          .alert.alert-info= flash[:alert]
+          .alert.alert-danger= flash[:alert].html_safe
         .pull-right
           = breadcrumbs pretext: "You are here: ", style: :bootstrap,
             display_single_fragment: true

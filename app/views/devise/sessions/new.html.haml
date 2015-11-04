@@ -1,20 +1,37 @@
-.col-sm-4.col-sm-offset-4
-  .row
-    %h2 Log in
-  .row
-    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+.wrapper-page.animated.fadeInDown
+  .text-center
+    = link_to root_path do
+      %div.text-right-logo
+        %img{alt: "logo", src: image_path("logo.png")}
+        %h3 Testributor
+    %h4 Test your code faster than ever
+    %br
+  .panel.panel-color.panel-primary
+    .panel-heading
+      %h3.text-center.m-t-10
+        Sign In to
+        %strong Testributor
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       .form-group
-        = f.label :email
-        %br/
-        = f.email_field :email, autofocus: true, class: "form-control"
+        .col-xs-12
+          = f.email_field :email, autofocus: true, class: "form-control",
+            type: "text", placeholder: 'E-mail', required: true
       .form-group
-        = f.label :password
-        %br/
-        = f.password_field :password, autocomplete: "off", class: "form-control"
+        .col-xs-12
+          = f.password_field :password, autocomplete: "off", class: "form-control",
+            placeholder: "Password", type: "password", required: true
+
       - if devise_mapping.rememberable?
-        .field
-          = f.check_box :remember_me
-          = f.label :remember_me
-      .actions
-        = f.submit "Log in"
-    = render "devise/shared/links"
+        .form-group
+          .col-xs-12
+            = f.check_box :remember_me
+            = f.label :remember_me, class: 'cr-styled'
+      .form-group.text-right
+        .col-xs-12
+          = f.submit "Log in", class: "btn btn-purple w-md"
+      .form-group.m-t-30
+        .col-sm-7
+          = render "devise/shared/links"
+        - if devise_mapping.registerable? && controller_name != 'registrations'
+          .col-sm-5.text-right
+            = link_to "Create an account", new_registration_path(resource_name)

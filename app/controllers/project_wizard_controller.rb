@@ -12,8 +12,8 @@ class ProjectWizardController < WizardController
     # Inform user that he has reached project limit
     if !current_user.can_create_new_project?
       flash[:alert] = I18n.t(
-        'activerecord.errors.models.
-        project.attributes.base.project_limit_reached')
+        'activerecord.errors.models.'\
+        'project.attributes.base.project_limit_reached')
 
       redirect_to root_path and return
     end

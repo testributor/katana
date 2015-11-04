@@ -4,10 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :set_redirect_url_in_cookie
+  layout 'application_layout'
 
   helper_method :current_project
-
-  layout 'front'
 
   # When project_id is set in params, set current_project if current_user
   # is a participant. If project is specified with a different name

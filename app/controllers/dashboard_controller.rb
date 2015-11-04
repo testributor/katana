@@ -1,8 +1,12 @@
 class DashboardController < ApplicationController
+  layout "dashboard"
   before_filter :authenticate_user!
   before_filter :check_for_active_providers, except: [:create, :destroy]
 
-  layout "dashboard"
+  def index
+    @projects = current_user.participating_projects.
+      includes(tracked_branches: { test_runs: :test_jobs })
+  end
 
   protected
 
