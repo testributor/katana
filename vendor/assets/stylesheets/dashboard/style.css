@@ -442,7 +442,7 @@ header {
   min-height: 550px;
 }
 .page-title {
-  padding: 10px 0px 30px;
+  padding: 10px 0px 0px;
 }
 .page-title h3 {
   margin: 0px;

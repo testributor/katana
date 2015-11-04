@@ -1,5 +1,8 @@
-= link_to "Back to test jobs",
-  project_branch_test_runs_path(current_project, @run.tracked_branch_id)
+- breadcrumb :test_run, current_project, @run
+
+- content_for :page_title do
+  = "Test Run ##{@run.id}"
+
 .panel-heading
   %h3 Commit #{@run.commit_sha}
 .panel-body
