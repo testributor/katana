@@ -149,6 +149,10 @@ aside.left-panel.collapsed {
   position: absolute;
   bottom: 0px;
 }
+
+aside:not(.collapsed) .logo-expanded {
+  padding: 0px 25px;
+}
     
 aside.left-panel.lg {
   width: 250px;
@@ -167,7 +171,6 @@ aside.left-panel.lg + .content {
   font-size: 20px;
   letter-spacing: .05em;
   color: #fff !important;
-  padding: 0px 25px;
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -179,7 +182,7 @@ aside.left-panel.lg + .content {
 /******** 2.2 Navigation *******/
 
 .navigation {
-  margin: 50px 0px 20px;
+  margin: 20px 0px 20px;
 }
 
 .navigation > ul > li {

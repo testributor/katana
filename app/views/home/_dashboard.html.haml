@@ -1,5 +1,5 @@
 = content_for :page_title do
-  %h3= "Your branches"
+  %h3= "Your projects"
 
 - if @projects.empty?
   .panel-heading
@@ -9,7 +9,7 @@
       = "to add a new project"
 - @projects.each do |project|
   .panel-heading
-    %h4=project.repository_name
+    %h4= link_to project.repository_name, project_path(project)
   .panel-body
     .row
       .col-md-12.col-sm-12.col-xs-12
