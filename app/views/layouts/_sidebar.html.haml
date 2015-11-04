@@ -22,10 +22,12 @@
           = link_to project_files_path(current_project) do
             %i.fa.fa-folder-open
             %span.nav-label Files
-        %li{ class: current_page?(new_project_invitation_path(current_project)) ? 'active' : nil }
-          = link_to new_project_invitation_path(current_project) do
-            %i.fa.fa-users
-            %span.nav-label= t('invite_users')
+        - # TODO: use cancancan authorization instead of this
+        - if current_user == current_project.user
+          %li{ class: current_page?(new_project_invitation_path(current_project)) ? 'active' : nil }
+            = link_to new_project_invitation_path(current_project) do
+              %i.fa.fa-users
+              %span.nav-label= t('invite_users')
         %li{ class: current_page?(api_credentials_project_path(current_project)) ? 'active' : nil }
           = link_to api_credentials_project_path(current_project) do
             %i.fa.fa-expeditedssl
