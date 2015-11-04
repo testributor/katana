@@ -1,4 +1,5 @@
-%aside.left-panel
+- aside_class = cookies[:left_panel_collapsed] == 'true' ? "collapsed" : nil
+%aside.left-panel{ class: aside_class }
   .logo
     = link_to root_url, class: "logo-expanded" do
       %i.ion-social-buffer
@@ -32,4 +33,3 @@
           =link_to new_project_path do
             %i.fa.fa-fw.fa-plus
             Add a project
-

@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.cookies
 //= require bootstrap
 //= require underscore
 //= require dashboard/modernizr.min
@@ -21,4 +22,5 @@
 //= require dashboard/jquery.nicescroll.js
 //= require dashboard/jquery.app
 //= require init
+//= require run
 //= require_tree .
