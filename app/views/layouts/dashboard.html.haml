@@ -11,7 +11,12 @@
     %section.content
       = render partial: 'layouts/header'
       .wraper.container-fluid
-        .page-title= yield :page_title
+        .pull-right
+          = breadcrumbs pretext: "You are here: ", style: :bootstrap,
+            display_single_fragment: true
+        - if content_for?(:page_title)
+          .page-title
+            %h3= yield :page_title
         .row
           .col-md-12
             .panel.panel-default

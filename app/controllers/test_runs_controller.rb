@@ -4,8 +4,7 @@ class TestRunsController < DashboardController
   before_action :set_test_run, only: [:show, :update, :destroy]
 
   def index
-    @test_runs =
-      current_user.tracked_branches.find(params[:branch_id]).test_runs
+    @tracked_branch = current_user.tracked_branches.find(params[:branch_id])
   end
 
   def show

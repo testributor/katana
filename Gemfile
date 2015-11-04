@@ -15,6 +15,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'bootstrap-sass'
 gem 'font-awesome-rails'
 gem 'exception_notification'
+gem 'gretel'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby

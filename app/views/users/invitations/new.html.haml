@@ -1,3 +1,8 @@
+- breadcrumb :new_invitation, current_project
+
+- content_for :page_title do
+  Invite user
+
 %h2= t "devise.invitations.new.header", project: current_project.name
 = form_for resource, :as => resource_name, :url => project_invitations_path,
   :html => {:method => :post} do |f|

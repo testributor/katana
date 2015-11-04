@@ -1,35 +1,39 @@
-%aside.left-panel
+- aside_class = cookies[:left_panel_collapsed] == 'true' ? "collapsed" : nil
+%aside.left-panel{ class: aside_class }
   .logo
     = link_to root_url, class: "logo-expanded" do
       %i.ion-social-buffer
-      %img{alt: "logo", src: image_path("single-logo.png")}
+      %img{alt: "logo", src: image_path("logo.png")}
       %span.nav-label Testributor
 
   %nav.navigation
-    - if user_signed_in?
-      %ul.list-unstyled
-        %li
-          = link_to root_url do
-            %i.fa.fa-fw.fa-dashboard
-            %span.nav-label Dashboard
-
-        - current_user.projects.each do |project|
-          %li.has-submenu
-            = link_to "javascript:;", data: { toggle: "collapse", target: "##{project.name}" } do
-              %span= project.name
-              %i.fa.fa-fw.fa-caret-down
-            %ul.list-unstyled.collapse{ id: project.name}
-              %li{ class: current_page?(project_path(project)) ? 'active' : nil }
-                %ul.list-unstyled
-                  - project.tracked_branches.each do |branch|
-                    %li= link_to branch.branch_name,
-                      project_branch_test_runs_path(project, branch)
-              %li{ class: current_page?(project_files_path(project)) ? 'active' : nil }
-                = link_to "Files", project_files_path(project)
-              %li= link_to t('invite_users'), new_project_invitation_path(project)
-              %li= link_to "API Credentials", api_credentials_project_path(project)
+    %ul.list-unstyled
+      - if current_project
+        :ruby
+          conditions_for_active_project = [
+            current_page?(project_path(current_project)),
+            controller_name == 'test_runs'
+          ]
+        %li{ class: conditions_for_active_project.inject{|a,b| a||b} ? 'active' : nil }
+          = link_to project_path(current_project) do
+            %i.fa.fa-dashboard
+            %span.nav-label= current_project.name
+        %li{ class: current_page?(project_files_path(current_project)) ? 'active' : nil }
+          = link_to project_files_path(current_project) do
+            %i.fa.fa-folder-open
+            %span.nav-label Files
+        - # TODO: use cancancan authorization instead of this
+        - if current_user == current_project.user
+          %li{ class: current_page?(new_project_invitation_path(current_project)) ? 'active' : nil }
+            = link_to new_project_invitation_path(current_project) do
+              %i.fa.fa-users
+              %span.nav-label= t('invite_users')
+        %li{ class: current_page?(api_credentials_project_path(current_project)) ? 'active' : nil }
+          = link_to api_credentials_project_path(current_project) do
+            %i.fa.fa-expeditedssl
+            %span.nav-label= "API Credentials"
+      - else
         %li
           =link_to new_project_path do
-            %i.fa.fa-fw.fa-plus
-            Add a project
-
+            %i.fa.fa-plus
+            %span.nav-label Add a project

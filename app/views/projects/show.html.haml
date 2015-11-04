@@ -1,20 +1,40 @@
+- breadcrumb :project, current_project
+
+- content_for :page_title do
+  Branches
+
 - if @branches.empty?
-  %h2 Your master branch is getting cooked.
-  %h3
-    Please reload the page to check if it's done or
-    = link_to 'add', new_project_branch_path(current_project)
-    another branch.
+  .panel-heading
+    %h2 Your master branch is getting cooked.
+    %h3
+      Please reload the page to check if it's done or
+      = link_to 'add', new_project_branch_path(current_project)
+      another branch.
 - else
-  %h2= "Your branches in project '#{current_project.repository_name}'"
-  - @branches.each do |branch|
-    .branch
-      = branch.branch_name
-      = branch.commit_sha
-      = branch.started_at
-      = branch.total_running_time
-      %span{class: branch.status.css_class}
-        = branch.status.text
-      %span
-        = button_to branch.status.cta_text,
-          project_branch_test_run_path(current_project, branch.id, branch.try(:last_run).try(:id), status: branch.status.status_to_set),
-          class: 'btn btn-primary', method: :put
+  .panel-body
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        .table-responsive
+          %table.table
+            %thead
+              %tr
+                %th Branch
+                %th Latest Run Commit
+                %th Completed at
+                %th Status
+                %th Actions
+            %tbody
+              - @branches.each do |branch|
+                %tr
+                  %td= link_to branch.branch_name,
+                      project_branch_test_runs_path(current_project, branch)
+                  %td= branch.last_run.try(:commit_sha)
+                  %td= branch.last_run.try(:completed_at)
+                  %td
+                    %span{class: branch.status.css_class}
+                      = branch.status.text if branch.status.text
+                  %td= button_to branch.status.cta_text,
+                    project_branch_test_run_path(current_project.id,
+                    branch.id, branch.try(:last_run).try(:id),
+                    status: branch.status.status_to_set),
+                    class: 'btn btn-primary', method: :put
