@@ -44,11 +44,11 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
     end
 
     it "displays test jobs with correct statuses and ctas", js: true do
-      cancelled = find("tr.cancelled")
-      pending = find("tr.pending")
-      failed = find("tr.failed")
-      success = find("tr.success")
-      running = find("tr.running")
+      cancelled = all("tr")[1]
+      failed = all("tr")[2]
+      success = all("tr")[3]
+      running = all("tr")[4]
+      pending = all("tr")[5]
 
       cancelled.must_have_content "Cancelled"
       pending.must_have_content "Pending"
