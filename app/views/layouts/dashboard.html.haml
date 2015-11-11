@@ -11,6 +11,10 @@
     %section.content
       = render partial: 'layouts/header'
       .wraper.container-fluid
+        - if flash[:notice].present?
+          .alert.alert-info= flash[:notice]
+        - if flash[:alert].present?
+          .alert.alert-info= flash[:alert]
         .pull-right
           = breadcrumbs pretext: "You are here: ", style: :bootstrap,
             display_single_fragment: true
@@ -20,6 +24,8 @@
         .row
           .col-md-12
             .panel.panel-default
+              - if self.respond_to?(:wizard_steps)
+                = render 'layouts/wizard_steps'
               = yield
 
     = javascript_include_tag 'dashboard'

@@ -26,10 +26,14 @@ en:
         project:
           attributes:
             base:
-              project_limit_exceeded: "You cannot add other projects
-                as you have exceeded you project limit.
+              project_limit_reached: "You cannot add other projects
+                as you have reached you project limit.
                 Please upgrade your plan"
-  hello: "Hello world"
+  add_project: "Select a repo"
+  add_branches: "Select branches"
+  configure_testributor: "Configure testributor.yml"
+  select_technologies: "Select technologies"
+  add_files: "Add more files"
   time:
     formats:
       no_utc: '%H:%M %P'

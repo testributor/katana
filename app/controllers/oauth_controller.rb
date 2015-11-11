@@ -9,6 +9,7 @@ class OauthController < ApplicationController
       # TODO Replace with a friendly message and send exception to admins
       redirect_to root_path, alert: e.message and return
     end
+    # TODO: Store login attribute in user to avoid fetching from github each time user.login is called
     current_user.update_attributes!(github_access_token: response.access_token)
 
     redirect_to cookies[:redirect_to_url],

@@ -18,10 +18,11 @@ module ApplicationHelper
     Octokit.authorize_url(Octokit.client_id, scope: 'user:email,repo')
   end
 
-  # we will be using this url for the api in order to avoid buying our
-  # own ssl certificate. Also in order to create an OauthApplication the
-  # redirect_uri must be https. There is a validation for that.
-  def heroku_url
-    'https://testributor.herokuapp.com'
+  def wizard_step_class(step)
+    class_str = "current" if current_step?(step)
+    class_str = "disabled" if future_step?(step)
+    class_str = "done" if past_step?(step)
+
+    class_str
   end
 end
