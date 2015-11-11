@@ -2,6 +2,7 @@ class ProjectFilesController < DashboardController
   include Controllers::EnsureProject
 
   def index
+    @project = current_project
     @project_files = current_project.project_files.order("created_at DESC")
   end
 
@@ -42,5 +43,10 @@ class ProjectFilesController < DashboardController
 
   def file_params
     params.require(:project_file).permit(:path, :contents)
+  end
+
+  def testributor_yml_contents
+    "each:\n  pattern: 'test/*/**_test.rb'\n  command: 'bin/rake test %{file}'
+    "
   end
 end
