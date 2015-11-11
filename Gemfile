@@ -8,6 +8,7 @@ gem 'pg'
 
 gem 'wicked'
 gem 'sidekiq'
+gem 'select2-rails'
 gem 'draper'
 gem 'haml-rails'
 gem 'sass-rails', '~> 5.0'
