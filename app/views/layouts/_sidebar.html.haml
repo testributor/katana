@@ -34,6 +34,6 @@
             %span.nav-label= "API Credentials"
       - else
         %li
-          =link_to new_project_path do
+          = link_to project_wizard_path(:add_project) do
             %i.fa.fa-plus
             %span.nav-label Add a project

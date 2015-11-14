@@ -1,0 +1,11 @@
+.panel-heading
+  %h2 Configure testributor.yml file
+
+.panel-body
+  = form_tag project_wizard_path, method: :put,
+    html: { class: "form-horizontal" } do
+    = text_area_tag :testributor_yml,
+      @project_wizard.testributor_yml_contents,
+      class: 'text form-control'
+    .pull-right.m-t-15
+      = submit_tag "Next", class: 'btn btn-primary w-lg btn-lg'

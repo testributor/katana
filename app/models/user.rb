@@ -14,9 +14,14 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :participating_projects, class_name: "Project"
   has_many :tracked_branches, through: :participating_projects
   has_many :test_runs, through: :tracked_branches
+  has_one :project_wizard
 
 
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
+
+  def can_create_new_project?
+    projects_limit >= Project.where(user_id: id).count + 1
+  end
 
   def github_client
     if github_access_token.present?

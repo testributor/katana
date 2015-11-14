@@ -1,0 +1,9 @@
+.panel-heading
+  .wizard
+    .steps.clearfix
+      %ul
+        - wizard_steps.each_with_index do |step, i|
+          %li{class: wizard_step_class(step)}
+            = link_to project_wizard_path(step) do
+              %span.number #{i + 1}.
+              = I18n.t(step)

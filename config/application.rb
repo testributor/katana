@@ -8,6 +8,13 @@ Bundler.require(*Rails.groups)
 
 module Katana
   class Application < Rails::Application
+
+    # we will be using this url for the api in order to avoid buying our
+    # own ssl certificate. Also in order to create an OauthApplication the
+    # redirect_uri must be https. There is a validation for that.
+    HEROKU_URL = 'https://testributor.herokuapp.com'
+
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
