@@ -44,11 +44,12 @@ class TestRun < ActiveRecord::Base
   #
   # Return value meaning:
   #   - Hash with errors key: syntax error in yml pattern missing or other
-  #   - nil: no yml file found
   #   - true: jobs built successfully
+  #   TODO: Remove errors hash from this method and add it to project_file
+  #   as a validation
   def build_test_jobs
     yml_contents = jobs_yml
-    return nil unless yml_contents
+    return { errors: "No testributor.yml file found" } unless yml_contents
 
     begin
       jobs_description = YAML.load(yml_contents)
@@ -96,7 +97,7 @@ class TestRun < ActiveRecord::Base
 
     if github_client.present?
       repo = tracked_branch.project.repository_id
-      file = 
+      file =
         begin
           file =
             github_client.contents(repo, path: JOBS_YML_PATH, ref: commit_sha)

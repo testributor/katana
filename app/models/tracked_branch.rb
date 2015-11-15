@@ -8,4 +8,25 @@ class TrackedBranch < ActiveRecord::Base
   def last_run
     test_runs.sort_by(&:created_at).last
   end
+
+  # TODO : Write tests
+  def create_test_run_and_jobs!
+    repo_id = project.repository_id
+    repo = client.repo(repo_id)
+    github_branch = client.branch(repo.id, repo[:default_branch])
+
+    if run = last_run
+      run.test_jobs.destroy_all
+    else
+      run = test_runs.create!(commit_sha: github_branch[:commit][:sha])
+    end
+    run.build_test_jobs
+    run.save!
+  end
+
+  private
+
+  def client
+    project.user.github_client
+  end
 end
