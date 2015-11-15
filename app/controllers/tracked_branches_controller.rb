@@ -17,10 +17,15 @@ class TrackedBranchesController < DashboardController
 
       test_run = tracked_branch.
         test_runs.build(commit_sha: branch[:commit][:sha])
-      test_run.build_test_jobs
-      test_run.save!
-      flash[:notice] =
-        "Successfully started tracking '#{tracked_branch.branch_name}' branch."
+      if (result = test_run.build_test_jobs).is_a?(Hash)
+        flash[:alert] = result[:errors]
+      elsif result.nil?
+        flash[:alert] = "No #{TestRun::JOBS_YML_PATH} file found!"
+      else
+        test_run.save!
+        flash[:notice] =
+          "Successfully started tracking '#{tracked_branch.branch_name}' branch."
+      end
     end
 
     redirect_to project_path(current_project)

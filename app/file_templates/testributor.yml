@@ -1,0 +1,14 @@
+# Specify jobs using the "each" iterator"
+# "pattern" is the regular expression which will be used to select files.
+# For each matching file a job will be created using the "command".
+# "%{file}" is a placeholder which will be replaced with the path of the matched
+# file.
+each:
+  pattern: 'test\/.*_test.rb$'
+  command: 'bin/rake test %{file}'
+  before: 'some_command'
+# You can also specify "manual" jobs as follows. The name of the job is not
+# important. Choose any valid yml key.
+javascript:
+  command: 'bin/rake test_javascript'
+  after: "some_cleanup_command"

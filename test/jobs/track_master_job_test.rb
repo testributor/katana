@@ -4,9 +4,9 @@ class TrackMasterJobTest < ActiveJob::TestCase
   describe '#perform' do
     before do
       # Repository id must exist in the vcr cassete response
-      @project = FactoryGirl.create(:project, repository_id: 42993121)
+      @project = FactoryGirl.create(:project, repository_id: 24643354)
       User.any_instance.stubs(:github_access_token).
-        returns('a37df4cfe72f1310982642bbb9775d3e4c15ed87')
+        returns('878321d52c0b0aa55b84cca76cf3f07bf3937b0f')
       VCR.use_cassette('github_client') do
         TrackMasterJob.perform_now(@project.id)
       end

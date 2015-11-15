@@ -19,8 +19,15 @@ class WebhooksControllerTest < ActionController::TestCase
       before do
         request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
         @controller.stubs(:verify_request_from_github!).returns(nil)
-        TestRun.any_instance.stubs(:test_file_names).returns(
-          [filename_1, filename_2 ])
+        TestRun.any_instance.stubs(:project_file_names).returns(
+          [filename_1, filename_2])
+        TestRun.any_instance.stubs(:jobs_yml).returns(
+          <<-YML
+            each:
+              pattern: '.*'
+              command: 'bin/rake test %{file}'
+          YML
+        )
         post :github,
           { repository: { id: project.repository_id },
             ref_type: 'branch',
@@ -37,9 +44,15 @@ class WebhooksControllerTest < ActionController::TestCase
         request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
         # Successful authorization for github
         @controller.stubs(:verify_request_from_github!).returns(nil)
-        TestRun.any_instance.stubs(:test_file_names).returns(
-          [filename_1, filename_2 ])
-
+        TestRun.any_instance.stubs(:project_file_names).returns(
+          [filename_1, filename_2])
+        TestRun.any_instance.stubs(:jobs_yml).returns(
+          <<-YML
+            each:
+              pattern: '.*'
+              command: 'bin/rake test %{file}'
+          YML
+        )
         post :github, { head_commit: { id: commit_sha },
                         repository: { id: project.repository_id },
                         ref: "refs/head/ispyropoulos/#{tracked_branch.branch_name}" }
@@ -57,10 +70,10 @@ class WebhooksControllerTest < ActionController::TestCase
         last_job = TestJob.last
 
         first_job.test_run_id.must_equal @testrun.id
-        first_job.file_name.must_equal filename_1
+        first_job.command.must_match filename_1
 
         last_job.test_run_id.must_equal @testrun.id
-        last_job.file_name.must_equal filename_2
+        last_job.command.must_match filename_2
       end
 
       it "responds with :ok" do

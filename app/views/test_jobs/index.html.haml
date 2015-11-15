@@ -18,7 +18,7 @@
           %tbody
             - @test_jobs.each do |test_job|
               %tr
-                %td= test_job.file_name
+                %td= test_job.command
                 %td= test_job.result
                 %td= test_job.count
                 %td= test_job.assertions

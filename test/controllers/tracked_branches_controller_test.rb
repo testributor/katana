@@ -21,8 +21,15 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       @controller.stubs(:fetch_branch).returns(branch_github_response)
       @controller.stubs(:github_client).
         returns(Octokit::Client.new)
-      TestRun.any_instance.stubs(:test_file_names).returns(
-        [filename_1, filename_2 ])
+      TestRun.any_instance.stubs(:project_file_names).returns(
+        [filename_1, filename_2])
+      TestRun.any_instance.stubs(:jobs_yml).returns(
+        <<-YML
+          each:
+            pattern: '.*'
+            command: 'bin/rake test %{file}'
+        YML
+      )
       sign_in :user, owner
       post :create, branch_params
     end
@@ -34,8 +41,8 @@ class TrackedBranchesControllerTest < ActionController::TestCase
     it "creates TestJobs" do
       _test_run = TestRun.last
 
-      _test_run.test_jobs.first.file_name.must_equal filename_1
-      _test_run.test_jobs.last.file_name.must_equal filename_2
+      _test_run.test_jobs.first.command.must_match filename_1
+      _test_run.test_jobs.last.command.must_match filename_2
     end
 
     it "creates a TestRun with correct attributes" do
