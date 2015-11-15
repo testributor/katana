@@ -10,7 +10,7 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
         fill_in 'user[email]', :with => 'spyros@testributor.com'
         fill_in 'user[password]', :with => '12345678'
         fill_in 'user[password_confirmation]', :with => '12345678'
-        click_button 'Sign up'
+        click_button 'Register'
       end
 
       it 'asks for e-mail confirmation' do
@@ -29,7 +29,7 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
         fill_in 'user[email]', :with => user.email
         fill_in 'user[password]', :with => '123456'
         fill_in 'user[password_confirmation]', :with => '123456'
-        click_button 'Sign up'
+        click_button 'Register'
       end
 
       it 'displays appropriate error message' do
