@@ -5,8 +5,14 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :omniauthable, omniauth_providers: %w(github)
 
-  attr_encrypted_options.merge!(key: ENV['ENCRYPTED_TOKEN_SECRET'],
-    mode: :per_attribute_iv_and_salt)
+  if Rails.env.test?
+    attr_encrypted_options.merge!(
+      key: 'cruns-iaj-taV-Eyg-uN-rOwz-aG',
+      mode: :per_attribute_iv_and_salt)
+  else
+    attr_encrypted_options.merge!(
+      key: ENV['ENCRYPTED_TOKEN_SECRET'], mode: :per_attribute_iv_and_salt)
+  end
   attr_encryptor :github_access_token
 
   belongs_to :invited_by, class_name: "Project"
