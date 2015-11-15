@@ -12,15 +12,11 @@ class TestRunsController < DashboardController
     @test_jobs = @run.test_jobs.order("status DESC, started_at ASC, id ASC")
   end
 
-  # TODO : remove, not used
   def create
-    @test_run = TestRun.new(test_run_params)
-    @test_run.build_test_jobs
-    if @test_run.save
-      redirect_to @test_run, notice: 'Test run was successfully created.'
-    else
-      render :new
-    end
+    branch = TrackedBranch.find(params[:branch_id])
+    branch.create_test_run_and_jobs!
+
+    redirect_to :back, notice: 'Your build was added to queue'
   end
 
   def update
