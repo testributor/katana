@@ -60,7 +60,7 @@ class ProjectWizard < ActiveRecord::Base
   end
 
   def testributor_yml_contents
-    "each:\n  pattern: 'test/*/**_test.rb'\n  command: 'bin/rake test %{file}'"
+    File.read(File.join(Rails.root, 'app', 'file_templates', 'testributor.yml'))
   end
 
   def branch_names=(branch_names)
@@ -86,6 +86,8 @@ class ProjectWizard < ActiveRecord::Base
       _project.repository_owner = repo.owner.login
     end
 
+    project.project_files.create!(path: "testributor.yml",
+                                  contents: testributor_yml)
     project.create_webhooks!
     project.create_oauth_application!
 
