@@ -2,10 +2,19 @@
   %h2 Configure testributor.yml file
 
 .panel-body
-  = form_tag project_wizard_path, method: :put,
-    html: { class: "form-horizontal" } do
-    = text_area_tag :testributor_yml,
-      @project_wizard.testributor_yml_contents,
-      class: 'text form-control'
+  = form_tag project_wizard_path, method: :put, html: { class: "form-horizontal" } do
+    .row
+      .col-sm-12
+        %panel.panel-info.panel-color
+          .panel-body.code-edit-wrap
+            = text_area_tag :testributor_yml,
+              @project_wizard.testributor_yml_contents,
+              class: 'text form-control code'
     .pull-right.m-t-15
       = submit_tag "Next", class: 'btn btn-primary w-lg btn-lg'
+
+- content_for :in_page_js do
+  = javascript_include_tag asset_path 'codemirror.js'
+  = javascript_include_tag asset_path 'formatting.js'
+  = javascript_include_tag asset_path 'yaml.js'
+  = javascript_include_tag asset_path 'custom.codemirror.js'

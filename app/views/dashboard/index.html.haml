@@ -5,8 +5,8 @@
   .panel-heading
     %h3
       = "You haven't added any projects yet."
-      = link_to "Click here", new_project_path
-      = "to add a new project"
+      = link_to "Add a project", project_wizard_path(:add_project),
+        class: 'btn btn-primary m-l-10'
 - @projects.each do |project|
   .panel-heading
     %h4= link_to project.repository_name, project_path(project)
@@ -15,11 +15,11 @@
       .col-md-12.col-sm-12.col-xs-12
         - if project.tracked_branches.empty?
           %i.small-margin
-            %p Your master branch is getting cooked.
-            %p
-              Please reload the page to check if it's done or
-              = link_to 'add', new_project_branch_path(project)
-              another branch.
+            You haven't added any branches to this project yet.
+            = link_to 'Add a branch',
+              project_wizard_path(:add_branch,
+              repo_id: project.owner_and_name),
+              class: 'btn btn-primary m-l-10'
         - else
           .table-responsive
             %table.table
@@ -38,8 +38,10 @@
                     %td= branch.last_run.try(:commit_sha)
                     %td= branch.last_run.try(:completed_at)
                     %td
-                      %span{class: branch.status.css_class}
-                        = branch.status.text if branch.status.text
+                      %span{class: branch.status.try(:css_class)}
+                        = branch.status.try(:text)
+                    -# TODO : When no test runs exist, add a button
+                    -# to create a test run
                     %td= button_to branch.status.cta_text,
                       project_branch_test_run_path(project.id,
                       branch.id, branch.try(:last_run).try(:id),

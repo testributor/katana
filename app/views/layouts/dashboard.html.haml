@@ -29,3 +29,4 @@
               = yield
 
     = javascript_include_tag 'dashboard'
+    = yield(:in_page_js) if content_for?(:in_page_js)
