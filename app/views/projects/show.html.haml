@@ -27,14 +27,19 @@
               - @branches.each do |branch|
                 %tr
                   %td= link_to branch.branch_name,
-                      project_branch_test_runs_path(current_project, branch)
+                      project_branch_test_runs_path(branch.project, branch)
                   %td= branch.last_run.try(:commit_sha)
                   %td= branch.last_run.try(:completed_at)
                   %td
-                    %span{class: branch.status.css_class}
-                      = branch.status.text if branch.status.text
-                  %td= button_to branch.status.cta_text,
-                    project_branch_test_run_path(current_project.id,
-                    branch.id, branch.try(:last_run).try(:id),
-                    status: branch.status.status_to_set),
-                    class: 'btn btn-primary', method: :put
+                    %span{class: branch.status.try(:css_class)}
+                      = branch.status.try(:text)
+                  - if branch.test_runs.present?
+                    %td= button_to branch.status.cta_text,
+                      project_branch_test_run_path(branch.project.id,
+                      branch.id, branch.try(:last_run).try(:id),
+                      status: branch.status.status_to_set),
+                      class: 'btn btn-primary', method: :put
+                  -else
+                    %td= button_to "Run latest",
+                      project_branch_test_runs_path(branch.project.id, branch.id),
+                      class: 'btn btn-primary', method: :post
