@@ -15,7 +15,8 @@ module ApplicationHelper
   end
 
   def github_oauth_authorize_url
-    Octokit.authorize_url(Octokit.client_id, scope: 'user:email,repo')
+    Octokit.authorize_url(Octokit.client_id, scope: 'user:email,repo',
+                         redirect_uri: github_callback_url)
   end
 
   def wizard_step_class(step)

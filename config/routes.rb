@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'oauth/github_callback' => 'oauth#github_callback'
+  get 'oauth/github_callback' => 'oauth#github_callback', as: :github_callback
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
 
   authenticated :user do
