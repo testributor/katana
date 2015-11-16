@@ -28,10 +28,10 @@
             = link_to new_project_invitation_path(current_project) do
               %i.fa.fa-users
               %span.nav-label= t('invite_users')
-        %li{ class: current_page?(api_credentials_project_path(current_project)) ? 'active' : nil }
-          = link_to api_credentials_project_path(current_project) do
-            %i.fa.fa-expeditedssl
-            %span.nav-label= "API Credentials"
+        %li{ class: current_page?(settings_project_path(current_project)) ? 'active' : nil }
+          = link_to settings_project_path(current_project) do
+            %i.fa.fa-cog
+            %span.nav-label= "Settings"
       - else
         %li
           = link_to project_wizard_path(:add_project) do

@@ -23,10 +23,9 @@
             %h3= yield :page_title
         .row
           .col-md-12
-            .panel.panel-default
-              - if self.respond_to?(:wizard_steps)
-                = render 'layouts/wizard_steps'
-              = yield
+            - if self.respond_to?(:wizard_steps)
+              = render 'layouts/wizard_steps'
+            = yield
 
     = javascript_include_tag 'dashboard'
     = yield(:in_page_js) if content_for?(:in_page_js)

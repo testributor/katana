@@ -1,0 +1,21 @@
+- breadcrumb :settings, current_project
+
+- content_for :page_title do
+  Settings
+
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Application credentials:
+    .panel-body
+      %pre
+        = "Client id:     #{@project.oauth_application.uid}".html_safe
+        %br
+        = "Client Secret: #{@project.oauth_application.secret}".html_safe
+
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Docker compose file:
+    .panel-body
+      %pre= @project.generate_docker_compose_yaml

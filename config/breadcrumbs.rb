@@ -12,8 +12,8 @@ crumb :new_invitation do |project|
   parent :project, project
 end
 
-crumb :api_credentials do |project|
-  link "API Credentials", api_credentials_project_path(project)
+crumb :settings do |project|
+  link "Setings", settings_project_path(project)
   parent :project, project
 end
 

@@ -72,8 +72,8 @@ class Project < ActiveRecord::Base
     language_image = docker_images.find_by_type('language')
     language = { 'base' =>
                  {
-                   'image' => language_image.name,
-                   'command' => "/bin/bash -l -c rvm #{language_image.version} do testributor",
+                   'image' => language_image.try(:name),
+                   'command' => "/bin/bash -l -c rvm #{language_image.try(:version)} do testributor",
                    'links' => techs.keys,
                    'environment' => {
                      'APP_ID' => oauth_application.uid,

@@ -20,7 +20,7 @@ class ProjectsController < DashboardController
     end
   end
 
-  def api_credentials
+  def settings
     @project = current_user.projects.find(params[:id])
   end
 
