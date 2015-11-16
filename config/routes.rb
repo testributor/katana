@@ -48,6 +48,9 @@ Rails.application.routes.draw do
     resources :tracked_branches, only: [:new, :create], path: :branches,
       as: :branches do
       resources :test_runs do
+        member do
+          post :retry
+        end
         resources :test_jobs
       end
     end

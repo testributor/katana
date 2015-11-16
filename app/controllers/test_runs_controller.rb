@@ -1,7 +1,7 @@
 class TestRunsController < DashboardController
   include Controllers::EnsureProject
 
-  before_action :set_test_run, only: [:show, :update, :destroy]
+  before_action :set_test_run, only: [:show, :update, :destroy, :retry]
 
   def index
     @tracked_branch = current_user.tracked_branches.find(params[:branch_id])
@@ -27,7 +27,13 @@ class TestRunsController < DashboardController
     end
   end
 
-  # TODO : remove, not used
+  def retry
+    branch = @test_run.tracked_branch
+    @test_run.destroy
+    branch.create_test_run_and_jobs!
+    redirect_to project_branch_test_runs_path, notice: 'Test run was successfully updated.'
+  end
+
   def destroy
     @test_run.destroy
     redirect_to project_branch_test_runs_url(current_project, @test_run.tracked_branch_id),
