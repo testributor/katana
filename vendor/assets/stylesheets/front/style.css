@@ -452,3 +452,9 @@ ul.social-icons li a i {
     vertical-align: middle;
   }
 }
+
+body {
+ .alert {
+    margin-bottom: 0px;
+  }
+}
