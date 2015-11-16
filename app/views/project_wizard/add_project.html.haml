@@ -1,6 +1,8 @@
-.panel-body.js-fetch-repos{ data: { current_path: fetch_repos_project_wizard_path } }
-.js-fetching-repos.text-center
-  .panel-title
-    %h3 Fetching your repositories from Github. This will take a while. Please wait...
-  .panel-body
-    %p= image_tag(asset_path('github.svg'), width: '100')
+.panel.panel-default
+  = render 'layouts/wizard_steps'
+  .panel-body.js-fetch-repos{ data: { current_path: fetch_repos_project_wizard_path } }
+  .js-fetching-repos.text-center
+    .panel-title
+      %h3 Fetching your repositories from Github. This will take a while. Please wait...
+    .panel-body
+      %p= image_tag(asset_path('github.svg'), width: '100')

@@ -1,34 +1,39 @@
-.panel-body
+.panel.panel-default
+  = render 'layouts/wizard_steps'
   = form_for @project_wizard, url: project_wizard_path,
       method: :put, html: { class: 'form-horizontal' } do |f|
     .row
-      .col-xs-5
-        %h3 Select language and version
-        = f.collection_radio_buttons :id, @languages, :id, :public_name do |radio|
-          .input-group.m-t-10
-            .radio
-              = radio.label(class: 'cr-styled') do
-                = radio.radio_button
-                %i.fa
-                = radio.text
-            .input-group-btn
-              = f.fields_for DockerImage.new do |ff|
-                = ff.select :version, radio.object.available_versions, {},
-                  class: 'btn btn-primary btn-effect-ripple dropdown-toggle'
+      .col-xs-6
+        .panel-heading
+          %h3 Select language and version
+        .panel-body
+          = f.collection_radio_buttons :id, @languages, :id, :public_name do |radio|
+            .input-group.m-t-10
+              .radio
+                = radio.label(class: 'cr-styled') do
+                  = radio.radio_button
+                  %i.fa
+                  = radio.text
+              .input-group-btn
+                = f.fields_for DockerImage.new do |ff|
+                  = ff.select :version, radio.object.available_versions, {},
+                    class: 'btn btn-primary btn-effect-ripple dropdown-toggle'
 
-      .col-xs-5
-        %h3 Select technologies and versions
-        = f.collection_check_boxes :id, @technologies, :id,
-          :public_name do |check|
-          .input-group.m-t-10
-            .radio
-              = check.label(class: 'cr-styled') do
-                = check.check_box
-                %i.fa
-                = check.text
-            .input-group-btn
-              = f.fields_for DockerImage.new do |ff|
-                = ff.select :version, check.object.available_versions, {},
-                  class: 'btn btn-primary btn-effect-ripple dropdown-toggle'
-    .pull-right.m-t-15
-      = f.submit "Create Project", class: 'btn btn-primary w-lg btn-lg'
+      .col-xs-6
+        .panel-heading
+          %h3 Select technologies and versions
+        .panel-body
+          = f.collection_check_boxes :id, @technologies, :id,
+            :public_name do |check|
+            .input-group.m-t-10
+              .radio
+                = check.label(class: 'cr-styled') do
+                  = check.check_box
+                  %i.fa
+                  = check.text
+              .input-group-btn
+                = f.fields_for DockerImage.new do |ff|
+                  = ff.select :version, check.object.available_versions, {},
+                    class: 'btn btn-primary btn-effect-ripple dropdown-toggle'
+      .pull-right.m-t-20
+        = f.submit "Create Project", class: 'btn btn-primary w-lg btn-lg'
