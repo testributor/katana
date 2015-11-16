@@ -54,5 +54,9 @@ Rails.application.routes.draw do
 
     resources :project_files, as: :files, path: :files, except: [:show, :new, :edit]
   end
-  resources :project_wizard
+  resources :project_wizard do
+    member do
+      get :fetch_repos
+    end
+  end
 end

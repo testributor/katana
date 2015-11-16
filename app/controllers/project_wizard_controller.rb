@@ -28,7 +28,6 @@ class ProjectWizardController < WizardController
 
     case step
     when :add_project
-      @repos = @project_wizard.fetch_repos
     when :add_branches
       redirect_if_blank_client and return
       @branches = @project_wizard.fetch_branches
@@ -64,6 +63,13 @@ class ProjectWizardController < WizardController
       flash[:alert] = @project_wizard.errors.full_messages.to_sentence
       redirect_to :back
     end
+  end
+
+  def fetch_repos
+    head 400 and return if !request.xhr?
+
+    @repos = @project_wizard.fetch_repos
+    render 'fetch_repos', layout: false
   end
 
   private
