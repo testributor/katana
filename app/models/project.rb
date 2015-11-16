@@ -9,6 +9,7 @@ class Project < ActiveRecord::Base
   has_many :tracked_branches, dependent: :destroy
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
+  has_many :docker_images
   has_and_belongs_to_many :members, class_name: "User"
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
   has_many :project_files, dependent: :destroy
@@ -60,6 +61,28 @@ class Project < ActiveRecord::Base
     app.save
 
     app
+  end
+
+  def generate_docker_compose_yaml
+    techs = {}
+    docker_images.each_with_index do |image, index|
+      techs.merge!({ "tech#{index}" => { "image" => image.name } })
+    end
+
+    language_image = docker_images.find_by_type('language')
+    language = { 'base' =>
+                 {
+                   'image' => language_image.name,
+                   'command' => "/bin/bash -l -c rvm #{language_image.version} do testributor",
+                   'links' => techs.keys,
+                   'environment' => {
+                     'APP_ID' => oauth_application.uid,
+                     'APP_SECRET' => oauth_application.secret,
+                     'APP_URL' => "http://www.testributor.com/api/v1/"
+                   }
+                 }
+               }
+    techs.merge(language).to_yaml
   end
 
   private

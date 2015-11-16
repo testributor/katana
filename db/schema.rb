@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151111152216) do
+ActiveRecord::Schema.define(version: 20151115174511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "docker_images", force: :cascade do |t|
+    t.string  "public_name"
+    t.text    "available_versions", default: [], array: true
+    t.string  "name"
+    t.string  "version"
+    t.text    "description"
+    t.integer "project_wizard_id"
+    t.integer "project_id"
+    t.text    "command"
+    t.string  "type"
+  end
+
+  add_index "docker_images", ["project_id"], name: "index_docker_images_on_project_id", using: :btree
+  add_index "docker_images", ["project_wizard_id"], name: "index_docker_images_on_project_wizard_id", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false

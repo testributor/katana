@@ -6,12 +6,14 @@ class ProjectWizard < ActiveRecord::Base
     add_project: "repo_name",
     add_branches: "branch_names",
     configure_testributor: "testributor_yml",
-    select_technologies: "selected_technologies"
+    select_technologies: "docker_images"
   }
   AVAILABLE_TECHNOLOGIES = %w(
     postgres9.4 postgres9.3 postgres9.2 rails4.1 redis mongo postgis)
 
   belongs_to :user
+  has_many :docker_images
+  accepts_nested_attributes_for :docker_images
 
   validates :user, presence: true
   validates :testributor_yml,
@@ -22,7 +24,7 @@ class ProjectWizard < ActiveRecord::Base
     presence: true, on: [:configure_testributor, ORDERED_STEPS.last]
   validates :branch_names,
     presence: true, on: [:add_branches, ORDERED_STEPS.last]
-  validates :selected_technologies, presence: true, on: :select_technologies
+  validates :docker_images, presence: true, on: :select_technologies
 
   after_save :reset_fields
 
@@ -86,6 +88,7 @@ class ProjectWizard < ActiveRecord::Base
       _project.repository_owner = repo.owner.login
     end
 
+    project.docker_images = docker_images
     project.project_files.create!(path: "testributor.yml",
                                   contents: testributor_yml)
     project.create_webhooks!

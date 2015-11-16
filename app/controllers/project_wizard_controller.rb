@@ -33,6 +33,8 @@ class ProjectWizardController < WizardController
       @branches = @project_wizard.fetch_branches
     when :configure_testributor
     when :select_technologies
+      @languages = DockerImage.where(type: 'language')
+      @technologies = DockerImage.where(type: 'technology')
     end
 
     render_wizard
@@ -48,7 +50,7 @@ class ProjectWizardController < WizardController
       @project_wizard.assign_attributes({
         testributor_yml: params[:testributor_yml]})
     when :select_technologies
-      @project_wizard.selected_technologies = params[:selected_technologies]
+      @project_wizard.assign_attributes(project_wizard_params)
     end
 
     if @project_wizard.save(context: step)
@@ -83,5 +85,10 @@ class ProjectWizardController < WizardController
     if current_user.github_client.blank?
       redirect_to project_wizard_path(:add_project)
     end
+  end
+
+  def project_wizard_params
+    params.require(:project_wizard).
+      permit(docker_images_attributes: [:id, :version])
   end
 end
