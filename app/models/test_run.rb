@@ -130,7 +130,7 @@ class TestRun < ActiveRecord::Base
   private
 
   def last_file_run
-    test_jobs.sort_by(&:completed_at).last
+    test_jobs.where('completed_at is not NULL').sort_by(&:completed_at).last
   end
 
   def github_client
