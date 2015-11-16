@@ -11,25 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115174511) do
+ActiveRecord::Schema.define(version: 20151116182012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "docker_images", force: :cascade do |t|
-    t.string  "public_name"
-    t.text    "available_versions", default: [], array: true
-    t.string  "name"
-    t.string  "version"
-    t.text    "description"
-    t.integer "project_wizard_id"
-    t.integer "project_id"
-    t.text    "command"
-    t.string  "type"
+    t.string "public_name",       default: "",         null: false
+    t.string "hub_image",         default: "",         null: false
+    t.string "standardized_name"
+    t.string "version"
+    t.text   "description",       default: "",         null: false
+    t.string "type",              default: "language", null: false
   end
-
-  add_index "docker_images", ["project_id"], name: "index_docker_images_on_project_id", using: :btree
-  add_index "docker_images", ["project_wizard_id"], name: "index_docker_images_on_project_wizard_id", using: :btree
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer  "resource_owner_id", null: false
@@ -90,6 +84,7 @@ ActiveRecord::Schema.define(version: 20151115174511) do
     t.text     "selected_technologies", default: [],              array: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "docker_image_id"
   end
 
   add_index "project_wizards", ["user_id"], name: "index_project_wizards_on_user_id", using: :btree
@@ -107,6 +102,7 @@ ActiveRecord::Schema.define(version: 20151115174511) do
     t.string   "secure_random"
     t.string   "name",                default: "", null: false
     t.string   "repository_owner",    default: "", null: false
+    t.integer  "docker_image_id"
   end
 
   add_index "projects", ["invitations_count"], name: "index_projects_on_invitations_count", using: :btree
@@ -120,6 +116,19 @@ ActiveRecord::Schema.define(version: 20151115174511) do
 
   add_index "projects_users", ["project_id"], name: "index_projects_users_on_project_id", using: :btree
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id", using: :btree
+
+  create_table "technology_selections", force: :cascade do |t|
+    t.integer  "project_wizard_id"
+    t.integer  "project_id"
+    t.integer  "docker_image_id"
+    t.string   "version"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "technology_selections", ["docker_image_id"], name: "index_technology_selections_on_docker_image_id", using: :btree
+  add_index "technology_selections", ["project_id"], name: "index_technology_selections_on_project_id", using: :btree
+  add_index "technology_selections", ["project_wizard_id"], name: "index_technology_selections_on_project_wizard_id", using: :btree
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"

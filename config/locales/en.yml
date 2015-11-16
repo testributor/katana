@@ -29,6 +29,11 @@ en:
               project_limit_reached: >
                 You can't add other projects as you have reached your <strong>project limit</strong>.
                 Please upgrade your plan.
+        project_wizard:
+          attributes:
+            docker_image_selection:
+              greater_than_one: You can't select more than one language
+              blank: At least one language must be selected
   add_project: "Select a repo"
   add_branches: "Select branches"
   configure_testributor: "Configure testributor.yml"

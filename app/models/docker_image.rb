@@ -1,5 +1,8 @@
 class DockerImage < ActiveRecord::Base
   # Disable inheritance
-  self.inheritance_column = :_type_disabled
-  belongs_to :project_wizard
+  self.inheritance_column = nil
+
+  scope :languages, -> { where(type: 'language') }
+  scope :technologies, -> { where(type: 'technology') }
+  belongs_to :docker_image_selection
 end

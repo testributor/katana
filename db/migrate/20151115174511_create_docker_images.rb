@@ -1,27 +1,32 @@
 class CreateDockerImages < ActiveRecord::Migration
   def change
     create_table :docker_images do |t|
-      t.string :public_name
-      t.text :available_versions, array: true, default: []
-      t.string :name
+      t.string :public_name, null: false, default: ''
+      t.string :hub_image, null: false, default: ''
+      t.string :standardized_name
       t.string :version
-      t.text :description
-      t.references :project_wizard, index: true
-      t.references :project, index: true
-      t.text :command
-      t.string :type
+      t.text :description, null: false, default: ''
+      t.string :type, null: false, default: 'language'
     end
 
     DockerImage.create!(
-      public_name: 'Ruby', name: 'ruby',
-      type: 'language', available_versions: %w(2.0 2.1 2.2))
+      public_name: 'Ruby 2.2', hub_image: 'testributor/base_image',
+      type: 'language', standardized_name: "ruby", version: "2.2")
 
     DockerImage.create!(
-      public_name: 'PostgreSQL', name: 'postgres',
-      type: 'technology', available_versions: %w(9.0 9.1 9.2 9.3 9.4 9.5))
+      public_name: 'Ruby 2.1', hub_image: 'testributor/base_image',
+      type: 'language', standardized_name: "ruby", version: "2.1")
 
     DockerImage.create!(
-      public_name: 'Redis', name: 'redis',
-      type: 'technology', available_versions: %w(2.6 2.8 3.0))
+      public_name: 'PostgreSQL 9.3', hub_image: 'postgres:9.3',
+      type: 'technology', standardized_name: "postgresql", version: "9.3")
+
+    DockerImage.create!(
+      public_name: 'PostgreSQL 9.4', hub_image: 'postgres:9.4',
+      type: 'technology', standardized_name: "postgresql", version: "9.4")
+
+    DockerImage.create!(
+      public_name: 'Redis 3.0', hub_image: 'redis:3.0',
+      type: 'technology', standardized_name: 'redis', version: '3.0')
   end
 end

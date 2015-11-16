@@ -9,11 +9,14 @@ class Project < ActiveRecord::Base
   has_many :tracked_branches, dependent: :destroy
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
-  has_many :docker_images
+  has_one :docker_image_selection
   has_and_belongs_to_many :members, class_name: "User"
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
   has_many :project_files, dependent: :destroy
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
+  belongs_to :docker_image # This is the base image
+  has_many :technology_selections
+  has_many :technologies, through: :technology_selections
 
   validates :name, :user, presence: true
   validates :name, uniqueness: { scope: :user }
@@ -65,15 +68,14 @@ class Project < ActiveRecord::Base
 
   def generate_docker_compose_yaml
     techs = {}
-    docker_images.each_with_index do |image, index|
-      techs.merge!({ "tech#{index}" => { "image" => image.name } })
+    technologies.each_with_index do |technology, index|
+      techs.merge!({ "tech#{index}" => { "image" => technology.try(:hub_image) } })
     end
 
-    language_image = docker_images.find_by_type('language')
     language = { 'base' =>
                  {
-                   'image' => language_image.try(:name),
-                   'command' => "/bin/bash -l -c rvm #{language_image.try(:version)} do testributor",
+                   'image' => docker_image.try(:hub_image),
+                   'command' => "/bin/bash -l -c rvm #{docker_image.try(:version)} do testributor",
                    'links' => techs.keys,
                    'environment' => {
                      'APP_ID' => oauth_application.uid,

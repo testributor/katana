@@ -33,8 +33,6 @@ class ProjectWizardController < WizardController
       @branches = @project_wizard.fetch_branches
     when :configure_testributor
     when :select_technologies
-      @languages = DockerImage.where(type: 'language')
-      @technologies = DockerImage.where(type: 'technology')
     end
 
     render_wizard
@@ -50,10 +48,15 @@ class ProjectWizardController < WizardController
       @project_wizard.assign_attributes({
         testributor_yml: params[:testributor_yml]})
     when :select_technologies
-      @project_wizard.assign_attributes(project_wizard_params)
+      @project_wizard.assign_attributes(selected_technologies_params)
     end
 
     if @project_wizard.save(context: step)
+      if step == :select_technologies && params[:technology_ids].present?
+        @project_wizard.technologies =
+          DockerImage.technologies.where(id: params[:technology_ids])
+      end
+
       if step == ProjectWizard::ORDERED_STEPS.last
         @project_wizard.to_project && @project_wizard.create_branches &&
           @project_wizard.destroy
@@ -61,8 +64,7 @@ class ProjectWizardController < WizardController
 
       redirect_to next_wizard_path
     else
-      # TODO : where do we show this?
-      flash[:alert] = @project_wizard.errors.full_messages.to_sentence
+      flash[:alert] = @project_wizard.errors.values.flatten.to_sentence
       redirect_to :back
     end
   end
@@ -89,6 +91,10 @@ class ProjectWizardController < WizardController
 
   def project_wizard_params
     params.require(:project_wizard).
-      permit(docker_images_attributes: [:id, :version])
+      permit(id: [], docker_image: [:version])
+  end
+
+  def selected_technologies_params
+    params.require(:project_wizard).permit(:docker_image_id)
   end
 end
