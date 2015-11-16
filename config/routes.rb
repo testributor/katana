@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resources :test_runs do
         member do
           post :retry
+          post :create
         end
         resources :test_jobs
       end

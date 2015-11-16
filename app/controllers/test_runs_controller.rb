@@ -28,10 +28,9 @@ class TestRunsController < DashboardController
   end
 
   def retry
-    branch = @test_run.tracked_branch
-    @test_run.destroy
-    branch.create_test_run_and_jobs!
-    redirect_to project_branch_test_runs_path, notice: 'Test run was successfully updated.'
+    @test_run.test_jobs.destroy_all
+    @test_run.build_test_jobs
+    redirect_to :back, notice: 'Test run was successfully updated.'
   end
 
   def destroy

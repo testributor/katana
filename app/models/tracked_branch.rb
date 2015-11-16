@@ -15,11 +15,7 @@ class TrackedBranch < ActiveRecord::Base
     repo = client.repo(repo_id)
     github_branch = client.branch(repo.id, repo[:default_branch])
 
-    if run = last_run
-      run.test_jobs.destroy_all
-    else
-      run = test_runs.create!(commit_sha: github_branch[:commit][:sha])
-    end
+    run = test_runs.create!(commit_sha: github_branch[:commit][:sha])
     run.build_test_jobs
     run.save!
   end

@@ -6,6 +6,12 @@
 .panel-body
   .row
     .col-md-12.col-sm-12.col-xs-12
+      .pull-right
+        = link_to new_project_branch_test_run_path, method: :post, action: :create do
+          %button.btn.btn-icon.btn-info.m-b-5.w-md
+            %i.fa.fa-plus.m-r-5
+            %span= 'Add a new run'
+
       %table.table
         %thead
           %tr
@@ -25,7 +31,7 @@
               %td= distance_of_time_in_words(test_run.total_running_time) if test_run.total_running_time
               %td= link_to 'Details',
                 project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run),
-                class: 'btn btn-primary'
+                class: 'btn btn-info'
               %td
                 = link_to retry_project_branch_test_run_path(id: test_run.id), method: :post do
                   %button.btn.btn-icon.btn-success.m-b-5
