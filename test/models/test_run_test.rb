@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class TestRunTest < ActiveSupport::TestCase
-  let(:_test_run) { FactoryGirl.create(:test_run) }
+  let(:_test_run) { FactoryGirl.create(:testributor_run) }
 
   describe "#total_running_time" do
     it "returns total time when all times exist" do
@@ -43,7 +43,7 @@ class TestRunTest < ActiveSupport::TestCase
   end
 
   describe "#jobs_yml" do
-    subject { FactoryGirl.create(:test_run) }
+    subject { FactoryGirl.create(:testributor_run) }
     let(:client) { Octokit::Client.new(access_token: "some_token") }
     let(:file) do
       file = mock
@@ -121,7 +121,7 @@ class TestRunTest < ActiveSupport::TestCase
   end
 
   describe "build_test_jobs" do
-    subject { FactoryGirl.create(:test_run) }
+    subject { FactoryGirl.create(:testributor_run) }
 
     before do
       subject.stubs(:project_file_names).returns(

@@ -2,32 +2,32 @@ require 'test_helper'
 
 class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
   let(:_test_job_failed) do
-    FactoryGirl.create(:test_job, status: TestStatus::FAILED)
+    FactoryGirl.create(:testributor_job, status: TestStatus::FAILED)
   end
   let(:_test_job_running) do
-    FactoryGirl.create(:test_job,
-                       test_run: _test_job_failed.test_run,
-                       status: TestStatus::RUNNING)
+    FactoryGirl.create(:testributor_job,
+      test_run: _test_job_failed.test_run,
+      status: TestStatus::RUNNING)
   end
   let(:_test_job_passed) do
-    FactoryGirl.create(:test_job,
-                       test_run: _test_job_failed.test_run,
-                       status: TestStatus::PASSED)
+    FactoryGirl.create(:testributor_job,
+      test_run: _test_job_failed.test_run,
+      status: TestStatus::PASSED)
   end
   let(:_test_job_error) do
-    FactoryGirl.create(:test_job,
-                       test_run: _test_job_failed.test_run,
-                       status: TestStatus::ERROR)
+    FactoryGirl.create(:testributor_job,
+      test_run: _test_job_failed.test_run,
+      status: TestStatus::ERROR)
   end
   let(:_test_job_pending) do
-    FactoryGirl.create(:test_job,
-                       test_run: _test_job_failed.test_run,
-                       status: TestStatus::PENDING)
+    FactoryGirl.create(:testributor_job,
+      test_run: _test_job_failed.test_run,
+      status: TestStatus::PENDING)
   end
   let(:_test_job_cancelled) do
-    FactoryGirl.create(:test_job,
-                       test_run: _test_job_failed.test_run,
-                       status: TestStatus::CANCELLED)
+    FactoryGirl.create(:testributor_job,
+      test_run: _test_job_failed.test_run,
+      status: TestStatus::CANCELLED)
   end
   let(:_test_run) { _test_job_failed.test_run }
   let(:project) { FactoryGirl.create(:project) }

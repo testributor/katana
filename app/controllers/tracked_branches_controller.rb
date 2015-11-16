@@ -15,8 +15,19 @@ class TrackedBranchesController < DashboardController
       tracked_branch = current_project.
         tracked_branches.create!(branch_name: branch[:name])
 
-      test_run = tracked_branch.
-        test_runs.build(commit_sha: branch[:commit][:sha])
+      c = branch[:commit]
+      test_run = tracked_branch.test_runs.build(
+        commit_sha: c.commit.tree.sha,
+        commit_message: c.commit.message,
+        commit_timestamp: c.commit.committer.date,
+        commit_url: c.html_url,
+        commit_author_name: c.commit.author.name,
+        commit_author_email: c.commit.author.email,
+        commit_author_username: c.author.login,
+        commit_committer_name: c.commit.committer.name,
+        commit_committer_email: c.commit.committer.email,
+        commit_committer_username: c.committer.login
+      )
       if (result = test_run.build_test_jobs).is_a?(Hash)
         flash[:alert] = result[:errors]
       elsif result.nil?

@@ -76,3 +76,9 @@ OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new({
     :email => 'spyros@github.com'
   }
 })
+
+if ENV['RUBYMINE']
+  require 'minitest/reporters'
+  reporters = [Minitest::Reporters::RubyMineReporter.new]
+  MiniTest::Reporters.use!(reporters)
+end

@@ -1,13 +1,15 @@
+require 'test_helper'
+
 class Api::V1::TestJobsControllerTest < ActionController::TestCase
   let(:project) { FactoryGirl.create(:project) }
   let(:application) { Doorkeeper::Application.new(owner: project) }
   # ArgumentError: let 'test_run' cannot begin with 'test'. Please use another name.
   # That's what the _ is for :)
   let(:_test_run) do
-    FactoryGirl.create(:test_run, project: project, status: TestStatus::PENDING)
+    FactoryGirl.create(:testributor_run, project: project, status: TestStatus::PENDING)
   end
   let(:_test_jobs) do
-    FactoryGirl.create_list(:test_job, 4, test_run: _test_run)
+    FactoryGirl.create_list(:testributor_job, 4, test_run: _test_run)
   end
   let(:token) do
     token = MiniTest::Mock.new

@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class Api::V1::ProjectsControllerTest < ActionController::TestCase
   let(:project) { FactoryGirl.create(:project) }
   let(:application) do

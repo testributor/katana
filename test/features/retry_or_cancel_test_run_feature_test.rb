@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
-  let(:_test_run) { FactoryGirl.create(:test_run) }
+  let(:_test_run) { FactoryGirl.create(:testributor_run) }
   let(:branch) { _test_run.tracked_branch }
   let(:project) { branch.project }
   let(:owner) { project.user }

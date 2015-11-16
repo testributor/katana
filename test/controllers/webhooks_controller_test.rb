@@ -53,9 +53,26 @@ class WebhooksControllerTest < ActionController::TestCase
               command: 'bin/rake test %{file}'
           YML
         )
-        post :github, { head_commit: { id: commit_sha },
-                        repository: { id: project.repository_id },
-                        ref: "refs/head/ispyropoulos/#{tracked_branch.branch_name}" }
+        post :github, {
+          head_commit: {
+            id: commit_sha,
+            message: 'Some commit messsage',
+            timestamp: '2015-11-17 11:42:24 UTC',
+            url: 'Some url',
+            author: {
+              name: 'Great Author',
+              email: 'great@author.com',
+              username: 'authorusername'
+            },
+            committer: {
+              name: 'Great Committer',
+              email: 'great@committer.com',
+              username: 'committerusername'
+            }
+          },
+          repository: { id: project.repository_id },
+          ref: "refs/head/ispyropoulos/#{tracked_branch.branch_name}"
+        }
         @testrun = TestRun.last
       end
 

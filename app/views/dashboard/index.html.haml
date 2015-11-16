@@ -27,7 +27,7 @@
                 %thead
                   %tr
                     %th Branch
-                    %th Commit
+                    %th Commit message (SHA)
                     %th Completed at
                     %th Status
                     %th Actions
@@ -36,7 +36,9 @@
                     %tr
                       %td= link_to branch.branch_name,
                           project_branch_test_runs_path(branch.project, branch)
-                      %td= branch.last_run.try(:commit_sha)
+                      %td
+                        - if branch.last_run
+                          #{branch.last_run.commit_message} (#{branch.last_run.commit_sha[0...6]})
                       %td= branch.last_run.try(:completed_at)
                       %td
                         %span{class: branch.status.try(:css_class)}
@@ -51,4 +53,3 @@
                         %td= button_to "Run branch",
                           project_branch_test_runs_path(project.id, branch.id),
                           class: 'btn btn-primary', method: :post
-

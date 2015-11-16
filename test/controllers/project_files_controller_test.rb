@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class ProjectFilesControllerTest < ActionController::TestCase
   let(:project) { FactoryGirl.create(:project) }
   let(:user) { project.user }

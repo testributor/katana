@@ -12,7 +12,28 @@ class TrackedBranchesControllerTest < ActionController::TestCase
   let(:filename_2) { "test/models/hello_test.rb" }
   let(:commit_sha) { "034df43" }
   let(:branch_github_response) do
-    { name: branch_name, commit: { sha: commit_sha }, project_id: project.id }
+    Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+      {
+        name: branch_name,
+        commit: {
+          commit: {
+            tree: { sha: commit_sha },
+            message: 'Some commit messsage',
+            html_url: 'Some url',
+            author: {
+              name: 'Great Author',
+              email: 'great@author.com',
+            },
+            committer: {
+              name: 'Great Committer',
+              email: 'great@committer.com',
+            }
+          },
+          author: { login: 'authorlogin' },
+          committer: { login: 'committerlogin' }
+        }
+      }
+    )
   end
 
   describe "POST#create" do

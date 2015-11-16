@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :test_job do
-    association :test_run
+  factory :testributor_job, class: 'TestJob' do
+    association :test_run, factory: :testributor_run
     sequence(:command){|n| "bin/rake test test/models/model_#{n}_test.rb"}
     result ''
     status 0

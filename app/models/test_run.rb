@@ -1,11 +1,9 @@
 class TestRun < ActiveRecord::Base
   JOBS_YML_PATH = "testributor.yml"
 
-  has_many :test_jobs, dependent: :delete_all
-  belongs_to :tracked_branch
-  belongs_to :user
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
+  has_many :test_jobs, dependent: :delete_all
 
   delegate :started_at, :completed_at, to: :last_file_run, allow_nil: true
 
@@ -130,7 +128,7 @@ class TestRun < ActiveRecord::Base
   private
 
   def last_file_run
-    test_jobs.where('completed_at is not NULL').sort_by(&:completed_at).last
+    test_jobs.where('completed_at IS NOT NULL').sort_by(&:completed_at).last
   end
 
   def github_client
