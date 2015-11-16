@@ -24,10 +24,8 @@ module Api
         # TODO: only update running jobs?
         job = current_project.test_jobs.running.find(params[:id])
 
-        # TODO: Change status to either FAIL or SUCCESS (or ERROR ?)
         # TODO: Store total_time
-        if job.update(test_job_params.merge(completed_at: Time.current,
-            status: TestStatus::COMPLETE))
+        if job.update(test_job_params.merge(completed_at: Time.current))
           head 200
         else
           render json: { error: job.errors.full_messages.join(', ') }
@@ -38,14 +36,18 @@ module Api
 
       def test_job_params
         new_params = params.require(:test_job).permit(:result, :failures,
-          :errors, :failures, :count, :assertions, :skips, :total_time)
+          :errors, :failures, :count, :assertions, :skips, :total_time, :status)
 
         # TODO: Remove this when we store total_time
         new_params.delete(:total_time)
 
         # Replace "errors" with "test_errors" because we can't have an
         # errors attribute (it conflicts with ActiveRecord's errors method)
-        new_params.merge(test_errors: new_params.delete(:errors))
+        if errors = new_params.delete(:errors)
+          new_params.merge(test_errors: errors)
+        else
+          new_params
+        end
       end
     end
   end

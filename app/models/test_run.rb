@@ -11,7 +11,9 @@ class TestRun < ActiveRecord::Base
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
-  scope :complete, -> { where(status: TestStatus::COMPLETE) }
+  scope :passed, -> { where(status: TestStatus::PASSED) }
+  scope :failed, -> { where(status: TestStatus::FAILED) }
+  scope :error, -> { where(status: TestStatus::ERROR) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def total_running_time
@@ -30,7 +32,7 @@ class TestRun < ActiveRecord::Base
   end
 
   def status
-    TestStatus.new(read_attribute(:status), failed?)
+    TestStatus.new(read_attribute(:status))
   end
 
   # Example yml file:
@@ -136,6 +138,6 @@ class TestRun < ActiveRecord::Base
   end
 
   def failed?
-    test_jobs.any? { |file| file.failed? }
+    test_jobs.any? { |job| job.status.failed? }
   end
 end

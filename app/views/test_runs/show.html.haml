@@ -48,6 +48,6 @@
                     test_job.test_run.id, test_job,
                     status: test_job.status.status_to_set),
                     class: 'btn btn-primary', method: :put
-              - if test_job.result.present?
+              - if test_job.status.failed? || test_job.status.error?
                 %tr.danger
                   %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)

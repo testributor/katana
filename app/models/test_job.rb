@@ -5,11 +5,13 @@ class TestJob < ActiveRecord::Base
 
   scope :pending, -> { where(status: TestStatus::PENDING) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
-  scope :complete, -> { where(status: TestStatus::COMPLETE) }
+  scope :passed, -> { where(status: TestStatus::PASSED) }
+  scope :failed, -> { where(status: TestStatus::FAILED) }
+  scope :error, -> { where(status: TestStatus::ERROR) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
   def status
-    TestStatus.new(read_attribute(:status), failed?)
+    TestStatus.new(read_attribute(:status))
   end
 
   # Returns the total time it took for a TestJob to run
@@ -23,9 +25,5 @@ class TestJob < ActiveRecord::Base
     else
       (Time.current - started_at).round
     end
-  end
-
-  def failed?
-    test_errors > 0 || failures > 0
   end
 end

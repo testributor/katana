@@ -23,7 +23,15 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
         },
         {
           commit_sha: "934ni",
-          status: TestStatus::COMPLETE, name: 'passed-branch'
+          status: TestStatus::PASSED, name: 'passed-branch'
+        },
+        {
+          commit_sha: "934ni",
+          status: TestStatus::FAILED, name: 'failed-branch'
+        },
+        {
+          commit_sha: "934ni",
+          status: TestStatus::ERROR, name: 'error-branch'
         },
         {
           commit_sha: "a0acl",
@@ -44,6 +52,8 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
 
       page.must_have_content "Pending"
       page.must_have_content "Passed"
+      page.must_have_content "Failed"
+      page.must_have_content "Error"
       page.must_have_content "Cancelled"
       page.must_have_content "Running"
     end

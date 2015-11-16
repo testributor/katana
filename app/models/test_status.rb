@@ -2,19 +2,46 @@ class TestStatus
   attr_reader :code
   PENDING = 0
   RUNNING = 1
-  COMPLETE = 2
-  CANCELLED = 3
+  PASSED = 2
+  FAILED = 3
+  ERROR = 4
+  CANCELLED = 5
 
   STATUS_MAP = {
     PENDING => 'Pending',
     RUNNING => 'Running',
-    COMPLETE => 'Complete',
+    PASSED => "Passed",
+    FAILED => 'Failed',
+    ERROR => 'Error',
     CANCELLED => 'Cancelled'
   }
 
-  def initialize(code, failed)
+  def initialize(code)
     @code = code
-    @failed = failed
+  end
+
+  def pending?
+    @code == PENDING
+  end
+
+  def running?
+    @code == RUNNING
+  end
+
+  def passed?
+    @code == PASSED
+  end
+
+  def failed?
+    @code == FAILED
+  end
+
+  def error?
+    @code == ERROR
+  end
+
+  def cancelled?
+    @code == CANCELLED
   end
 
   def cta_text
@@ -35,10 +62,6 @@ class TestStatus
   end
 
   def text
-    if @code == COMPLETE
-      return @failed ? 'Failed' : 'Passed'
-    end
-
     STATUS_MAP[@code]
   end
 
@@ -50,8 +73,12 @@ class TestStatus
       'label label-info'
     when RUNNING
       'label label-running'
-    when COMPLETE
-      @failed ? 'label label-danger' : 'label label-success'
+    when PASSED
+      'label label-success'
+    when FAILED
+      'label label-danger'
+    when ERROR
+      'label label-danger'
     end
   end
 end

@@ -12,10 +12,28 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
   end
 
   it "user is able to retry a complete test_run" do
-    _test_run.update_column(:status, TestStatus::COMPLETE)
+    _test_run.update_column(:status, TestStatus::PASSED)
     _test_run.reload
     visit root_path
     page.must_have_content "Passed"
+    find("input.btn-primary").click
+    page.must_have_content "Pending"
+  end
+
+  it "user is able to retry a complete test_run" do
+    _test_run.update_column(:status, TestStatus::FAILED)
+    _test_run.reload
+    visit root_path
+    page.must_have_content "Failed"
+    find("input.btn-primary").click
+    page.must_have_content "Pending"
+  end
+
+  it "user is able to retry a complete test_run" do
+    _test_run.update_column(:status, TestStatus::ERROR)
+    _test_run.reload
+    visit root_path
+    page.must_have_content "Error"
     find("input.btn-primary").click
     page.must_have_content "Pending"
   end
