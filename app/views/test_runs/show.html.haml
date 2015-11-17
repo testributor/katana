@@ -2,61 +2,61 @@
 
 - content_for :page_title do
   = "Test Run ##{@run.id}"
-
-.panel-heading.test-run-panel-heading
-  %h3.pull-left
-    Commit #{@run.commit_sha}
-  .test
-    .pull-right
-      = link_to retry_project_branch_test_run_path(id: @run.id), method: :post do
-        %button.btn.btn-icon.btn-success.m-b-5
-          %i.fa.fa-refresh
-      = link_to project_branch_test_run_path(id: @run.id), method: :post do
-        %button.btn.btn-icon.btn-danger.m-b-5
-          %i.fa.fa-remove
-.panel-body
-  .row
-    .col-xs-12
-      .table-responsive
-        %table.table
-          %thead
-            %tr
-              %th='File'
-              %th='Status'
-              %th='Errors'
-              %th='Failures'
-              %th='Tests'
-              %th='Assertions'
-              %th='Skips'
-              %th='Started at (UTC)'
-              %th='Completed at (UTC)'
-              %th='Total running time'
-              %th='Actions'
-          %tbody
-            - @test_jobs.each do |test_job|
+.panel.panel-default
+  .panel-heading.test-run-panel-heading
+    %h3.pull-left
+      Commit #{@run.commit_sha}
+    .test
+      .pull-right
+        = link_to retry_project_branch_test_run_path(id: @run.id), method: :post do
+          %button.btn.btn-icon.btn-success.m-b-5
+            %i.fa.fa-refresh
+        = link_to project_branch_test_run_path(id: @run.id), method: :post do
+          %button.btn.btn-icon.btn-danger.m-b-5
+            %i.fa.fa-remove
+  .panel-body
+    .row
+      .col-xs-12
+        .table-responsive
+          %table.table
+            %thead
               %tr
-                %td= test_job.command
-                %td
-                  %span{class: test_job.status.css_class}= test_job.status.text
-                %td= test_job.test_errors
-                %td= test_job.failures
-                %td= test_job.count
-                %td= test_job.assertions
-                %td= test_job.skips
-                %td= l(test_job.started_at, format: :no_utc) if test_job.started_at
-                %td= l(test_job.completed_at, format: :no_utc) if test_job.completed_at
-                %td= distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true) if test_job.total_running_time
-                %td
-                  - # TODO: tracked branch and test_run nesting seems unecessary
-                  - # for the test_job resource. We only need the project for
-                  - # validation/authorization purposes (to let it work in the
-                  - # same way the rest of the routes work).
-                  = button_to test_job.status.cta_text,
-                    project_branch_test_run_test_job_path(current_project,
-                    test_job.test_run.tracked_branch.id,
-                    test_job.test_run.id, test_job,
-                    status: test_job.status.status_to_set),
-                    class: 'btn btn-primary', method: :put
-              - if test_job.status.failed? || test_job.status.error?
-                %tr.danger
-                  %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)
+                %th='File'
+                %th='Status'
+                %th='Errors'
+                %th='Failures'
+                %th='Tests'
+                %th='Assertions'
+                %th='Skips'
+                %th='Started at (UTC)'
+                %th='Completed at (UTC)'
+                %th='Total running time'
+                %th='Actions'
+            %tbody
+              - @test_jobs.each do |test_job|
+                %tr
+                  %td= test_job.command
+                  %td
+                    %span{class: test_job.status.css_class}= test_job.status.text
+                  %td= test_job.test_errors
+                  %td= test_job.failures
+                  %td= test_job.count
+                  %td= test_job.assertions
+                  %td= test_job.skips
+                  %td= l(test_job.started_at, format: :no_utc) if test_job.started_at
+                  %td= l(test_job.completed_at, format: :no_utc) if test_job.completed_at
+                  %td= distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true) if test_job.total_running_time
+                  %td
+                    - # TODO: tracked branch and test_run nesting seems unecessary
+                    - # for the test_job resource. We only need the project for
+                    - # validation/authorization purposes (to let it work in the
+                    - # same way the rest of the routes work).
+                    = button_to test_job.status.cta_text,
+                      project_branch_test_run_test_job_path(current_project,
+                      test_job.test_run.tracked_branch.id,
+                      test_job.test_run.id, test_job,
+                      status: test_job.status.status_to_set),
+                      class: 'btn btn-primary', method: :put
+                - if test_job.status.failed? || test_job.status.error?
+                  %tr.danger
+                    %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)
