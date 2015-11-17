@@ -40,7 +40,9 @@ class User < ActiveRecord::Base
   end
 
   def self.from_omniauth(auth)
-    if user = User.find_by(email: auth.email)
+    return nil unless auth.info.email
+
+    if user = User.find_by(email: auth.info.email)
       user.update(provider: auth.provider,
                   uid: auth.uid,
                   confirmed_at: user.confirmed_at || Date.current)
@@ -50,7 +52,7 @@ class User < ActiveRecord::Base
       where(provider: auth.provider, uid: auth.uid).first_or_create! do |auth_user|
         auth_user.provider = auth.provider
         auth_user.uid = auth.uid
-        auth_user.email = auth.email
+        auth_user.email = auth.info.email
         auth_user.confirmed_at = Date.current
         auth_user.password = Devise.friendly_token[0,20]
       end
