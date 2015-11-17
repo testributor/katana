@@ -3,6 +3,7 @@ class ProjectSerializer < ActiveModel::Serializer
     :build_commands
 
   has_many :files
+  has_one :docker_image
 
   def github_access_token
     object.user.github_access_token
@@ -18,5 +19,9 @@ class ProjectSerializer < ActiveModel::Serializer
       RAILS_ENV=test rake db:create
       RAILS_ENV=test rake db:reset
     TEXT
+  end
+
+  def docker_image
+    { name: object.docker_image.standardized_name, version: object.docker_image.version }
   end
 end
