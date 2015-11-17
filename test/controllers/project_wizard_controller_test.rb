@@ -154,7 +154,6 @@ class ProjectWizardControllerTest < ActionController::TestCase
         put :update,
           { id: current_step,
             project_wizard: { docker_image_id: docker_image_id } }
-        binding.pry
         assert_redirected_to project_wizard_path(next_step)
       end
 
