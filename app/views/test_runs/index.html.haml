@@ -26,7 +26,7 @@
             - @tracked_branch.test_runs.each do |test_run|
               %tr
                 %td= "##{test_run.id}"
-                %td= "#{test_run.commit_message} (#{test_run.commit_sha[0...6]})"
+                %td= test_run.decorate.commit_message
                 %td
                   %span{class: test_run.status.css_class}= test_run.status.text
                 %td= distance_of_time_in_words(test_run.total_running_time) if test_run.total_running_time

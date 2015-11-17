@@ -38,7 +38,7 @@
                           project_branch_test_runs_path(branch.project, branch)
                       %td
                         - if branch.last_run
-                          #{branch.last_run.commit_message} (#{branch.last_run.commit_sha[0...6]})
+                          = branch.last_run.decorate.commit_message
                       %td= branch.last_run.try(:completed_at)
                       %td
                         %span{class: branch.status.try(:css_class)}
