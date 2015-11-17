@@ -89,11 +89,6 @@ class ProjectWizardController < WizardController
     end
   end
 
-  def project_wizard_params
-    params.require(:project_wizard).
-      permit(id: [], docker_image: [:version])
-  end
-
   def selected_technologies_params
     params.require(:project_wizard).permit(:docker_image_id)
   end

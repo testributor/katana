@@ -8,8 +8,6 @@ class ProjectWizard < ActiveRecord::Base
     configure_testributor: "testributor_yml",
     select_technologies: "docker_image_id"
   }
-  AVAILABLE_TECHNOLOGIES = %w(
-    postgres9.4 postgres9.3 postgres9.2 rails4.1 redis mongo postgis)
 
   belongs_to :user
   belongs_to :docker_image # This is the base image
