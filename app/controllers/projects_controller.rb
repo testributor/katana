@@ -7,37 +7,8 @@ class ProjectsController < DashboardController
       includes(test_runs: :test_jobs)
   end
 
-  def new
-    if client = current_user.github_client
-      owner = client.user
-      @repos = client.repos.reject do |r|
-        r.owner.login != owner.login ||
-          r.id.in?(current_user.projects.pluck(:repository_id))
-      end.map do |r|
-        Project.new(repository_id: r.id, repository_name: r.name,
-          repository_owner: owner.login, fork: r.fork?)
-      end
-    end
-  end
-
   def settings
     @project = current_user.projects.find(params[:id])
-  end
-
-  def create
-    if project_params[:repository_id].present?
-      if (project = create_project).persisted?
-        # Track master branch by default
-        TrackMasterJob.perform_later(project.id)
-
-        flash[:notice] =
-          "Successfully created '#{project.repository_name}' project."
-      else
-        flash[:error] = project.errors.full_messages.to_sentence
-      end
-    end
-
-    redirect_to root_path
   end
 
   def destroy
@@ -67,12 +38,6 @@ class ProjectsController < DashboardController
   end
 
   private
-
-  def create_project
-    ProjectCreationService.
-      new(current_user,
-          project_params[:repository_id].to_i, github_webhook_url).apply
-  end
 
   def current_project
     super(:id)
