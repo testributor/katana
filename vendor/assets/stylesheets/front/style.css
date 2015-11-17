@@ -443,6 +443,11 @@ ul.social-icons li a i {
   color: #fff;
 
   img {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+42,000000+96&amp;0.65+0,0+78,0+90,0+91,0+91 */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.3) 42%, rgba(0,0,0,0) 78%, rgba(0,0,0,0) 90%, rgba(0,0,0,0) 91%, rgba(0,0,0,0) 96%); /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.3) 42%,rgba(0,0,0,0) 78%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 91%,rgba(0,0,0,0) 96%); /* Chrome10-25,Safari5.1-6 */
+    background: radial-gradient(ellipse at center,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.3) 42%,rgba(0,0,0,0) 78%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 91%,rgba(0,0,0,0) 96%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     float: left;
     width: 70px;
   }
