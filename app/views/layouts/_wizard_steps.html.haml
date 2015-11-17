@@ -3,7 +3,8 @@
     .steps.clearfix
       %ul
         - wizard_steps.each_with_index do |step, i|
-          %li{class: wizard_step_class(step)}
-            = link_to project_wizard_path(step) do
+          - step_class = wizard_step_class(step)
+          %li{ class: step_class }
+            = link_to project_wizard_path(step), class: step_class do
               %span.number #{i + 1}.
               = I18n.t(step)

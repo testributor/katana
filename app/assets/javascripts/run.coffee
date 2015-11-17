@@ -14,6 +14,10 @@ $(document).on 'ready', ->
   if namespace && namespace.hasOwnProperty(klass)
     page = (new namespace[klass])[method]()
 
+  # Disable all links that have 'disabled' class
+  $('a.disabled').click (e) ->
+    e.preventDefault()
+
   # Navbar cookie set
   $('.top-head .navbar-toggle').click ->
     # the code that adds/removes the class from aside element
