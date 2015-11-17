@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
 
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
 
+  def connected_to_github?
+    github_access_token.blank? || github_client
+  end
+
   def can_create_new_project?
     projects_limit >= Project.where(user_id: id).count + 1
   end

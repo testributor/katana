@@ -9,12 +9,15 @@ class Testributor.Pages.ProjectWizard
 
     if currentPath
       Pace.ignore(->
-        jqxhr = $.get(currentPath, (data, xhr)->
-          $fetchRepos.hide()
-          $fetchingRepos.hide()
-          $fetchRepos.append(data).fadeIn('slow')
-        ).fail(->
-          $fetchingRepos.hide()
-          alert('Connection with github interrupted!')
-          $fetchRepos.append('We were not able to complete this action.').fadeIn('slow')
-        ))
+        jqxhr = $.ajax
+          url: currentPath,
+          success: ((data, xhr)->
+            $fetchRepos.hide()
+            $fetchingRepos.hide()
+            $fetchRepos.append(data).fadeIn('slow')
+          ),
+          fail: ((->
+            $fetchingRepos.hide()
+            alert('Connection with github interrupted!')
+            $fetchRepos.append('We were not able to complete this action.').fadeIn('slow')
+          )))

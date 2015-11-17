@@ -11,7 +11,7 @@ class DashboardController < ApplicationController
   protected
 
   def check_for_active_providers
-    unless current_user.github_access_token.blank? || current_user.github_client
+    unless current_user.connected_to_github?
       flash.now[:alert] =
         "Your Testributor account is not connected to GitHub anymore. "\
         "Please #{view_context.link_to 're-connect', view_context.github_oauth_authorize_url}.".
