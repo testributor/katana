@@ -34,9 +34,4 @@
                   project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run),
                   class: 'btn btn-info'
                 %td
-                  = link_to retry_project_branch_test_run_path(id: test_run.id), method: :post do
-                    %button.btn.btn-icon.btn-success.m-b-5
-                      %i.fa.fa-refresh
-                  = link_to project_branch_test_run_path(id: test_run.id), method: :delete do
-                    %button.btn.btn-icon.btn-danger.m-b-5
-                      %i.fa.fa-remove
+                  = render partial: 'test_run_actions', locals: { test_run: test_run }

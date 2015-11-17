@@ -8,12 +8,7 @@
       Commit #{@run.commit_sha}
     .test
       .pull-right
-        = link_to retry_project_branch_test_run_path(id: @run.id), method: :post do
-          %button.btn.btn-icon.btn-success.m-b-5
-            %i.fa.fa-refresh
-        = link_to project_branch_test_run_path(id: @run.id), method: :post do
-          %button.btn.btn-icon.btn-danger.m-b-5
-            %i.fa.fa-remove
+        = render partial: 'test_run_actions', locals: { test_run: @run }
   .panel-body
     .row
       .col-xs-12
