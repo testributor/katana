@@ -52,7 +52,7 @@ Rails.application.routes.draw do
           post :retry
           post :create
         end
-        resources :test_jobs
+        resources :test_jobs, only: :update
       end
     end
 

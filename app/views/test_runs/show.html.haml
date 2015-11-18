@@ -5,7 +5,7 @@
 .panel.panel-default
   .panel-heading.test-run-panel-heading
     %h3.pull-left
-      #{@run.decorate.commit_message}
+      #{@run.decorate.commit_message(render_as_link: true)}
     .test
       .pull-right
         = render partial: 'test_run_actions', locals: { test_run: @run }
