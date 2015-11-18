@@ -4,6 +4,10 @@ class ProjectWizardControllerTest < ActionController::TestCase
   let(:project) { FactoryGirl.create(:project) }
   let(:user) { project.user }
 
+  before do
+    project
+  end
+
   describe "GET#show" do
     before do
       user.update_column(:projects_limit, 2)
@@ -128,21 +132,18 @@ class ProjectWizardControllerTest < ActionController::TestCase
     describe ":select_technologies" do
       let(:current_step) { :select_technologies }
       let(:docker_image_id) { 1 }
-      let(:next_step) { :wicked_finish }
       let(:project_wizard) do
         FactoryGirl.create(:project_wizard, user: user)
       end
 
       before do
-        ProjectWizard.any_instance.stubs(:to_project).returns(Project.new)
+        ProjectWizard.any_instance.stubs(:to_project).returns(project)
         ProjectWizard.any_instance.
           stubs(:create_branches).returns([TrackedBranch.new])
         project_wizard
       end
 
       it "destroys ProjectWizard" do
-        project_wizard.stubs(:to_project).returns(Project.new)
-        project_wizard.stubs(:create_branches).returns([TrackedBranch.new])
         put :update,
           { id: current_step,
             project_wizard: { docker_image_id: docker_image_id } }
@@ -154,7 +155,7 @@ class ProjectWizardControllerTest < ActionController::TestCase
         put :update,
           { id: current_step,
             project_wizard: { docker_image_id: docker_image_id } }
-        assert_redirected_to root_path
+        assert_redirected_to instructions_project_path(Project.last)
       end
 
       it "redirects to previous step and flashes if ProjectWizard#invalid?" do

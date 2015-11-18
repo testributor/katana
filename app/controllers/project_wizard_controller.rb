@@ -63,10 +63,10 @@ class ProjectWizardController < WizardController
 
     if @project_wizard.save(context: step)
       if step == ProjectWizard::ORDERED_STEPS.last
-        @project_wizard.to_project && @project_wizard.create_branches &&
-          @project_wizard.destroy
-        # Avoid extra redirect to finish_step
-        redirect_to root_path and return
+        project = @project_wizard.to_project
+        @project_wizard.create_branches
+        @project_wizard.destroy
+        redirect_to instructions_project_path(project) and return
       end
 
       redirect_to next_wizard_path
