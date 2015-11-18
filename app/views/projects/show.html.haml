@@ -29,7 +29,7 @@
                   %tr
                     %td= link_to branch.branch_name,
                         project_branch_test_runs_path(branch.project, branch)
-                    %td= branch.last_run.decorate.commit_message
+                    %td= branch.last_run.try(:decorate).try(:commit_message)
                     %td= branch.last_run.try(:completed_at)
                     %td
                       %span{class: branch.status.try(:css_class)}
