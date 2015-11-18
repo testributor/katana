@@ -25,7 +25,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Sat, 14 Nov 2015 17:56:40 GMT
+      - Wed, 18 Nov 2015 09:54:49 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -35,15 +35,15 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4915'
+      - '4997'
       X-Ratelimit-Reset:
-      - '1447524536'
+      - '1447842438'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
       - Thu, 22 Oct 2015 18:39:17 GMT
       Etag:
-      - W/"64659d9baf7cabb0ae00b0ee50883bf5"
+      - W/"2a2a25bc4db832eba422ea5467aef3a1"
       X-Oauth-Scopes:
       - repo, user:email
       X-Accepted-Oauth-Scopes:
@@ -73,180 +73,16 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Served-By:
-      - 8dd185e423974a7e13abbbe6e060031e
+      - 593010132f82159af0ded24b4932e109
       X-Github-Request-Id:
-      - 02545D38:7FBF:1A7EDB45:564775D8
+      - 02545D38:1AD4:1E01E909:564C4AE8
     body:
       encoding: ASCII-8BIT
       string: '{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false,"name":"Ilias
         Spyropoulos","company":"incrediblue","blog":"www.incrediblue.com","location":"Volos,
-        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":1,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
+        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":2,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
     http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:40 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repositories/24643354
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.1.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 14 Nov 2015 17:56:41 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4914'
-      X-Ratelimit-Reset:
-      - '1447524536'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Last-Modified:
-      - Fri, 13 Nov 2015 11:56:32 GMT
-      Etag:
-      - W/"15bb39e73e43aedab25d4a3ccec4696c"
-      X-Oauth-Scopes:
-      - repo, user:email
-      X-Accepted-Oauth-Scopes:
-      - repo
-      X-Oauth-Client-Id:
-      - b18d68d68471de920bdb
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
-      X-Github-Media-Type:
-      - github.v3; format=json
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Frame-Options:
-      - deny
-      Content-Security-Policy:
-      - default-src 'none'
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-Served-By:
-      - 2d7a5e35115884240089368322196939
-      X-Github-Request-Id:
-      - 02545D38:7FBF:1A7EDBFC:564775D8
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":24643354,"name":"intl-tel-input-rails","full_name":"ispyropoulos/intl-tel-input-rails","owner":{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false},"private":false,"html_url":"https://github.com/ispyropoulos/intl-tel-input-rails","description":"intl-tel-input
-        for the Rails asset pipeline","fork":false,"url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails","forks_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/forks","keys_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/teams","hooks_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/hooks","issue_events_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/issues/events{/number}","events_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/events","assignees_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/assignees{/user}","branches_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/branches{/branch}","tags_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/tags","blobs_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/refs{/sha}","trees_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/statuses/{sha}","languages_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/languages","stargazers_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/stargazers","contributors_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/contributors","subscribers_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/subscribers","subscription_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/subscription","commits_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/commits{/sha}","git_commits_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/commits{/sha}","comments_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/comments{/number}","issue_comment_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/issues/comments{/number}","contents_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/contents/{+path}","compare_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/merges","archive_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/downloads","issues_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/issues{/number}","pulls_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/pulls{/number}","milestones_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/milestones{/number}","notifications_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/labels{/name}","releases_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/releases{/id}","created_at":"2014-09-30T15:23:45Z","updated_at":"2015-11-13T11:56:32Z","pushed_at":"2015-08-10T13:36:23Z","git_url":"git://github.com/ispyropoulos/intl-tel-input-rails.git","ssh_url":"git@github.com:ispyropoulos/intl-tel-input-rails.git","clone_url":"https://github.com/ispyropoulos/intl-tel-input-rails.git","svn_url":"https://github.com/ispyropoulos/intl-tel-input-rails","homepage":"","size":740,"stargazers_count":13,"watchers_count":13,"language":"JavaScript","has_issues":true,"has_downloads":true,"has_wiki":false,"has_pages":false,"forks_count":9,"mirror_url":null,"open_issues_count":2,"forks":9,"open_issues":2,"watchers":13,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true},"network_count":9,"subscribers_count":2}'
-    http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:41 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repositories/24643354/branches/master
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.1.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 14 Nov 2015 17:56:41 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4913'
-      X-Ratelimit-Reset:
-      - '1447524536'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Etag:
-      - W/"a47caca578ab8dd8ff86f9ca1245253e"
-      X-Oauth-Scopes:
-      - repo, user:email
-      X-Accepted-Oauth-Scopes:
-      - ''
-      X-Oauth-Client-Id:
-      - b18d68d68471de920bdb
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
-      X-Github-Media-Type:
-      - github.v3; format=json
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Frame-Options:
-      - deny
-      Content-Security-Policy:
-      - default-src 'none'
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-Served-By:
-      - 2d7a5e35115884240089368322196939
-      X-Github-Request-Id:
-      - 02545D38:7FB9:3CDF1FC:564775D9
-    body:
-      encoding: ASCII-8BIT
-      string: '{"name":"master","commit":{"sha":"082b3dfc8fbd8865241d8136b037fe30ca8d742b","commit":{"author":{"name":"Ilias
-        Spyropoulos","email":"ispyropoulos@users.noreply.github.com","date":"2015-08-10T13:18:47Z"},"committer":{"name":"Ilias
-        Spyropoulos","email":"ispyropoulos@users.noreply.github.com","date":"2015-08-10T13:18:47Z"},"message":"Merge
-        pull request #6 from ispyropoulos/fix-assets\n\nMove vendor/assets to assets","tree":{"sha":"7f67943d0bd947beecf3cdf649f9dbaa0e2149dd","url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/trees/7f67943d0bd947beecf3cdf649f9dbaa0e2149dd"},"url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/git/commits/082b3dfc8fbd8865241d8136b037fe30ca8d742b","comment_count":0},"url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/commits/082b3dfc8fbd8865241d8136b037fe30ca8d742b","html_url":"https://github.com/ispyropoulos/intl-tel-input-rails/commit/082b3dfc8fbd8865241d8136b037fe30ca8d742b","comments_url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/commits/082b3dfc8fbd8865241d8136b037fe30ca8d742b/comments","author":{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false},"committer":{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false},"parents":[{"sha":"816cd5f1d0afd75c206cf86990afd76c21127071","url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/commits/816cd5f1d0afd75c206cf86990afd76c21127071","html_url":"https://github.com/ispyropoulos/intl-tel-input-rails/commit/816cd5f1d0afd75c206cf86990afd76c21127071"},{"sha":"fb1fa2a3519e48360c638c49e238a2451d610b8d","url":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/commits/fb1fa2a3519e48360c638c49e238a2451d610b8d","html_url":"https://github.com/ispyropoulos/intl-tel-input-rails/commit/fb1fa2a3519e48360c638c49e238a2451d610b8d"}]},"_links":{"self":"https://api.github.com/repos/ispyropoulos/intl-tel-input-rails/branches/master","html":"https://github.com/ispyropoulos/intl-tel-input-rails/tree/master"}}'
-    http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:42 GMT
+  recorded_at: Wed, 18 Nov 2015 09:54:49 GMT
 - request:
     method: get
     uri: https://api.github.com/user
@@ -272,7 +108,7 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Sat, 14 Nov 2015 17:56:42 GMT
+      - Wed, 18 Nov 2015 09:54:49 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
@@ -282,15 +118,181 @@ http_interactions:
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4912'
+      - '4996'
       X-Ratelimit-Reset:
-      - '1447524536'
+      - '1447842438'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Last-Modified:
       - Thu, 22 Oct 2015 18:39:17 GMT
       Etag:
-      - W/"64659d9baf7cabb0ae00b0ee50883bf5"
+      - W/"2a2a25bc4db832eba422ea5467aef3a1"
+      X-Oauth-Scopes:
+      - repo, user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Oauth-Client-Id:
+      - b18d68d68471de920bdb
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - dc1ce2bfb41810a06c705e83b388572d
+      X-Github-Request-Id:
+      - 02545D38:1ACD:35794FB:564C4AE9
+    body:
+      encoding: ASCII-8BIT
+      string: '{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false,"name":"Ilias
+        Spyropoulos","company":"incrediblue","blog":"www.incrediblue.com","location":"Volos,
+        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":2,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
+    http_version: 
+  recorded_at: Wed, 18 Nov 2015 09:54:50 GMT
+- request:
+    method: get
+    uri: https://api.github.com/user
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 18 Nov 2015 09:54:50 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4995'
+      X-Ratelimit-Reset:
+      - '1447842438'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Last-Modified:
+      - Thu, 22 Oct 2015 18:39:17 GMT
+      Etag:
+      - W/"2a2a25bc4db832eba422ea5467aef3a1"
+      X-Oauth-Scopes:
+      - repo, user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Oauth-Client-Id:
+      - b18d68d68471de920bdb
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Frame-Options:
+      - deny
+      Content-Security-Policy:
+      - default-src 'none'
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Served-By:
+      - 2c18a09f3ac5e4dd1e004af7c5a94769
+      X-Github-Request-Id:
+      - 02545D38:94AD:1C48CC3C:564C4AEA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false,"name":"Ilias
+        Spyropoulos","company":"incrediblue","blog":"www.incrediblue.com","location":"Volos,
+        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":2,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
+    http_version: 
+  recorded_at: Wed, 18 Nov 2015 09:54:50 GMT
+- request:
+    method: get
+    uri: https://api.github.com/user
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 18 Nov 2015 09:54:51 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4994'
+      X-Ratelimit-Reset:
+      - '1447842438'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Last-Modified:
+      - Thu, 22 Oct 2015 18:39:17 GMT
+      Etag:
+      - W/"2a2a25bc4db832eba422ea5467aef3a1"
       X-Oauth-Scopes:
       - repo, user:email
       X-Accepted-Oauth-Scopes:
@@ -322,165 +324,12 @@ http_interactions:
       X-Served-By:
       - 2811da37fbdda4367181b328b22b2499
       X-Github-Request-Id:
-      - 02545D38:7FBA:50905F9:564775DA
+      - 02545D38:94AE:22956AA1:564C4AEB
     body:
       encoding: ASCII-8BIT
       string: '{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false,"name":"Ilias
         Spyropoulos","company":"incrediblue","blog":"www.incrediblue.com","location":"Volos,
-        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":1,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
+        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":2,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
     http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:42 GMT
-- request:
-    method: get
-    uri: https://api.github.com/user
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.1.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 14 Nov 2015 17:56:43 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4911'
-      X-Ratelimit-Reset:
-      - '1447524536'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Last-Modified:
-      - Thu, 22 Oct 2015 18:39:17 GMT
-      Etag:
-      - W/"64659d9baf7cabb0ae00b0ee50883bf5"
-      X-Oauth-Scopes:
-      - repo, user:email
-      X-Accepted-Oauth-Scopes:
-      - ''
-      X-Oauth-Client-Id:
-      - b18d68d68471de920bdb
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding
-      X-Github-Media-Type:
-      - github.v3; format=json
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Frame-Options:
-      - deny
-      Content-Security-Policy:
-      - default-src 'none'
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-Served-By:
-      - a30e6f9aa7cf5731b87dfb3b9992202d
-      X-Github-Request-Id:
-      - 02545D38:7FC0:1F5A4CC6:564775DA
-    body:
-      encoding: ASCII-8BIT
-      string: '{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false,"name":"Ilias
-        Spyropoulos","company":"incrediblue","blog":"www.incrediblue.com","location":"Volos,
-        Greece","email":"ilias@incrediblue.com","hireable":true,"bio":null,"public_repos":1,"public_gists":0,"followers":5,"following":9,"created_at":"2010-08-06T07:18:54Z","updated_at":"2015-10-22T18:39:17Z"}'
-    http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:43 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repositories/24643354/contents/testributor.yml?ref=082b3dfc8fbd8865241d8136b037fe30ca8d742b
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.1.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 404
-      message: Not Found
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 14 Nov 2015 17:56:44 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 404 Not Found
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4910'
-      X-Ratelimit-Reset:
-      - '1447524536'
-      X-Oauth-Scopes:
-      - repo, user:email
-      X-Accepted-Oauth-Scopes:
-      - ''
-      X-Oauth-Client-Id:
-      - b18d68d68471de920bdb
-      X-Github-Media-Type:
-      - github.v3; format=json
-      X-Xss-Protection:
-      - 1; mode=block
-      X-Frame-Options:
-      - deny
-      Content-Security-Policy:
-      - default-src 'none'
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Expose-Headers:
-      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
-        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Content-Type-Options:
-      - nosniff
-      X-Github-Request-Id:
-      - 02545D38:7FBA:5090644:564775DB
-    body:
-      encoding: ASCII-8BIT
-      string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}'
-    http_version: 
-  recorded_at: Sat, 14 Nov 2015 17:56:44 GMT
+  recorded_at: Wed, 18 Nov 2015 09:54:51 GMT
 recorded_with: VCR 2.9.3
