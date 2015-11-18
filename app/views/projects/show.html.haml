@@ -29,7 +29,7 @@
                   %tr
                     %td= link_to branch.branch_name,
                         project_branch_test_runs_path(branch.project, branch)
-                    %td= branch.last_run.try(:commit_sha)
+                    %td= branch.last_run.decorate.commit_message
                     %td= branch.last_run.try(:completed_at)
                     %td
                       %span{class: branch.status.try(:css_class)}
@@ -41,6 +41,6 @@
                         status: branch.status.status_to_set),
                         class: 'btn btn-primary', method: :put
                     -else
-                      %td= button_to "Run latest",
+                      %td= button_to "Add a new run",
                         project_branch_test_runs_path(branch.project.id, branch.id),
                         class: 'btn btn-primary', method: :post
