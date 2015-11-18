@@ -5,6 +5,25 @@ class ProjectTest < ActiveSupport::TestCase
   let(:owner) { project.user }
   let(:new_owner) { FactoryGirl.create(:user) }
 
+  describe "technologies validations" do
+    subject { FactoryGirl.create(:project) }
+
+    let(:postgres_9_3) do
+      FactoryGirl.create(:docker_image,
+                         standardized_name: "postgres", version: "9.3")
+    end
+
+    let(:postgres_9_4) do
+      FactoryGirl.create(:docker_image,
+                         standardized_name: "postgres", version: "9.4")
+    end
+
+    it "validates uniqueness of technology standardized names" do
+      ->{ subject.technologies = [postgres_9_3, postgres_9_4] }.
+        must_raise(ActiveRecord::RecordInvalid)
+    end
+  end
+
   describe "project limit on user validation" do
     it "doesn't get called when user id hasn't changed" do
       owner.update_column(:projects_limit, 2)
@@ -23,7 +42,9 @@ class ProjectTest < ActiveSupport::TestCase
     end
 
     it "gets called when project is created" do
-      skip "Write this test"
+      project = Project.new(name: "Test", user: owner)
+      project.expects(:check_user_limit).once
+      project.save!
     end
 
     it "is valid if projects limit is greater than user's projects" do

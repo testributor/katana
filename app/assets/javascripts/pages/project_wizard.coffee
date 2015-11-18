@@ -1,5 +1,7 @@
 Testributor.Pages ||= {}
 class Testributor.Pages.ProjectWizard
+  update: ->
+    $(".multi-select").select2()
   show: ()->
     $(".multi-select").select2()
 

@@ -49,14 +49,16 @@ class ProjectWizardController < WizardController
         testributor_yml: params[:testributor_yml]})
     when :select_technologies
       @project_wizard.assign_attributes(selected_technologies_params)
+      begin
+        @project_wizard.technologies =
+          DockerImage.technologies.where(id: params[:technology_ids])
+      rescue ActiveRecord::RecordInvalid => invalid
+        flash[:alert] = invalid.record.errors.to_a.to_sentence
+        render :select_technologies and return
+      end
     end
 
     if @project_wizard.save(context: step)
-      if step == :select_technologies && params[:technology_ids].present?
-        @project_wizard.technologies =
-          DockerImage.technologies.where(id: params[:technology_ids])
-      end
-
       if step == ProjectWizard::ORDERED_STEPS.last
         @project_wizard.to_project && @project_wizard.create_branches &&
           @project_wizard.destroy
