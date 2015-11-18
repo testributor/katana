@@ -9,17 +9,17 @@ class Testributor.Pages.ProjectWizard
     $fetchingRepos = $('.js-fetching-repos')
     currentPath = $fetchRepos.data('current-path')
 
-    if currentPath
-      Pace.ignore(->
+    if $fetchRepos
+      Pace.ignore ->
         jqxhr = $.ajax
           url: currentPath,
-          success: ((data, xhr)->
-            $fetchRepos.hide()
-            $fetchingRepos.hide()
+          success: (data)->
             $fetchRepos.append(data).fadeIn('slow')
-          ),
-          fail: ((->
-            $fetchingRepos.hide()
+          fail: ->
             alert('Connection with github interrupted!')
             $fetchRepos.append('We were not able to complete this action.').fadeIn('slow')
-          )))
+          error: ->
+            $fetchRepos.append('Oops! Something went wrong. We are working on it.').fadeIn('slow')
+          complete: ->
+            $fetchingRepos.hide()
+
