@@ -1,0 +1,37 @@
+- breadcrumb :project_instructions, current_project
+
+- content_for :page_title do
+  Instructions
+
+%p
+  %h3 Create any needed non tracked files
+
+  In many projects there are files which are not tracked by the version control
+  system to let developers use different versions in their machines. Still some
+  of them are needed for a successfull test suite run. An example is the
+  "config/database.yml" file in a Rails application which holds the information
+  on how to connect to the database.
+  You can create or override any project files
+  = "#{link_to "here", project_files_path(current_project)}.".html_safe
+
+  "testributor.yml" file is the one that describes the jobs that constitute
+  each test run and for this reason it cannot be deleted.
+
+%p
+  %h3 Create a worker on your machine
+
+  %ol
+    %li
+      Install docker and docker-compose
+      You can find instructions on how to do that on the official Docker site:
+      = link_to "https://www.docker.com/"
+    %li
+      Download the docker-compose.yml file for this project.
+      = link_to docker_compose_project_path(current_project), class: "btn btn-default" do
+        Download
+        %i.fa.fa-download
+    %li
+      Create a worker by running the following command in the same directory where
+      you saved the file:
+      %br
+      %strong docker-compose run docker-compose.yml

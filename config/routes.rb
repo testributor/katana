@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   resources :projects, only: [:show, :destroy] do
     member do
       get :settings
+      get :instructions
       get :docker_compose
       devise_scope :user do
         resources :invitations, controller: "users/invitations",

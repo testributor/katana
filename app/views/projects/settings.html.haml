@@ -6,12 +6,19 @@
 .col-lg-12
   .panel.panel-default
     .panel-heading
+      %h3.panel-title Instructions
+    .panel-body
+      Read the workers on how to setup your project
+      = link_to("here", instructions_project_path(current_project))
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
       %h3.panel-title Application credentials:
     .panel-body
       %pre
-        = "Client id:     #{@project.oauth_application.uid}".html_safe
+        = "Client id:     #{current_project.oauth_application.uid}".html_safe
         %br
-        = "Client Secret: #{@project.oauth_application.secret}".html_safe
+        = "Client Secret: #{current_project.oauth_application.secret}".html_safe
 
 .col-lg-12
   .panel.panel-default
@@ -21,4 +28,4 @@
         = link_to docker_compose_project_path(current_project) do
           %i.fa.fa-download
     .panel-body
-      %pre= @project.generate_docker_compose_yaml
+      %pre= current_project.generate_docker_compose_yaml

@@ -10,6 +10,17 @@
     = render partial: 'layouts/sidebar'
     %section.content
       = render partial: 'layouts/header'
+      :ruby
+        show_zero_workers_warning =
+          current_project && current_project.active_workers == 0 &&
+          !current_page?(instructions_project_path(current_project))
+
+      - if show_zero_workers_warning
+        .alert.alert-danger
+          There are no active workers for this project.
+          No jobs are being run. Check
+          = link_to("the instructions", instructions_project_path(current_project))
+          on how to add one.
       .wraper.container-fluid
         - if flash[:notice].present?
           .alert.alert-info= flash[:notice]

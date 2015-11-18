@@ -8,7 +8,10 @@ class ProjectsController < DashboardController
   end
 
   def settings
-    @project = current_user.projects.find(params[:id])
+    ActiveRecord::RecordNotFound unless current_project
+  end
+
+  def instructions
   end
 
   def destroy
