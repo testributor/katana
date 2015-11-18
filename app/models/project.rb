@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+  TESTRIBUTOR_GEM_VERSION = '2.2'
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
   # https://github.com/scambra/devise_invitable/issues/84
@@ -77,7 +78,7 @@ class Project < ActiveRecord::Base
     language = { 'base' =>
                  {
                    'image' => docker_image.try(:hub_image),
-                   'command' => "/bin/bash -l -c rvm #{docker_image.try(:version)} do testributor",
+                   'command' => "/bin/bash -l -c rvm #{TESTRIBUTOR_GEM_VERSION} do testributor",
                    'links' => techs.keys,
                    'environment' => {
                      'APP_ID' => oauth_application.uid,
