@@ -1,9 +1,0 @@
-default_headers: &default_headers
-  Authorization: 'Bearer {{api_key}}'
-requests:
-  -
-    key: project
-    request:
-      url: {{api_url}}/projects/current
-      headers:
-        <<: *default_headers
