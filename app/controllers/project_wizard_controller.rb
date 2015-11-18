@@ -43,6 +43,9 @@ class ProjectWizardController < WizardController
     when :add_project
       @project_wizard.assign_attributes({repo_name: params[:repo_name]})
     when :add_branches
+      # We use the overriden branch_names= method because postgres
+      # array type requires branch_names_will_change! in order to save
+      # branch_names to DB
       @project_wizard.branch_names = params[:branch_names]
     when :configure_testributor
       @project_wizard.assign_attributes({
@@ -62,6 +65,8 @@ class ProjectWizardController < WizardController
       if step == ProjectWizard::ORDERED_STEPS.last
         @project_wizard.to_project && @project_wizard.create_branches &&
           @project_wizard.destroy
+        # Avoid extra redirect to finish_step
+        redirect_to root_path and return
       end
 
       redirect_to next_wizard_path
