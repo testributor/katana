@@ -24,9 +24,9 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
     it "returns a pending job and updates it's status to RUNNING" do
       _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING) }
       @controller.stub :doorkeeper_token, token do
-        patch :bind_next_pending, default: { format: :json }
+        patch :bind_next_batch, default: { format: :json }
         result = JSON.parse(response.body)
-        result["command"].must_equal _test_jobs[-1].command
+        result.first["command"].must_equal _test_jobs[-1].command
         _test_jobs[-1].reload.status.code.must_equal TestStatus::RUNNING
       end
     end

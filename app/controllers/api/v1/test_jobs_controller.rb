@@ -1,35 +1,74 @@
 module Api
   module V1
     class TestJobsController < ApiController
-      # PATCH test_jobs/bind_next_pending
-      # To avoid race conditions, the selected job should be marked as running
+      # PATCH test_jobs/bind_next_batch
+      # To avoid race conditions, the selected jobs should be marked as running
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
-      def bind_next_pending
-        preferred_job_sql = current_project.test_jobs.pending.
+      def bind_next_batch
+        # Calculate workload and the numer of pending or running jobs.
+        # We try to equally distribute the load so we only send
+        # workload / active_workers number of when jobs are requested.
+        workload = current_project.test_jobs.
+          where(status: [TestStatus::RUNNING,TestStatus::PENDING]).count
+
+
+        preferred_jobs_sql = current_project.test_jobs.pending.
           where(test_runs: { status: [TestStatus::RUNNING,TestStatus::PENDING] }).
-          order("test_runs.status DESC").limit(1).to_sql # Prefer "running" runs
+          order("test_runs.status DESC"). # Prefer "running" runs
+          limit(workload / [current_project.active_workers, 1].max).to_sql
 
         sql = <<-SQL
           UPDATE test_jobs SET status = #{TestStatus::RUNNING}
-          FROM (#{preferred_job_sql} FOR UPDATE) t
+          FROM (#{preferred_jobs_sql} FOR UPDATE) t
           WHERE test_jobs.id = t.id
           RETURNING test_jobs.*
         SQL
 
-        render json: TestJob.find_by_sql(sql).first, include: "test_run.project"
+        render json: TestJob.find_by_sql(sql), include: "test_run.project"
       end
 
-      def update
-        # TODO: only update running jobs?
-        job = current_project.test_jobs.running.find(params[:id])
+      # TODO: When the reporter sends reports for cancelled/destroyed test_runs
+      # send back a list of cancelled/missing test_run ids so that the worker
+      # can cancel any left jobs for those runs.
+      def batch_update
+        job_ids = params[:jobs].keys
+        current_project.test_jobs.running.where(id: job_ids).each do |job|
+          begin
+            job_params = JSON.parse(params[:jobs][job.id.to_s]).keep_if do |k,v|
+                %w(result status id result runs assertions failures errors
+                   skips).include?(k)
+            end
+          rescue Exception => e
+            puts e.message
+            render json: { error: e.message } and return
+          end
 
-        # TODO: Store total_time
-        if job.update(test_job_params.merge(completed_at: Time.current))
-          head 200
-        else
-          render json: { error: job.errors.full_messages.join(', ') }
+          job.update!(job_params)
         end
+
+        head 200
+
+        # TODO: Consider updating all jobs with something like the following.
+        # Make sure the fields are sanitized before sending to Postgres
+=begin
+        update_values = jobs_to_update.map do |id, j|
+          [id] + %w(result runs assertions failures errors skips status).
+            map{|k| j[k].to_i}.join(',')
+        end.map{|v| "(#{v})"}
+
+        sql = <<-SQL
+          WITH new_values ("id", "result","runs","assertions","failures","errors","skips")
+          AS (VALUES (#{update_values.join(',')})
+          UPDATE "test_jobs" t SET result = nv.result,
+            count = nv.runs, assertions = nv.assertions, failures = nv.failures,
+            test_errors = nv.errors, skips = nv.skips, status = nv.status,
+            "updated_at" = current_timestamp
+          FROM new_values nv
+          WHERE t."id" = nv."id"
+          RETURNING t.*
+        SQL
+=end
       end
 
       private

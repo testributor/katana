@@ -13,9 +13,10 @@ Rails.application.routes.draw do
         end
       end
       resources :test_runs
-      resources :test_jobs, only: [:update] do
+      resources :test_jobs, only: [] do
         collection do
-          patch :bind_next_pending
+          patch :bind_next_batch
+          patch :batch_update
         end
       end
     end
