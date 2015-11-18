@@ -21,6 +21,9 @@ class ActionController::TestCase
   include Devise::TestHelpers
 
   def setup
+    # Stub create_webhooks! in order to disable external
+    # requests
+    Project.any_instance.stubs(:create_webhooks!).returns(1)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     ActionMailer::Base.deliveries.clear
   end
@@ -50,6 +53,9 @@ class Capybara::Rails::TestCase
   self.use_transactional_fixtures = false
 
   before do
+    # Stub create_webhooks! in order to disable external
+    # requests
+    Project.any_instance.stubs(:create_webhooks!).returns(1)
     # No javascript tests
     if Capybara.current_driver == :rack_test
       DatabaseCleaner.strategy = :transaction
