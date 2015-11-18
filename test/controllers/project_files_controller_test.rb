@@ -18,18 +18,14 @@ class ProjectFilesControllerTest < ActionController::TestCase
       response.redirect_url.must_match /users\/sign_in/
     end
 
-    it "allows logged users" do
-      get :index, project_id: project.id
-      assert_response :success
-    end
-
-    it "returns files for the specified project" do
-      files = [
-        project.project_files.create(path: "one", contents: "one contents"),
-        project.project_files.create(path: "two", contents: "two contents") ]
+    it "redirects to testributor.yml" do
+      testributor = project.project_files.
+        create(path: "testributor.yml", contents: "testributor contents")
+      project.project_files.create(path: "two", contents: "two contents")
 
       get :index, project_id: project.id
-      assert_response :success
+
+      assert_redirected_to project_file_path(project, testributor.id)
     end
   end
 
@@ -61,6 +57,14 @@ class ProjectFilesControllerTest < ActionController::TestCase
       ProjectFile.find_by(id: subject.id).must_be :nil?
     end
 
+    it "doesn't destroy the file if it is the testributor.yml file" do
+      old_count = ProjectFile.count
+      ProjectFile.any_instance.
+        stubs(:testributor_yml?).returns(true)
+      delete :destroy, project_id: project.id, id: subject.id
+      ProjectFile.count.must_equal old_count
+    end
+
     it "won't destroy other project files" do
       other_project_file = FactoryGirl.create(:project_file)
 
@@ -70,6 +74,11 @@ class ProjectFilesControllerTest < ActionController::TestCase
       ProjectFile.count.must_equal old_count
       ProjectFile.find_by(id: other_project_file.id).
         must_equal other_project_file
+    end
+
+    it "redirects to project_files_path(project)" do
+      delete :destroy, project_id: project.id, id: subject.id
+      assert_redirected_to project_files_path(project)
     end
   end
 

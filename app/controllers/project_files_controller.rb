@@ -39,8 +39,7 @@ class ProjectFilesController < DashboardController
       flash[:alert] = file.errors.full_messages.join(', ')
     end
 
-    redirect_to project_file_path(
-      current_project, current_project.project_files.first)
+    redirect_to project_files_path(current_project)
   end
 
   def update
