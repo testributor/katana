@@ -14,6 +14,9 @@ class TestRun < ActiveRecord::Base
   scope :error, -> { where(status: TestStatus::ERROR) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
+  after_save :cancel_test_jobs,
+    if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
+
   def total_running_time
     completed_at_times = test_jobs.map(&:completed_at).compact.sort
     started_at_times = test_jobs.map(&:started_at).sort
@@ -137,5 +140,9 @@ class TestRun < ActiveRecord::Base
 
   def failed?
     test_jobs.any? { |job| job.status.failed? }
+  end
+
+  def cancel_test_jobs
+    test_jobs.update_all(status: TestStatus::CANCELLED)
   end
 end

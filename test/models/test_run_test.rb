@@ -3,6 +3,20 @@ require 'test_helper'
 class TestRunTest < ActiveSupport::TestCase
   let(:_test_run) { FactoryGirl.create(:testributor_run) }
 
+  describe "#cancel_test_jobs" do
+    subject { FactoryGirl.create(:testributor_run) }
+    before do
+      subject.test_jobs.create!(command: "ls", status: TestStatus::QUEUED)
+      subject.test_jobs.create!(command: "ls", status: TestStatus::QUEUED)
+    end
+
+    it "cancels the test_jobs when it is cancelled" do
+      subject.status = TestStatus::CANCELLED
+      subject.save!
+      subject.test_jobs.reload.pluck(:status).uniq.must_equal [TestStatus::CANCELLED]
+    end
+  end
+
   describe "#total_running_time" do
     it "returns total time when all times exist" do
       times = [
