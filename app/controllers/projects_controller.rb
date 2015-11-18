@@ -37,6 +37,12 @@ class ProjectsController < DashboardController
     redirect_to root_path
   end
 
+  def docker_compose
+    send_data current_project.generate_docker_compose_yaml,
+      :type => 'text/yml; charset=UTF-8;',
+      :disposition => 'attachment; filename=docker-compose.yml'
+  end
+
   private
 
   def current_project

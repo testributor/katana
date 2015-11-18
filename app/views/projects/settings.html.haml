@@ -16,6 +16,9 @@
 .col-lg-12
   .panel.panel-default
     .panel-heading
-      %h3.panel-title Docker compose file:
+      %h3.panel-title
+        Docker compose file
+        = link_to docker_compose_project_path(current_project) do
+          %i.fa.fa-download
     .panel-body
       %pre= @project.generate_docker_compose_yaml
