@@ -19,10 +19,10 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       test_run: _test_job_failed.test_run,
       status: TestStatus::ERROR)
   end
-  let(:_test_job_pending) do
+  let(:_test_job_queued) do
     FactoryGirl.create(:testributor_job,
       test_run: _test_job_failed.test_run,
-      status: TestStatus::PENDING)
+      status: TestStatus::QUEUED)
   end
   let(:_test_job_cancelled) do
     FactoryGirl.create(:testributor_job,
@@ -38,7 +38,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       _test_job_passed
       _test_job_failed
       _test_job_error
-      _test_job_pending
+      _test_job_queued
       _test_job_cancelled
       _test_job_running
       login_as owner, scope: :user
@@ -54,17 +54,17 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       failed = job_trs[3]
       passed = job_trs[4]
       running = job_trs[5]
-      pending = job_trs[6]
+      queued = job_trs[6]
 
       cancelled.must_have_content "Cancelled"
       error.must_have_content "Error"
       failed.must_have_content "Failed"
       passed.must_have_content "Passed"
       running.must_have_content "Running"
-      pending.must_have_content "Pending"
+      queued.must_have_content "Queued"
 
       cancelled.find("input").value.must_equal "retry"
-      pending.find("input").value.must_equal "cancel"
+      queued.find("input").value.must_equal "cancel"
       failed.find("input").value.must_equal "retry"
       error.find("input").value.must_equal "retry"
       running.find("input").value.must_equal "cancel"

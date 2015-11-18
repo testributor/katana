@@ -6,7 +6,7 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
   # ArgumentError: let 'test_run' cannot begin with 'test'. Please use another name.
   # That's what the _ is for :)
   let(:_test_run) do
-    FactoryGirl.create(:testributor_run, project: project, status: TestStatus::PENDING)
+    FactoryGirl.create(:testributor_run, project: project, status: TestStatus::QUEUED)
   end
   let(:_test_jobs) do
     FactoryGirl.create_list(:testributor_job, 4, test_run: _test_run)
@@ -20,8 +20,8 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
 
   before { _test_jobs }
 
-  describe "PATCH#bind_next_pending" do
-    it "returns a pending job and updates it's status to RUNNING" do
+  describe "PATCH#bind_next_queued" do
+    it "returns a queued job and updates it's status to RUNNING" do
       _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING) }
       @controller.stub :doorkeeper_token, token do
         patch :bind_next_batch, default: { format: :json }

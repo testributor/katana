@@ -70,7 +70,7 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       _test_run = TestRun.last
 
       _test_run.commit_sha.must_equal commit_sha
-      _test_run.status.code.must_equal TestStatus::PENDING
+      _test_run.status.code.must_equal TestStatus::QUEUED
     end
 
     it "displays flash notice" do

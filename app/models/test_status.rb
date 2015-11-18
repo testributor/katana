@@ -1,6 +1,6 @@
 class TestStatus
   attr_reader :code
-  PENDING = 0
+  QUEUED = 0
   RUNNING = 1
   PASSED = 2
   FAILED = 3
@@ -8,7 +8,7 @@ class TestStatus
   CANCELLED = 5
 
   STATUS_MAP = {
-    PENDING => 'Pending',
+    QUEUED => 'Queued',
     RUNNING => 'Running',
     PASSED => "Passed",
     FAILED => 'Failed',
@@ -20,8 +20,8 @@ class TestStatus
     @code = code
   end
 
-  def pending?
-    @code == PENDING
+  def queued?
+    @code == QUEUED
   end
 
   def running?
@@ -46,7 +46,7 @@ class TestStatus
 
   def cta_text
     case @code
-    when PENDING, RUNNING
+    when QUEUED, RUNNING
       "cancel"
     else
       "retry"
@@ -57,7 +57,7 @@ class TestStatus
     if cta_text == "cancel"
       CANCELLED
     else
-      PENDING
+      QUEUED
     end
   end
 
@@ -69,7 +69,7 @@ class TestStatus
     case @code
     when CANCELLED
       'label label-default'
-    when PENDING
+    when QUEUED
       'label label-info'
     when RUNNING
       'label label-running'

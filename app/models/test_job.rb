@@ -3,7 +3,7 @@ class TestJob < ActiveRecord::Base
 
   validates :test_run, presence: true
 
-  scope :pending, -> { where(status: TestStatus::PENDING) }
+  scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :passed, -> { where(status: TestStatus::PASSED) }
   scope :failed, -> { where(status: TestStatus::FAILED) }

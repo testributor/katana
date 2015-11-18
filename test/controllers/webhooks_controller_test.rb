@@ -79,7 +79,7 @@ class WebhooksControllerTest < ActionController::TestCase
       it "creates a test run with correct attributes" do
         @testrun.tracked_branch_id.must_equal tracked_branch.id
         @testrun.commit_sha.must_equal commit_sha
-        @testrun.status.code.must_equal TestStatus::PENDING
+        @testrun.status.code.must_equal TestStatus::QUEUED
       end
 
       it "creates test jobs with correct attributes" do

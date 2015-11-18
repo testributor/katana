@@ -17,7 +17,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit root_path
     page.must_have_content "Passed"
     find("input.btn-primary").click
-    page.must_have_content "Pending"
+    page.must_have_content "Queued"
   end
 
   it "user is able to retry a complete test_run" do
@@ -26,7 +26,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit root_path
     page.must_have_content "Failed"
     find("input.btn-primary").click
-    page.must_have_content "Pending"
+    page.must_have_content "Queued"
   end
 
   it "user is able to retry a complete test_run" do
@@ -35,7 +35,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit root_path
     page.must_have_content "Error"
     find("input.btn-primary").click
-    page.must_have_content "Pending"
+    page.must_have_content "Queued"
   end
 
   it "user is able to retry a cancelled test_run" do
@@ -44,14 +44,14 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit root_path
     page.must_have_content "Cancelled"
     find("input.btn-primary").click
-    page.must_have_content "Pending"
+    page.must_have_content "Queued"
   end
 
-  it "user is able to cancel a pending test_run" do
-    _test_run.update_column(:status, TestStatus::PENDING)
+  it "user is able to cancel a queued test_run" do
+    _test_run.update_column(:status, TestStatus::QUEUED)
     _test_run.reload
     visit root_path
-    page.must_have_content "Pending"
+    page.must_have_content "Queued"
     find("input.btn-primary").click
     page.must_have_content "Cancelled"
   end

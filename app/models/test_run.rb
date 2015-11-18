@@ -7,7 +7,7 @@ class TestRun < ActiveRecord::Base
 
   delegate :started_at, :completed_at, to: :last_file_run, allow_nil: true
 
-  scope :pending, -> { where(status: TestStatus::PENDING) }
+  scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :passed, -> { where(status: TestStatus::PASSED) }
   scope :failed, -> { where(status: TestStatus::FAILED) }

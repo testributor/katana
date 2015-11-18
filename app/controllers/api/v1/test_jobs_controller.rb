@@ -6,15 +6,15 @@ module Api
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
       def bind_next_batch
-        # Calculate workload and the numer of pending or running jobs.
+        # Calculate workload and the numer of queued or running jobs.
         # We try to equally distribute the load so we only send
         # workload / active_workers number of when jobs are requested.
         workload = current_project.test_jobs.
-          where(status: [TestStatus::RUNNING,TestStatus::PENDING]).count
+          where(status: [TestStatus::RUNNING,TestStatus::QUEUED]).count
 
 
-        preferred_jobs_sql = current_project.test_jobs.pending.
-          where(test_runs: { status: [TestStatus::RUNNING,TestStatus::PENDING] }).
+        preferred_jobs_sql = current_project.test_jobs.queued.
+          where(test_runs: { status: [TestStatus::RUNNING,TestStatus::QUEUED] }).
           order("test_runs.status DESC"). # Prefer "running" runs
           limit(workload / [current_project.active_workers, 1].max).to_sql
 

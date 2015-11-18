@@ -15,7 +15,7 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
       branches = [
         {
           commit_sha: "344ads",
-          status: TestStatus::PENDING, name: 'pending-branch'
+          status: TestStatus::QUEUED, name: 'queued-branch'
         },
         {
           commit_sha: "0f542",
@@ -50,7 +50,7 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
       login_as owner, scope: :user
       visit root_path
 
-      page.must_have_content "Pending"
+      page.must_have_content "Queued"
       page.must_have_content "Passed"
       page.must_have_content "Failed"
       page.must_have_content "Error"
