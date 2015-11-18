@@ -72,7 +72,9 @@ class Project < ActiveRecord::Base
   def generate_docker_compose_yaml
     techs = {}
     technologies.each_with_index do |technology, index|
-      techs.merge!({ "tech#{index}" => { "image" => technology.try(:hub_image) } })
+      techs.merge!({
+        technology.standardized_name => { "image" => technology.try(:hub_image) }
+      })
     end
 
     language = { 'base' =>
