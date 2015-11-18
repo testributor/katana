@@ -8,11 +8,11 @@
       .row
         .col-sm-12
           %panel.panel-info.panel-color
-            .panel-body.code-edit-wrap
+            .panel-body.code-edit-wrap.m-b-10
               = text_area_tag :testributor_yml,
                 @project_wizard.testributor_yml_contents,
                 class: 'text form-control code'
-      .pull-right.m-t-15
+      .pull-right.m-t-10
         = submit_tag "Next", class: 'btn btn-primary w-lg btn-lg'
 
 - content_for :in_page_js do

@@ -57,7 +57,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :project_files, as: :files, path: :files, except: [:show, :new, :edit]
+    resources :project_files, as: :files, path: :files, except: [:edit]
   end
   resources :project_wizard do
     member do
