@@ -8,6 +8,10 @@ class DashboardController < ApplicationController
       includes(tracked_branches: { test_runs: :test_jobs })
   end
 
+  def current_ability
+    @current_ability ||= Ability.new(current_user, current_project)
+  end
+
   protected
 
   def check_for_active_providers

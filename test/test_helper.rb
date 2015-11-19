@@ -9,6 +9,7 @@ require 'capybara/poltergeist'
 require 'vcr'
 # Cleanup database between tests (Only for JS tests)
 require 'database_cleaner'
+require 'sidekiq/testing'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'test/vcr_cassettes'
@@ -34,6 +35,7 @@ class ActiveSupport::TestCase
   #fixtures :all
 
   ActiveRecord::Migration.check_pending!
+  Sidekiq::Testing.inline!
 end
 
 class ActionDispatch::IntegrationTest

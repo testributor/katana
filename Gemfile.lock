@@ -143,9 +143,6 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
-    devise_invitable (1.5.3)
-      actionmailer (>= 3.2.6, < 5)
-      devise (>= 3.2.0)
     dotenv (2.0.2)
     draper (2.1.0)
       actionpack (>= 3.0)
@@ -392,7 +389,6 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise
-  devise_invitable (~> 1.5.3)
   doorkeeper!
   draper
   exception_notification

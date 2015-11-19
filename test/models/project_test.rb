@@ -72,7 +72,7 @@ class ProjectTest < ActiveSupport::TestCase
 
   describe "invited_users association" do
     let(:invited_user) do
-      User.invite!({ email: 'invited_user@example.com'}, project)
+      FactoryGirl.create(:user_invitation, project: project).user
     end
 
     before { invited_user }
@@ -83,8 +83,7 @@ class ProjectTest < ActiveSupport::TestCase
 
     describe "after user accepting the invitation" do
       before do
-        User.accept_invitation!(:invitation_token => invited_user.raw_invitation_token,
-          :password => "12345678")
+        invited_user.user_invitations.first.accept!(invited_user)
       end
 
       it "still returns the invited user" do

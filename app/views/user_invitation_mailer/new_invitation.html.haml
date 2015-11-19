@@ -1,0 +1,12 @@
+%h2
+  = "Hello #{@user_invitation.email}"
+%p
+  You are invited to participate in project
+  = "\"#{@user_invitation.project.name}\""
+  on testributor.com
+%p
+  Click
+  = link_to "here", @accept_url
+  to accept the invitation.
+%p
+  If this email reaches you by mistake please ignore it.

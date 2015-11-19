@@ -8,8 +8,8 @@ crumb :project do |project|
 end
 
 crumb :new_invitation do |project|
-  link "Invite user", new_project_invitation_path(project)
-  parent :project, project
+  link "Invite user", new_project_user_invitation_path(project)
+  parent :project_participations, project
 end
 
 crumb :settings do |project|
@@ -24,6 +24,11 @@ end
 
 crumb :project_files do |project|
   link "Files", project_files_path(project)
+  parent :project, project
+end
+
+crumb :project_participations do |project|
+  link "Users", project_participations_path(current_project)
   parent :project, project
 end
 
