@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119090521) do
+ActiveRecord::Schema.define(version: 20151119121538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,15 +98,12 @@ ActiveRecord::Schema.define(version: 20151119090521) do
     t.integer  "webhook_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "invitation_limit"
-    t.integer  "invitations_count",   default: 0
     t.string   "secure_random"
     t.string   "name",                default: "", null: false
     t.string   "repository_owner",    default: "", null: false
     t.integer  "docker_image_id"
   end
 
-  add_index "projects", ["invitations_count"], name: "index_projects_on_invitations_count", using: :btree
   add_index "projects", ["user_id", "repository_provider", "repository_id"], name: "index_projects_on_user_and_provider_and_repository_id", unique: true, using: :btree
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
@@ -180,6 +177,18 @@ ActiveRecord::Schema.define(version: 20151119090521) do
   add_index "tracked_branches", ["project_id", "branch_name"], name: "index_tracked_branches_on_project_id_and_branch_name", unique: true, using: :btree
   add_index "tracked_branches", ["project_id"], name: "index_tracked_branches_on_project_id", using: :btree
 
+  create_table "user_invitations", force: :cascade do |t|
+    t.string   "token",       default: "", null: false
+    t.integer  "project_id",               null: false
+    t.integer  "user_id"
+    t.string   "email",       default: "", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_invitations", ["project_id"], name: "index_user_invitations_on_project_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                              default: "",    null: false
     t.string   "encrypted_password",                 default: "",    null: false
@@ -202,18 +211,11 @@ ActiveRecord::Schema.define(version: 20151119090521) do
     t.string   "encrypted_github_access_token_iv"
     t.boolean  "admin",                              default: false
     t.integer  "projects_limit",                     default: 1,     null: false
-    t.string   "invitation_token"
-    t.datetime "invitation_created_at"
-    t.datetime "invitation_accepted_at"
-    t.datetime "invitation_sent_at"
-    t.integer  "invited_by_id"
     t.string   "provider"
     t.string   "uid"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
-  add_index "users", ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

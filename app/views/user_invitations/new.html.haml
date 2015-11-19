@@ -1,0 +1,16 @@
+- breadcrumb :new_invitation, current_project
+
+- content_for :page_title do
+  Invite user
+
+.panel.panel-default
+  .panel-header
+    %h2= "Invite user on project #{current_project.name}"
+  .panel-body
+    .row
+      .col-lg-6
+        = simple_form_for [current_project, @invitation],
+          wrapper: :horizontal_form, html: { class: 'form-horizontal' } do |f|
+          = f.input :email
+          .col-sm-9.col-sm-offset-3
+            = f.submit "Send invitation", class: 'btn btn-default'

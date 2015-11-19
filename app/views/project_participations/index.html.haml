@@ -7,10 +7,11 @@
   .panel-body
     .row
       .col-md-12.col-sm-12.col-xs-12
-        = link_to new_project_invitation_path(current_project), class: 'btn btn-default' do
+        = link_to new_project_user_invitation_path(current_project), class: 'btn btn-default' do
           %i.fa.fa-users
           %span.nav-label= t('invite_users')
         - if @participations.any?
+          %h3 Users
           %table.table
             %thead
               %tr
@@ -21,7 +22,7 @@
               - @participations.each do |participation|
                 %tr
                   %td= participation.user.email
-                  %td= participation.created_at
+                  %td= l(participation.created_at.to_date, format: :default)
                   %td
                     = link_to(project_participation_path(current_project, participation),
                       method: :delete, class: 'btn btn-danger',
@@ -29,7 +30,8 @@
                       %i.fa.fa-remove
                       Revoke access
 
-        - if @pending_invitations.any?
+        - if @invitations.any?
+          %h3 Invitations
           %table.table
             %thead
               %tr
@@ -37,13 +39,20 @@
                 %th= "Invited at"
                 %th= "Actions"
             %tbody
-              - @pending_invitations.each do |inviation|
+              - @invitations.each do |invitation|
                 %tr
                   %td= invitation.email
-                  %td= invitation.created_at
+                  %td= l(invitation.created_at.to_date, format: :default)
                   %td
-                    %i.fa.fa-remove
-                    Revoke access
+                    = link_to(resend_project_user_invitation_path(current_project, invitation),
+                      method: :post, class: 'btn btn-default') do
+                      %i.fa.fa-envelope-o
+                      Resend invitation
+                    = link_to(project_user_invitation_path(current_project, invitation),
+                      method: :delete, class: 'btn btn-danger',
+                      data: { confirm: "Are you sure?" }) do
+                      %i.fa.fa-remove
+                      Cancel invitation
         - else
           %br
           %h3

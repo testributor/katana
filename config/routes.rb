@@ -2,8 +2,7 @@ Rails.application.routes.draw do
   use_doorkeeper
 
   devise_for :projects
-  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks",
-                                       :invitations => 'users/invitations' }
+  devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
 
   namespace :api, default: { format: 'json' } do
     namespace :v1 do
@@ -33,6 +32,7 @@ Rails.application.routes.draw do
     root to: "home#index"
   end
 
+  get 'invitation/accept' => "user_invitations#accept", as: :accept_user_invitation
   # If you put this in the defaults(project: nil) block above it will erase
   # the "project" param from create action resulting in error.
   resources :projects, only: [:show, :update, :destroy] do
@@ -40,10 +40,6 @@ Rails.application.routes.draw do
       get :settings
       get :instructions
       get :docker_compose
-      devise_scope :user do
-        resources :invitations, controller: "users/invitations",
-          only: [:new, :create], as: :project_invitations
-      end
     end
 
     resources :tracked_branches, only: [:new, :create], path: :branches,
@@ -59,6 +55,12 @@ Rails.application.routes.draw do
 
     resources :project_files, as: :files, path: :files, except: [:edit]
     resources :project_participations, as: :participations, path: :users
+    resources :user_invitations, path: :invitations,
+      except: [:index, :show, :update, :edit] do
+      member do
+        post :resend
+      end
+    end
   end
   resources :project_wizard do
     member do

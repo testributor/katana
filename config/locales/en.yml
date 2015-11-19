@@ -43,6 +43,10 @@ en:
             docker_image_selection:
               greater_than_one: You can't select more than one language
               blank: At least one language must be selected
+        user_invitation:
+          attributes:
+            email:
+              taken: "An invitation for this user already exists"
   add_project: "Select a repo"
   add_branches: "Select branches"
   configure_testributor: "Configure testributor.yml"

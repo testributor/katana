@@ -7,7 +7,7 @@ class ProjectParticipationsController < DashboardController
     @participations = current_project.project_participations.
       where("user_id != ?", current_user.id).includes(:user)
 
-    @pending_invitations = [] # TODO
+    @invitations = current_project.user_invitations.pending.includes(:user)
   end
 
   def destroy

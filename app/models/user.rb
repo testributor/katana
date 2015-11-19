@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable
-  devise :invitable, :database_authenticatable, :registerable,
+  devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :omniauthable, omniauth_providers: %w(github)
 
@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   end
   attr_encryptor :github_access_token
 
-  belongs_to :invited_by, class_name: "Project"
+  has_many :user_invitations
   has_many :projects # on which this user is an owner
   has_many :project_participations
   has_many :participating_projects, through: :project_participations,

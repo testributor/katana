@@ -26,12 +26,4 @@ class ApplicationController < ActionController::Base
   def set_redirect_url_in_cookie
     cookies[:redirect_to_url] = request.url
   end
-
-  # https://github.com/scambra/devise_invitable#controller-filter
-  # raise 404 if project does not exists or current_user is not the owner
-  # Since we don't show the link to create invitation to non owners, if
-  # a users ends up seeing this, it means he messed with the POST params.
-  def authenticate_inviter!
-    current_user.projects.find(current_project.try(:id))
-  end
 end

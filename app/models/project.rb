@@ -2,8 +2,6 @@ class Project < ActiveRecord::Base
   TESTRIBUTOR_GEM_VERSION = '2.2.0'
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
-  # https://github.com/scambra/devise_invitable/issues/84
-  include DeviseInvitable::Inviter
 
   ACTIVE_WORKER_THRESHOLD_SECONDS = 20
 
@@ -16,7 +14,9 @@ class Project < ActiveRecord::Base
   has_many :project_participations
   has_many :members, through: :project_participations, class_name: "User",
     source: :user
-  has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
+  has_many :user_invitations
+  has_many :invited_users, through: :user_invitations, class_name: 'User',
+    source: :user
   has_many :project_files, dependent: :destroy
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
   belongs_to :docker_image # This is the base image

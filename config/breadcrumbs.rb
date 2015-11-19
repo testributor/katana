@@ -8,7 +8,7 @@ crumb :project do |project|
 end
 
 crumb :new_invitation do |project|
-  link "Invite user", new_project_invitation_path(project)
+  link "Invite user", new_project_user_invitation_path(project)
   parent :project_participations, project
 end
 
