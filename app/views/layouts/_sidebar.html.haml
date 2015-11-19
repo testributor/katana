@@ -12,11 +12,6 @@
   %nav.navigation
     %ul.list-unstyled
       - if current_project
-        :ruby
-          conditions_for_active_project = [
-            current_page?(project_path(current_project)),
-            controller_name == 'test_runs'
-          ]
         %li{ class: conditions_for_active_project.inject{|a,b| a||b} ? 'active' : nil }
           = link_to project_path(current_project) do
             %i.fa.fa-dashboard

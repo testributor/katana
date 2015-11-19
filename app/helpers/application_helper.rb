@@ -38,6 +38,13 @@ module ApplicationHelper
     end
   end
 
+  def conditions_for_active_project
+    [
+      current_page?(project_path(current_project)),
+      controller_name == 'test_runs'
+    ]
+  end
+
   def technologies_options
     DockerImage.technologies.map do |technology|
       [technology.public_name, technology.id]
