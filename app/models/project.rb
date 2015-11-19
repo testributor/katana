@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  TESTRIBUTOR_GEM_VERSION = '2.2'
+  TESTRIBUTOR_GEM_VERSION = '2.2.0'
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
   # https://github.com/scambra/devise_invitable/issues/84
