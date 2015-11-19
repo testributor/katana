@@ -14,6 +14,20 @@ class ProjectsController < DashboardController
   def instructions
   end
 
+  def update
+    begin
+      current_project.assign_attributes(project_params)
+      current_project.technologies = DockerImage.technologies.
+        where(id: project_params[:technology_ids])
+      current_project.save
+      flash[:notice] = "Project successfully updated"
+      redirect_to :back
+    rescue ActiveRecord::RecordInvalid => invalid
+      flash[:alert] = invalid.record.errors.messages.values.join(', ')
+      redirect_to :back
+    end
+  end
+
   def destroy
     if client = current_user.github_client
       project = current_user.projects.find(params[:id])
@@ -53,6 +67,6 @@ class ProjectsController < DashboardController
   end
 
   def project_params
-    params.require(:project).permit(:repository_id)
+    params.require(:project).permit(:docker_image_id, technology_ids: [])
   end
 end

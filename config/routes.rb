@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   # If you put this in the defaults(project: nil) block above it will erase
   # the "project" param from create action resulting in error.
-  resources :projects, only: [:show, :destroy] do
+  resources :projects, only: [:show, :update, :destroy] do
     member do
       get :settings
       get :instructions

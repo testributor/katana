@@ -29,3 +29,24 @@
           %i.fa.fa-download
     .panel-body
       %pre= current_project.generate_docker_compose_yaml
+
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title
+        Language and technologies
+    .panel-body
+      = form_for current_project, url: project_path do |f|
+        .col-xs-6
+          %h3 Language
+          = f.select :docker_image_id,
+            grouped_options_for_select(grouped_languages_options,
+            f.object.docker_image_id)
+        .col-xs-6
+          %h3 Technologies
+          = f.select :technology_ids,
+            options_for_select(technologies_options, f.object.technology_ids),
+            {}, multiple: true, class: 'multi-select'
+        .col-xs-12
+          .pull-right.m-t-15
+            = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'

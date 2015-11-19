@@ -26,4 +26,21 @@ module ApplicationHelper
 
     class_str
   end
+
+  def grouped_languages_options
+    DockerImage.languages.group_by(&:standardized_name).
+      map do |group, languages|
+      [
+        group, languages.map do |language|
+          [language.public_name, language.id]
+        end
+      ]
+    end
+  end
+
+  def technologies_options
+    DockerImage.technologies.map do |technology|
+      [technology.public_name, technology.id]
+    end
+  end
 end
