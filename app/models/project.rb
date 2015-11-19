@@ -11,10 +11,10 @@ class Project < ActiveRecord::Base
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
   has_one :docker_image_selection
-  has_many :project_participations
+  has_many :project_participations, dependent: :destroy
   has_many :members, through: :project_participations, class_name: "User",
     source: :user
-  has_many :user_invitations
+  has_many :user_invitations, dependent: :destroy
   has_many :invited_users, through: :user_invitations, class_name: 'User',
     source: :user
   has_many :project_files, dependent: :destroy

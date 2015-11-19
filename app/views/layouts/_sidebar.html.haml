@@ -20,12 +20,10 @@
           = link_to project_files_path(current_project) do
             %i.fa.fa-folder-open
             %span.nav-label Files
-        - # TODO: use cancancan authorization instead of this
-        - if current_user == current_project.user
-          %li{ class: current_page?(project_participations_path(current_project)) ? 'active' : nil }
-            = link_to project_participations_path(current_project) do
-              %i.fa.fa-users
-              %span.nav-label Users
+        %li{ class: current_page?(project_participations_path(current_project)) ? 'active' : nil }
+          = link_to project_participations_path(current_project) do
+            %i.fa.fa-users
+            %span.nav-label Users
         %li{ class: current_page?(settings_project_path(current_project)) ? 'active' : nil }
           = link_to settings_project_path(current_project) do
             %i.fa.fa-cog

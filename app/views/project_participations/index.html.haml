@@ -7,9 +7,10 @@
   .panel-body
     .row
       .col-md-12.col-sm-12.col-xs-12
-        = link_to new_project_user_invitation_path(current_project), class: 'btn btn-default' do
-          %i.fa.fa-users
-          %span.nav-label= t('invite_users')
+        - if can? :manage, current_project
+          = link_to new_project_user_invitation_path(current_project), class: 'btn btn-default' do
+            %i.fa.fa-users
+            %span.nav-label= t('invite_users')
         - if @participations.any?
           %h3 Users
           %table.table
@@ -24,13 +25,25 @@
                   %td= participation.user.email
                   %td= l(participation.created_at.to_date, format: :default)
                   %td
-                    = link_to(project_participation_path(current_project, participation),
-                      method: :delete, class: 'btn btn-danger',
-                      data: { confirm: "The user will not be able to use this project, are you sure?" }) do
-                      %i.fa.fa-remove
-                      Revoke access
+                    - if can? :destroy, participation
+                      :ruby
+                        message = if participation.user == current_user
+                          "You are leaving this project. Are you sure?"
+                        else
+                          "The user will not be able to use this project, are you sure?"
+                        end
 
-        - if @invitations.any?
+                      = link_to(project_participation_path(current_project, participation),
+                        method: :delete, class: 'btn btn-danger',
+                        data: { confirm: message }) do
+                        %i.fa.fa-remove
+                        Revoke access
+        - else
+          %br
+          %h3
+            No other users participating in this project
+
+        - if can? :manage, current_project && @invitations.any?
           %h3 Invitations
           %table.table
             %thead
@@ -53,7 +66,3 @@
                       data: { confirm: "Are you sure?" }) do
                       %i.fa.fa-remove
                       Cancel invitation
-        - else
-          %br
-          %h3
-            No other users participating in this project

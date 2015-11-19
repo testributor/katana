@@ -2,27 +2,28 @@ class ProjectParticipationsController < DashboardController
   include Controllers::EnsureProject
 
   def index
-    authorize! :manage, current_project
-
-    @participations = current_project.project_participations.
-      where("user_id != ?", current_user.id).includes(:user)
-
+    @participations = current_project.project_participations.includes(:user)
     @invitations = current_project.user_invitations.pending.includes(:user)
   end
 
   def destroy
-    authorize! :manage, current_project
+    participation = current_project.project_participations.find(params[:id])
 
-    participation = current_project.project_participations.
-      where("user_id != ?", current_user.id).find(params[:id])
+    authorize! :destroy, participation
 
     if participation.destroy
-      flash[:notice] = "User is no longer a member of this project"
+      if participation.user == current_user
+        flash[:notice] =
+          "You are no longer a member of #{participation.project.name} project"
+        redirect_to authenticated_root_path
+      else
+        flash[:notice] = "User is no longer a member of this project"
+        redirect_to :back
+      end
     else
       flash[:alert] = participation.errors.full_messages.to_sentence
+      redirect_to :back
     end
-
-    redirect_to :back
   end
 end
 

@@ -9,13 +9,28 @@ class ProjectParticipationsControllerTest < ActionController::TestCase
   end
 
   describe "GET#index" do
-    before do
-      sign_in :user, project.user
+    describe "when current_user is the owner" do
+      before do
+        sign_in :user, project.user
+      end
+
+      it "lists all members" do
+        get :index, project_id: project.id
+        assigns(:participations).map(&:user_id).sort.
+          must_equal [user.id, project.user_id].sort
+      end
     end
 
-    it "lists members but not the current user" do
-      get :index, project_id: project.id
-      assigns(:participations).map(&:user_id).must_equal [user.id]
+    describe "when current_user is not the owner" do
+      before do
+        sign_in :user, user
+      end
+
+      it "lists all members" do
+        get :index, project_id: project.id
+        assigns(:participations).map(&:user_id).sort.
+          must_equal [user.id, project.user_id].sort
+      end
     end
   end
 
@@ -32,6 +47,35 @@ class ProjectParticipationsControllerTest < ActionController::TestCase
         id: user.project_participations.first.id
       project.members.reload.map(&:id).must_equal [project.user_id]
       user.reload # user should not be destroyed
+    end
+
+    it "not allows the owner to remove himself" do
+      project.members.map(&:id).sort.
+        must_equal [project.user_id, user.id].sort
+      -> {
+        delete :destroy, project_id: project.id,
+          id: project.project_participations.where(user_id: project.user.id).first.id
+      }.must_raise CanCan::AccessDenied
+    end
+
+    it "allows the non owner to remove himself" do
+      sign_in :user, user
+      project.members.map(&:id).sort.
+        must_equal [project.user_id, user.id].sort
+      delete :destroy, project_id: project.id,
+        id: user.project_participations.first.id
+      project.members.reload.map(&:id).must_equal [project.user_id]
+      user.reload # user should not be destroyed
+    end
+
+    it "does not allow non owner to remove the owner" do
+      sign_in :user, user
+      project.members.map(&:id).sort.
+        must_equal [project.user_id, user.id].sort
+      -> {
+        delete :destroy, project_id: project.id,
+          id: project.project_participations.where(user_id: project.user.id).first.id
+      }.must_raise CanCan::AccessDenied
     end
   end
 end
