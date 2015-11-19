@@ -17,7 +17,7 @@ class TrackedBranchesController < DashboardController
 
       c = branch[:commit]
       test_run = tracked_branch.test_runs.build(
-        commit_sha: c.commit.tree.sha,
+        commit_sha: c.sha,
         commit_message: c.commit.message,
         commit_timestamp: c.commit.committer.date,
         commit_url: c.html_url,
