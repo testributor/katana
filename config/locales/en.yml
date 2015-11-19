@@ -52,6 +52,3 @@ en:
   configure_testributor: "Configure testributor.yml"
   select_technologies: "Select technologies"
   add_files: "Add more files"
-  time:
-    formats:
-      no_utc: '%H:%M %P'

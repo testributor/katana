@@ -5,7 +5,7 @@ class TestRun < ActiveRecord::Base
   has_one :project, through: :tracked_branch
   has_many :test_jobs, dependent: :delete_all
 
-  delegate :started_at, :completed_at, to: :last_file_run, allow_nil: true
+  delegate :completed_at, to: :last_file_run, allow_nil: true
 
   scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
@@ -18,18 +18,10 @@ class TestRun < ActiveRecord::Base
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
 
   def total_running_time
-    completed_at_times = test_jobs.map(&:completed_at).compact.sort
-    started_at_times = test_jobs.map(&:started_at).sort
-
-    return if completed_at_times.blank? || started_at_times.blank?
-
-    if completed_at_times.length == started_at_times.length
-      time = completed_at_times.last - started_at_times.first
-    elsif time_first_job_started = started_at_times.compact.first
-      time = Time.now - time_first_job_started
+    if completed_at = test_jobs.maximum(:completed_at)
+      completed_at -
+        test_jobs.minimum("sent_at + (INTERVAL '1 seconds' * ROUND(worker_in_queue_seconds))")
     end
-
-    time.round if time
   end
 
   def status

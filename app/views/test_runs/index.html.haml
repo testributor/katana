@@ -29,6 +29,8 @@
                 %td= test_run.decorate.commit_message
                 %td
                   %span{class: test_run.status.css_class}= test_run.status.text
-                %td= distance_of_time_in_words(test_run.total_running_time) if test_run.total_running_time
+                %td
+                  - if test_run.total_running_time
+                    = distance_of_time_in_words(0, test_run.total_running_time, include_seconds: true)
                 %td
                   = render partial: 'test_run_actions', locals: { test_run: test_run }

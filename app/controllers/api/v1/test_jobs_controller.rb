@@ -6,7 +6,7 @@ module Api
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
       def bind_next_batch
-        # Calculate workload and the numer of queued or running jobs.
+        # Calculate workload and the number of queued or running jobs.
         # We try to equally distribute the load so we only send
         # workload / active_workers number of when jobs are requested.
         workload = current_project.test_jobs.
@@ -37,14 +37,15 @@ module Api
           begin
             job_params = JSON.parse(params[:jobs][job.id.to_s]).keep_if do |k,v|
                 %w(result status id result runs assertions failures errors
-                   skips).include?(k)
+                   skips sent_at_seconds_since_epoch worker_in_queue_seconds
+                   worker_command_run_seconds).include?(k)
             end
           rescue Exception => e
             puts e.message
             render json: { error: e.message } and return
           end
 
-          job.update!(job_params)
+          job.update!(job_params.merge(reported_at: Time.current))
         end
 
         head 200

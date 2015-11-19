@@ -23,7 +23,6 @@
                 %th='Tests'
                 %th='Assertions'
                 %th='Skips'
-                %th='Started at (UTC)'
                 %th='Completed at (UTC)'
                 %th='Total running time'
                 %th='Actions'
@@ -38,9 +37,10 @@
                   %td= test_job.count
                   %td= test_job.assertions
                   %td= test_job.skips
-                  %td= l(test_job.started_at, format: :no_utc) if test_job.started_at
-                  %td= l(test_job.completed_at, format: :no_utc) if test_job.completed_at
-                  %td= distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true) if test_job.total_running_time
+                  %td= l(test_job.completed_at, format: :short) if test_job.completed_at
+                  %td
+                    - if test_job.total_running_time
+                      = distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true)
                   %td
                     - unless @run.status.code == TestStatus::CANCELLED
                       - # TODO: tracked branch and test_run nesting seems unecessary

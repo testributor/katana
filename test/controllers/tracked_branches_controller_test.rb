@@ -16,8 +16,8 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       {
         name: branch_name,
         commit: {
+          sha: commit_sha,
           commit: {
-            tree: { sha: commit_sha },
             message: 'Some commit messsage',
             html_url: 'Some url',
             author: {

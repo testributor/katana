@@ -1,25 +1,73 @@
 require 'test_helper'
 
 class TestJobTest < ActiveSupport::TestCase
-  describe "#total_running_time" do
-    let(:job) { TestJob.new }
+  subject { TestJob.new }
 
-    it "returns the correct time when completed_at, started_at exist" do
-      job.started_at = Time.current
-      job.completed_at = Time.current + 3.minutes
-
-      job.total_running_time.must_equal 3.minutes
+  describe '#sent_at_seconds_since_epoch=' do
+    describe 'when no seconds are passed' do
+      it '#sent_at should return nil' do
+        subject.sent_at.must_be_nil
+      end
     end
 
-    it "returns the correct time when only started_at exists" do
-      job.started_at = Time.current
+    describe 'when some seconds are passed' do
+      let(:time_now) { Time.current }
+      let(:epoch_seconds) { time_now.to_i }
 
-      job.total_running_time.
-        must_equal (Time.current - job.started_at).round
+      before do
+        subject.sent_at_seconds_since_epoch = epoch_seconds
+      end
+
+      it '#sent_at should return nil' do
+        subject.sent_at.to_s.must_equal time_now.to_s
+      end
+    end
+  end
+
+  describe '#total_running_time' do
+    describe 'when times not reported yet' do
+      it 'should return nil' do
+        subject.total_running_time.must_be_nil
+      end
     end
 
-    it "returns nil when no started_at, completed_at exist" do
-      job.total_running_time.must_equal nil
+    describe 'when times reported' do
+      before do
+        time_now = Time.current
+        subject.sent_at = time_now - 5.minutes
+        subject.reported_at = time_now - 2.minutes
+        subject.worker_in_queue_seconds = 60
+      end
+
+      it 'should return the duration between the reported and started points' do
+        # 2 minutes ago - 5 minutes ago - 1 minute
+        subject.total_running_time.must_equal 120 # seconds
+      end
+    end
+  end
+
+  describe '#complete_at' do
+    before { subject.valid? }
+
+    describe 'when times not reported yet' do
+      it 'should return nil' do
+        subject.completed_at.must_be_nil
+      end
+    end
+
+    describe 'when times reported' do
+      let(:five_minutes_ago) { 5.minutes.ago }
+      before do
+        subject.sent_at = five_minutes_ago
+        subject.worker_in_queue_seconds = 60
+        subject.worker_command_run_seconds = 2.3
+        subject.valid?
+      end
+
+      it 'should return the duration between the reported and started points' do
+        # 5 minutes ago + 1 minute + 2 minutes (rounded)
+        subject.completed_at.must_equal (five_minutes_ago + 62.seconds)
+      end
     end
   end
 end

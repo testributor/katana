@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119121538) do
+ActiveRecord::Schema.define(version: 20151119173706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,20 +132,23 @@ ActiveRecord::Schema.define(version: 20151119121538) do
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"
-    t.string   "command",      default: "", null: false
-    t.text     "result",       default: "", null: false
-    t.integer  "status",       default: 0,  null: false
-    t.integer  "test_errors",  default: 0,  null: false
-    t.integer  "failures",     default: 0,  null: false
-    t.integer  "count",        default: 0,  null: false
-    t.integer  "assertions",   default: 0,  null: false
-    t.integer  "skips",        default: 0,  null: false
-    t.datetime "started_at"
+    t.string   "command",                                             default: "", null: false
+    t.text     "result",                                              default: "", null: false
+    t.integer  "status",                                              default: 0,  null: false
+    t.integer  "test_errors",                                         default: 0,  null: false
+    t.integer  "failures",                                            default: 0,  null: false
+    t.integer  "count",                                               default: 0,  null: false
+    t.integer  "assertions",                                          default: 0,  null: false
+    t.integer  "skips",                                               default: 0,  null: false
     t.datetime "completed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "before",       default: "", null: false
-    t.text     "after",        default: "", null: false
+    t.text     "before",                                              default: "", null: false
+    t.text     "after",                                               default: "", null: false
+    t.datetime "sent_at"
+    t.decimal  "worker_in_queue_seconds",    precision: 10, scale: 6
+    t.decimal  "worker_command_run_seconds", precision: 10, scale: 6
+    t.datetime "reported_at"
   end
 
   create_table "test_runs", force: :cascade do |t|

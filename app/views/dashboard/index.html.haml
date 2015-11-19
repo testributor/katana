@@ -28,7 +28,7 @@
                   %tr
                     %th Branch
                     %th Commit message (SHA)
-                    %th Completed at
+                    %th Last run
                     %th Status
                     %th Actions
                 %tbody
@@ -39,7 +39,9 @@
                       %td
                         - if branch.last_run
                           = branch.last_run.decorate.commit_message
-                      %td= branch.last_run.try(:completed_at)
+                      %td
+                        - if branch.last_run.try(:completed_at)
+                          = time_ago_in_words(branch.last_run.completed_at)
                       %td
                         %span{class: branch.status.try(:css_class)}
                           = branch.status.try(:text)
