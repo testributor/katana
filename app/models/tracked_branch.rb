@@ -13,7 +13,7 @@ class TrackedBranch < ActiveRecord::Base
   def create_test_run_and_jobs!
     repo_id = project.repository_id
     repo = client.repo(repo_id)
-    branch = client.branch(repo.id, repo[:default_branch])
+    branch = client.branch(repo.id, branch_name)
     c =  branch[:commit]
     run = test_runs.create!(
       commit_sha: c.sha,
