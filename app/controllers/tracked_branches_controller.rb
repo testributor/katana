@@ -3,9 +3,12 @@ class TrackedBranchesController < DashboardController
 
   def new
     if client = current_user.github_client
-      @branches = client.branches(current_project.repository_id).
-        reject { |b| b.name.in?(current_project.tracked_branches.map(&:branch_name)) }.
-        map { |b| TrackedBranch.new(branch_name: b.name) }
+      branch_names_to_reject = current_project.
+        tracked_branches.map(&:branch_name)
+      @branches = client.
+        branches(current_project.repository_id).reject do |branch|
+          branch.name.in?(branch_names_to_reject)
+        end.map { |b| TrackedBranch.new(branch_name: b.name) }
     end
   end
 
