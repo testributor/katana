@@ -13,4 +13,4 @@
           = f.input :branch_names, as: :check_boxes,
             collection: @branches.map(&:branch_name),
             checked: @project_wizard.branch_names | ["master"]
-          = f.submit "Next", class: 'btn btn-primary'
+          = f.submit "Next", class: 'btn btn-primary pull-right btn-lg w-lg'
