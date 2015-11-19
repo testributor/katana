@@ -60,7 +60,7 @@ class TestRun < ActiveRecord::Base
       return { errors: "yml syntax error" }
     end
 
-    if (each_description = jobs_description.delete("each"))
+    if each_description = jobs_description.delete("each")
       pattern = each_description["pattern"]
       command = each_description["command"]
       before = each_description["before"].to_s

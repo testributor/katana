@@ -30,12 +30,14 @@ class TestRunsController < DashboardController
   def retry
     @test_run.test_jobs.destroy_all
     @test_run.build_test_jobs
+    @test_run.save
     redirect_to :back, notice: 'Test run was successfully updated.'
   end
 
   def destroy
+    tracked_branch_id = @test_run.tracked_branch_id
     @test_run.destroy
-    redirect_to project_branch_test_runs_url(current_project, @test_run.tracked_branch_id),
+    redirect_to project_branch_test_runs_url(current_project, tracked_branch_id),
       notice: 'Test run was successfully cancelled.'
   end
 
