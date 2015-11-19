@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
       current_user.participating_projects.find_by(id: params[param_name])
   end
 
+  def current_ability
+    @current_ability ||= Ability.new(current_user)
+  end
+
   protected
 
   def set_redirect_url_in_cookie

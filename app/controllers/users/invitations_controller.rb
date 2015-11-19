@@ -17,7 +17,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def after_invite_path_for(resource_name)
-    project_path(current_project)
+    project_participations_path(current_project)
   end
 
   def current_project

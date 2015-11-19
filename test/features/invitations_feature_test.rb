@@ -13,7 +13,7 @@ class InvitationsFeatureTest < Capybara::Rails::TestCase
   describe "send invitation menu item" do
     it "shows the menu item when user is the owner of the current project" do
       login_as owner, scope: :user
-      visit project_path(project)
+      visit project_participations_path(project)
       page.must_have_selector "a[href='#{new_project_invitation_path(id: project.to_param)}']"
     end
 

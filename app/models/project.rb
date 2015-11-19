@@ -13,7 +13,9 @@ class Project < ActiveRecord::Base
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
   has_one :docker_image_selection
-  has_and_belongs_to_many :members, class_name: "User"
+  has_many :project_participations
+  has_many :members, through: :project_participations, class_name: "User",
+    source: :user
   has_many :invited_users, class_name: 'User', foreign_key: :invited_by_id
   has_many :project_files, dependent: :destroy
   has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
