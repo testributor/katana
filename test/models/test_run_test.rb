@@ -103,10 +103,18 @@ class TestRunTest < ActiveSupport::TestCase
     end
 
     describe "when file only exists in project_files" do
+      let(:contents) do
+        <<-YAML
+          each:
+            command: 'bin/rake test'
+            pattern: 'test/models/*_test.rb'
+        YAML
+      end
+
       before do
         # project_files version
         subject.project.project_files.create(
-          path: TestRun::JOBS_YML_PATH, contents: "project_files version")
+          path: TestRun::JOBS_YML_PATH, contents: contents)
 
         client.stubs(:contents).
           with(subject.tracked_branch.project.repository_id,
@@ -115,7 +123,7 @@ class TestRunTest < ActiveSupport::TestCase
       end
 
       it "returns the project_files version" do
-        subject.jobs_yml.must_equal 'project_files version'
+        subject.jobs_yml.must_equal contents
       end
     end
 

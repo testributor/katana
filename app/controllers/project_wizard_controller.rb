@@ -71,7 +71,7 @@ class ProjectWizardController < WizardController
 
       redirect_to next_wizard_path
     else
-      flash[:alert] = @project_wizard.errors.values.flatten.to_sentence
+      flash[:alert] = @project_wizard.errors.messages.values.join(',')
       redirect_to :back
     end
   end

@@ -104,7 +104,13 @@ class ProjectWizardControllerTest < ActionController::TestCase
     end
 
     describe ":configure_testributor" do
-      let(:_testributor_yml) { "hello: world" }
+      let(:_testributor_yml) do
+        <<-YAML
+          each:
+            command: 'bin/rake test'
+            pattern: 'test/models/*_test.rb'
+        YAML
+      end
       let(:current_step) { :configure_testributor }
       let(:next_step) { :select_technologies }
 

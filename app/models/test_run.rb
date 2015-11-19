@@ -48,10 +48,10 @@ class TestRun < ActiveRecord::Base
   # Return value meaning:
   #   - Hash with errors key: syntax error in yml pattern missing or other
   #   - true: jobs built successfully
-  #   TODO: Remove errors hash from this method and add it to project_file
   #   as a validation
   def build_test_jobs
     yml_contents = jobs_yml
+    # TODO: Reuse methods in ProjectFile for validation of testributor.yml
     return { errors: "No testributor.yml file found" } unless yml_contents
 
     begin

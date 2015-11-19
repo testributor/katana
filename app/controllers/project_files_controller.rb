@@ -19,7 +19,7 @@ class ProjectFilesController < DashboardController
     if file.persisted?
       flash[:notice] = "#{file.path} created"
     else
-      flash[:alert] = file.errors.full_messages.join(', ')
+      flash[:alert] = file.errors.messages.values.join(', ')
     end
 
     redirect_to :back
@@ -36,7 +36,7 @@ class ProjectFilesController < DashboardController
     if file.destroy
       flash[:notice] = "#{file_name} was deleted"
     else
-      flash[:alert] = file.errors.full_messages.join(', ')
+      flash[:alert] = file.errors.messages.values.join(', ')
     end
 
     redirect_to project_files_path(current_project)
@@ -47,7 +47,7 @@ class ProjectFilesController < DashboardController
     if file.update(file_params)
       flash[:notice] = "#{file.path} updated successfully."
     else
-      flash[:alert] = file.errors.full_messages.join(', ')
+      flash[:alert] = file.errors.messages.values.join(', ')
     end
 
     redirect_to :back

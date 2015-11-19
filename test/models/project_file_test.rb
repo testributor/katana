@@ -27,6 +27,81 @@ class ProjectFileTest < ActiveSupport::TestCase
       new_file.wont_be :valid?
       new_file.errors[:path].must_equal ["has already been taken"]
     end
+
+    describe "testributor.yml" do
+      let(:file_path) { 'testributor.yml' }
+      it "does not allow invalid yml contents" do
+        contents = "a : ::"
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        file.errors.added?(:contents, :syntax_error).must_equal true
+      end
+
+      it "does not allow contents without a key" do
+        contents = "#"
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        file.errors.added?(:contents, :no_key_provided).must_equal true
+      end
+
+      it "does not allow an 'each' key without a 'pattern'" do
+        contents = <<-YAML
+          each:
+            command: 'blah'
+        YAML
+        contents = ({'each' => { 'command' => 'blah' }}).to_yaml
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        file.errors.added?(:contents, :each_without_pattern).must_equal true
+      end
+
+      it "does not allow an 'each' key without a 'command'" do
+        contents = <<-YAML
+          each:
+            pattern: 'blah'
+        YAML
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        file.errors.added?(:contents, :each_without_command).must_equal true
+      end
+
+      it "does not allow an 'each' key without inner keys" do
+        contents = <<-YAML
+          each:
+        YAML
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        file.errors.added?(:contents, :each_without_pattern).must_equal true
+        file.errors.added?(:contents, :each_without_command).must_equal true
+      end
+
+      it "does not allow a custom specified key without a 'command'" do
+        contents = <<-YAML
+          custom:
+            other: 'blah'
+        YAML
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal false
+        custom_without_command = "custom is missing \"command\" key"
+        file.errors.added?(:contents, custom_without_command).must_equal true
+      end
+
+      it "allows a custom specified key with a 'command'" do
+        contents = <<-YAML
+          custom:
+            command: 'blah'
+        YAML
+        file = ProjectFile.new(path: file_path, contents: contents)
+
+        file.valid?.must_equal true
+      end
+    end
   end
 
   describe "generate_docker_compose_yaml" do

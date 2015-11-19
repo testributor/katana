@@ -19,8 +19,13 @@ class ProjectFilesControllerTest < ActionController::TestCase
     end
 
     it "redirects to testributor.yml" do
+      contents = <<-YAML
+        each:
+          command: 'bin/rake test'
+          pattern: 'test/models/*_test.rb'
+      YAML
       testributor = project.project_files.
-        create(path: "testributor.yml", contents: "testributor contents")
+        create(path: "testributor.yml", contents: contents)
       project.project_files.create(path: "two", contents: "two contents")
 
       get :index, project_id: project.id

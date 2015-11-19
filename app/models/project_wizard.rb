@@ -22,6 +22,7 @@ class ProjectWizard < ActiveRecord::Base
   validates :branch_names,
     presence: true, on: [:add_branches, ORDERED_STEPS.last]
   validates :docker_image_id, presence: true, on: :select_technologies
+  validate :valid_testributor_yml_contents, on: :configure_testributor
 
   after_save :reset_fields
 
@@ -103,6 +104,21 @@ class ProjectWizard < ActiveRecord::Base
   end
 
   private
+
+  def valid_testributor_yml_contents
+    project_file = ProjectFile.new(path: TestRun::JOBS_YML_PATH,
+                                   contents: testributor_yml)
+    project_file.valid?
+    copy_errors_from(project_file)
+  end
+
+  def copy_errors_from(project_file)
+    project_file.errors.to_hash.each do |key, value|
+      value.each do |message|
+        errors.add(key, message)
+      end
+    end
+  end
 
   def repo
     @repo ||= user.github_client.repo(repo_name)

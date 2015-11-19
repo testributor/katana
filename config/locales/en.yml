@@ -23,6 +23,15 @@ en:
   activerecord:
     errors:
       models:
+        project_file:
+          attributes:
+            contents:
+              no_key_provided: "no 'each:' key or custom command key provided"
+              syntax_error: "syntax error"
+              each_without_pattern: "'each:' key without 'pattern:' key provided"
+              each_without_command: "'each:' key without 'command:' key provided"
+              each_without_command_pattern: "'each:' key without 'command:'and 'pattern:' keys provided"
+
         project:
           attributes:
             base:

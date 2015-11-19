@@ -49,14 +49,21 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
       VCR.use_cassette 'branches' do
         click_on repo_name
         check 'aws'
-        # Proceed to 'Configure Testributor'
         click_on 'Next'
       end
     end
 
-    # Proceed to 'Select technologies'
+    # 'Configure Testributor' page
+    yaml = <<-YAML
+      each:
+        command: 'bin/rake'
+        pattern: 'test/models/*_test.rb'
+    YAML
+
+    fill_in 'testributor_yml', with: yaml
     click_on 'Next'
 
+    # 'Select technologies' page
     select technology.public_name
     select language2.public_name
     click_on 'Create project'
