@@ -37,29 +37,29 @@ class TestRun < ActiveRecord::Base
   #   command: 'bin/rake test_javascript'
   #   after: "some_cleanup_command"
   #
-  # Return value meaning:
-  #   - Hash with errors key: syntax error in yml pattern missing or other
-  #   - true: jobs built successfully
-  #   as a validation
+  # We assume that the JOBS_YML_PATH exists and has valid commands.
+  # @raise JOBS_YML_PATH not found if it doesn't exist
+  # @returns false if JOBS_YML_PATH is invalid?
+  # @raises "JOBS_YML_PATH not found" if JOBS_YML_PATH doesn't exist?
+  # if JOBS_YML_PATH is invalid, then the JOBS_YML_PATH errors are copied
+  # to self. As a result, self.errors can be used to display errors to the user
   def build_test_jobs
     yml_contents = jobs_yml
-    # TODO: Reuse methods in ProjectFile for validation of testributor.yml
-    return { errors: "No testributor.yml file found" } unless yml_contents
-
-    begin
-      jobs_description = YAML.load(yml_contents)
-    rescue Psych::SyntaxError
-      return { errors: "yml syntax error" }
+    raise "#{JOBS_YML_PATH} not found" unless yml_contents
+    testributor_yml = ProjectFile.new(path: JOBS_YML_PATH,
+                                      contents: yml_contents)
+    if testributor_yml.invalid?
+      copy_errors(testributor_yml.errors)
+      return false
     end
+
+    jobs_description = YAML.load(yml_contents)
 
     if each_description = jobs_description.delete("each")
       pattern = each_description["pattern"]
       command = each_description["command"]
       before = each_description["before"].to_s
       after = each_description["after"].to_s
-
-      return { errors: '"each" block defined but no "pattern"' } unless pattern
-      return { errors: '"each" block defined but no "command"' } unless command
 
       file_names = project_file_names
       file_names.select{|f| f.match(pattern)}.each do |f|
@@ -72,9 +72,6 @@ class TestRun < ActiveRecord::Base
       command = description["command"]
       before = description["before"].to_s
       after = description["after"].to_s
-
-      return { errors: "#{job_name} is missing \"command\" key" } unless command
-
       test_jobs.build(command: command, before: before, after: after)
     end
 
@@ -91,7 +88,7 @@ class TestRun < ActiveRecord::Base
     file = nil
 
     if github_client.present?
-      repo = tracked_branch.project.repository_id
+      repo = project.repository_id
       file =
         begin
           file =
@@ -121,6 +118,15 @@ class TestRun < ActiveRecord::Base
   end
 
   private
+
+  # TODO: this almost the same as ProjectWizard#copy_errors. DRY
+  def copy_errors(errors)
+    errors.to_hash.each do |key, value|
+      value.each do |message|
+        self.errors.add(key, message)
+      end
+    end
+  end
 
   def last_file_run
     test_jobs.where('completed_at IS NOT NULL').sort_by(&:completed_at).last

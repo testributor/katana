@@ -109,13 +109,13 @@ class ProjectWizard < ActiveRecord::Base
     project_file = ProjectFile.new(path: TestRun::JOBS_YML_PATH,
                                    contents: testributor_yml)
     project_file.valid?
-    copy_errors_from(project_file)
+    copy_errors(project_file.errors)
   end
 
-  def copy_errors_from(project_file)
-    project_file.errors.to_hash.each do |key, value|
+  def copy_errors(errors)
+    errors.to_hash.each do |key, value|
       value.each do |message|
-        errors.add(key, message)
+        self.errors.add(key, message)
       end
     end
   end

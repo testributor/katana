@@ -1,19 +1,20 @@
-- if @branches
-  - if @branches.empty?
-    %p
-      %h2 No branches found! None. Zero. Zilch. Nada.
-      We were unable to find any branches in the '#{current_project.repository_name}'. That's weird...
-  - else
-    %h2 The branches of '#{current_project.repository_name}' repository on Github
-    %ul
-      - @branches.each do |branch|
-        %li
-          = form_for branch, url: { action: :create } do |f|
-            = f.hidden_field :branch_name
-            = f.submit branch.branch_name
-- else
-  %h2 Your Testributor account is not connected to GitHub.
-  %p
-    We're going to now talk to the GitHub API. Ready?
-    = link_to 'Click here', github_oauth_authorize_url
-    to begin!
+.col-lg-12
+  .panel.panel-default
+    .panel-heading
+      %h3.panel-title Select a branch to add from '#{current_project.owner_and_name}'
+    .panel-body
+      - if @branches
+        - if @branches.empty?
+          %p
+            %h2 No branches found! None. Zero. Zilch. Nada.
+            We were unable to find any branches in the '#{current_project.repository_name}'. That's weird...
+        - else
+          %ul.list-group
+            .branches
+              - @branches.each do |branch|
+                %li.list-unstyled
+                  = link_to branch.branch_name,
+                    project_branches_path(current_project,
+                    branch_name: branch.branch_name),
+                    method: :post,
+                    class: 'btn btn-default btn-custom btn-block m-b-5'
