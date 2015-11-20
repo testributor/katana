@@ -4,7 +4,6 @@ class DockerImage < ActiveRecord::Base
 
   scope :languages, -> { where(type: 'language') }
   scope :technologies, -> { where(type: 'technology') }
-  belongs_to :docker_image_selection
 
   validates :standardized_name, presence: true
 end

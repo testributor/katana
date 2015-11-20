@@ -1,15 +1,24 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-user = User.create(email: 'admin@testributor.com',
-            password: '12345678',
-            password_confirmation: '12345678')
-user.confirm
-user = User.create(email: 'pakallis+other@gmail.com',
-            password: '12345678',
-            password_confirmation: '12345678')
-user.confirm
+DockerImage.create!(
+  public_name: 'Ruby 1.9.3', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '1.9.3')
+DockerImage.create!(
+  public_name: 'Ruby 2.0.0', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '2.0.0')
+DockerImage.create!(
+  public_name: 'Ruby 2.1.4', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '2.1.4')
+DockerImage.create!(
+  public_name: 'Ruby 2.1.5', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '2.1.5')
+DockerImage.create!(
+  public_name: 'Ruby 2.2.0', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '2.2.0')
+DockerImage.create!(
+  public_name: 'Ruby 2.2.1', hub_image: 'testributor/base_image',
+  type: 'language', standardized_name: 'ruby', version: '2.2.1')
+DockerImage.create!(
+  public_name: 'PostgreSQL 9.3', hub_image: 'postgres:9.3',
+  type: 'technology', standardized_name: 'postgresql', version: '9.3')
+DockerImage.create!(
+  public_name: 'PostgreSQL 9.4', hub_image: 'postgres:9.4',
+  type: 'technology', standardized_name: 'postgresql', version: '9.4')
