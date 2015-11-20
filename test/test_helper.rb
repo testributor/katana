@@ -22,6 +22,9 @@ class ActionController::TestCase
   include Devise::TestHelpers
 
   def setup
+    # Clean everything in "test" redis database before each test
+    Katana::Application.redis.flushdb
+
     # Stub create_webhooks! in order to disable external
     # requests
     Project.any_instance.stubs(:create_webhooks!).returns(1)
