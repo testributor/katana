@@ -26,7 +26,10 @@
               %tr
                 %td= link_to "##{test_run.id}",
                   project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run)
-                %td= test_run.decorate.commit_message
+                %td
+                  = test_run.decorate.commit_message
+                  %br
+                  %i= test_run.decorate.commit_info
                 %td
                   %span{class: test_run.status.css_class}= test_run.status.text
                 %td

@@ -4,8 +4,11 @@
   = "Test Run ##{@run.id}"
 .panel.panel-default
   .panel-heading.test-run-panel-heading
-    %h3.pull-left
-      #{@run.decorate.commit_message(render_as_link: true)}
+    .pull-left
+      %h3
+        #{@run.decorate.commit_message(render_as_link: true)}
+        %br
+        #{@run.decorate.commit_info}
     .test
       .pull-right
         = render partial: 'test_run_actions', locals: { test_run: @run }

@@ -5,12 +5,11 @@
     .panel-body
       .list-group
       - @repos.each do |repo|
-        = link_to repo[:name],
-          project_wizard_path(repo_name: repo[:name]),
-          method: :put,
-          class: 'list-group-item'
-        %strong
-          %i= (repo[:fork] ? " (fork)" : '')
+        = link_to project_wizard_path(repo_name: repo[:name]), method: :put,
+        class: 'list-group-item' do
+          #{repo[:name]}
+          - if repo[:fork]
+            %strong= "[FORK]"
   - else
     .panel-title
       %h2 No repositories found! None. Zero. Zilch. Nada.

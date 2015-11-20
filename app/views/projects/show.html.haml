@@ -29,10 +29,14 @@
                   %tr
                     %td= link_to branch.branch_name,
                         project_branch_test_runs_path(branch.project, branch)
-                    %td= branch.last_run.try(:decorate).try(:commit_message)
+                    %td
+                      - if branch.last_run
+                        = branch.last_run.decorate.commit_message
+                        %br
+                        %i= branch.last_run.decorate.commit_info
                     %td
                       - if branch.last_run.try(:completed_at)
-                        = time_ago_in_words(branch.last_run.completed_at)
+                        = "#{time_ago_in_words(branch.last_run.completed_at)} ago"
                     %td
                       %span{class: branch.status.try(:css_class)}
                         = branch.status.try(:text)
