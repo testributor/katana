@@ -1,14 +1,16 @@
 = content_for :page_title do
   %h3= "Your projects"
 
-.panel.pane-default
-  - if @projects.empty?
+- if @projects.empty?
+  .panel.panel-default
     .panel-heading
       %h3
         = "You haven't added any projects yet."
         = link_to "Add a project", project_wizard_path(:add_project),
           class: 'btn btn-primary m-l-10'
-  - @projects.each do |project|
+
+- @projects.each do |project|
+  .panel.panel-default
     .panel-heading
       %h4= link_to project.repository_name, project_path(project)
     .panel-body
