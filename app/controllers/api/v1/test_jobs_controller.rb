@@ -32,23 +32,37 @@ module Api
       # send back a list of cancelled/missing test_run ids so that the worker
       # can cancel any left jobs for those runs.
       def batch_update
+        jobs = params[:jobs].map do |id, json|
+          [id.to_i, JSON.parse(json)] rescue nil
+        end.compact
+        jobs = Hash[jobs]
         job_ids = params[:jobs].keys
+
+        # Store the TestRun ids of any missing or cancelled TestRuns to let
+        # the worker know that they should be removed from the jobs queue.
+        test_run_ids = jobs.values.map{|j| j["test_run_id"].to_i}.uniq
+        # Anything not cancelled is a keeper (we still want them to run)
+        test_run_id_keepers =
+          current_project.test_runs.where("status != ?", TestStatus::CANCELLED).
+          where(id: test_run_ids).pluck(:id)
+        missing_or_cancelled_test_run_ids = test_run_ids - test_run_id_keepers
+
         current_project.test_jobs.running.where(id: job_ids).each do |job|
           begin
-            job_params = JSON.parse(params[:jobs][job.id.to_s]).keep_if do |k,v|
+            job_params = jobs[job.id].keep_if do |k,v|
                 %w(result status id result runs assertions failures errors
                    skips sent_at_seconds_since_epoch worker_in_queue_seconds
                    worker_command_run_seconds).include?(k)
             end
           rescue Exception => e
-            puts e.message
-            render json: { error: e.message } and return
+            render json: { error: e.message,
+              delete_test_runs:  missing_or_cancelled_test_run_ids } and return
           end
 
           job.update!(job_params.merge(reported_at: Time.current))
         end
 
-        head 200
+        render json: { delete_test_runs:  missing_or_cancelled_test_run_ids }
 
         # TODO: Consider updating all jobs with something like the following.
         # Make sure the fields are sanitized before sending to Postgres
