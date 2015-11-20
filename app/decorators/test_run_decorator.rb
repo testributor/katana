@@ -6,13 +6,13 @@ class TestRunDecorator < ApplicationDecorator
 
     if model.commit_message.present?
       # http://stackoverflow.com/a/18134919/859387
-      cm = "#{h.truncate(model.commit_message.split("\n")[0], length: 80, separator: ' ')} (##{model.commit_sha[0...7]})"
+      cm = "#{h.truncate(h.sanitize(model.commit_message).split("\n")[0], length: 80, separator: ' ')} (##{commit_sha[0...7]})"
       if options[:render_as_link]
         cm = h.link_to cm, commit_url, title: 'See this commit on GitHub',
           target: '_blank'
       end
 
-      cm
+      cm.html_safe
     else
       model.commit_sha
     end

@@ -41,6 +41,8 @@
                       %td
                         - if branch.last_run
                           = branch.last_run.decorate.commit_message
+                          %br
+                          %i= branch.last_run.decorate.commit_info
                       %td
                         - if branch.last_run.try(:completed_at)
                           = time_ago_in_words(branch.last_run.completed_at)
