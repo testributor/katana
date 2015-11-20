@@ -77,7 +77,7 @@ class ProjectWizardController < WizardController
   end
 
   def fetch_repos
-    redirect_to project_wizard_add_project_path if !request.xhr?
+    redirect_to project_wizard_path(:add_project) and return if !request.xhr?
 
     @repos = @project_wizard.fetch_repos
     render 'fetch_repos', layout: false
