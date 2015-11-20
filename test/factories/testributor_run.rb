@@ -2,6 +2,15 @@ FactoryGirl.define do
   factory :testributor_run, class: 'TestRun' do
     association :tracked_branch
     commit_sha "123456"
+    commit_message 'Test commit'
+    commit_timestamp 1.day.ago
+    commit_url 'https://github.com/ispyropoulos/katana/commit/f1e76db6eea4be210078e28a4491dff5613504b2'
+    commit_author_name 'Donald Duck'
+    commit_author_email 'test@example.com'
+    commit_author_username 'donaldduck'
+    commit_committer_name 'Donald Duck'
+    commit_committer_email 'test@example.com'
+    commit_committer_username 'donaldduck'
     status 0
   end
 end
