@@ -37,9 +37,7 @@ class User < ActiveRecord::Base
 
   def github_client
     if github_access_token.present?
-      client = Octokit::Client.new(access_token: github_access_token)
-
-      (client.scopes & GITHUB_REQUIRED_SCOPES).size == 2 ? client : nil
+      Octokit::Client.new(access_token: github_access_token)
     end
   rescue Octokit::Unauthorized
     return

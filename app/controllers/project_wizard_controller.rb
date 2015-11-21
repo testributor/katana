@@ -1,4 +1,5 @@
-class ProjectWizardController < WizardController
+class ProjectWizardController < DashboardController
+  include Wicked::Wizard
   REDIRECT_MESSAGES = {
     add_project: "You need to select a repository first",
     add_branches: "You need to select a branch first",
