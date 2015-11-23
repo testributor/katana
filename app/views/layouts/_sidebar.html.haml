@@ -28,7 +28,14 @@
           = link_to settings_project_path(current_project) do
             %i.fa.fa-cog
             %span.nav-label= "Settings"
-      - else
+    - if current_project
+      %ul.list-unstyled
+        %li
+          = link_to new_project_branch_path(current_project) do
+            %i.fa.fa-plus
+            %span.nav-label Add a branch
+    - else
+      %ul.list-unstyled
         %li
           = link_to project_wizard_path(:add_project) do
             %i.fa.fa-plus

@@ -13,10 +13,17 @@ class TestRunsController < DashboardController
   end
 
   def create
-    branch = TrackedBranch.find(params[:branch_id])
-    branch.create_test_run_and_jobs!
+    branch = current_project.tracked_branches.find(params[:branch_id])
+    build_result = branch.build_test_run_and_jobs
+    if build_result && branch.save
+      flash[:notice] = 'Your build was added to queue'
+    elsif build_result.nil?
+      flash[:alert] = "#{branch.branch_name} doesn't exist anymore on github"
+    else
+      flash[:alert] = branch.errors.messages.values.join(', ')
+    end
 
-    redirect_to :back, notice: 'Your build was added to queue'
+    redirect_to :back
   end
 
   def update

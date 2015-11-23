@@ -3,6 +3,10 @@
 - content_for :page_title do
   Branches
 
+= link_to new_project_branch_path(current_project), class: 'body-gray' do
+  %i.fa.fa-plus-circle.m-b-10
+  Add a branch
+
 .panel.panel-default
   - if @branches.empty?
     .panel-heading

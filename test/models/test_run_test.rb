@@ -122,8 +122,9 @@ class TestRunTest < ActiveSupport::TestCase
         YML
       end
 
-      it "returns errors" do
-        subject.build_test_jobs.must_equal({ errors: 'yml syntax error'})
+      it "adds errors" do
+        subject.build_test_jobs
+        subject.errors.values.join(", ").must_equal "syntax error"
       end
     end
 
@@ -144,9 +145,10 @@ class TestRunTest < ActiveSupport::TestCase
           YML
         end
 
-        it "returns errors" do
-          subject.build_test_jobs.
-            must_equal({ errors: '"each" block defined but no "pattern"'})
+        it "adds errors" do
+          subject.build_test_jobs
+          subject.errors.values.join(", ").
+            must_equal "'each:' key without 'pattern:' key provided"
         end
       end
 
@@ -158,9 +160,10 @@ class TestRunTest < ActiveSupport::TestCase
           YML
         end
 
-        it "returns errors" do
-          subject.build_test_jobs.
-            must_equal({ errors: '"each" block defined but no "command"'})
+        it "adds errors" do
+          subject.build_test_jobs
+          subject.errors.values.join(", ").
+            must_equal "'each:' key without 'command:' key provided"
         end
       end
 
