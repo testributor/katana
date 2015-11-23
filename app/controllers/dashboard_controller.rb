@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
-  rescue_from Octokit::Unauthorized, with: :redirect_reconnect_to_github
   layout "dashboard"
+  rescue_from Octokit::Unauthorized, with: :redirect_reconnect_to_github
   before_filter :authenticate_user!
   before_filter :check_for_active_providers, except: [:create, :destroy]
 
@@ -16,8 +16,8 @@ class DashboardController < ApplicationController
   protected
 
   def check_for_active_providers
-    unless current_user.connected_to_github?
-      flash.now[:alert] = reconnect_message
+    unless current_user.github_client
+      redirect_to_reconnect_to_github_page and return
     end
   end
 
@@ -25,18 +25,24 @@ class DashboardController < ApplicationController
     if request.xhr?
       render text: reconnect_message and return
     end
-    path = request.env['PATH_INFO']
-    if path != root_path
-      flash[:alert] = reconnect_message.html_safe
-      redirect_to root_path and return
-    end
+
+    redirect_to_reconnect_to_github_page and return
   end
 
   private
 
+  def redirect_to_reconnect_to_github_page
+    path = request.env['PATH_INFO']
+    if path != root_path
+      flash[:alert] = reconnect_message.html_safe
+      redirect_to root_path
+    end
+  end
+
   def reconnect_message
-    "Your Testributor account is not connected to GitHub anymore. "\
-    "Please #{view_context.link_to 're-connect', view_context.github_oauth_authorize_url}.".
+    "Your Testributor account is not connected to GitHub. "\
+    "Please #{view_context.link_to 'Connect to Github',
+    view_context.github_oauth_authorize_url}.".
       html_safe
   end
 end
