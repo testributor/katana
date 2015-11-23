@@ -10,11 +10,11 @@
 .panel.panel-default
   - if @branches.empty?
     .panel-heading
-      %h2 Your master branch is getting cooked.
-      %h3
-        Please reload the page to check if it's done or
-        = link_to 'add', new_project_branch_path(current_project)
-        another branch.
+
+      %h3= "No branches found for project '#{current_project.owner_and_name}'"
+      = link_to "Add a branch",
+        new_project_branch_path(current_project),
+        class: 'btn btn-primary m-l-10'
   - else
     .panel-body
       .row
