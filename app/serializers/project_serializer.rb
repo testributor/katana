@@ -1,6 +1,5 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :repository_name, :repository_owner, :github_access_token,
-    :build_commands
+  attributes :repository_name, :repository_owner, :github_access_token
 
   has_many :files
   has_one :docker_image
@@ -11,14 +10,6 @@ class ProjectSerializer < ActiveModel::Serializer
 
   def files
     object.project_files
-  end
-
-  def build_commands
-    <<-TEXT
-      bundle install
-      RAILS_ENV=test rake db:create
-      RAILS_ENV=test rake db:reset
-    TEXT
   end
 
   def docker_image

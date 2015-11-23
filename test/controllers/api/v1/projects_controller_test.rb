@@ -10,6 +10,10 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
     FactoryGirl.create_list(:project_file, 2, project: project)
   end
 
+  let(:build_commands) do
+    project.project_files.where(path: ProjectFile::BUILD_COMMANDS_PATH).first
+  end
+
   before { project_files }
 
   describe "GET#current" do
@@ -19,14 +23,14 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
 
       result = JSON.parse(response.body)
       files = result["files"]
-      files.first["id"].must_equal project_files.first.id
-      files.first["path"].must_equal project_files.first.path
-      files.first["contents"].must_equal project_files.first.contents
+      files.first["id"].must_equal build_commands.id
+      files.first["path"].must_equal ProjectFile::BUILD_COMMANDS_PATH
+      files.first["contents"].must_equal build_commands.contents
       files.last["id"].must_equal project_files.last.id
       files.last["path"].must_equal project_files.last.path
       files.last["contents"].must_equal project_files.last.contents
 
-      (%w(repository_name repository_owner github_access_token build_commands files) - result.keys).must_be :blank?
+      (%w(repository_name repository_owner github_access_token files) - result.keys).must_be :blank?
     end
   end
 
