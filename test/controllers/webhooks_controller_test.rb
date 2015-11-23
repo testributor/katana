@@ -12,22 +12,16 @@ class WebhooksControllerTest < ActionController::TestCase
     tracked_branch
     project.update_column(:repository_provider, 'github')
     project.reload
+    # Successful authorization for github
+    @controller.stubs(:verify_request_from_github!).returns(nil)
   end
 
   describe "POST#github" do
     describe "delete event" do
       before do
         request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
-        @controller.stubs(:verify_request_from_github!).returns(nil)
         TestRun.any_instance.stubs(:project_file_names).returns(
           [filename_1, filename_2])
-        TestRun.any_instance.stubs(:jobs_yml).returns(
-          <<-YML
-            each:
-              pattern: '.*'
-              command: 'bin/rake test %{file}'
-          YML
-        )
         post :github,
           { repository: { id: project.repository_id },
             ref_type: 'branch',
@@ -42,17 +36,8 @@ class WebhooksControllerTest < ActionController::TestCase
     describe "push event" do
       before do
         request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
-        # Successful authorization for github
-        @controller.stubs(:verify_request_from_github!).returns(nil)
         TestRun.any_instance.stubs(:project_file_names).returns(
           [filename_1, filename_2])
-        TestRun.any_instance.stubs(:jobs_yml).returns(
-          <<-YML
-            each:
-              pattern: '.*'
-              command: 'bin/rake test %{file}'
-          YML
-        )
         post :github, {
           head_commit: {
             id: commit_sha,

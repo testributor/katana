@@ -4,10 +4,37 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   let(:_test_run) { FactoryGirl.create(:testributor_run) }
   let(:owner) { _test_run.project.user }
   let(:_test_job) { FactoryGirl.create(:testributor_job, test_run: _test_run) }
+  let(:branch_name) { 'master' }
+  let(:commit_sha) { 'a3e2de2r' }
+  let(:branch_github_response) do
+    Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+      {
+        name: branch_name,
+        commit: {
+          sha: commit_sha,
+          commit: {
+            message: 'Some commit messsage',
+            html_url: 'Some url',
+            author: {
+              name: 'Great Author',
+              email: 'great@author.com',
+            },
+            committer: {
+              name: 'Great Committer',
+              email: 'great@committer.com',
+            }
+          },
+          author: { login: 'authorlogin' },
+          committer: { login: 'committerlogin' }
+        }
+      }
+    )
+  end
 
   before do
     _test_job.test_run.project.
       project_files << FactoryGirl.create(:project_file, path: ProjectFile::JOBS_YML_PATH)
+    TrackedBranch.any_instance.stubs(:from_github).returns(branch_github_response)
     login_as owner, scope: :user
     visit project_branch_test_runs_path(project_id: _test_run.project.id,
                                         branch_id: _test_run.tracked_branch.id)
@@ -20,17 +47,6 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
 
     it 'displays the cancel action' do
       page.must_have_content('Cancel')
-    end
-  end
-
-  describe 'when a user clicks on retry button' do
-    it 'must recreate all test_jobs', js: true do
-      TestRun.any_instance.stubs(:project_file_names).
-        returns(['test/controllers/shitty_test.rb'])
-      old_test_job = _test_job.id
-      _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
-      page.first('td .btn.btn-icon.btn-success').click
-      _test_run.test_jobs.pluck(:id).must_equal [old_test_job + 1]
     end
   end
 

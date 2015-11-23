@@ -21,10 +21,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   it "user can't click on disabled(not-completed) steps", js: true do
     visit root_path
     VCR.use_cassette 'repos'  do
-      VCR.use_cassette 'github_client' do
-        find('aside').click_on 'Add a project'
-        page.must_have_content repo_name
-      end
+      find('aside').click_on 'Add a project'
+      page.must_have_content repo_name
     end
 
     click_on "Select branches"
@@ -39,18 +37,14 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     visit root_path
 
     VCR.use_cassette 'repos'  do
-      VCR.use_cassette 'github_client' do
-        find('aside').click_on 'Add a project'
-        page.must_have_content repo_name
-      end
+      find('aside').click_on 'Add a project'
+      page.must_have_content repo_name
     end
 
-    VCR.use_cassette 'github_client' do
-      VCR.use_cassette 'branches' do
-        click_on repo_name
-        check 'aws'
-        click_on 'Next'
-      end
+    VCR.use_cassette 'branches', allow_playback_repeats: true do
+      click_on repo_name
+      check 'aws'
+      click_on 'Next'
     end
 
     # 'Configure Testributor' page
@@ -66,7 +60,9 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     # 'Select technologies' page
     select technology.public_name
     select language2.public_name
-    click_on 'Create project'
+    VCR.use_cassette 'repo' do
+      click_on 'Create project'
+    end
 
     project = Project.last
     project.docker_image_id.must_equal language2.id
@@ -76,8 +72,9 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     project.repository_provider.must_equal 'github'
     project.repository_name.must_equal 'katana'
     project.repository_owner.must_equal 'ispyropoulos'
-    testributor_file = project.project_files.first
-    testributor_file.path.must_equal 'testributor.yml'
+    testributor_file = project.project_files.
+      where(path: ProjectFile::JOBS_YML_PATH).first
+    testributor_file.wont_equal nil
     page.wont_have_content "Please upgrade your plan"
   end
 end

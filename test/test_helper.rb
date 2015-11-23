@@ -15,9 +15,10 @@ VCR.configure do |c|
   c.cassette_library_dir = 'test/vcr_cassettes'
   c.hook_into :webmock
   c.ignore_localhost = true
-  c.allow_http_connections_when_no_cassette = true
+  c.allow_http_connections_when_no_cassette = false
 end
 
+# Inherits from ActiveSupport::TestCase
 class ActionController::TestCase
   include Devise::TestHelpers
 
@@ -27,10 +28,6 @@ class ActionController::TestCase
     # Stub client_id with a random id so that
     # ApplicationHelper#github_oauth_authorize_url won't break
     Octokit.stubs(:client_id).returns("aRandomID")
-
-    # Stub create_webhooks! in order to disable external
-    # requests
-    Project.any_instance.stubs(:create_webhooks!).returns(1)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     ActionMailer::Base.deliveries.clear
   end
@@ -42,8 +39,24 @@ class ActiveSupport::TestCase
 
   ActiveRecord::Migration.check_pending!
   Sidekiq::Testing.inline!
+
+  before do
+    yaml = <<-YAML
+      each:
+        pattern: ".*"
+        command: "bin/rake test %{file}"
+    YAML
+    Octokit::Client.any_instance.stubs(:contents).
+      with { |*args| args[1][:path] == ProjectFile::JOBS_YML_PATH }.
+      returns(OpenStruct.new(content: Base64.encode64(yaml)))
+    tree = OpenStruct.new(
+      tree: [OpenStruct.new({path: 'test/models/stub_test_1.rb'}),
+             OpenStruct.new({path: 'test_models/stub_test_2.rb'})])
+    Octokit::Client.any_instance.stubs(:tree).returns(tree)
+  end
 end
 
+# Inherits from ActiveSupport::TestCase
 class ActionDispatch::IntegrationTest
   include Warden::Test::Helpers
 end
@@ -61,10 +74,12 @@ class Capybara::Rails::TestCase
   self.use_transactional_fixtures = false
 
   before do
-    # Stub create_webhooks! in order to disable external
-    # requests
     Project.any_instance.stubs(:create_webhooks!).returns(1)
+    # Stub client_id with a random id so that
+    # ApplicationHelper#github_oauth_authorize_url won't break
+    Octokit.stubs(:client_id).returns("aRandomID")
     ActionMailer::Base.deliveries.clear
+
     # No javascript tests
     if Capybara.current_driver == :rack_test
       DatabaseCleaner.strategy = :transaction

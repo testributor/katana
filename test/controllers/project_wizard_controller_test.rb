@@ -16,7 +16,6 @@ class ProjectWizardControllerTest < ActionController::TestCase
 
     it "redirects to root_path if projects limit has been reached" do
       user.update_column(:projects_limit, 1)
-      user.stubs(:github_client).returns(Octokit::Client)
       # id doesn't matter here. It could be anything
       get :show, { id: :add_project }
 
@@ -25,7 +24,6 @@ class ProjectWizardControllerTest < ActionController::TestCase
     end
 
     it "redirects to another step if a required param is missing" do
-      user.stubs(:github_client).returns(Octokit::Client)
       # id doesn't matter here. It could be anything
       get :show, { id: :add_branches }
 
@@ -45,7 +43,6 @@ class ProjectWizardControllerTest < ActionController::TestCase
   describe "PUT#update" do
     before do
       sign_in :user, user
-      user.stubs(:github_client).returns(Octokit::Client)
     end
 
     describe ":add_project" do

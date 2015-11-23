@@ -40,16 +40,8 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       project
       TrackedBranch.any_instance.stubs(:from_github).
         returns(branch_github_response)
-      @controller.stubs(:github_client).returns(Octokit::Client.new)
       TestRun.any_instance.stubs(:project_file_names).returns(
         [filename_1, filename_2])
-      TestRun.any_instance.stubs(:jobs_yml).returns(
-        <<-YML
-          each:
-            pattern: '.*'
-            command: 'bin/rake test %{file}'
-        YML
-      )
       sign_in :user, owner
     end
 
@@ -109,7 +101,6 @@ class TrackedBranchesControllerTest < ActionController::TestCase
     let(:project_id) { project.id }
     let(:owner) { project.user }
     before do
-      @controller.stubs(:github_client).returns(Octokit::Client.new)
       sign_in :user, owner
       request.env['HTTP_REFERER'] = 'a-random-path'
     end

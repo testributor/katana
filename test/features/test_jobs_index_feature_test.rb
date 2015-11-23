@@ -45,7 +45,8 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
                                        _test_run)
   end
 
-  it "displays test jobs with correct statuses and ctas" do
+  it "displays test jobs with correct statuses and ctas", js: true do
+    page.driver.resize_window(1600, 1200)
     job_trs = all("tr:not(.danger)")
     cancelled = job_trs[1]
     error = job_trs[2]
@@ -63,9 +64,9 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
     queued.all(".btn-danger").length.must_equal 0
     running.all(".btn-danger").length.must_equal 0
-    cancelled.all(".btn-success").length.must_equal 0
-    failed.find(".btn-success").value.must_equal "Retry"
-    error.find(".btn-success").value.must_equal "Retry"
-    passed.find(".btn-success").value.must_equal "Retry"
+    cancelled.all(".btn-primary").length.must_equal 0
+    failed.find(".btn-primary").must_have_content "Retry"
+    error.find(".btn-primary").must_have_content "Retry"
+    passed.find(".btn-primary").must_have_content "Retry"
   end
 end

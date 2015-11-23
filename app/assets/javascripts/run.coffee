@@ -12,7 +12,9 @@ $(document).on 'ready', ->
   # Execute the corresponding method
   klass = module[0]
   if namespace && namespace.hasOwnProperty(klass)
-    page = (new namespace[klass])[method]()
+    page = new namespace[klass]
+  if page && _.isFunction(page[method])
+    page[method]()
 
   # Disable all links that have 'disabled' class
   $('a.disabled').click (e) ->
