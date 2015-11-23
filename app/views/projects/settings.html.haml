@@ -50,3 +50,14 @@
         .col-xs-12
           .pull-right.m-t-15
             = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
+
+- if can? :manage, current_project
+  .col-lg-12
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title
+          Delete project
+      .panel-body
+        = link_to "Delete", project_path(current_project), method: :delete,
+          data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
+          class: 'btn btn-danger'

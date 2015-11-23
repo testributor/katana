@@ -2,7 +2,7 @@ class DashboardController < ApplicationController
   layout "dashboard"
   rescue_from Octokit::Unauthorized, with: :redirect_reconnect_to_github
   before_filter :authenticate_user!
-  before_filter :check_for_active_providers, except: [:create, :destroy]
+  before_filter :check_for_active_providers, except: [:create]
 
   def index
     @projects = current_user.participating_projects.

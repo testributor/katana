@@ -29,26 +29,17 @@ class ProjectsController < DashboardController
   end
 
   def destroy
-    if client = current_user.github_client
-      project = current_user.projects.find(params[:id])
+    project = current_user.projects.find(params[:id])
 
-      # Project pre-destroy actions
-      # ---------------------------
+    current_user.github_client.
+      remove_hook(project.repository_id, project.webhook_id)
 
-      # Delete the associated Webhook from the GitHub repo,
-      # unless still in use in other projects.
-      unless Project.where(webhook_id: project.webhook_id).count(:id) > 1
-        unless client.remove_hook(project.repository_id, project.webhook_id)
-          # TODO Notify admins about the stale Webhook?
-        end
-      end
-
-      project.destroy!
-      # TODO Project post-destroy actions
-      # e.g. Kill Amazon workers (Tasks, ECS instances, etc.)
-
+    if project.destroy
       flash[:notice] =
-        "Successfully destroyed '#{project.repository_name}' project."
+        "Successfully destroyed '#{project.name}' project."
+    else
+      flash[:alert] =
+        "Could not destroy '#{project.name}' project."
     end
 
     redirect_to root_path

@@ -8,10 +8,15 @@
     .row
       .col-md-12.col-sm-12.col-xs-12
         .pull-right
-          = link_to new_project_branch_test_run_path, method: :post, action: :create do
-            %button.btn.btn-icon.btn-info.m-b-5.w-md
+          = link_to new_project_branch_test_run_path, method: :post,
+            action: :create do
+            %button.btn.btn-icon.btn-info.w-md
               %i.fa.fa-plus.m-r-5
               %span= 'Add a new run'
+          = link_to "Destroy branch",
+            project_branch_path(current_project, @tracked_branch),
+            method: :delete, class: 'btn btn-danger',
+            data: { confirm: "Branch will be removed from this project. Are you sure?" }
 
         %table.table
           %thead

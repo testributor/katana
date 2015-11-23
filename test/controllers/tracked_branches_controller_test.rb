@@ -102,4 +102,46 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       end
     end
   end
+
+  describe "DELETE#destroy" do
+    let(:branch) { FactoryGirl.create(:tracked_branch) }
+    let(:project) { branch.project }
+    let(:project_id) { project.id }
+    let(:owner) { project.user }
+    before do
+      @controller.stubs(:github_client).returns(Octokit::Client.new)
+      sign_in :user, owner
+      request.env['HTTP_REFERER'] = 'a-random-path'
+    end
+
+    it "destroys branch if it belongs to current_project" do
+      old_count = TrackedBranch.count
+      delete :destroy, { project_id: project_id, id: branch.id }
+      TrackedBranch.count.must_equal old_count - 1
+    end
+
+    it "flashes notice on success and redirects to project_path" do
+      delete :destroy, { project_id: project_id, id: branch.id }
+
+      flash[:notice].must_equal "#{branch.branch_name} branch was removed"
+      assert_redirected_to project_path(project)
+    end
+
+    it "flashes alert on failure and redirects to project_branch_path" do
+      TrackedBranch.any_instance.stubs(:destroy).returns(false)
+      delete :destroy, { project_id: project_id, id: branch.id }
+
+      flash[:alert].must_equal "Can't remove #{branch.branch_name} branch"
+      assert_redirected_to project_branch_path(project, branch)
+    end
+
+    it "doesn't destroy branch if it doesn't belong to current_project" do
+      old_count = TrackedBranch.count
+      delete_branch = -> { delete :destroy,
+           { project_id: project_id + 1, id: branch.id } }
+      delete_branch.must_raise ActiveRecord::RecordNotFound
+      branch.reload
+      TrackedBranch.count.must_equal old_count
+    end
+  end
 end

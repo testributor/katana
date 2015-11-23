@@ -17,12 +17,8 @@
       .row
         .col-md-12.col-sm-12.col-xs-12
           - if project.tracked_branches.empty?
-            %i.small-margin
-              You haven't added any branches to this project yet.
-              = link_to 'Add a branch',
-                project_wizard_path(:add_branch,
-                repo_id: project.owner_and_name),
-                class: 'btn btn-primary m-l-10'
+            = render partial: "no_branches",
+              locals: { project: project}
           - else
             .table-responsive
               %table.table

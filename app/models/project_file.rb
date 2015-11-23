@@ -12,9 +12,13 @@ class ProjectFile < ActiveRecord::Base
   validate :prevent_path_change,
     if: ->{ path_changed? && (path_was == JOBS_YML_PATH || path_was == BUILD_COMMANDS_PATH) }
 
-  # testributor.yml and build_commands should not be deleted
-  before_destroy -> { return false }, if: :testributor_yml?
-  before_destroy -> { return false }, if: :build_commands?
+  # Build_commands and testributor.yml should not be deleted unless
+  # Project is destroyed. We set about_to_be_destroyed in Project in a
+  # before_destroy callback.
+  before_destroy -> { return false unless project.about_to_be_destroyed },
+    if: :build_commands?
+  before_destroy -> { return false unless project.about_to_be_destroyed },
+    if: :testributor_yml?
   # Bash script don't play well with carriage returns so we stip them out
   # http://stackoverflow.com/questions/22140338/carriage-return-r-on-bash-script
   before_validation :remove_carriege_returns_from_file, if: :build_commands?

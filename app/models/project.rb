@@ -1,4 +1,5 @@
 class Project < ActiveRecord::Base
+  attr_accessor :about_to_be_destroyed
   TESTRIBUTOR_GEM_VERSION = '2.2.0'
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
@@ -18,7 +19,8 @@ class Project < ActiveRecord::Base
   has_many :invited_users, through: :user_invitations, class_name: 'User',
     source: :user
   has_many :project_files, dependent: :destroy
-  has_one :oauth_application, class_name: 'Doorkeeper::Application', as: :owner, dependent: :destroy
+  has_one :oauth_application, class_name: 'Doorkeeper::Application',
+    as: :owner, dependent: :destroy
   belongs_to :docker_image # This is the base image
   has_many :technology_selections
   has_many :technologies, through: :technology_selections
@@ -28,6 +30,11 @@ class Project < ActiveRecord::Base
   validate :check_user_limit, if: :user_id_changed?
 
   before_create :set_secure_random
+  # Set this flag to true in order to destroy testributor.yml and
+  # build_commands.sh which can't be deleted otherwise.
+  # Use prepend: true to guarantee that it is called before childrens'
+  # destroy methods.
+  before_destroy :set_about_to_be_destroyed, prepend: true
   # TODO: Run cron job to ensure all owners are also participants
   after_create :add_owner_to_participants
   after_create :create_build_commands_file
@@ -118,6 +125,10 @@ class Project < ActiveRecord::Base
   end
 
   private
+
+  def set_about_to_be_destroyed
+    self.about_to_be_destroyed = true
+  end
 
   # Don't let a project be assigned to a user if projects limit
   # has been reached
