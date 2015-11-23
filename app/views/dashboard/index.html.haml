@@ -12,7 +12,7 @@
 - @projects.each do |project|
   .panel.panel-default
     .panel-heading
-      %h4= link_to project.repository_name, project_path(project)
+      %h4= link_to project.owner_and_name, project_path(project)
     .panel-body
       .row
         .col-md-12.col-sm-12.col-xs-12
