@@ -101,6 +101,18 @@ class ProjectFileTest < ActiveSupport::TestCase
 
         file.valid?.must_equal true
       end
+
+      it "does not allow changing the path of this file" do
+        contents = <<-YAML
+          custom:
+            command: 'blah'
+        YAML
+        file = ProjectFile.new(path: file_path, contents: contents)
+        file.save!
+        file.path = "some_other_path"
+        file.save.must_equal false
+        file.errors[:path].must_equal ["Cannot change path for this file"]
+      end
     end
   end
 
@@ -118,6 +130,37 @@ class ProjectFileTest < ActiveSupport::TestCase
 
       YAML.load(project.generate_docker_compose_yaml).keys.
         include?("elastic_search").must_equal true
+    end
+  end
+
+  describe "testributor yaml file" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:_testributor_yml) do
+      FactoryGirl.create(:project_file, path: ProjectFile::JOBS_YML_PATH,
+                        project: project)
+    end
+
+    it "does not allow destroying" do
+      _testributor_yml.destroy.must_equal false
+      _testributor_yml.reload # it won't raise
+    end
+  end
+
+  describe "build commands file" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:build_commands) do
+      project.project_files.where(path: ProjectFile::BUILD_COMMANDS_PATH).first!
+    end
+
+    it "does not allow destroying" do
+      build_commands.destroy.must_equal false
+      build_commands.reload # it won't raise
+    end
+
+    it "does not allow changing the path" do
+      build_commands.path = "some_other_path"
+      build_commands.save.must_equal false
+      build_commands.errors[:path].must_equal ["Cannot change path for this file"]
     end
   end
 end

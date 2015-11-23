@@ -3,13 +3,13 @@ class ProjectFilesController < DashboardController
 
   def index
     @testributor_yml = current_project.
-      project_files.find_by_path(TestRun::JOBS_YML_PATH)
+      project_files.find_by_path(ProjectFile::JOBS_YML_PATH)
     redirect_to project_file_path(
       current_project, @testributor_yml) and return
   end
 
   def new
-    @project_files = current_project.project_files
+    @project_files = sorted_project_files
     @file = ProjectFile.new
     render :show
   end
@@ -27,7 +27,7 @@ class ProjectFilesController < DashboardController
 
   def show
     @file = current_project.project_files.find(params[:id])
-    @project_files = current_project.project_files
+    @project_files = sorted_project_files
   end
 
   def destroy
@@ -54,6 +54,18 @@ class ProjectFilesController < DashboardController
   end
 
   private
+  def sorted_project_files
+    current_project.project_files.sort_by do |f|
+      case f.path
+      when ProjectFile::JOBS_YML_PATH
+        0
+      when ProjectFile::BUILD_COMMANDS_PATH
+        1
+      else
+        2
+      end
+    end
+  end
 
   def file_params
     params.require(:project_file).permit(:path, :contents)

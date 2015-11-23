@@ -106,7 +106,7 @@ class ProjectWizard < ActiveRecord::Base
   private
 
   def valid_testributor_yml_contents
-    project_file = ProjectFile.new(path: TestRun::JOBS_YML_PATH,
+    project_file = ProjectFile.new(path: ProjectFile::JOBS_YML_PATH,
                                    contents: testributor_yml)
     project_file.valid?
     copy_errors(project_file.errors)

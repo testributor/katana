@@ -2,8 +2,7 @@
   %ul.nav.nav-pills.m-b-15
     - @project_files.each do |file|
       %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}
-        = link_to file.path,
-        project_file_path(current_project, file)
+        = link_to file.path, project_file_path(current_project, file)
     %li{ class: params[:id].blank? ? 'active' : ''}
       = link_to new_project_file_path(current_project) do
         %i.fa.fa-plus-circle
@@ -15,17 +14,21 @@
         .col-xs-12
           = f.text_field :path, class: 'text form-control m-b-10',
             placeholder: "Enter file name.",
-            readonly: @file.testributor_yml?
+            readonly: @file.testributor_yml? || @file.build_commands?
         .col-xs-12
           .code-edit-wrap.m-b-10
             = f.text_area :contents, class: 'text form-control code',
               placeholder: "Enter file contents"
       = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
-      - if @file.persisted? && !@file.testributor_yml?
+      - if @file.persisted? && !@file.testributor_yml? && !@file.build_commands?
         = link_to 'Destroy',
           project_file_path(current_project, @file),
           method: :delete, class: 'btn btn-danger m-l-15',
           data: { confirm: "File will be deleted. Are your sure?" }
+
+    - if @file.path == ProjectFile::BUILD_COMMANDS_PATH
+      %hr
+      = render 'build_commands_documentation'
 
 - if @file.testributor_yml?
   - content_for :in_page_js do

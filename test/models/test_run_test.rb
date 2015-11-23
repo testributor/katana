@@ -35,12 +35,12 @@ class TestRunTest < ActiveSupport::TestCase
       before do
         # project_files version
         subject.project.project_files.create(
-          path: TestRun::JOBS_YML_PATH, contents: "project_files version")
+          path: ProjectFile::JOBS_YML_PATH, contents: "project_files version")
 
         # Stub repo version
         client.stubs(:contents).
           with(subject.tracked_branch.project.repository_id,
-               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+               {path: ProjectFile::JOBS_YML_PATH, ref: subject.commit_sha}).
           returns(file)
       end
 
@@ -54,7 +54,7 @@ class TestRunTest < ActiveSupport::TestCase
         # Stub repo version
         client.stubs(:contents).
           with(subject.tracked_branch.project.repository_id,
-               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+               {path: ProjectFile::JOBS_YML_PATH, ref: subject.commit_sha}).
           returns(file)
       end
 
@@ -75,11 +75,11 @@ class TestRunTest < ActiveSupport::TestCase
       before do
         # project_files version
         subject.project.project_files.create(
-          path: TestRun::JOBS_YML_PATH, contents: contents)
+          path: ProjectFile::JOBS_YML_PATH, contents: contents)
 
         client.stubs(:contents).
           with(subject.tracked_branch.project.repository_id,
-               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+               {path: ProjectFile::JOBS_YML_PATH, ref: subject.commit_sha}).
           raises(Octokit::NotFound)
       end
 
@@ -93,7 +93,7 @@ class TestRunTest < ActiveSupport::TestCase
         # Stub repo version
         client.stubs(:contents).
           with(subject.tracked_branch.project.repository_id,
-               {path: TestRun::JOBS_YML_PATH, ref: subject.commit_sha}).
+               {path: ProjectFile::JOBS_YML_PATH, ref: subject.commit_sha}).
           raises(Octokit::NotFound)
       end
 

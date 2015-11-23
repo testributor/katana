@@ -1,6 +1,4 @@
 class TestRun < ActiveRecord::Base
-  JOBS_YML_PATH = "testributor.yml"
-
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
   has_many :test_jobs, dependent: :delete_all
@@ -45,8 +43,8 @@ class TestRun < ActiveRecord::Base
   # to self. As a result, self.errors can be used to display errors to the user
   def build_test_jobs
     yml_contents = jobs_yml
-    raise "#{JOBS_YML_PATH} not found" unless yml_contents
-    testributor_yml = ProjectFile.new(path: JOBS_YML_PATH,
+    raise "#{ProjectFile::JOBS_YML_PATH} not found" unless yml_contents
+    testributor_yml = ProjectFile.new(path: ProjectFile::JOBS_YML_PATH,
                                       contents: yml_contents)
     if testributor_yml.invalid?
       copy_errors(testributor_yml.errors)
@@ -78,7 +76,7 @@ class TestRun < ActiveRecord::Base
     true
   end
 
-  # Returns the content of JOBS_YML_PATH file. The file can either be defined
+  # Returns the content of ProjectFile::JOBS_YML_PATH file. The file can either be defined
   # in Project's files (project_files association) or it can be checked in the
   # git repository. If defined both ways the repo version wins to let the users
   # use a customized file in specific branches (e.g. if they don't want to run
@@ -92,7 +90,7 @@ class TestRun < ActiveRecord::Base
       file =
         begin
           file =
-            github_client.contents(repo, path: JOBS_YML_PATH, ref: commit_sha)
+            github_client.contents(repo, path: ProjectFile::JOBS_YML_PATH, ref: commit_sha)
 
           Base64.decode64(file.content)
         rescue Octokit::NotFound
@@ -102,7 +100,7 @@ class TestRun < ActiveRecord::Base
 
     if file.blank?
       file =
-        project.project_files.where(path: JOBS_YML_PATH).first.try(:contents)
+        project.project_files.where(path: ProjectFile::JOBS_YML_PATH).first.try(:contents)
     end
 
     file
