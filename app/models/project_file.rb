@@ -1,13 +1,26 @@
 class ProjectFile < ActiveRecord::Base
+  BUILD_COMMANDS_PATH = 'testributor_build_commands.sh'
+  JOBS_YML_PATH = "testributor.yml"
+
   belongs_to :project
 
-  validates :contents, :path, presence: true
+  # Let build_commands be empty
+  validates :contents, :path, presence: true,
+    unless: ->{ path == BUILD_COMMANDS_PATH }
   validates :path, uniqueness: { scope: :project_id }
   validate :valid_contents, if: :testributor_yml?
+  # testributor.yml and build_commands should not be deleted
   before_destroy -> { return false }, if: :testributor_yml?
+  before_destroy -> { return false }, if: :build_commands?
+  validate :prevent_path_change,
+    if: ->{ path_changed? && (path_was == JOBS_YML_PATH || path_was == BUILD_COMMANDS_PATH) }
 
   def testributor_yml?
-    path == TestRun::JOBS_YML_PATH
+    path == JOBS_YML_PATH
+  end
+
+  def build_commands?
+    path == BUILD_COMMANDS_PATH
   end
 
   private
@@ -52,5 +65,9 @@ class ProjectFile < ActiveRecord::Base
         return
       end
     end
+  end
+
+  def prevent_path_change
+    errors.add(:path, "Cannot change path for this file")
   end
 end

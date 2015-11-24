@@ -91,4 +91,13 @@ class ProjectTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe 'creation of build_commands file' do
+    it "creates a build commands file after creation" do
+      user = FactoryGirl.create(:user)
+      project = Project.create(name: "Test project", user: user)
+      project.reload.project_files.pluck(:path).
+        must_equal [ProjectFile::BUILD_COMMANDS_PATH]
+    end
+  end
 end

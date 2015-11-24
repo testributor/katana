@@ -30,6 +30,7 @@ class Project < ActiveRecord::Base
   before_create :set_secure_random
   # TODO: Run cron job to ensure all owners are also participants
   after_create :add_owner_to_participants
+  after_create :create_build_commands_file
 
   attr_accessor :fork
 
@@ -134,6 +135,10 @@ class Project < ActiveRecord::Base
   # TODO: Add tests for this
   def add_owner_to_participants
     self.members << self.user
+  end
+
+  def create_build_commands_file
+    self.project_files.create!(path: ProjectFile::BUILD_COMMANDS_PATH)
   end
 
   def set_secure_random

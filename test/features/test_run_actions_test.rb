@@ -7,7 +7,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
 
   before do
     _test_job.test_run.project.
-      project_files << FactoryGirl.create(:project_file, path: TestRun::JOBS_YML_PATH)
+      project_files << FactoryGirl.create(:project_file, path: ProjectFile::JOBS_YML_PATH)
     login_as owner, scope: :user
     visit project_branch_test_runs_path(project_id: _test_run.project.id,
                                         branch_id: _test_run.tracked_branch.id)

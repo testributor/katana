@@ -40,7 +40,7 @@ class TestRunsControllerTest < ActionController::TestCase
       }
     }.to_yaml
     project.project_files.create!(
-      path: TestRun::JOBS_YML_PATH, contents: contents)
+      path: ProjectFile::JOBS_YML_PATH, contents: contents)
     sign_in :user, project.user
     request.env["HTTP_REFERER"] = "previous_path"
   end
