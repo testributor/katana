@@ -61,6 +61,7 @@ class Capybara::Rails::TestCase
     # Stub create_webhooks! in order to disable external
     # requests
     Project.any_instance.stubs(:create_webhooks!).returns(1)
+    ActionMailer::Base.deliveries.clear
     # No javascript tests
     if Capybara.current_driver == :rack_test
       DatabaseCleaner.strategy = :transaction
