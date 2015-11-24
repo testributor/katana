@@ -17,7 +17,7 @@
             readonly: @file.testributor_yml? || @file.build_commands?
         .col-xs-12
           .code-edit-wrap.m-b-10
-            = f.text_area :contents, class: 'text form-control code',
+            = f.text_area :contents, class: 'text form-control code code-shell',
               placeholder: "Enter file contents"
       = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
       - if @file.persisted? && !@file.testributor_yml? && !@file.build_commands?
@@ -30,9 +30,10 @@
       %hr
       = render 'build_commands_documentation'
 
-- if @file.testributor_yml?
+- if @file.testributor_yml? || @file.build_commands?
   - content_for :in_page_js do
     = javascript_include_tag asset_path 'codemirror.js'
     = javascript_include_tag asset_path 'formatting.js'
+    = javascript_include_tag asset_path 'shell.js'
     = javascript_include_tag asset_path 'yaml.js'
     = javascript_include_tag asset_path 'custom.codemirror.js'

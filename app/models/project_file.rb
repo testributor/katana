@@ -9,11 +9,15 @@ class ProjectFile < ActiveRecord::Base
     unless: ->{ path == BUILD_COMMANDS_PATH }
   validates :path, uniqueness: { scope: :project_id }
   validate :valid_contents, if: :testributor_yml?
+  validate :prevent_path_change,
+    if: ->{ path_changed? && (path_was == JOBS_YML_PATH || path_was == BUILD_COMMANDS_PATH) }
+
   # testributor.yml and build_commands should not be deleted
   before_destroy -> { return false }, if: :testributor_yml?
   before_destroy -> { return false }, if: :build_commands?
-  validate :prevent_path_change,
-    if: ->{ path_changed? && (path_was == JOBS_YML_PATH || path_was == BUILD_COMMANDS_PATH) }
+  # Bash script don't play well with carriage returns so we stip them out
+  # http://stackoverflow.com/questions/22140338/carriage-return-r-on-bash-script
+  before_validation :remove_carriege_returns_from_file, if: :build_commands?
 
   def testributor_yml?
     path == JOBS_YML_PATH
@@ -69,5 +73,9 @@ class ProjectFile < ActiveRecord::Base
 
   def prevent_path_change
     errors.add(:path, "Cannot change path for this file")
+  end
+
+  def remove_carriege_returns_from_file
+    contents.gsub!(/\r/,'')
   end
 end

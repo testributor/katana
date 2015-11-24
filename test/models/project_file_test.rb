@@ -163,4 +163,16 @@ class ProjectFileTest < ActiveSupport::TestCase
       build_commands.errors[:path].must_equal ["Cannot change path for this file"]
     end
   end
+
+  describe "remove_carriege_returns_from_file" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:build_commands) do
+      project.project_files.where(path: ProjectFile::BUILD_COMMANDS_PATH).first!
+    end
+    it 'removes carriege return characters before validation' do
+      build_commands.contents = "bundle install\r\napt-get install phantomjs"
+      build_commands.valid?
+      build_commands.contents.must_equal "bundle install\napt-get install phantomjs"
+    end
+  end
 end
