@@ -1,8 +1,8 @@
-- unless test_run.status.code == TestStatus::CANCELLED
-  = link_to "Retry", retry_project_branch_test_run_path(id: test_run.id),
+- unless test_run.status.code == TestStatus::PASSED
+  = link_to "Retry", retry_project_branch_test_run_path(id: test_run.id,
+    project_id: current_project, branch_id: test_run.tracked_branch_id),
     class: 'btn btn-icon btn-success', method: :post
-
+- unless test_run.status.code.in? [TestStatus::CANCELLED, TestStatus::PASSED]
   = link_to "Cancel",
     project_branch_test_run_path(current_project, test_run.tracked_branch_id,
-    test_run,
-    status: TestStatus::CANCELLED), class: 'btn btn-primary', method: :put
+    test_run, status: TestStatus::CANCELLED), class: 'btn btn-danger', method: :put

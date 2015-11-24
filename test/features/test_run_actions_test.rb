@@ -37,7 +37,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   describe 'when a user clicks on delete button' do
     it 'must delete all test_jobs', js: true do
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
-      page.first('td .btn.btn-primary').click
+      page.first('td .btn.btn-danger').click
       TestRun.cancelled.count.must_equal 1
     end
   end

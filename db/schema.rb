@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20151122185327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "intarray"
 
   create_table "docker_images", force: :cascade do |t|
     t.string "public_name",       default: "",         null: false

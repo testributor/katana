@@ -14,6 +14,7 @@ class TestJob < ActiveRecord::Base
   validates :test_run, presence: true
 
   before_validation :set_completed_at
+  after_save :update_test_run_status
 
   scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
@@ -52,5 +53,9 @@ class TestJob < ActiveRecord::Base
       self.completed_at=
         sent_at + (worker_in_queue_seconds + worker_command_run_seconds).round.seconds
     end
+  end
+
+  def update_test_run_status
+    test_run.update_status!
   end
 end

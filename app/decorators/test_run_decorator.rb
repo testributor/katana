@@ -34,4 +34,8 @@ class TestRunDecorator < ApplicationDecorator
 
     info.html_safe
   end
+
+  def cog_color
+    test_run.failing? ? 'red' : 'green'
+  end
 end
