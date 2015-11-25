@@ -33,17 +33,12 @@ class ProjectWizardControllerTest < ActionController::TestCase
       assert_redirected_to project_wizard_path(:add_project)
     end
 
-    describe ":add_branches" do
-      let(:step) { :add_branches }
-      let(:first_step) { :add_project }
-
-      it "redirects to :add_project if client is blank" do
-        user.stubs(:github_client).returns(nil)
-        get :show, { id: step }
-
-        flash[:alert].wont_be :empty?
-        assert_redirected_to project_wizard_path(first_step)
-      end
+    it "redirects to root_path if current_user.github_client is nil" do
+      # id doesn't matter here. It could be anything
+      @controller.current_user.stubs(:github_client).returns(nil)
+      get :show, { id: :add_branches }
+      flash[:alert].wont_be :empty?
+      assert_redirected_to root_path
     end
   end
 

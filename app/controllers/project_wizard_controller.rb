@@ -30,7 +30,6 @@ class ProjectWizardController < DashboardController
     case step
     when :add_project
     when :add_branches
-      redirect_if_blank_client and return
       @branches = @project_wizard.fetch_branches
     when :configure_testributor
     when :select_technologies
@@ -89,12 +88,6 @@ class ProjectWizardController < DashboardController
   def fetch_project_wizard
     @project_wizard =
       ProjectWizard.find_or_create_by(user_id: current_user.id)
-  end
-
-  def redirect_if_blank_client
-    if current_user.github_client.blank?
-      redirect_to project_wizard_path(:add_project)
-    end
   end
 
   def selected_technologies_params
