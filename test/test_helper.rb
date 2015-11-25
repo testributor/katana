@@ -24,6 +24,9 @@ class ActionController::TestCase
   def setup
     # Clean everything in "test" redis database before each test
     Katana::Application.redis.flushdb
+    # Stub client_id with a random id so that
+    # ApplicationHelper#github_oauth_authorize_url won't break
+    Octokit.stubs(:client_id).returns("aRandomID")
 
     # Stub create_webhooks! in order to disable external
     # requests

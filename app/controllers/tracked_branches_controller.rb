@@ -39,6 +39,17 @@ class TrackedBranchesController < DashboardController
     redirect_to project_path(current_project)
   end
 
+  def destroy
+    tracked_branch = current_project.tracked_branches.find(params[:id])
+    if tracked_branch.destroy
+      flash[:notice] = "#{tracked_branch.branch_name} branch was removed"
+      redirect_to project_path(current_project)
+    else
+      flash[:alert] = "Can't remove #{tracked_branch.branch_name} branch"
+      redirect_to project_branch_path(current_project, tracked_branch)
+    end
+  end
+
   private
 
   def github_client

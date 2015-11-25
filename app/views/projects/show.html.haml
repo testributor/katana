@@ -10,11 +10,8 @@
 .panel.panel-default
   - if @branches.empty?
     .panel-heading
-
-      %h3= "No branches found for project '#{current_project.owner_and_name}'"
-      = link_to "Add a branch",
-        new_project_branch_path(current_project),
-        class: 'btn btn-primary m-l-10'
+      = render partial: "no_branches",
+        locals: { project: current_project}
   - else
     .panel-body
       .row
