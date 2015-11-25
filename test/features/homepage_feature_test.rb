@@ -15,34 +15,42 @@ class HomepageFeatureTest < Capybara::Rails::TestCase
       branches = [
         {
           commit_sha: "344ads",
-          status: TestStatus::QUEUED, name: 'queued-branch'
+          status: TestStatus::QUEUED, name: 'queued-branch',
+          commit_timestamp: 1.hour.ago
         },
         {
           commit_sha: "0f542",
-          status: TestStatus::RUNNING, name: 'running-branch'
+          status: TestStatus::RUNNING, name: 'running-branch',
+          commit_timestamp: 1.hour.ago
         },
         {
           commit_sha: "934ni",
-          status: TestStatus::PASSED, name: 'passed-branch'
+          status: TestStatus::PASSED, name: 'passed-branch',
+          commit_timestamp: 1.hour.ago
         },
         {
           commit_sha: "934ni",
-          status: TestStatus::FAILED, name: 'failed-branch'
+          status: TestStatus::FAILED, name: 'failed-branch',
+          commit_timestamp: 1.hour.ago
         },
         {
           commit_sha: "934ni",
-          status: TestStatus::ERROR, name: 'error-branch'
+          status: TestStatus::ERROR, name: 'error-branch',
+          commit_timestamp: 1.hour.ago
         },
         {
           commit_sha: "a0acl",
-          status: TestStatus::CANCELLED, name: 'cancelled-branch'
+          status: TestStatus::CANCELLED, name: 'cancelled-branch',
+          commit_timestamp: 1.hour.ago
         }
       ]
 
       branches.each do |branch|
         tracked_branch = TrackedBranch.new({branch_name: branch[:name]})
         tracked_branch.test_runs.
-          build(commit_sha: branch[:commit_sha], status: branch[:status])
+          build(commit_sha: branch[:commit_sha],
+                status: branch[:status],
+                commit_timestamp: branch[:commit_timestamp])
         project.tracked_branches << tracked_branch
       end
 
