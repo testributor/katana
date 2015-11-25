@@ -2,12 +2,15 @@ require 'test_helper'
 
 class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
   let(:_test_run) { FactoryGirl.create(:testributor_run) }
-  let(:branch) { _test_run.tracked_branch }
-  let(:project) { branch.project }
-  let(:owner) { project.user }
+  let(:_test_job) { FactoryGirl.create(:testributor_job, test_run: _test_run) }
+  let(:_project_file) { FactoryGirl.create(:testributor_job, test_run: _test_rcun) }
+  let(:owner) { _test_run.project.user }
 
   before do
-    _test_run
+    TestRun.any_instance.stubs(:project_file_names).
+      returns(['test/controllers/shitty_test.rb'])
+    _test_job.test_run.project.
+      project_files << FactoryGirl.create(:project_file, path: ProjectFile::JOBS_YML_PATH)
     login_as owner, scope: :user
   end
 
@@ -16,8 +19,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Passed"
-    find("input.btn-primary").click
-    page.must_have_content "Queued"
+    page.wont_have_selector ".btn-success"
   end
 
   it "user is able to retry a complete test_run" do
@@ -25,7 +27,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Failed"
-    find("input.btn-primary").click
+    find(".btn-success").click
     page.must_have_content "Queued"
   end
 
@@ -34,7 +36,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Error"
-    find("input.btn-primary").click
+    find(".btn-success").click
     page.must_have_content "Queued"
   end
 
@@ -43,7 +45,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Cancelled"
-    find("input.btn-primary").click
+    find(".btn-success").click
     page.must_have_content "Queued"
   end
 
@@ -52,7 +54,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Queued"
-    find("input.btn-primary").click
+    find(".btn-danger").click
     page.must_have_content "Cancelled"
   end
 
@@ -61,7 +63,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit root_path
     page.must_have_content "Running"
-    find("input.btn-primary").click
+    find(".btn-danger").click
     page.must_have_content "Cancelled"
   end
 end

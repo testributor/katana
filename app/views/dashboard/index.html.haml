@@ -46,11 +46,8 @@
                         %span{class: branch.status.try(:css_class)}
                           = branch.status.try(:text)
                       - if branch.test_runs.present?
-                        %td= button_to branch.status.cta_text,
-                          project_branch_test_run_path(project.id,
-                          branch.id, branch.try(:last_run).try(:id),
-                          status: branch.status.status_to_set),
-                          class: 'btn btn-primary', method: :put
+                        %td
+                          = render 'test_run_actions', test_run: branch.test_runs.last, current_project: project.id
                       -else
                         %td= button_to "Run branch",
                           project_branch_test_runs_path(project.id, branch.id),

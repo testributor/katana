@@ -70,4 +70,100 @@ class TestJobTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe '#update_test_run_status' do
+    let(:_test_run) { FactoryGirl.create(:testributor_run) }
+
+
+    describe 'when all testjobs have the same status' do
+      it 'updates the test run status based on the test_jobs' do
+        FactoryGirl.create_list(:testributor_job, 2, test_run: _test_run)
+        [TestStatus::QUEUED, TestStatus::PASSED,
+         TestStatus::FAILED, TestStatus::ERROR, TestStatus::CANCELLED].each do |status|
+          _test_run.test_jobs.update_all(:status => status)
+
+          _test_run.test_jobs.size.must_equal 2
+          _test_run.update_status!
+          _test_run.reload.status.code.must_equal status
+        end
+      end
+    end
+
+    describe 'when there are 2 different statuses' do
+      it 'updates to running if queued in statuses' do
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::QUEUED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
+
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal TestStatus::RUNNING
+      end
+
+      it 'updates to error if error in statuses and there is no queued' do
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
+
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal TestStatus::ERROR
+      end
+
+      it 'updates to fail if fail in statuses and there is no queued or error in statuses' do
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
+
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal TestStatus::FAILED
+      end
+    end
+
+    describe 'when there are 3 different statuses' do
+      it 'updates to running if queued in statuses' do
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::QUEUED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
+
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal TestStatus::RUNNING
+      end
+
+      it 'updates to error if error in statuses and there is no queued' do
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
+        FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
+
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal TestStatus::ERROR
+      end
+    end
+
+    describe 'when there are 4 different statuses' do
+      # Normally there should be no cancelled status in test job
+      # unless they are all cancelled but in any case eg: race condition
+      it 'updates to cancelled if cancelled in statuses' do
+        [TestStatus::QUEUED, TestStatus::FAILED,
+         TestStatus::ERROR, TestStatus::CANCELLED].each do |status|
+
+          FactoryGirl.create(:testributor_job, test_run: _test_run, status: status)
+        end
+
+        _test_run.test_jobs.size.must_equal 4
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal 5
+      end
+
+      it 'updates to running' do
+        [TestStatus::QUEUED, TestStatus::FAILED,
+         TestStatus::ERROR, TestStatus::PASSED].each do |status|
+
+          FactoryGirl.create(:testributor_job, test_run: _test_run, status: status)
+        end
+
+        _test_run.test_jobs.size.must_equal 4
+        _test_run.update_status!
+        _test_run.reload.status.code.must_equal 1
+      end
+    end
+  end
 end

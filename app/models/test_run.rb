@@ -115,6 +115,30 @@ class TestRun < ActiveRecord::Base
     github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path)
   end
 
+  def failing?
+    ([TestStatus::FAILED, TestStatus::ERROR] & test_jobs.pluck(:status)).any?
+  end
+
+  def update_status!
+    ActiveRecord::Base.connection.execute <<-SQL
+      UPDATE test_runs SET status = (
+         SELECT COALESCE (
+          CASE array_length(sub.status, 1)
+          WHEN 1 THEN status[1]
+          ELSE ( CASE WHEN #{TestStatus::CANCELLED} = ANY(sub.status) THEN #{TestStatus::CANCELLED}
+                      WHEN #{TestStatus::QUEUED} = ANY(sub.status) THEN #{TestStatus::RUNNING}
+                      WHEN #{TestStatus::ERROR} = ANY(sub.status) THEN #{TestStatus::ERROR}
+                      ELSE #{TestStatus::FAILED} END )
+          END, 0)
+        FROM (
+          SELECT uniq(array_agg(status)) status
+          FROM test_jobs
+          WHERE test_run_id = #{id}
+          GROUP BY test_run_id) sub)
+        WHERE test_runs.id = #{id}
+    SQL
+  end
+
   private
 
   # TODO: this almost the same as ProjectWizard#copy_errors. DRY

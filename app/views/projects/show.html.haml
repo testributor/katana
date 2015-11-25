@@ -24,30 +24,20 @@
                   %th Latest Run Commit
                   %th Last run
                   %th Status
-                  %th Actions
               %tbody
                 - @branches.each do |branch|
                   %tr
-                    %td= link_to branch.branch_name,
+                    %td.col-md-2
+                      = link_to branch.branch_name,
                         project_branch_test_runs_path(branch.project, branch)
-                    %td
+                    %td.col-md-5
                       - if branch.last_run
                         = branch.last_run.decorate.commit_message
                         %br
                         %i= branch.last_run.decorate.commit_info
-                    %td
+                    %td.col-md-3
                       - if branch.last_run.try(:completed_at)
                         = "#{time_ago_in_words(branch.last_run.completed_at)} ago"
-                    %td
+                    %td.col-md-2
                       %span{class: branch.status.try(:css_class)}
                         = branch.status.try(:text)
-                    - if branch.test_runs.present?
-                      %td= button_to branch.status.cta_text,
-                        project_branch_test_run_path(branch.project.id,
-                        branch.id, branch.try(:last_run).try(:id),
-                        status: branch.status.status_to_set),
-                        class: 'btn btn-primary', method: :put
-                    -else
-                      %td= button_to "Add a new run",
-                        project_branch_test_runs_path(branch.project.id, branch.id),
-                        class: 'btn btn-primary', method: :post

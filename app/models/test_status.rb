@@ -47,14 +47,14 @@ class TestStatus
   def cta_text
     case @code
     when QUEUED, RUNNING
-      "cancel"
-    else
-      "retry"
+      "Cancel"
+    when ERROR, FAILED, PASSED
+      "Retry"
     end
   end
 
   def status_to_set
-    if cta_text == "cancel"
+    if cta_text == "Cancel"
       CANCELLED
     else
       QUEUED
@@ -72,13 +72,26 @@ class TestStatus
     when QUEUED
       'label label-info'
     when RUNNING
-      'label label-running'
+      'label label-primary running'
     when PASSED
       'label label-success'
     when FAILED
       'label label-danger'
     when ERROR
-      'label label-danger'
+      'label label-pink'
     end
+  end
+
+  def button_css_class
+    case @code
+    when CANCELLED || FAILED || ERROR
+      'btn btn-success'
+    when QUEUED || RUNNING
+      'btn btn-danger'
+    end
+  end
+
+  def terminal?
+    @code.in? [ERROR, FAILED, PASSED]
   end
 end

@@ -45,7 +45,7 @@
                     - if test_job.total_running_time
                       = distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true)
                   %td
-                    - unless @run.status.code == TestStatus::CANCELLED
+                    - if test_job.status.terminal?
                       - # TODO: tracked branch and test_run nesting seems unecessary
                       - # for the test_job resource. We only need the project for
                       - # validation/authorization purposes (to let it work in the
@@ -55,7 +55,8 @@
                         test_job.test_run.tracked_branch.id,
                         test_job.test_run.id, test_job,
                         status: test_job.status.status_to_set),
-                        class: 'btn btn-primary', method: :put
+                        class: 'btn btn-success', method: :put
+
                 - if test_job.status.failed? || test_job.status.error?
                   %tr.danger
                     %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)

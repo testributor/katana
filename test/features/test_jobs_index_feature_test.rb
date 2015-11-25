@@ -33,42 +33,39 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
   let(:project) { FactoryGirl.create(:project) }
   let(:owner) { project.user }
 
-  describe "when i visit the test run page" do
-    before do
-      _test_job_passed
-      _test_job_failed
-      _test_job_error
-      _test_job_queued
-      _test_job_cancelled
-      _test_job_running
-      login_as owner, scope: :user
-      visit project_branch_test_run_path(project,
-                                         _test_run.tracked_branch_id,
-                                         _test_run)
-    end
+  before do
+    _test_job_passed
+    _test_job_error
+    _test_job_queued
+    _test_job_cancelled
+    _test_job_running
+    login_as owner, scope: :user
+    visit project_branch_test_run_path(project,
+                                       _test_run.tracked_branch_id,
+                                       _test_run)
+  end
 
-    it "displays test jobs with correct statuses and ctas", js: true do
-      job_trs = all("tr:not(.danger)")
-      cancelled = job_trs[1]
-      error = job_trs[2]
-      failed = job_trs[3]
-      passed = job_trs[4]
-      running = job_trs[5]
-      queued = job_trs[6]
+  it "displays test jobs with correct statuses and ctas" do
+    job_trs = all("tr:not(.danger)")
+    cancelled = job_trs[1]
+    error = job_trs[2]
+    failed = job_trs[3]
+    passed = job_trs[4]
+    running = job_trs[5]
+    queued = job_trs[6]
 
-      cancelled.must_have_content "Cancelled"
-      error.must_have_content "Error"
-      failed.must_have_content "Failed"
-      passed.must_have_content "Passed"
-      running.must_have_content "Running"
-      queued.must_have_content "Queued"
+    cancelled.must_have_content "Cancelled"
+    error.must_have_content "Error"
+    failed.must_have_content "Failed"
+    passed.must_have_content "Passed"
+    running.must_have_content "Running"
+    queued.must_have_content "Queued"
 
-      cancelled.find("input").value.must_equal "retry"
-      queued.find("input").value.must_equal "cancel"
-      failed.find("input").value.must_equal "retry"
-      error.find("input").value.must_equal "retry"
-      running.find("input").value.must_equal "cancel"
-      passed.find("input").value.must_equal "retry"
-    end
+    queued.all(".btn-danger").length.must_equal 0
+    running.all(".btn-danger").length.must_equal 0
+    cancelled.all(".btn-success").length.must_equal 0
+    failed.find(".btn-success").value.must_equal "Retry"
+    error.find(".btn-success").value.must_equal "Retry"
+    passed.find(".btn-success").value.must_equal "Retry"
   end
 end
