@@ -77,36 +77,63 @@ padding: 0.4em .8em;
 }
 
 .label-default {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #a1a1a1;
 }
 
 .label-primary {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #3bc0c3;
 }
 
 .label-success {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #2eb398;
 }
 
 .label-info {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #5bc0de;
 }
 
 .label-warning {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #f4984e;
 }
 
 .label-danger {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #FF6C60;
 }
 
 .label-inverse {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #344860;
 }
 .label-purple{
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #7266ba;
 }
 .label-pink{
+    box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
+    -o-box-shadow: 0 2px 2px rgba(0,0,0,0.25) inset;
     background-color: #f13c6e;
 }
 

@@ -146,7 +146,7 @@ aside.left-panel {
 
 aside.left-panel.collapsed {
   overflow: visible !important;
-  position: absolute;
+  /*position: absolute;*/
   bottom: 0px;
 }
 

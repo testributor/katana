@@ -20,35 +20,18 @@
             = render partial: "no_branches",
               locals: { project: project}
           - else
-            .table-responsive
-              %table.table
-                %thead
-                  %tr
-                    %th Branch
-                    %th Commit message (SHA)
-                    %th Last run
-                    %th Status
-                    %th Actions
-                %tbody
-                  - project.tracked_branches.each do |branch|
-                    %tr
-                      %td.col-md-2= link_to branch.branch_name,
-                          project_branch_test_runs_path(branch.project, branch)
-                      %td.col-md-4
-                        - if branch.last_run
-                          = branch.last_run.decorate.commit_message
-                          %br
-                          %i= branch.last_run.decorate.commit_info
-                      %td.col-md-2
-                        - if branch.last_run.try(:completed_at)
-                          = time_ago_in_words(branch.last_run.completed_at)
-                      %td.col-md-2
-                        %span{class: branch.status.try(:css_class)}
-                          = branch.status.try(:text)
-                      - if branch.test_runs.present?
-                        %td.col-md-2
-                          = render 'test_run_actions', test_run: branch.test_runs.last, current_project: project.id
-                      -else
-                        %td= button_to "Run branch",
-                          project_branch_test_runs_path(project.id, branch.id),
-                          class: 'btn btn-primary', method: :post
+            .row
+              - project.tracked_branches.each do |branch|
+                .col-sm-2= link_to branch.branch_name,
+                    project_branch_test_runs_path(branch.project, branch)
+                .col-sm-6
+                  - if branch.last_run
+                    = branch.last_run.decorate.commit_message
+                    %br
+                    %i= branch.last_run.decorate.commit_info
+                .col-sm-2
+                  %span{class: branch.status.try(:css_class)}
+                    = branch.status.try(:text)
+                .col-md-2
+                  - if branch.last_run.try(:completed_at)
+                    = time_ago_in_words(branch.last_run.completed_at)
