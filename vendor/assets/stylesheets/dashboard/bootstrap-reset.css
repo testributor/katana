@@ -516,6 +516,10 @@ margin-top: 0px;
 .btn-custom.btn-default:hover,.btn-custom.btn-default:active,.btn-custom.btn-default:focus{
     color: #333 !important;
 }
+
+a.btn-xs:hover {
+   text-decoration: none !important;
+}
 .btn-custom.btn-primary{
     color: #3bc0c3 !important;
 }

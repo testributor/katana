@@ -20,8 +20,8 @@
             = render partial: "no_branches",
               locals: { project: project}
           - else
-            .row
-              - project.tracked_branches.each do |branch|
+            - project.tracked_branches.each do |branch|
+              .row
                 .col-sm-2= link_to branch.branch_name,
                     project_branch_test_runs_path(branch.project, branch)
                 .col-sm-6
@@ -35,3 +35,4 @@
                 .col-md-2
                   - if branch.last_run.try(:completed_at)
                     = time_ago_in_words(branch.last_run.completed_at)
+              %hr

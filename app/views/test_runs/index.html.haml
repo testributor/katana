@@ -1,7 +1,7 @@
 - breadcrumb :tracked_branch, current_project, @tracked_branch
 
 - content_for :page_title do
-  = @tracked_branch.branch_name
+  = link_to @tracked_branch.branch_name, project_path(id: current_project.id)
 
 .panel.panel-default
   .panel-body
@@ -10,9 +10,9 @@
         .pull-right
           = link_to new_project_branch_test_run_path, method: :post,
             action: :create do
-            %button.btn.btn-icon.btn-info.w-md
-              %i.fa.fa-plus.m-r-5
-              %span= 'Add a new run'
+            %i.fa.fa-plus.m-r-5
+            %span= 'Add a new run'
+        -#
           = link_to "Destroy branch",
             project_branch_path(current_project, @tracked_branch),
             method: :delete, class: 'btn btn-danger',
@@ -31,7 +31,7 @@
               %tr
                 %td.col-md-1= link_to "##{test_run.id}",
                   project_branch_test_run_path(current_project, test_run.tracked_branch_id, test_run)
-                %td.col-md-4
+                %td.col-md-5
                   = test_run.decorate.commit_message
                   %br
                   %i= test_run.decorate.commit_info
@@ -44,5 +44,5 @@
                 %td.col-md-2
                   - if test_run.total_running_time
                     = distance_of_time_in_words(0, test_run.total_running_time, include_seconds: true)
-                %td.col-md-3
+                %td.col-md-2
                   = render partial: 'test_run_actions', locals: { test_run: test_run }

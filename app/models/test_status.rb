@@ -83,11 +83,11 @@ class TestStatus
   end
 
   def button_css_class
-    case @code
-    when CANCELLED || FAILED || ERROR
+    case
+    when @code.in?([CANCELLED, FAILED, ERROR])
       'btn btn-success'
-    when QUEUED || RUNNING
-      'btn btn-danger'
+    when @code.in?([QUEUED, RUNNING])
+      'btn btn-primary'
     end
   end
 

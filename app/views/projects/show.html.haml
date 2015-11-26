@@ -2,19 +2,20 @@
 
 - content_for :page_title do
   Branches
-
-= link_to new_project_branch_path(current_project), class: 'body-gray' do
-  %i.fa.fa-plus-circle.m-b-10
-  Add a branch
-
 .panel.panel-default
   - if @branches.empty?
     .panel-heading
+
       = render partial: "no_branches",
         locals: { project: current_project}
   - else
     .panel-body
       .row
+        .col-md-12.col-sm-12.col-xs-12
+          .pull-right
+            = link_to new_project_branch_path(current_project), class: 'body-gray' do
+              %i.fa.fa-plus-circle.m-b-10
+              Add a branch
         .col-md-12.col-sm-12.col-xs-12
           .table-responsive
             %table.table
