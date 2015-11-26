@@ -127,6 +127,7 @@ class TestRun < ActiveRecord::Base
           WHEN 1 THEN status[1]
           ELSE ( CASE WHEN #{TestStatus::CANCELLED} = ANY(sub.status) THEN #{TestStatus::CANCELLED}
                       WHEN #{TestStatus::QUEUED} = ANY(sub.status) THEN #{TestStatus::RUNNING}
+                      WHEN #{TestStatus::RUNNING} = ANY(sub.status) THEN #{TestStatus::RUNNING}
                       WHEN #{TestStatus::ERROR} = ANY(sub.status) THEN #{TestStatus::ERROR}
                       ELSE #{TestStatus::FAILED} END )
           END, 0)
