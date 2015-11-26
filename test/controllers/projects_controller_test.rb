@@ -43,19 +43,25 @@ class ProjectsControllerTest < ActionController::TestCase
 
       -> { delete :destroy, { id: project.id } }.
         must_raise ActiveRecord::RecordNotFound
+
+      Project.count.must_equal 1
     end
 
     it "destroys the project if user is the owner" do
+      Octokit::Client.any_instance.stubs(:remove_hook).returns(1)
+      delete :destroy, { id: project.id }
+
+      Project.count.must_equal 0
+    end
+
+    it "deletes the github webhook if project was destroyed" do
+      Octokit::Client.any_instance.expects(:remove_hook).once
       delete :destroy, { id: project.id }
     end
 
-    it "deletes the github webhook if it isn't used by other projects" do
-      @controller.current_user.github_client.expects(:remove_hook).never
-      delete :destroy, { id: project.id }
-    end
-
-    it "doesn't delete the github webhook if it is used by other projects" do
-      @controller.current_user.github_client.expects(:remove_hook).never
+    it "doesn't delete the github webhook if project wasn't destroyed" do
+      Project.any_instance.stubs(:destroy).returns(false)
+      Octokit::Client.any_instance.expects(:remove_hook).never
       delete :destroy, { id: project.id }
     end
 
