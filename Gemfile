@@ -20,6 +20,7 @@ gem 'bootstrap-social-rails'
 gem 'font-awesome-rails'
 gem 'exception_notification'
 gem 'gretel'
+gem 'rack-timeout'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby

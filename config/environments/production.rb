@@ -4,6 +4,15 @@ Rails.application.configure do
   # Code is not reloaded between requests.
   config.cache_classes = true
 
+  # According to the Note in the following SO answer, concurrency should be
+  # on by default when cache_classes is true. Running
+  # "heroku run rake middleware" though reveals that Rack::Lock is still there
+  # so concurrency is not enabled. Adding this option removes Rack::Lock and
+  # enables concurrency (so we make use of puma threads).
+  # http://stackoverflow.com/questions/21605318/how-can-i-serve-requests-concurrently-with-rails-4
+  # Read this too: http://tenderlovemaking.com/2012/06/18/removing-config-threadsafe.html
+  config.allow_concurrency=true
+
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.

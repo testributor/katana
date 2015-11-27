@@ -6,6 +6,10 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  # http://stackoverflow.com/questions/21605318/how-can-i-serve-requests-concurrently-with-rails-4
+  # Read this too: http://tenderlovemaking.com/2012/06/18/removing-config-threadsafe.html
+  config.allow_concurrency=true
+
   # Do not eager load code on boot.
   config.eager_load = false
 
