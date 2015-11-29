@@ -121,15 +121,37 @@ class ProjectFileTest < ActiveSupport::TestCase
 
     before do
       project.technologies.create(public_name: "Elastic search",
-        standardized_name: "elastic_search", version: '1.0.0')
+        standardized_name: "elastic_search", version: '1.0.0',
+        docker_compose_data: { alias: "elastic", environment: {
+          "PASSWORD" => "123" }
+        })
+      project.stubs(:oauth_application).
+        returns(OpenStruct.new(uid: '123', secret: '123'))
     end
 
     it "uses the standardized name of a docker image as the name in yml" do
-      project.stubs(:oauth_application).
-        returns(OpenStruct.new(uid: '123', secret: '123'))
-
       YAML.load(project.generate_docker_compose_yaml).keys.
         include?("elastic_search").must_equal true
+    end
+
+    it "adds aliases to linked images" do
+      yml = YAML.load(project.generate_docker_compose_yaml)
+      yml[project.docker_image.standardized_name]["links"].
+        include?("elastic_search:elastic").must_equal true
+    end
+
+    it "adds environment variables to technologies" do
+      yml = YAML.load(project.generate_docker_compose_yaml)
+      yml["elastic_search"]["environment"]["PASSWORD"].must_equal '123'
+    end
+
+    it "adds environment variables to base image" do
+      base = project.docker_image
+      base.docker_compose_data["environment"] = { "BASE_PASS" => "321" }
+      base.save!
+      yml = YAML.load(project.generate_docker_compose_yaml)
+      yml[project.docker_image.standardized_name]["environment"]["BASE_PASS"].
+        must_equal '321'
     end
   end
 

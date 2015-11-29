@@ -11,19 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127125226) do
+ActiveRecord::Schema.define(version: 20151128094642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "intarray"
 
   create_table "docker_images", force: :cascade do |t|
-    t.string "public_name",       default: "",         null: false
-    t.string "hub_image",         default: "",         null: false
+    t.string "public_name",         default: "",         null: false
+    t.string "hub_image",           default: "",         null: false
     t.string "standardized_name"
     t.string "version"
-    t.text   "description",       default: "",         null: false
-    t.string "type",              default: "language", null: false
+    t.text   "description",         default: "",         null: false
+    t.string "type",                default: "language", null: false
+    t.json   "docker_compose_data", default: {},         null: false
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|
