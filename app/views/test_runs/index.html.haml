@@ -9,8 +9,8 @@
       .col-md-12.col-sm-12.col-xs-12
         .pull-right
           = link_to new_project_branch_test_run_path, method: :post,
-            action: :create do
-            %i.fa.fa-plus.m-r-5
+            action: :create, class: 'body-gray' do
+            %i.fa.fa-plus-circle
             %span= 'Add a new run'
         -#
           = link_to "Destroy branch",

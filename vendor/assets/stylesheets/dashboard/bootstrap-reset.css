@@ -685,3 +685,10 @@ border: 1px solid #ddd;
 background-color: #1c2b36;
 border-color: #1c2b36;
 }
+
+td a {
+  text-decoration: underline;
+}
+td .btn {
+  text-decoration: none;
+}
