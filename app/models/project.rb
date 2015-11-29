@@ -102,6 +102,8 @@ class Project < ActiveRecord::Base
   end
 
   def generate_docker_compose_yaml
+    return false if docker_image.blank?
+
     attributes_hash = {}
 
     # Add linked images

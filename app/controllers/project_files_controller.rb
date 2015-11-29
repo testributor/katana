@@ -2,15 +2,17 @@ class ProjectFilesController < DashboardController
   include Controllers::EnsureProject
 
   def index
-    @testributor_yml = current_project.
+    testributor_yml = current_project.
       project_files.find_by_path(ProjectFile::JOBS_YML_PATH)
     redirect_to project_file_path(
-      current_project, @testributor_yml) and return
+      current_project, testributor_yml) and return
   end
 
   def new
     @project_files = sorted_project_files
     @file = ProjectFile.new
+    @docs = docs
+
     render :show
   end
 
@@ -28,6 +30,7 @@ class ProjectFilesController < DashboardController
   def show
     @file = current_project.project_files.find(params[:id])
     @project_files = sorted_project_files
+    @docs = docs
   end
 
   def destroy
@@ -65,6 +68,25 @@ class ProjectFilesController < DashboardController
         2
       end
     end
+  end
+
+  def docs
+    docs = {}
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+      fenced_code_blocks: true, disable_indented_code_blocks: true)
+
+    current_project.technologies.map do |t|
+      if t.docker_compose_data["documentation"].present?
+        docs[t.public_name] =
+          markdown.render(t.docker_compose_data["documentation"])
+      end
+    end
+    if current_project.docker_image.docker_compose_data["documentation"].present?
+      docs[current_project.docker_image.public_name] = markdown.render(
+        current_project.docker_image.docker_compose_data["documentation"])
+    end
+
+    docs
   end
 
   def file_params
