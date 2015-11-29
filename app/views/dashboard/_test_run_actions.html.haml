@@ -1,7 +1,7 @@
 - unless test_run.status.code == TestStatus::PASSED
   = link_to retry_project_branch_test_run_path(id: test_run.id,
     project_id: current_project, branch_id: test_run.tracked_branch_id),
-    class: 'btn btn-primary btn-xs m-b-5', method: :post do
+    class: 'btn btn-primary btn-xs m-b-5 m-r-5', method: :post do
     %i.fa.fa-refresh
     %span Retry
 - unless test_run.status.code.in? [TestStatus::CANCELLED, TestStatus::PASSED]
