@@ -111,7 +111,9 @@ class Project < ActiveRecord::Base
       data = technology.docker_compose_data
       image_attributes = {}
       image_attributes["image"] = technology.hub_image
-      image_attributes["environment"] = data["environment"] if data["environment"]
+      if data["environment"].present?
+        image_attributes["environment"] = data["environment"]
+      end
       attributes_hash[technology.standardized_name] = image_attributes
     end
 
