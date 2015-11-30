@@ -1,39 +1,51 @@
-.panel.panel-default
-  %ul.nav.nav-pills.m-b-15
-    - @project_files.each do |file|
-      %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}
-        = link_to file.path, project_file_path(current_project, file)
-    %li{ class: params[:id].blank? ? 'active' : ''}
-      = link_to new_project_file_path(current_project) do
-        %i.fa.fa-plus-circle
-        = 'Add file'
-  .panel.body
-    - form_path = @file.persisted? ? project_file_path(current_project, @file) : project_files_path(current_project)
-    = form_for [current_project, @file], url: form_path do |f|
-      .row
-        .col-xs-12
-          = f.text_field :path, class: 'text form-control m-b-10',
-            placeholder: "Enter file name.",
-            readonly: @file.testributor_yml? || @file.build_commands?
-        .col-xs-12
-          .code-edit-wrap.m-b-10
-            = f.text_area :contents, class: 'text form-control code code-shell',
-              placeholder: "Enter file contents"
-      = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
-      - if @file.persisted? && !@file.testributor_yml? && !@file.build_commands?
-        = link_to 'Destroy',
-          project_file_path(current_project, @file),
-          method: :delete, class: 'btn btn-danger m-l-15',
-          data: { confirm: "File will be deleted. Are your sure?" }
+%div{ class: @docs.present? ? 'col-lg-8' : 'col-xs-12' }
+  .panel.panel-default
+    %ul.nav.nav-pills.m-b-15
+      - @project_files.each do |file|
+        %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}
+          = link_to file.path, project_file_path(current_project, file)
+      %li{ class: params[:id].blank? ? 'active' : ''}
+        = link_to new_project_file_path(current_project) do
+          %i.fa.fa-plus-circle
+          = 'Add file'
+    .panel.body
+      - form_path = @file.persisted? ? project_file_path(current_project, @file) : project_files_path(current_project)
+      = form_for [current_project, @file], url: form_path do |f|
+        .row
+          .col-xs-12
+            = f.text_field :path, class: 'text form-control m-b-10',
+              placeholder: "Enter file name.",
+              readonly: @file.testributor_yml? || @file.build_commands?
+          .col-xs-12
+            .code-edit-wrap.m-b-10
+              = f.text_area :contents, class: 'text form-control code code-shell',
+                placeholder: "Enter file contents"
+        = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
+        - if @file.persisted? && !@file.testributor_yml? && !@file.build_commands?
+          = link_to 'Destroy',
+            project_file_path(current_project, @file),
+            method: :delete, class: 'btn btn-danger m-l-15',
+            data: { confirm: "File will be deleted. Are your sure?" }
 
-    - if @file.path == ProjectFile::BUILD_COMMANDS_PATH
+      - if @file.path == ProjectFile::BUILD_COMMANDS_PATH
+        %hr
+        = render 'build_commands_documentation'
+
+  - if @file.testributor_yml? || @file.build_commands?
+    - content_for :in_page_js do
+      = javascript_include_tag asset_path 'codemirror.js'
+      = javascript_include_tag asset_path 'formatting.js'
+      = javascript_include_tag asset_path 'shell.js'
+      = javascript_include_tag asset_path 'yaml.js'
+      = javascript_include_tag asset_path 'custom.codemirror.js'
+
+- if @docs.present?
+  .col-lg-4
+    .panel.panel-default
+      %h4 Help
+      The technologies you selected provide the following infomation which you might find useful.
       %hr
-      = render 'build_commands_documentation'
-
-- if @file.testributor_yml? || @file.build_commands?
-  - content_for :in_page_js do
-    = javascript_include_tag asset_path 'codemirror.js'
-    = javascript_include_tag asset_path 'formatting.js'
-    = javascript_include_tag asset_path 'shell.js'
-    = javascript_include_tag asset_path 'yaml.js'
-    = javascript_include_tag asset_path 'custom.codemirror.js'
+      - @docs.each do |name, doc|
+        %h5= name
+        = doc.html_safe
+        %hr

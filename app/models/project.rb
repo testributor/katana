@@ -102,26 +102,47 @@ class Project < ActiveRecord::Base
   end
 
   def generate_docker_compose_yaml
-    techs = {}
+    return false if docker_image.blank?
+
+    attributes_hash = {}
+
+    # Add linked images
     technologies.each_with_index do |technology, index|
-      techs.merge!({
-        technology.standardized_name => { "image" => technology.try(:hub_image) }
-      })
+      data = technology.docker_compose_data
+      image_attributes = {}
+      image_attributes["image"] = technology.hub_image
+      image_attributes["environment"] = data["environment"] if data["environment"]
+      attributes_hash[technology.standardized_name] = image_attributes
     end
 
-    language = { 'base' =>
-                 {
-                   'image' => docker_image.try(:hub_image),
-                   'command' => "/bin/bash -l -c rvm #{TESTRIBUTOR_GEM_VERSION} do testributor",
-                   'links' => techs.keys,
-                   'environment' => {
-                     'APP_ID' => oauth_application.uid,
-                     'APP_SECRET' => oauth_application.secret,
-                     'APP_URL' => "http://www.testributor.com/api/v1/"
-                   }
-                 }
-               }
-    techs.merge(language).to_yaml
+    # Now add the base image
+    base_image_attributes = {}
+    base_image_attributes["image"] = docker_image.hub_image
+    base_image_attributes["command"] = "/bin/bash -l get_and_run_testributor.sh"
+    if technologies.any?
+      base_image_attributes["links"] = technologies.map do |tech|
+        link = tech.standardized_name
+        if tech.docker_compose_data["alias"]
+          link += ":#{tech.docker_compose_data["alias"]}"
+        end
+
+        link
+      end
+    end
+    base_image_attributes["environment"] = {
+      'APP_ID' => oauth_application.uid,
+      'APP_SECRET' => oauth_application.secret,
+      'APP_URL' => "http://www.testributor.com/api/v1/"
+    }
+
+    # Merge any additional base image variables
+    if docker_image.docker_compose_data["environment"]
+      base_image_attributes["environment"].merge!(
+        docker_image.docker_compose_data["environment"])
+    end
+    attributes_hash[docker_image.standardized_name] = base_image_attributes
+
+    attributes_hash.to_yaml
   end
 
   private
