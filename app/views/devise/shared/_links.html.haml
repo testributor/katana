@@ -1,5 +1,5 @@
 %hr
-- if devise_mapping.omniauthable?
+-# - if devise_mapping.omniauthable?
   - resource_class.omniauth_providers.each do |provider|
     = link_to  omniauth_authorize_path(resource_name, provider),
       class: "btn btn-block btn-social btn-#{provider}" do
