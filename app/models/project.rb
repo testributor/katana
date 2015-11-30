@@ -118,7 +118,7 @@ class Project < ActiveRecord::Base
     # Now add the base image
     base_image_attributes = {}
     base_image_attributes["image"] = docker_image.hub_image
-    base_image_attributes["command"] = "/bin/bash get_and_run_testributor.sh"
+    base_image_attributes["command"] = "/bin/bash -l get_and_run_testributor.sh"
     if technologies.any?
       base_image_attributes["links"] = technologies.map do |tech|
         link = tech.standardized_name
