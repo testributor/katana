@@ -82,3 +82,63 @@ DockerImage.create!(
       The hostname of the database is "postgres"
     SQL
   })
+
+DockerImage.create!(
+  public_name: 'MySQL 5.7', hub_image: 'mysql:5.7',
+  type: 'technology', standardized_name: 'mysql', version: '5.7',
+  docker_compose_data: {
+    alias: "mysql",
+    environment: {
+      MYSQL_ROOT_PASSWORD: "testributor",
+      MYSQL_USER: "testributor",
+      MYSQL_PASSWORD: "testributor"
+    },
+    documentation: <<-SQL.strip_heredoc
+      The database credentials are:
+
+      - user: "testributor"
+      - password: "testributor"
+
+      The hostname of the database is "mysql"
+    SQL
+  })
+
+DockerImage.create!(
+  public_name: 'MySQL 5.6', hub_image: 'mysql:5.6',
+  type: 'technology', standardized_name: 'mysql', version: '5.6',
+  docker_compose_data: {
+    alias: "mysql",
+    environment: {
+      MYSQL_ROOT_PASSWORD: "testributor",
+      MYSQL_USER: "testributor",
+      MYSQL_PASSWORD: "testributor"
+    },
+    documentation: <<-SQL.strip_heredoc
+      The database credentials are:
+
+      - user: "testributor"
+      - password: "testributor"
+
+      The hostname of the database is "mysql"
+    SQL
+  })
+
+DockerImage.create!(
+  public_name: 'MySQL 5.5', hub_image: 'mysql:5.5',
+  type: 'technology', standardized_name: 'mysql', version: '5.5',
+  docker_compose_data: {
+    alias: "mysql",
+    environment: {
+      MYSQL_ROOT_PASSWORD: "testributor",
+      MYSQL_USER: "testributor",
+      MYSQL_PASSWORD: "testributor"
+    },
+    documentation: <<-SQL.strip_heredoc
+      The database credentials are:
+
+      - user: "testributor"
+      - password: "testributor"
+
+      The hostname of the database is "mysql"
+    SQL
+  })
