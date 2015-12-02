@@ -15,6 +15,7 @@
 //= require jquery.cookies
 //= require bootstrap
 //= require underscore
+//= require socket.io
 //= require select2
 //= require dashboard/modernizr.min
 //= require dashboard/pace.min

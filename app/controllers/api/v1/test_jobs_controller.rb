@@ -60,6 +60,8 @@ module Api
           end
 
           job.update!(job_params.merge(reported_at: Time.current))
+          Broadcaster.publish(job.test_run.redis_live_update_resource_key,
+                              { test_job: job.serialized_job }.to_json)
         end
 
         render json: { delete_test_runs:  missing_or_cancelled_test_run_ids }

@@ -1,4 +1,6 @@
 class TestRun < ActiveRecord::Base
+  # For redis_live_update_resource_key
+  include Models::RedisLiveUpdates
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
   has_many :test_jobs, dependent: :delete_all

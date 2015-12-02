@@ -67,4 +67,7 @@ Rails.application.routes.draw do
       get :fetch_repos
     end
   end
+
+  post 'live_updates/subscribe' => "live_updates#subscribe",
+    as: :live_updates_subscribe
 end
