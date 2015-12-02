@@ -134,7 +134,7 @@ class Project < ActiveRecord::Base
     base_image_attributes["environment"] = {
       'APP_ID' => oauth_application.uid,
       'APP_SECRET' => oauth_application.secret,
-      'APP_URL' => "http://www.testributor.com/api/v1/"
+      'API_URL' => "http://www.testributor.com/api/v1/"
     }
 
     # Merge any additional base image variables
