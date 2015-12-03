@@ -22,6 +22,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             committer: {
               name: 'Great Committer',
               email: 'great@committer.com',
+              date: DateTime.current
             }
           },
           author: { login: 'authorlogin' },
@@ -104,6 +105,15 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
       page.first('td .btn.btn-danger').click
       TestRun.cancelled.count.must_equal 1
+    end
+  end
+
+  describe 'when a user clicks add a new run button' do
+    it 'turns all previous test_jobs to cancelled', js: true do
+      page.must_have_content 'Queued'
+      page.find('a[action="create"]').click
+      _test_run.reload.status.code.must_equal TestStatus::CANCELLED
+      _test_run.test_jobs.pluck(:status).uniq.must_equal [TestStatus::CANCELLED]
     end
   end
 end
