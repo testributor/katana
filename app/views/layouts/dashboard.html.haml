@@ -1,11 +1,12 @@
 !!!
 %html
   %head
+    %title= brand_name
     %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
-    %title= brand_name
+    = render "layouts/favicon"
     %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
-    %link{rel: 'icon', type: "image/png", size: '16x16', href: asset_path('favicon-16x16')}
+
     = stylesheet_link_tag    'dashboard', media: 'all'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
