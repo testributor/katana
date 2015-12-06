@@ -6,6 +6,7 @@ ruby '2.2.0'
 gem 'rails', '4.2.3'
 gem 'pg'
 gem 'redis'
+gem 'handlebars_assets'
 
 gem 'wicked'
 gem 'sidekiq'
