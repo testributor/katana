@@ -43,7 +43,7 @@
           %h3
             No other users participating in this project
 
-        - if can? :manage, current_project && @invitations.any?
+        - if can?(:manage, current_project) && @invitations.any?
           %h3 Invitations
           %table.table
             %thead
