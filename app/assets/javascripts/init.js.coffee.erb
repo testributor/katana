@@ -1,5 +1,11 @@
+<% #http://stackoverflow.com/a/6951986 %>
+<% url = Katana::Application.routes.url_helpers %>
+
 window.Testributor = {
-  Config: {}
+  Config: {
+    SOCKETIO_URL: "<%= ENV['SOCKETIO_URL'] || 'http://localhost:9000' %>"
+    LIVE_UPDATES_SUBSCRIBE_URL: "<%= url.live_updates_subscribe_path %>"
+  }
   Assets: {}
   Models: {}
   Widgets: {}

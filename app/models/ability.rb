@@ -13,6 +13,8 @@ class Ability
     if project.present?
       project_owner_permissions if project.user == user
     end
+
+    live_updates_permissions
   end
 
   private
@@ -21,9 +23,21 @@ class Ability
     can :manage, project
 
     # Project owners can remove all users but themselves from a project
-    can :destroy, ProjectParticipation, project_id: project.id
+    can :manage, ProjectParticipation, project_id: project.id
     cannot :destroy, ProjectParticipation, user_id: user.id
+  end
 
-    can :manage, ProjectParticipation, project_id: project
+  def live_updates_permissions
+    can :read_live_updates, TestJob do |test_job|
+      test_job.test_run.project.members.include?(user)
+    end
+
+    can :read_live_updates, TestRun do |test_run|
+      test_run.project.members.include?(user)
+    end
+
+    can :read_live_updates, Project do |project|
+      project.members.include?(user)
+    end
   end
 end

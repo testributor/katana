@@ -9,6 +9,8 @@
 # #worker_command_run_seconds - The number of seconds it took to run the job
 #
 class TestJob < ActiveRecord::Base
+  # For redis_live_update_resource_key
+  include Models::RedisLiveUpdates
   belongs_to :test_run
 
   validates :test_run, presence: true
@@ -47,7 +49,13 @@ class TestJob < ActiveRecord::Base
     end
   end
 
+  def serialized_job
+    ActiveModel::SerializableResource.new(
+      self, serializer: InternalTestJobsSerializer).serializable_hash
+  end
+
   private
+
   def set_completed_at
     if completed_at.nil? && sent_at && worker_in_queue_seconds && worker_command_run_seconds
       self.completed_at=

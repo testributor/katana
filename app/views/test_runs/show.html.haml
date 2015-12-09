@@ -3,7 +3,8 @@
 - content_for :page_title do
   = link_to project_branch_test_runs_path do
     = "Test Run ##{@run.id}"
-.panel.panel-default
+
+.panel.panel-default{ data: { test_run_id: @run.id }}
   .panel-heading.test-run-panel-heading
     .pull-left
       %h3
@@ -32,7 +33,7 @@
                 %th='Actions'
             %tbody
               - @test_jobs.each do |test_job|
-                %tr
+                %tr{id: "test-job-#{test_job.id}"}
                   %td= test_job.command
                   %td
                     %span{class: test_job.status.css_class}= test_job.status.text
