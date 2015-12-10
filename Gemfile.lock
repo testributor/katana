@@ -235,6 +235,7 @@ GEM
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.2.0)
+    newrelic_rpm (3.14.0.305)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     oauth2 (1.0.0)
@@ -411,6 +412,7 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   mocha
+  newrelic_rpm
   oauth2
   octokit (~> 4.0)
   omniauth-github

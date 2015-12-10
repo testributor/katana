@@ -40,17 +40,18 @@ gem 'attr_encrypted'
 gem 'doorkeeper', github: 'doorkeeper-gem/doorkeeper', ref: ' f9d5e3d'
 gem 'oauth2'
 gem 'omniauth-github'
-gem 'active_model_serializers', :github => 'rails-api/active_model_serializers', :ref => '1f0886' # 0.10 rc version
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', ref: '1f0886' # 0.10 rc version
 gem 'simple_form'
 
 group :production do
   gem 'rails_12factor'
   gem 'puma'
+  gem 'newrelic_rpm'
 end
 
 group :test do
-  gem "factory_girl_rails"
-  gem "capybara"
+  gem 'factory_girl_rails'
+  gem 'capybara'
   gem 'poltergeist'
   gem 'minitest-reporters'
   gem 'minitest-rails'
