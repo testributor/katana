@@ -38,7 +38,7 @@ crumb :tracked_branch do |project, branch|
 end
 
 crumb :test_run do |project, run|
-  link "Test Run ##{run.id}", project_branch_test_run_path(project, run.tracked_branch, run)
+  link "Test Run ##{run.id}", project_test_run_path(project, run)
   parent :tracked_branch , project, run.tracked_branch
 end
 

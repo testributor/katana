@@ -42,18 +42,19 @@ Rails.application.routes.draw do
       get :docker_compose
     end
 
+    resources :test_runs, only: [:show, :update, :destroy] do
+      member do
+        post :retry
+      end
+    end
+
     resources :test_jobs, only: [] do
       put :retry
     end
 
     resources :tracked_branches, only: [:new, :create, :destroy],
       path: :branches, as: :branches do
-        resources :test_runs do
-          member do
-            post :retry
-            post :create
-          end
-        end
+        resources :test_runs, only: [:index, :create, :new]
     end
 
     resources :project_files, as: :files, path: :files, except: [:edit]

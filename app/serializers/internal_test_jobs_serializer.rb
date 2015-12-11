@@ -38,9 +38,6 @@ class InternalTestJobsSerializer < ActiveModel::Serializer
   end
 
   def retry_url
-    project_branch_test_run_test_job_path(object.test_run.tracked_branch.project,
-                                          object.test_run.tracked_branch_id,
-                                          object.test_run_id, object,
-                                         status: TestStatus::QUEUED)
+    project_test_job_retry_path(object.test_run.project, object)
   end
 end

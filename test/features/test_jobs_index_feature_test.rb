@@ -40,9 +40,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
     _test_job_cancelled
     _test_job_running
     login_as owner, scope: :user
-    visit project_branch_test_run_path(project,
-                                       _test_run.tracked_branch_id,
-                                       _test_run)
+    visit project_test_run_path(project, _test_run)
   end
 
   it "displays test jobs with correct statuses and ctas", js: true do

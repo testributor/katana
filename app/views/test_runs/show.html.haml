@@ -1,7 +1,8 @@
 - breadcrumb :test_run, current_project, @run
 
 - content_for :page_title do
-  = link_to project_branch_test_runs_path do
+  = link_to project_branch_test_runs_path(current_project,
+    @run.tracked_branch) do
     = "Test Run ##{@run.id}"
 
 .panel.panel-default{ data: { test_run_id: @run.id }}

@@ -47,8 +47,7 @@ class TestRunsControllerTest < ActionController::TestCase
 
   describe "GET#show" do
     it "returns 200" do
-      get :show,
-        { project_id: project.id, branch_id: branch.id, id: _test_run.id}
+      get :show, { project_id: project.id, id: _test_run.id}
       assert_response :ok
     end
   end
