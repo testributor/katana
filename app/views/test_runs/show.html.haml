@@ -48,17 +48,12 @@
                       = distance_of_time_in_words(0, test_job.total_running_time, include_seconds: true)
                   %td
                     - if test_job.status.terminal?
-                      - # TODO: tracked branch and test_run nesting seems unecessary
-                      - # for the test_job resource. We only need the project for
-                      - # validation/authorization purposes (to let it work in the
-                      - # same way the rest of the routes work).
-                      = link_to project_branch_test_run_test_job_path(current_project,
-                        test_job.test_run.tracked_branch.id, test_job.test_run.id, test_job,
-                        status: test_job.status.status_to_set),
+                      = link_to project_test_job_retry_path(current_project,
+                        test_job),
                         class: "btn btn-primary btn-xs m-b-5", method: :put do
                         %i.fa.fa-refresh
-                        %span= test_job.status.cta_text
+                        %span= "Retry"
 
                 - if test_job.status.failed? || test_job.status.error?
                   %tr.danger
-                    %td{ colspan: 10, style: "text-align: left" }=simple_format(test_job.result)
+                    %td{ colspan: 10, style: "text-align: left" }= simple_format(test_job.result)

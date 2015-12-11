@@ -1,18 +1,9 @@
 class TestJobsController < DashboardController
   include Controllers::EnsureProject
 
-  # Here, we use update to retry a failed test job
-  def update
-    @test_job = TestJob.find(params[:id])
-    if @test_job.update(test_job_params)
-      redirect_to :back, notice: 'Test job was successfully updated.'
-    else
-      render :edit
-    end
-  end
-  private
-
-  def test_job_params
-    params.permit(:status)
+  def retry
+    @test_job = TestJob.find(params[:test_job_id])
+    @test_job.retry!
+    redirect_to :back, notice: 'Test job was successfully updated.'
   end
 end

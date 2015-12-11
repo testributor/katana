@@ -42,6 +42,10 @@ Rails.application.routes.draw do
       get :docker_compose
     end
 
+    resources :test_jobs, only: [] do
+      put :retry
+    end
+
     resources :tracked_branches, only: [:new, :create, :destroy],
       path: :branches, as: :branches do
         resources :test_runs do
@@ -49,7 +53,6 @@ Rails.application.routes.draw do
             post :retry
             post :create
           end
-          resources :test_jobs, only: :update
         end
     end
 
