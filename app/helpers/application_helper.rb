@@ -50,4 +50,28 @@ module ApplicationHelper
       [technology.public_name, technology.id]
     end
   end
+
+  def flash_messages
+    if flash[:notice]
+      html = <<-HTML
+        <div class='alert alert-info'>
+          #{flash[:notice]}
+        </div>
+        </br>
+      HTML
+      flash_message = html.html_safe
+    end
+
+    if flash[:alert]
+      html = <<-HTML
+        <div class='alert alert-danger'>
+          #{flash[:alert]}
+        </div>
+        </br>
+      HTML
+      flash_message = html.html_safe
+    end
+
+    flash_message
+  end
 end

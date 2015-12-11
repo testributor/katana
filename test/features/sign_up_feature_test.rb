@@ -33,9 +33,8 @@ class SignUpFeatureTest < Capybara::Rails::TestCase
       end
 
       it 'displays appropriate error message' do
-        page.must_have_selector('#error_explanation',
-          text: "2 errors prohibited this user from being saved: "\
-                "Email has already been takenPassword is too short (minimum is 8 characters)")
+        page.must_have_selector('.alert.alert-danger',
+          text: "Email has already been taken")
         ActionMailer::Base.deliveries.select { |m| m.subject.match(/Confirmation/) }.
           must_be :empty?
       end
