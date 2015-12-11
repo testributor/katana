@@ -15,19 +15,22 @@ class LiveUpdatesController < ApplicationController
 
       begin
         authorize! :read_live_updates, resource
+
+        # User is authorized for this resource, therefore add socket_id to
+        # subscribers.
+        Broadcaster.subscribe(
+          params[:uid], resource.redis_live_update_resource_key
+        )
+
+        head :ok
       rescue CanCan::AccessDenied
         render json: { errors: 'Access denied' },
-          status: :unprocessable_entity and return
+          status: :unprocessable_entity
       end
     else
       render json: { errors: 'Param is not whitelisted' },
-        status: :unprocessable_entity and return
+        status: :unprocessable_entity
     end
-
-    # User is authorized for this resource, therefore add socket_id to subscribers.
-    Broadcaster.subscribe(params[:uid], klass.redis_live_update_resource_key)
-
-    head :ok
   end
 
   def whitelisted_params
