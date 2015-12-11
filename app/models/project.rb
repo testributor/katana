@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   attr_accessor :about_to_be_destroyed
-  TESTRIBUTOR_GEM_VERSION = '2.2.0'
+
+  include Models::RedisLiveUpdates
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
 
