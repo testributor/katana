@@ -16,7 +16,7 @@
           = link_to project_path(current_project) do
             %i.fa.fa-dashboard
             %span.nav-label= current_project.name
-        %li{ class: current_page?(project_files_path(current_project)) ? 'active' : nil }
+        %li{ class: controller_name == 'project_files' ? 'active' : nil }
           = link_to project_files_path(current_project) do
             %i.fa.fa-folder-open
             %span.nav-label Files
