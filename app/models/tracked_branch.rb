@@ -1,4 +1,5 @@
 class TrackedBranch < ActiveRecord::Base
+  OLD_RUNS_LIMIT = 20
   belongs_to :project
   has_many :test_runs, dependent: :destroy
   # TODO : Write tests for this validation
@@ -6,6 +7,27 @@ class TrackedBranch < ActiveRecord::Base
 
   delegate :status, :total_running_time, :commit_sha, to: :last_run,
     allow_nil: true
+
+  def self.cleanup_old_runs
+    # TODO:
+    # This query is going to become heavy at some point in time.
+    # In order to easy the pain, we can add a cleanup hook on the
+    # after_create of TestRuns.
+    branches_to_cleanup = TrackedBranch.joins(:test_runs).
+      group("tracked_branches.id").having("COUNT(*) > #{OLD_RUNS_LIMIT}")
+
+    branches_to_cleanup.find_each do |tracked_branch|
+      tracked_branch.cleanup_old_runs
+    end
+  end
+
+  def cleanup_old_runs
+    test_runs_to_delete_count = test_runs.count - OLD_RUNS_LIMIT
+    if test_runs_to_delete_count > 0
+      test_runs.order("created_at ASC").
+        limit(test_runs_to_delete_count).destroy_all
+    end
+  end
 
   def last_run
     test_runs.sort_by(&:created_at).last

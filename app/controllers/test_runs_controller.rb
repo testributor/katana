@@ -5,6 +5,8 @@ class TestRunsController < DashboardController
 
   def index
     @tracked_branch = current_user.tracked_branches.find(params[:branch_id])
+    @test_runs = @tracked_branch.test_runs.
+      limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
   end
 
   def show

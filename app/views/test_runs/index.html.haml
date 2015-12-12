@@ -27,7 +27,7 @@
               %th= "Total run time"
               %th= "Actions"
           %tbody
-            - @tracked_branch.test_runs.order("created_at DESC").each do |test_run|
+            - @test_runs.each do |test_run|
               %tr
                 %td.col-md-1= link_to "##{test_run.id}",
                   project_test_run_path(current_project, test_run)

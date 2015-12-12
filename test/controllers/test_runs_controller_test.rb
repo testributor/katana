@@ -45,6 +45,22 @@ class TestRunsControllerTest < ActionController::TestCase
     request.env["HTTP_REFERER"] = "previous_path"
   end
 
+  describe "GET#index" do
+    it "doesn't allow more than OLD_RUNS_LIMIT TestRuns to be displayed" do
+      old_runs_count = TrackedBranch::OLD_RUNS_LIMIT
+      FactoryGirl.create_list(:testributor_run,
+                              old_runs_count,
+                              tracked_branch: branch)
+      oldest_run = FactoryGirl.create(:testributor_run,
+                                      tracked_branch: branch,
+                                      created_at: 20.days.ago)
+      get :index, { project_id: project.id, branch_id: branch.id }
+
+      assigns[:test_runs].map(&:id).wont_include oldest_run.id
+      assert_select "tbody tr", old_runs_count
+    end
+  end
+
   describe "GET#show" do
     it "returns 200" do
       get :show, { project_id: project.id, id: _test_run.id}
