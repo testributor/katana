@@ -1,0 +1,88 @@
+.hero {
+  background-color: #383861;
+}
+
+.main-text {
+  margin-top: 40px;
+  color: white;
+  font-size: 20px;
+  line-height: 1.9;
+}
+
+.inner-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: white;
+}
+
+.main-link {
+  color: white;
+  text-decoration: underline;
+  &:hover, &:focus, &:active {
+    color: white;
+  }
+}
+
+.hero .main-title {
+  font-weight: bold;
+  font-size: 65px;
+  margin: 50px 0 0 0;
+  @media screen and (max-width: 1024px) {
+    font-size: 52px;
+    margin-top: 30px;
+  }
+}
+
+.features-image {
+  margin-top: 120px;
+  margin-left: 20px;
+}
+
+.feature-list {
+  font-size: 25px;
+  margin-top: 40px;
+  li {
+    margin-top: 28px;
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 25px;
+    margin-top: 30px;
+    li {
+      margin-top: 20px;
+    }
+  }
+}
+
+
+.cta-container {
+  margin-top: 70px;
+}
+
+.features {
+  background-color: #5A5A9A;
+
+  .main-title {
+    @media screen and (max-width: 1024px) {
+      font-size: 52px;
+      margin-top: 30px;
+    }
+  }
+}
+
+.btn-tb-primary {
+  border: 2px solid white;
+  font-weight: bold;
+  color: white;
+}
+
+html, body {
+  background-color: #383861;
+}
+
+.panel.panel-primary.panel-color {
+  border: 1px solid #7F7FD8;
+}
+
+.panel.panel-primary .panel-heading {
+  background-color: #4F4F86;
+}

@@ -1,0 +1,44 @@
+%header
+  %section.hero
+    .container
+      .row.nav-wrapper
+        %nav.navbar.navbar-custom
+          .container-fluid
+            .navbar-header
+              %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+                %span.sr-only Toggle navigation
+                %span.icon-bar
+                %span.icon-bar
+                %span.icon-bar
+              = link_to root_path do
+                %div.navbar-brand.text-right-logo
+                  %img{alt: "logo", src: image_path("logo.png")}
+                  %h2 Testributor
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse
+              %ul.nav.navbar-nav.navbar-right
+                %li
+                  %a.btn.btn-custom{href: new_user_session_path} Log in
+                %li
+                  %a.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+          .col-xs-10.col-xs-offset-1
+            %h1.main-title{style: 'margin-bottom: 80px;'}
+              Frequently Asked Questions (FAQs)
+            %h2 What are the supported technologies?
+            %p.inner-text
+              We are working very hard to make the Testributor a stable and
+              reliable service that will never let you down. Towards this end,
+              we strive to test ourselves as many as possible platforms and
+              technology combinations as we can. So far, we promise that
+              Testributor can run anything that is built on:
+            %ul
+              %li Ruby (MRI) 1.9.3, 2.0.0, 2.1.4, 2.1.5, 2.2.0, 2.2.1
+              %li PostgreSQL 9.3, 9.4
+              %li MySQL 5.5, 5.6, 5.7
+              %li Redis 2.6, 2.8, 3.0
+            %p.inner-text We will update this list regularly.
+            %h2 What is a worker?
+            %p.inner-text
+              A worker is a
+            %h2 What does zero configuration mean?
+            %p.inner-text
+              Lorem ipsum.

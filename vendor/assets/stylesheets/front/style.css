@@ -76,21 +76,6 @@ p {
   margin-left: 15px;
   font-weight: 700;
 }
-#macbook {
-  background: image-url("mac.png");
-  width: 967px;
-  height: 484px;
-  margin: 0px auto;
-  margin-top: 50px;
-}
-#tour {
-  margin: 0 auto;
-  width: 652px;
-  height: 432px;
-  position: relative;
-  top: 22px;
-  left: -4px;
-}
 .carousel-indicators li {
   border: 1px solid #333b4d;
 }
@@ -341,29 +326,6 @@ ul.social-icons li a i {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
-}
-@media screen and (max-width: 1024px) {
-  #macbook {
-    width: 750px;
-    height: 395px;
-    background-size: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: -20px;
-    position: static;
-  }
-  #tour {
-    width: 518px;
-    height: 330px;
-    top: 18px;
-  }
-  #tour .carousel-inner img {
-    width: 518px;
-    height: 330px;
-  }
-  .jumbotron {
-    margin-bottom: 1em;
-  }
 }
 @media screen and (max-width: 768px) {
   #macbook {

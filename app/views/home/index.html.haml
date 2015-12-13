@@ -1,5 +1,5 @@
 %header
-  %section.hero
+  %section.hero.slide
     .container
       .row.nav-wrapper
         %nav.navbar.navbar-custom
@@ -17,126 +17,71 @@
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
               %ul.nav.navbar-nav.navbar-right
                 %li
-                  %a{href: "#how"} How it works
+                  %a.btn.btn-custom{href: new_user_session_path} Log in
                 %li
-                  %a{href: "#features"} Features
-                %li
-                  %a{href: "#pricing"} Pricing
-                %li
-                  %a{href: "#clients"} Clients
-                %li
-                  %a{href: new_user_session_path} Log In
-      .row.hero-content.text-center
-        %h1 Testributor - Optimized for developer productivity
-        #macbook
-          #tour.carousel.slide{"data-ride" => "carousel"}
-            / Indicators
-            %ol.carousel-indicators
-              %li.active{"data-slide-to" => "0", "data-target" => "#tour"}
-              %li{"data-slide-to" => "1", "data-target" => "#tour"}
-              %li{"data-slide-to" => "2", "data-target" => "#tour"}
-            .carousel-inner
-              .item.active
-                %img{alt: "slide-img", src: image_path("stock1.jpg")}
-              .item
-                %img{alt: "slide-img", src: image_path("stock2.jpg")}
-              .item
-                %img{alt: "slide-img", src: image_path("stock3.jpg")}
+                  %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+      .row.hero-content{style: 'margin-top: 30px'}
+        .col-xs-10.col-xs-offset-1
+          %h1.main-title Testing, as it should be
+          %p.main-text
+            If you are a programmer, you are probably familiar with the joys of
+            code testing. You are probably also aware that, in the real world,
+            test suites can get really big. The bigger and the more complete
+            the test suites are, the more substantial the time penalty that
+            programmers experience is. We are a humble team of programmers who
+            had to deal with exactly this pain as yourself, but no more.
+          %p.main-text
+            We created Testributor - an online service that aspires to help you
+            with the time consuming aspect of running testing. Testributor will
+            help you to magically slice up your suite and transparently run all
+            its “pieces” in parallel, on your computers or ours. In addition,
+            we are giving you a beautiful web UI, which is engineered with
+            simplicity in mind, to let you monitor your suite statuses and
+            track your breaking tests effortlessly.
+          .cta-container
+            %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path, style: 'padding: 25px 65px;font-size: 20px;'} Sign up for beta
 
-%section#how.section.features
-  .container.text-center
-    .row
-      .col-sm-12
-        %h2.title How It Works ?
-        %p.slogan Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.
-    .row.pt80
-      .col-sm-4
-        .features-2
-          %img{alt: "", src: image_path("drawing-tablet.png")}
-        %div
-          %h3 Responsive Design
-          %p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      .col-sm-4
-        .features-2
-          %img{alt: "", src: image_path("code-window.png")}
-        %div
-          %h3 Clean Code
-          %p Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.Ut enim ad minim veniam, quis.
-      .col-sm-4
-        .features-2
-          %img{alt: "", src: image_path("clock.png")}
-        %div
-          %h3 Easy Customize
-          %p Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Ut enim ad minim veniam.
-%section#features.content-wrap.bg-light.section.pb0
-  .container
-    .row
-      .col-sm-6
-        .feature-sec
-          %h3 Inbox &amp; Contact-list App
-          %p Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae. Vivamus eu sollicitudin lacus, nec ultricies lorem.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed feugiat arcu ut orci porta, eget porttitor felis suscipit. Sed a nisl ullamcorper, tempus augue at, rutrum lacus.
-          %a.use-btn.btn-primary{href: "#"} Get Started
-      .col-sm-6.featured-img
-        %img.img-responsive{alt: "Features-img", src: image_path("screen-3.png")}
-%section#pricing.section
-  .container
-    .row.text-center
-      .col-sm-12
-        %h2.title Simple Pricing
-        %p.slogan Work on joint projects. Access time entries of your fellow team members and run reports for the entire team.
-    .row.pt80
-      .col-md-10.col-md-offset-1
-        .row
-          .col-sm-4
-            .price_card.text-center
-              .header.bg-info
-                %span.price $10
-                %span.name Starter Pack
-              %ul.price-features
-                %li 5 Projects
-                %li 1 GB Storage
-                %li No Domain
-                %li 1 User
-              %button.btn.btn-info.w-md Sign Up
-          .col-sm-4
-            .price_card.text-center
-              .header.bg-pink
-                %span.price $20
-                %span.name Professional Pack
-              %ul.price-features
-                %li 15 Projects
-                %li 5 GB Storage
-                %li 2 Domain
-                %li 10 User
-              %button.btn.btn-pink.w-md Sign Up
-            %span.tip * Most popular!
-          .col-sm-4
-            .price_card.text-center
-              .header.bg-purple
-                %span.price $30
-                %span.name Enterprise Pack
-              %ul.price-features
-                %li Unlimited Projects
-                %li 10 GB Storage
-                %li 10 Domain
-                %li 100 User
-              %button.btn.btn-purple.w-md Sign Up
-%section#clients.bg-light.section
-  .container
-    .row.text-center
-      .col-sm-12
-        %h2.title Trusted by Thousands
-        %p.slogan Lorem ipsum dolor sit amet, consectetur adipis.
-        %ul.list-inline.client-list.pt40
-          %li
-            %a{href: "", title: "Microsoft"}
-              %img{alt: "clients", src: image_path("clients/microsoft.png")}
-          %li
-            %a{href: "", title: "Google"}
-              %img{alt: "clients", src: image_path("clients/google.png")}
-          %li
-            %a{href: "", title: "Instagram"}
-              %img{alt: "clients", src: image_path("clients/instagram.png")}
-          %li
-            %a{href: "", title: "Converse"}
-              %img{alt: "clients", src: image_path("clients/converse.png")}
+  %section.features.hero.slide
+    .container
+      .row
+        .col-xs-10.col-xs-offset-1
+          %h2.main-title Features
+          %ul.feature-list
+            %li Runs your tests in parallel batches with smart distribution
+            %li You are in charge of how your test suite is sliced up
+            %li Utilise your spare CPU cores to easily run your own workers
+            %li Set up your private workers with near-zero configuration
+            %li Opt for completely hassle-free managed cloud workers(coming soon)
+            %li Slick, beautiful web based UI
+            %li Re-run your individual breaking tests with a single click
+            %li Smart noise-free notification system (coming soon)
+            %li
+              Architectured using <a class='main-link' href="https://www.docker.com/what-docker">
+              Docker</a> technology to support
+              a limitless range of dependencies
+
+  %section.hero.slide
+    .container
+      .row
+        .col-xs-10.col-xs-offset-1
+          %h2{style: 'margin-top: 80px; font-size: 65px; font-weight: bold;'} Beta Terms
+          %p.main-text
+            There are a few simple things we would like you know about before
+            signing up. Testributor is going to be in Beta phase for a
+            few weeks. What does this mean? Basically, it means that every now
+            and then you may hit a few bumps while running your tests. Fear not
+            though. We are here to help  everything you come across. In fact,
+            we do count a lot on your feedback and we want you to report to us
+            every small or big problem you encounter.
+            Of course, we want to give you something in return.
+          %p.main-text
+            Every <strong>verified</strong> account that will open
+            during the Beta period will be eligible for a totally free, special
+            plan, when we come out of the Beta! The only thing you have to do is
+            just use the Testributor service and set up your worker(s) and run
+            <strong>at least one</strong> of your test suites. We are confident that you will
+            love it! Check our list of
+            = link_to "supported technologies.", pages_path('faqs'), class: 'main-link'
+            to make sure that you have a smoother experience.
+          .cta-container
+            %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path, style: 'padding: 25px 65px;font-size: 20px;'} Sign up for beta
