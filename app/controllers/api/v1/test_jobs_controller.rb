@@ -9,7 +9,7 @@ module Api
         # Calculate workload and the number of queued or running jobs.
         # We try to equally distribute the load so we only send
         # workload / active_workers number of when jobs are requested.
-        workload = current_project.test_jobs.joins(:test_run).
+        workload = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
           where(status: [TestStatus::RUNNING,TestStatus::QUEUED]).count
 
