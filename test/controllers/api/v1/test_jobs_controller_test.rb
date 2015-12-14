@@ -14,7 +14,6 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
   let(:token) do
     token = MiniTest::Mock.new
     token.expect(:application, application)
-    token.expect(:update_column, true, [:last_used_at, Time])
     token.expect(:acceptable?, true, [Doorkeeper::OAuth::Scopes])
   end
 

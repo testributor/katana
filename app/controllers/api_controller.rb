@@ -14,8 +14,6 @@ class ApiController < ActionController::Base
     "project_#{current_project.id}_worker_#{uuid}" if uuid
   end
 
-  #TODO: doorkeeper_token.update_column(:last_used_at, Time.current)
-  #remove last_used_at from tokens ?
   def worker_report
     return false unless worker_uuid
 
