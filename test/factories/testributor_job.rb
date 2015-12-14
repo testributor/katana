@@ -9,5 +9,17 @@ FactoryGirl.define do
     count 0
     assertions 0
     skips 0
+
+    trait :failed do
+      status TestStatus::FAILED
+    end
+
+    trait :error do
+      status TestStatus::ERROR
+    end
+
+    trait :cancelled do
+      status TestStatus::CANCELLED
+    end
   end
 end

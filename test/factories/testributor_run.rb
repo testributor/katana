@@ -12,5 +12,17 @@ FactoryGirl.define do
     commit_committer_email 'test@example.com'
     commit_committer_username 'donaldduck'
     status 0
+
+    trait :failed do
+      status TestStatus::FAILED
+    end
+
+    trait :error do
+      status TestStatus::ERROR
+    end
+
+    trait :cancelled do
+      status TestStatus::CANCELLED
+    end
   end
 end
