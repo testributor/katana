@@ -30,7 +30,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       status: TestStatus::CANCELLED)
   end
   let(:_test_run) { _test_job_failed.test_run }
-  let(:project) { FactoryGirl.create(:project) }
+  let(:project) { _test_run.project }
   let(:owner) { project.user }
 
   before do
