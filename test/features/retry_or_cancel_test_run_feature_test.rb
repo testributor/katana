@@ -30,14 +30,15 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     login_as owner, scope: :user
   end
 
-  it "user won't be able to retry a successful test_run" do
+  it "user is be able to retry a successful test_run" do
     _test_job.update_column(:status, TestStatus::PASSED)
     _test_job.reload
     _test_run.update_column(:status, TestStatus::PASSED)
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Passed"
-    page.wont_have_selector ".btn-primary"
+    find(".btn-primary").click
+    page.must_have_content "Queued"
   end
 
   it "user is able to retry a failed test_run", js: true do
@@ -62,15 +63,14 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     page.must_have_content "Queued"
   end
 
-  it "user is able to retry a cancelled test_run" do
+  it "user won't be able to retry a cancelled test_run" do
     _test_job.update_column(:status, TestStatus::CANCELLED)
     _test_job.reload
     _test_run.update_column(:status, TestStatus::CANCELLED)
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Cancelled"
-    find(".btn-primary").click
-    page.must_have_content "Queued"
+    page.wont_have_selector ".btn-primary"
   end
 
   it "user is able to cancel a queued test_run" do
