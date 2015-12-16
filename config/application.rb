@@ -32,5 +32,13 @@ module Katana
     config.active_record.raise_in_transactional_callbacks = true
 
     config.active_job.queue_adapter = :sidekiq
+
+    config.middleware.use Rack::Attack
+    ActiveSupport::Notifications.subscribe('rack.attack') do |name, start, finish, request_id, req|
+      if req.env["rack.attack.match_type"] == :throttle
+        Rails.logger.info "Throttled request from #{req.ip}. Data: " +
+          req.env['rack.attack.throttle_data'].to_s
+      end
+    end
   end
 end

@@ -23,6 +23,7 @@ gem 'exception_notification'
 gem 'gretel'
 gem 'rack-timeout'
 gem 'redcarpet'
+gem 'rack-attack'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
