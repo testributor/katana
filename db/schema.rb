@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217141633) do
+ActiveRecord::Schema.define(version: 20151217152635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20151217141633) do
     t.decimal  "worker_in_queue_seconds",    precision: 10, scale: 6
     t.decimal  "worker_command_run_seconds", precision: 10, scale: 6
     t.datetime "reported_at"
+    t.decimal  "avg_worker_command_run_seconds", precision: 10, scale: 6
   end
 
   create_table "test_runs", force: :cascade do |t|

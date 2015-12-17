@@ -3,7 +3,7 @@ class TestRun < ActiveRecord::Base
   include Models::RedisLiveUpdates
   belongs_to :tracked_branch
   has_one :project, through: :tracked_branch
-  has_many :test_jobs, dependent: :delete_all
+  has_many :test_jobs, dependent: :delete_all, inverse_of: :test_run
 
   delegate :completed_at, to: :last_file_run, allow_nil: true
 

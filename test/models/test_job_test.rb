@@ -24,6 +24,44 @@ class TestJobTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#set_avg_worker_command_run_seconds" do
+    let(:_test_run) do
+      FactoryGirl.create(:testributor_run, commit_sha: '3333',
+                         sha_history: ['3333', '2222', '1111', '0000'])
+    end
+
+    let(:previous_run) do
+      FactoryGirl.create(:testributor_run, commit_sha: '1111',
+                         tracked_branch: _test_run.tracked_branch)
+    end
+
+    let(:most_relevant_job) do
+      FactoryGirl.create(:testributor_job, test_run: previous_run,
+        command: "and conquer", worker_command_run_seconds: 400)
+    end
+
+    subject do
+      FactoryGirl.create(:testributor_job, test_run: _test_run,
+                         command: "and conquer")
+    end
+
+    it "sets average to worker_command_run_seconds when there is no relevant job" do
+      subject.worker_command_run_seconds = 123
+      subject.valid?
+      subject.avg_worker_command_run_seconds.must_equal 123
+    end
+
+    it "sets average to the weighted avg when there is a relevant job" do
+      most_relevant_job
+
+      subject.worker_command_run_seconds = 123
+      subject.valid?
+      subject.avg_worker_command_run_seconds.to_d.must_equal(
+        (400 * TestJob::NUMBER_OF_SIGNIFICANT_RUNS + 123) /
+          (TestJob::NUMBER_OF_SIGNIFICANT_RUNS + 1).to_d)
+    end
+  end
+
   describe "#most_relevant_job" do
     let(:_test_run) do
       FactoryGirl.create(:testributor_run, commit_sha: '3333',
