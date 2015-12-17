@@ -70,6 +70,13 @@ class TestJob < ActiveRecord::Base
     save!
   end
 
+  # test_run.most_relevant_run => matching command job
+  def most_relevant_job
+    return nil unless (test_run && (most_relevant_run = test_run.most_relevant_run))
+
+    most_relevant_run.test_jobs.detect{|j| j.command == command}
+  end
+
   private
 
   def set_completed_at
