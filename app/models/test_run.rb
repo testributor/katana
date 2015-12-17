@@ -157,6 +157,13 @@ class TestRun < ActiveRecord::Base
       sort_by{|test_run| sha_history.index(test_run.commit_sha)}.first
   end
 
+  # Return the previous_run or the last TestRun on the same project if no
+  # previous_run could be found
+  def most_relevant_run
+    previous_run || project.test_runs.where("test_runs.id != ?", self.id).
+      order("created_at DESC").first
+  end
+
   private
 
   # TODO: this almost the same as ProjectWizard#copy_errors. DRY

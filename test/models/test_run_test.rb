@@ -53,6 +53,51 @@ class TestRunTest < ActiveSupport::TestCase
     end
   end
 
+  describe "most_relevant_run" do
+    let(:branch) { FactoryGirl.create(:tracked_branch) }
+
+    subject do
+      FactoryGirl.create(:testributor_run, tracked_branch: branch,
+        commit_sha: '3333', sha_history: ['3333', '2222', '1111', '0000'])
+    end
+
+    let(:most_recent_non_previous_run) do
+      FactoryGirl.create(:testributor_run, tracked_branch: branch,
+        commit_sha: 'nothing_to_do_with_the_history_sha')
+    end
+
+    before { most_recent_non_previous_run }
+
+    describe "when there are previous TestRuns that match the history" do
+      let(:previous_run) do
+        FactoryGirl.create(:testributor_run, tracked_branch: branch,
+          commit_sha: '1111')
+      end
+
+      before do
+        Timecop.travel(1.month.ago) { previous_run }
+      end
+
+      it "returns the first match even when more recent exist" do
+        subject.most_relevant_run.must_equal previous_run
+      end
+    end
+
+    describe "when there are not previous TestRuns that match the history" do
+      it "returns the most recent run" do
+        subject.most_relevant_run.must_equal most_recent_non_previous_run
+      end
+
+      describe "when there are no TestRuns at all" do
+        before { most_recent_non_previous_run.destroy }
+
+        it 'returns nil' do
+          subject.most_relevant_run.must_be :nil?
+        end
+      end
+    end
+  end
+
   describe "retry?" do
     subject { FactoryGirl.build(:testributor_run) }
 
