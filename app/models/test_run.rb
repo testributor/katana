@@ -149,6 +149,14 @@ class TestRun < ActiveRecord::Base
       read_attribute(:status))
   end
 
+  # For the SHAs in sha_history, this method returns the first matching TestRun.
+  # This is the most relevant commit we have already run so it will be used
+  # as a statistic for TestJob costs.
+  def previous_run
+    project.test_runs.where(commit_sha: sha_history[1..-1]).
+      sort_by{|test_run| sha_history.index(test_run.commit_sha)}.first
+  end
+
   private
 
   # TODO: this almost the same as ProjectWizard#copy_errors. DRY

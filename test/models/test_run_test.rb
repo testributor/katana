@@ -17,6 +17,42 @@ class TestRunTest < ActiveSupport::TestCase
     end
   end
 
+  describe "previous_run" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:branch_1) { FactoryGirl.create(:tracked_branch, project: project) }
+    let(:branch_2) { FactoryGirl.create(:tracked_branch, project: project) }
+
+    subject do
+      FactoryGirl.create(:testributor_run, tracked_branch: branch_1,
+        commit_sha: '3333', sha_history: ['3333', '2222', '1111', '0000'])
+    end
+
+    describe "when there are previous TestRuns that match the history" do
+      let(:previous_run) do
+        FactoryGirl.create(:testributor_run, tracked_branch: branch_2,
+          commit_sha: '1111')
+      end
+      let(:older_commit_previous_run) do
+        FactoryGirl.create(:testributor_run, tracked_branch: branch_1,
+          commit_sha: '0000')
+      end
+      before do
+        older_commit_previous_run
+        previous_run
+      end
+
+      it "returns the first match" do
+        subject.previous_run.must_equal previous_run
+      end
+    end
+
+    describe "when there are not previous TestRuns that match the history" do
+      it "returns nil" do
+        subject.previous_run.must_equal nil
+      end
+    end
+  end
+
   describe "retry?" do
     subject { FactoryGirl.build(:testributor_run) }
 
