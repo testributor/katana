@@ -1,5 +1,5 @@
 %header
-  %section.hero.slide
+  %section.top-section
     .container
       .row.nav-wrapper
         %nav.navbar.navbar-custom
@@ -20,7 +20,7 @@
                   %a.btn.btn-custom{href: new_user_session_path} Log in
                 %li
                   %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
-      .row.hero-content{style: 'margin-top: 30px'}
+      .row.hero-content
         .col-xs-10.col-xs-offset-1
           %h1.main-title Testing, as it should be
           %p.main-text
@@ -39,15 +39,15 @@
             simplicity in mind, to let you monitor your suite statuses and
             track your breaking tests effortlessly.
           .cta-container
-            %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path, style: 'padding: 25px 65px;font-size: 20px;'} Sign up for beta
+            %a.btn-cta.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign up for beta
 
-  %section.features.hero.slide
+  %section.features
     .container
-      .row
+      .row.hero-content
         .col-xs-10.col-xs-offset-1
           %h2.main-title Features
           %ul.feature-list
-            %li Runs your tests in parallel batches with smart distribution
+            %li Run your tests in parallel batches with smart distribution
             %li You are in charge of how your test suite is sliced up
             %li Utilise your spare CPU cores to easily run your own workers
             %li Set up your private workers with near-zero configuration
@@ -60,11 +60,11 @@
               Docker</a> technology to support
               a limitless range of dependencies
 
-  %section.hero.slide
+  %section
     .container
-      .row
+      .row.hero-content
         .col-xs-10.col-xs-offset-1
-          %h2{style: 'margin-top: 80px; font-size: 65px; font-weight: bold;'} Beta Terms
+          %h2.main-title Beta Terms
           %p.main-text
             There are a few simple things we would like you know about before
             signing up. Testributor is going to be in Beta phase for a
@@ -84,4 +84,4 @@
             = link_to "supported technologies.", pages_path('faqs'), class: 'main-link'
             to make sure that you have a smoother experience.
           .cta-container
-            %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path, style: 'padding: 25px 65px;font-size: 20px;'} Sign up for beta
+            %a.btn-cta.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign up for beta

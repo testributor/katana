@@ -1,82 +1,78 @@
-.hero {
-  background-color: #383861;
-}
-
-.main-text {
-  margin-top: 40px;
-  color: white;
-  font-size: 20px;
-  line-height: 1.9;
-}
-
-.inner-text {
-  font-size: 15px;
-  line-height: 1.9;
-  color: white;
-}
-
-.main-link {
-  color: white;
-  text-decoration: underline;
-  &:hover, &:focus, &:active {
-    color: white;
-  }
-}
-
-.hero .main-title {
-  font-weight: bold;
-  font-size: 65px;
-  margin: 50px 0 0 0;
-  @media screen and (max-width: 1024px) {
-    font-size: 52px;
-    margin-top: 30px;
-  }
-}
-
-.features-image {
-  margin-top: 120px;
-  margin-left: 20px;
-}
-
-.feature-list {
-  font-size: 25px;
-  margin-top: 40px;
-  li {
-    margin-top: 28px;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 25px;
-    margin-top: 30px;
-    li {
-      margin-top: 20px;
-    }
-  }
-}
-
-
-.cta-container {
-  margin-top: 70px;
-}
-
-.features {
-  background-color: #5A5A9A;
-
-  .main-title {
-    @media screen and (max-width: 1024px) {
-      font-size: 52px;
-      margin-top: 30px;
-    }
-  }
-}
-
-.btn-tb-primary {
-  border: 2px solid white;
-  font-weight: bold;
+*, p, a, h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
 html, body {
   background-color: #383861;
+}
+
+form * {
+  color: #424242;
+}
+
+.btn-cta {
+  padding: 25px 65px;
+  font-size: 20px;
+}
+
+.top-section {
+  padding: 30px 0 0 0;
+}
+
+.hero-content {
+  margin: 40px 0 60px 0;
+}
+
+.main-title {
+  font-weight: bold;
+  font-size: 65px;
+  @media screen and (max-width: $screen-xs-max) {
+    font-size: 45px;
+  }
+}
+
+.main-text {
+  margin-top: 40px;
+  font-size: 20px;
+  line-height: 1.9;
+
+  @media screen and (max-width: $screen-xs-max) {
+    font-size: 18px;
+  }
+}
+
+.inner-text {
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.main-link {
+  text-decoration: underline;
+}
+
+.feature-list {
+  margin-top: 40px;
+  font-size: 20px;
+  @media screen and (max-width: $screen-xs-max) {
+    font-size: 18px;
+  }
+
+  li {
+    margin-top: 20px;
+  }
+}
+
+.cta-container {
+  margin-top: 60px;
+}
+
+.features {
+  background-color: #5A5A9A;
+}
+
+.btn-tb-primary {
+  border: 2px solid white;
+  font-weight: bold;
 }
 
 .panel.panel-primary.panel-color {
