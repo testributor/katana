@@ -6,17 +6,18 @@ module Api
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
       def bind_next_batch
-        # Calculate workload and the number of queued or running jobs.
-        # We try to equally distribute the load so we only send
-        # workload / active_workers number of when jobs are requested.
-        workload = current_project.test_jobs.
+        sample_job = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
-          where(status: [TestStatus::RUNNING,TestStatus::QUEUED]).count
+          where(status: TestStatus::QUEUED).
+          order("test_runs.status DESC, test_runs.created_at DESC").first
 
-        preferred_jobs_sql = current_project.test_jobs.queued.
-          where(test_runs: { status: [TestStatus::RUNNING,TestStatus::QUEUED] }).
-          order("test_runs.status DESC"). # Prefer "running" runs
-          limit(workload / [current_project.active_workers.count, 1].max).to_sql
+        if sample_job.blank?
+          render json: [], include: "test_run.project" and  return
+        end
+
+        preferred_jobs_sql = current_project.test_jobs.where(
+          test_run_id: sample_job.test_run_id,
+          chunk_index: sample_job.chunk_index).to_sql
 
         sql = <<-SQL
           UPDATE test_jobs SET status = #{TestStatus::RUNNING}
@@ -25,7 +26,8 @@ module Api
           RETURNING test_jobs.*
         SQL
 
-        render json: TestJob.find_by_sql(sql), include: "test_run.project"
+        test_jobs = TestJob.find_by_sql(sql)
+        render json: test_jobs, include: "test_run.project"
       end
 
       # TODO: When the reporter sends reports for cancelled/destroyed test_runs
