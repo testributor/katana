@@ -13,6 +13,9 @@ class TestRun < ActiveRecord::Base
   scope :failed, -> { where(status: TestStatus::FAILED) }
   scope :error, -> { where(status: TestStatus::ERROR) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
+  scope :terminal_status, -> {
+    where(status: [TestStatus::PASSED, TestStatus::FAILED, TestStatus::ERROR])
+  }
 
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
@@ -74,6 +77,7 @@ class TestRun < ActiveRecord::Base
       after = description["after"].to_s
       test_jobs.build(command: command, before: before, after: after)
     end
+    Katanomeas.new(self).assign_chunk_indexes_to_test_jobs
 
     true
   end
@@ -153,15 +157,28 @@ class TestRun < ActiveRecord::Base
   # This is the most relevant commit we have already run so it will be used
   # as a statistic for TestJob costs.
   def previous_run
-    project.test_runs.where(commit_sha: sha_history[1..-1]).
-      sort_by{|test_run| sha_history.index(test_run.commit_sha)}.first
+    runs = project.test_runs.terminal_status.where(commit_sha: sha_history)
+    runs = runs.where("test_runs.id != ?", self.id) if self.id
+
+    # TODO check if the array in sort_by works
+    runs.sort_by{|test_run| [sha_history.index(test_run.commit_sha), -test_run.created_at.to_i] }.first
   end
 
   # Return the previous_run or the last TestRun on the same project if no
   # previous_run could be found
   def most_relevant_run
-    previous_run || project.test_runs.where("test_runs.id != ?", self.id).
-      order("created_at DESC").first
+    return @most_relevant_run if @most_relevant_run
+
+    @most_relevant_run = previous_run
+
+    unless @most_relevant_run
+      runs = project.test_runs.terminal_status
+      runs = runs.where("test_runs.id != ?", self.id) if self.id
+
+      @most_relevant_run = runs.order("created_at DESC").first
+    end
+
+    @most_relevant_run
   end
 
   private

@@ -133,23 +133,24 @@ ActiveRecord::Schema.define(version: 20151217152635) do
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"
-    t.string   "command",                                             default: "", null: false
-    t.text     "result",                                              default: "", null: false
-    t.integer  "status",                                              default: 0,  null: false
-    t.integer  "test_errors",                                         default: 0,  null: false
-    t.integer  "failures",                                            default: 0,  null: false
-    t.integer  "count",                                               default: 0,  null: false
-    t.integer  "assertions",                                          default: 0,  null: false
-    t.integer  "skips",                                               default: 0,  null: false
+    t.string   "command",                                                 default: "", null: false
+    t.text     "result",                                                  default: "", null: false
+    t.integer  "status",                                                  default: 0,  null: false
+    t.integer  "test_errors",                                             default: 0,  null: false
+    t.integer  "failures",                                                default: 0,  null: false
+    t.integer  "count",                                                   default: 0,  null: false
+    t.integer  "assertions",                                              default: 0,  null: false
+    t.integer  "skips",                                                   default: 0,  null: false
     t.datetime "completed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "before",                                              default: "", null: false
-    t.text     "after",                                               default: "", null: false
+    t.text     "before",                                                  default: "", null: false
+    t.text     "after",                                                   default: "", null: false
     t.datetime "sent_at"
-    t.decimal  "worker_in_queue_seconds",    precision: 10, scale: 6
-    t.decimal  "worker_command_run_seconds", precision: 10, scale: 6
+    t.decimal  "worker_in_queue_seconds",        precision: 10, scale: 6
+    t.decimal  "worker_command_run_seconds",     precision: 10, scale: 6
     t.datetime "reported_at"
+    t.integer  "chunk_index",                                             default: 0,  null: false
     t.decimal  "avg_worker_command_run_seconds", precision: 10, scale: 6
   end
 
