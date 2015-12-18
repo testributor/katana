@@ -15,6 +15,7 @@ class KatanomeasTest < ActiveSupport::TestCase
         test_run: most_relevant_run, command: "Command #{i}",
         worker_command_run_seconds: rand(Katanomeas::CHUNK_COST_SECONDS))
     end
+    most_relevant_run.update_column(:status, TestStatus::PASSED)
   end
 
   describe "assign_chunk_indexes_to_test_jobs" do

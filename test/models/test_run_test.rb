@@ -1,10 +1,10 @@
 require 'test_helper'
 
 class TestRunTest < ActiveSupport::TestCase
-  let(:_test_run) { FactoryGirl.create(:testributor_run) }
+  let(:_test_run) { FactoryGirl.create(:testributor_run, :passed) }
 
   describe "#cancel_test_jobs" do
-    subject { FactoryGirl.create(:testributor_run) }
+    subject { FactoryGirl.create(:testributor_run, :passed) }
     before do
       subject.test_jobs.create!(command: "ls", status: TestStatus::QUEUED)
       subject.test_jobs.create!(command: "ls", status: TestStatus::QUEUED)
@@ -23,17 +23,17 @@ class TestRunTest < ActiveSupport::TestCase
     let(:branch_2) { FactoryGirl.create(:tracked_branch, project: project) }
 
     subject do
-      FactoryGirl.create(:testributor_run, tracked_branch: branch_1,
+      FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch_1,
         commit_sha: '3333', sha_history: ['3333', '2222', '1111', '0000'])
     end
 
     describe "when there are previous TestRuns that match the history" do
       let(:previous_run) do
-        FactoryGirl.create(:testributor_run, tracked_branch: branch_2,
+        FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch_2,
           commit_sha: '1111')
       end
       let(:older_commit_previous_run) do
-        FactoryGirl.create(:testributor_run, tracked_branch: branch_1,
+        FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch_1,
           commit_sha: '0000')
       end
       before do
@@ -57,12 +57,12 @@ class TestRunTest < ActiveSupport::TestCase
     let(:branch) { FactoryGirl.create(:tracked_branch) }
 
     subject do
-      FactoryGirl.create(:testributor_run, tracked_branch: branch,
+      FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch,
         commit_sha: '3333', sha_history: ['3333', '2222', '1111', '0000'])
     end
 
     let(:most_recent_non_previous_run) do
-      FactoryGirl.create(:testributor_run, tracked_branch: branch,
+      FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch,
         commit_sha: 'nothing_to_do_with_the_history_sha')
     end
 
@@ -70,7 +70,7 @@ class TestRunTest < ActiveSupport::TestCase
 
     describe "when there are previous TestRuns that match the history" do
       let(:previous_run) do
-        FactoryGirl.create(:testributor_run, tracked_branch: branch,
+        FactoryGirl.create(:testributor_run, :passed, tracked_branch: branch,
           commit_sha: '1111')
       end
 

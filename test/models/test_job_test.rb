@@ -31,7 +31,7 @@ class TestJobTest < ActiveSupport::TestCase
     end
 
     let(:previous_run) do
-      FactoryGirl.create(:testributor_run, commit_sha: '1111',
+      FactoryGirl.create(:testributor_run, :passed, commit_sha: '1111',
                          tracked_branch: _test_run.tracked_branch)
     end
 
@@ -42,7 +42,7 @@ class TestJobTest < ActiveSupport::TestCase
 
     subject do
       FactoryGirl.create(:testributor_job, test_run: _test_run,
-                         command: "and conquer")
+                         command: "and conquer", status: TestStatus::PASSED)
     end
 
     it "sets average to worker_command_run_seconds when there is no relevant job" do
@@ -53,6 +53,7 @@ class TestJobTest < ActiveSupport::TestCase
 
     it "sets average to the weighted avg when there is a relevant job" do
       most_relevant_job
+      previous_run.update_column(:status, TestStatus::PASSED)
 
       subject.worker_command_run_seconds = 123
       subject.valid?
@@ -69,7 +70,7 @@ class TestJobTest < ActiveSupport::TestCase
     end
 
     let(:previous_run) do
-      FactoryGirl.create(:testributor_run, commit_sha: '1111',
+      FactoryGirl.create(:testributor_run, :passed, commit_sha: '1111',
                          tracked_branch: _test_run.tracked_branch)
     end
 
@@ -80,10 +81,13 @@ class TestJobTest < ActiveSupport::TestCase
 
     let(:most_relevant_job) do
       FactoryGirl.create(:testributor_job, test_run: previous_run,
-                         command: "and conquer")
+                         command: "and conquer", status: TestStatus::PASSED)
     end
 
-    before { most_relevant_job }
+    before do
+      most_relevant_job
+      previous_run.update_column(:status, TestStatus::PASSED)
+    end
 
     it "returns the most relevant job" do
       subject.most_relevant_job.must_equal most_relevant_job
