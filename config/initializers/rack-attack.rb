@@ -26,7 +26,7 @@ class Rack::Attack
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
   limit = ENV['RACK_ATTACK_LIMIT'] || 150
   period = (ENV['RACK_ATTACK_PERIOD_SECONDS'] || 60).seconds
-  throttle('req/ip', :limit => limit, :period => period) do |req|
+  throttle('req/ip', :limit => limit.to_i, :period => period.to_i) do |req|
     req.ip unless req.path.starts_with?('/assets')
   end
 
@@ -34,7 +34,7 @@ class Rack::Attack
   # a more predictable frequency.
   api_limit = ENV['RACK_ATTACK_API_LIMIT'] || 1
   api_period = (ENV['RACK_ATTACK_API_PERIOD_SECONDS'] || 1).seconds
-  throttle('api/req/ip', :limit => api_limit, :period => api_period) do |req|
+  throttle('api/req/ip', :limit => api_limit.to_i, :period => api_period.to_i) do |req|
     req.ip if req.path.starts_with?('/api')
   end
 
