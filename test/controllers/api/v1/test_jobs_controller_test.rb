@@ -41,11 +41,10 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       # Set the TestRun to inconsistent state
       terminal_state_test_run.update_column(:status, TestStatus::PASSED)
 
-      Project.any_instance.stubs(:active_workers).returns([1,2])
       @controller.stub :doorkeeper_token, token do
         patch :bind_next_batch, default: { format: :json }
         result = JSON.parse(response.body)
-        result.count.must_equal 2
+        result.count.must_equal 4
       end
     end
   end

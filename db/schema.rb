@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151214123457) do
+ActiveRecord::Schema.define(version: 20151217152635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,29 +133,31 @@ ActiveRecord::Schema.define(version: 20151214123457) do
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"
-    t.string   "command",                                             default: "", null: false
-    t.text     "result",                                              default: "", null: false
-    t.integer  "status",                                              default: 0,  null: false
-    t.integer  "test_errors",                                         default: 0,  null: false
-    t.integer  "failures",                                            default: 0,  null: false
-    t.integer  "count",                                               default: 0,  null: false
-    t.integer  "assertions",                                          default: 0,  null: false
-    t.integer  "skips",                                               default: 0,  null: false
+    t.string   "command",                                                 default: "", null: false
+    t.text     "result",                                                  default: "", null: false
+    t.integer  "status",                                                  default: 0,  null: false
+    t.integer  "test_errors",                                             default: 0,  null: false
+    t.integer  "failures",                                                default: 0,  null: false
+    t.integer  "count",                                                   default: 0,  null: false
+    t.integer  "assertions",                                              default: 0,  null: false
+    t.integer  "skips",                                                   default: 0,  null: false
     t.datetime "completed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "before",                                              default: "", null: false
-    t.text     "after",                                               default: "", null: false
+    t.text     "before",                                                  default: "", null: false
+    t.text     "after",                                                   default: "", null: false
     t.datetime "sent_at"
-    t.decimal  "worker_in_queue_seconds",    precision: 10, scale: 6
-    t.decimal  "worker_command_run_seconds", precision: 10, scale: 6
+    t.decimal  "worker_in_queue_seconds",        precision: 10, scale: 6
+    t.decimal  "worker_command_run_seconds",     precision: 10, scale: 6
     t.datetime "reported_at"
+    t.integer  "chunk_index",                                             default: 0,  null: false
+    t.decimal  "avg_worker_command_run_seconds", precision: 10, scale: 6
   end
 
   create_table "test_runs", force: :cascade do |t|
     t.integer  "tracked_branch_id"
     t.string   "commit_sha"
-    t.integer  "status",                    default: 0, null: false
+    t.integer  "status",                    default: 0,  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "commit_message"
@@ -167,6 +169,7 @@ ActiveRecord::Schema.define(version: 20151214123457) do
     t.string   "commit_committer_name"
     t.string   "commit_committer_email"
     t.string   "commit_committer_username"
+    t.text     "sha_history",               default: [], null: false, array: true
   end
 
   add_index "test_runs", ["tracked_branch_id"], name: "index_test_runs_on_tracked_branch_id", using: :btree

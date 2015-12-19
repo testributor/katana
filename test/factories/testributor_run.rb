@@ -17,6 +17,10 @@ FactoryGirl.define do
       status TestStatus::FAILED
     end
 
+    trait :passed do
+      status TestStatus::PASSED
+    end
+
     trait :error do
       status TestStatus::ERROR
     end

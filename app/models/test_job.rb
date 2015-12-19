@@ -9,13 +9,19 @@
 # #worker_command_run_seconds - The number of seconds it took to run the job
 #
 class TestJob < ActiveRecord::Base
+
+  # The smaller this number is, the less new runs will be needed to "balance"
+  # the avg_worker_command_run_seconds.
+  NUMBER_OF_SIGNIFICANT_RUNS = 3
+
   # For redis_live_update_resource_key
   include Models::RedisLiveUpdates
-  belongs_to :test_run
-
+  belongs_to :test_run, inverse_of: :test_jobs
   validates :test_run, presence: true
 
   before_validation :set_completed_at
+  before_validation :set_avg_worker_command_run_seconds,
+    if: ->{ worker_command_run_seconds_changed? }
   after_save :update_test_run_status
 
   scope :queued, -> { where(status: TestStatus::QUEUED) }
@@ -70,6 +76,13 @@ class TestJob < ActiveRecord::Base
     save!
   end
 
+  # test_run.most_relevant_run => matching command job
+  def most_relevant_job
+    return nil unless (test_run && (most_relevant_run = test_run.most_relevant_run))
+
+    most_relevant_run.test_jobs.detect{|j| j.command == command}
+  end
+
   private
 
   def set_completed_at
@@ -77,6 +90,16 @@ class TestJob < ActiveRecord::Base
       self.completed_at=
         sent_at + (worker_in_queue_seconds + worker_command_run_seconds).round.seconds
     end
+  end
+
+  def set_avg_worker_command_run_seconds
+    self.avg_worker_command_run_seconds =
+      if most_relevant_job && most_relevant_job.worker_command_run_seconds.present?
+        ((most_relevant_job.worker_command_run_seconds * NUMBER_OF_SIGNIFICANT_RUNS) +
+         worker_command_run_seconds) / (NUMBER_OF_SIGNIFICANT_RUNS + 1).to_d
+      else
+        worker_command_run_seconds
+      end
   end
 
   def update_test_run_status

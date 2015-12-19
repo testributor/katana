@@ -53,6 +53,31 @@ class ActiveSupport::TestCase
       tree: [OpenStruct.new({path: 'test/models/stub_test_1.rb'}),
              OpenStruct.new({path: 'test_models/stub_test_2.rb'})])
     Octokit::Client.any_instance.stubs(:tree).returns(tree)
+
+    commit_github_response =
+      Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+        {
+          sha: '034df43',
+          commit: {
+            message: 'Some commit messsage',
+            html_url: 'Some url',
+            author: {
+              name: 'Great Author',
+              email: 'great@author.com',
+            },
+            committer: {
+              name: 'Great Committer',
+              email: 'great@committer.com',
+            }
+          },
+          author: { login: 'authorlogin' },
+          committer: { login: 'committerlogin' }
+        }
+      )
+    TrackedBranch.any_instance.stubs(:sha_history).returns([
+      commit_github_response,
+      commit_github_response,
+      commit_github_response])
   end
 end
 
@@ -78,6 +103,10 @@ class Capybara::Rails::TestCase
     # Stub client_id with a random id so that
     # ApplicationHelper#github_oauth_authorize_url won't break
     Octokit.stubs(:client_id).returns("aRandomID")
+    TrackedBranch.any_instance.stubs(:sha_history).returns([
+      "31ee93316d0665ab3d9c3fda7986cbf3af550d72",
+      "ec21cd4151e5eb92bd56dec6e9fbf72af81f4735",
+      "78e21cb09836dbb725487a70ff37da277ee4f785"])
     ActionMailer::Base.deliveries.clear
 
     # No javascript tests

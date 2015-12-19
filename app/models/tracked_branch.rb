@@ -1,5 +1,7 @@
 class TrackedBranch < ActiveRecord::Base
   OLD_RUNS_LIMIT = 20
+  HISTORY_COMMITS_LIMIT = 30
+
   belongs_to :project
   has_many :test_runs, dependent: :destroy
   # TODO : Write tests for this validation
@@ -37,42 +39,43 @@ class TrackedBranch < ActiveRecord::Base
   # Returns nil if branch doesn't exist in github
   # TODO: Write tests
   def build_test_run_and_jobs(options={})
-    if (c = options[:head_commit]).present?
-      test_run_params = {
-        commit_sha: c[:id],
-        commit_message: c[:message],
-        commit_timestamp: c[:timestamp],
-        commit_url: c[:url],
-        commit_author_name: c[:author][:name],
-        commit_author_email: c[:author][:email],
-        commit_author_username: c[:author][:username],
-        commit_committer_name: c[:committer][:name],
-        commit_committer_email: c[:committer][:email],
-        commit_committer_username: c[:committer][:username]
-      }
-    else
-      begin
-        c = from_github[:commit]
-      rescue Octokit::NotFound
-        # We tried to find a branch in github and it wasn't found.
-        # TODO: Destroy branch when we can't find it?
-        return nil
+    begin
+      if (c = options[:head_commit]).present?
+        test_run_params = {
+          commit_sha: c[:id],
+          commit_message: c[:message],
+          commit_timestamp: c[:timestamp],
+          commit_url: c[:url],
+          commit_author_name: c[:author][:name],
+          commit_author_email: c[:author][:email],
+          commit_author_username: c[:author][:username],
+          commit_committer_name: c[:committer][:name],
+          commit_committer_email: c[:committer][:email],
+          commit_committer_username: c[:committer][:username],
+          sha_history: sha_history(c[:id]).map(&:sha)
+        }
+      else
+        history = sha_history
+        c = history.first
+        test_run_params = {
+          commit_sha: c.sha,
+          commit_message: c.commit.message,
+          commit_timestamp: c.commit.committer.date,
+          commit_url: c.html_url,
+          commit_author_name: c.commit.author.name,
+          commit_author_email: c.commit.author.email,
+          commit_author_username: c.author.login,
+          commit_committer_name: c.commit.committer.name,
+          commit_committer_email: c.commit.committer.email,
+          commit_committer_username: c.committer.login,
+          sha_history: history.map(&:sha)
+        }
       end
-
-      test_run_params = {
-        commit_sha: c.sha,
-        commit_message: c.commit.message,
-        commit_timestamp: c.commit.committer.date,
-        commit_url: c.html_url,
-        commit_author_name: c.commit.author.name,
-        commit_author_email: c.commit.author.email,
-        commit_author_username: c.author.login,
-        commit_committer_name: c.commit.committer.name,
-        commit_committer_email: c.commit.committer.email,
-        commit_committer_username: c.committer.login
-      }
+    rescue Octokit::NotFound
+      # We tried to find a branch in github and it wasn't found.
+      # TODO: Destroy branch when we can't find it?
+      return nil
     end
-
     run = test_runs.build(test_run_params)
 
     build_test_jobs_success = run.build_test_jobs
@@ -83,8 +86,11 @@ class TrackedBranch < ActiveRecord::Base
     build_test_jobs_success
   end
 
-  def from_github
-    client.branch(project.repository_id, branch_name)
+  # Fetches the requested branch HEAD with the last 30 commits in history
+  # If sha is set, it will be used instead of the branch name.
+  def sha_history(sha = nil)
+    client.commits(project.repository_id, sha || branch_name).
+      first(HISTORY_COMMITS_LIMIT)
   end
 
   private
