@@ -15,11 +15,6 @@ class TestRunsController < DashboardController
 
   def create
     branch = current_project.tracked_branches.find(params[:branch_id])
-    # Cancel all running or queued test_runs
-    branch.test_runs.where(status: [TestStatus::RUNNING, TestStatus::QUEUED]).each do |tr|
-      tr.update(:status => TestStatus::CANCELLED)
-    end
-
     build_result = branch.build_test_run_and_jobs
     if build_result && branch.save
       flash[:notice] = 'Your build was added to queue'

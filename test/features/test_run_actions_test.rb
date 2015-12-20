@@ -101,6 +101,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_branch_test_runs_path(project_id: _test_run.project.id,
         branch_id: _test_run.tracked_branch.id)
     end
+
     it 'must delete all test_jobs', js: true do
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
       page.first('td .btn.btn-danger').click
@@ -109,7 +110,12 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   end
 
   describe 'when a user clicks add a new run button' do
-    it 'turns all previous test_jobs to cancelled', js: true do
+    before do
+      visit project_branch_test_runs_path(project_id: _test_run.project.id,
+        branch_id: _test_run.tracked_branch.id)
+    end
+
+    it 'turns all previous queued test_jobs to cancelled', js: true do
       page.must_have_content 'Queued'
       page.find('a[action="create"]').click
       _test_run.reload.status.code.must_equal TestStatus::CANCELLED

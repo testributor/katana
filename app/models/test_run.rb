@@ -20,6 +20,8 @@ class TestRun < ActiveRecord::Base
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
 
+  before_create :cancel_queued_runs_of_same_branch
+
   def total_running_time
     if completed_at = test_jobs.maximum(:completed_at)
       completed_at -
@@ -206,5 +208,13 @@ class TestRun < ActiveRecord::Base
 
   def cancel_test_jobs
     test_jobs.update_all(status: TestStatus::CANCELLED)
+  end
+
+  def cancel_queued_runs_of_same_branch
+    TestRun.queued.where(tracked_branch: tracked_branch_id).
+      update_all(:status => TestStatus::CANCELLED)
+    TestJob.joins(:test_run).queued.
+      where('test_runs.tracked_branch_id = ?', tracked_branch_id).
+      update_all(:status => TestStatus::CANCELLED)
   end
 end
