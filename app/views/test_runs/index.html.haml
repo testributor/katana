@@ -46,5 +46,5 @@
                   - if test_run.total_running_time
                     = distance_of_time_in_words(0, test_run.total_running_time, include_seconds: true)
                 %td.col-md-2
-                  - if reverse_order_num == @test_runs.size
+                  - if reverse_order_num == @test_runs.size || test_run.status.code == TestStatus::RUNNING
                     = render partial: 'test_run_actions', locals: { test_run: test_run }

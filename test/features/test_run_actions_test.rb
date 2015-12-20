@@ -7,10 +7,10 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   let(:branch_name) { 'master' }
   let(:commit_sha) { 'a3e2de2r' }
   let(:branch_github_response) do
-    Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
-      {
-        name: branch_name,
-        commit: {
+    commit_github_response =
+      Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+        {
+          name: branch_name,
           sha: commit_sha,
           commit: {
             message: 'Some commit messsage',
@@ -18,18 +18,27 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             author: {
               name: 'Great Author',
               email: 'great@author.com',
+              login: 'authorlogin'
             },
             committer: {
               name: 'Great Committer',
               email: 'great@committer.com',
-              date: DateTime.current
+              date: DateTime.current,
+              login: 'committerlogin'
             }
           },
-          author: { login: 'authorlogin' },
-          committer: { login: 'committerlogin' }
+            committer: {
+              login: 'committerlogin'
+          },
+            author: {
+              login: 'authorlogin'
+          }
         }
-      }
-    )
+      )
+    TrackedBranch.any_instance.stubs(:sha_history).returns([
+      commit_github_response,
+      commit_github_response,
+      commit_github_response])
   end
 
   before do

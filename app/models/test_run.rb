@@ -211,10 +211,12 @@ class TestRun < ActiveRecord::Base
   end
 
   def cancel_queued_runs_of_same_branch
-    TestRun.queued.where(tracked_branch: tracked_branch_id).
-      update_all(:status => TestStatus::CANCELLED)
-    TestJob.joins(:test_run).queued.
-      where('test_runs.tracked_branch_id = ?', tracked_branch_id).
-      update_all(:status => TestStatus::CANCELLED)
+    TestJob.joins(:test_run).where(
+      status: [TestStatus::QUEUED, TestStatus::RUNNING],
+      test_runs: { status: TestStatus::QUEUED,
+        tracked_branch_id: tracked_branch.id
+    }).update_all(status: TestStatus::CANCELLED)
+    TestRun.queued.where(tracked_branch_id: tracked_branch.id).
+      update_all(status: TestStatus::CANCELLED)
   end
 end
