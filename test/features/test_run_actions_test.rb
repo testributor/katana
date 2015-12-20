@@ -7,10 +7,10 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   let(:branch_name) { 'master' }
   let(:commit_sha) { 'a3e2de2r' }
   let(:branch_github_response) do
-    Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
-      {
-        name: branch_name,
-        commit: {
+    commit_github_response =
+      Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+        {
+          name: branch_name,
           sha: commit_sha,
           commit: {
             message: 'Some commit messsage',
@@ -18,17 +18,27 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             author: {
               name: 'Great Author',
               email: 'great@author.com',
+              login: 'authorlogin'
             },
             committer: {
               name: 'Great Committer',
               email: 'great@committer.com',
+              date: DateTime.current,
+              login: 'committerlogin'
             }
           },
-          author: { login: 'authorlogin' },
-          committer: { login: 'committerlogin' }
+            committer: {
+              login: 'committerlogin'
+          },
+            author: {
+              login: 'authorlogin'
+          }
         }
-      }
-    )
+      )
+    TrackedBranch.any_instance.stubs(:sha_history).returns([
+      commit_github_response,
+      commit_github_response,
+      commit_github_response])
   end
 
   before do
@@ -100,10 +110,25 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_branch_test_runs_path(project_id: _test_run.project.id,
         branch_id: _test_run.tracked_branch.id)
     end
+
     it 'must delete all test_jobs', js: true do
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
       page.first('td .btn.btn-danger').click
       TestRun.cancelled.count.must_equal 1
+    end
+  end
+
+  describe 'when a user clicks add a new run button' do
+    before do
+      visit project_branch_test_runs_path(project_id: _test_run.project.id,
+        branch_id: _test_run.tracked_branch.id)
+    end
+
+    it 'turns all previous queued test_jobs to cancelled', js: true do
+      page.must_have_content 'Queued'
+      page.find('a[action="create"]').click
+      _test_run.reload.status.code.must_equal TestStatus::CANCELLED
+      _test_run.test_jobs.pluck(:status).uniq.must_equal [TestStatus::CANCELLED]
     end
   end
 end

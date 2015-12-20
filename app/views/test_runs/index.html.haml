@@ -27,10 +27,11 @@
               %th= "Total run time"
               %th= "Actions"
           %tbody
-            - @test_runs.each do |test_run|
+            - @test_runs.each_with_index do |test_run, index|
+              - reverse_order_num = (index - @test_runs.size).abs
               %tr
-                %td.col-md-1= link_to "##{test_run.id}",
-                  project_test_run_path(current_project, test_run)
+                %td.col-md-1
+                  = link_to "##{reverse_order_num}", project_test_run_path(current_project, test_run)
                 %td.col-md-5
                   = test_run.decorate.commit_message
                   %br
@@ -45,4 +46,5 @@
                   - if test_run.total_running_time
                     = distance_of_time_in_words(0, test_run.total_running_time, include_seconds: true)
                 %td.col-md-2
-                  = render partial: 'test_run_actions', locals: { test_run: test_run }
+                  - if reverse_order_num == @test_runs.size || test_run.status.code == TestStatus::RUNNING
+                    = render partial: 'test_run_actions', locals: { test_run: test_run }
