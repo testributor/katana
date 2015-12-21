@@ -15,6 +15,25 @@ form * {
   font-size: 20px;
 }
 
+.submit-email-group {
+  @media screen and (max-width: $screen-xs-max) {
+    * {
+      display: block;
+      margin: 20px auto 0 auto;
+    }
+  }
+}
+
+.submit-email-content {
+  margin: 30px 0;
+}
+.submit-email-input {
+  min-width: 300px;
+  padding: 10px 16px;
+  border: 1px solid #5A5A9A;
+  vertical-align: middle;
+}
+
 .top-section {
   padding: 30px 0 0 0;
 }

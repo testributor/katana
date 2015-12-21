@@ -85,3 +85,21 @@
             to make sure that you have a smoother experience.
           .cta-container
             %a.btn-cta.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign up for beta
+
+  %section.features
+    .container
+      .row.hero-content
+        .col-xs-10.col-xs-offset-1
+          %h2 Can i skip the beta phase and sign up later? No problem!
+          %p.submit-email-content
+            Just pop in your email address in the box below and click Submit.
+            That’s it! We’ll keep you posted about our release plans and
+            we - obviously - promise that we’ll never share your details or spam you.
+          .row
+            .col-xs-12
+              .submit-email-group
+                = form_for @submission, remote: true do |f|
+                  = f.text_field :email, class: 'submit-email-input',
+                    placeholder: "Your e-mail"
+                  = f.submit "Subscribe",
+                    class: 'btn btn-primary w-lg btn-lg m-l-10'

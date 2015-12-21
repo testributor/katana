@@ -66,6 +66,8 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  resources :email_submissions, only: :create
   resources :project_wizard do
     member do
       get :fetch_repos

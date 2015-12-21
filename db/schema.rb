@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151217152635) do
+ActiveRecord::Schema.define(version: 20151221135430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,10 @@ ActiveRecord::Schema.define(version: 20151217152635) do
     t.text   "description",         default: "",         null: false
     t.string "type",                default: "language", null: false
     t.json   "docker_compose_data", default: {},         null: false
+  end
+
+  create_table "email_submissions", force: :cascade do |t|
+    t.string "email", null: false
   end
 
   create_table "oauth_access_grants", force: :cascade do |t|

@@ -14,5 +14,6 @@
 //= require bootstrap
 //= require front/jquery.easing.1.3.min
 //= require front/SmoothScroll
+//= require front/sweet-alert.min
 //= require init
 //= require_tree .
