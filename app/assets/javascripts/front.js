@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery_ujs
 //= require bootstrap
 //= require front/jquery.easing.1.3.min
 //= require front/SmoothScroll
