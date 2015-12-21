@@ -1,11 +1,18 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :repository_name, :repository_owner, :github_access_token
+  attributes :repository_name, :repository_owner, :repository_ssh_url
 
   has_many :files
   has_one :docker_image
 
-  def github_access_token
-    object.user.github_access_token
+  # TODO We should probably discover and cache those urls via the provider's API
+  # instead of constructing them ourselves, as they may change at some point.
+  def repository_ssh_url
+    case object.repository_provider
+      when 'github'
+        "git@github.com:#{object.repository_owner}/#{object.repository_name}.git"
+      else
+        nil # don't know how to construct the SSH url
+    end
   end
 
   def files
