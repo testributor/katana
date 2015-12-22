@@ -4,6 +4,10 @@ module Api
       def current
         render json: current_project
       end
+
+      def beacon
+        render json: "OK", status: 200
+      end
     end
   end
 end
