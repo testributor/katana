@@ -9,7 +9,7 @@ module Api
         sample_job = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
           where(status: TestStatus::QUEUED).
-          order("test_runs.status DESC, test_runs.created_at DESC").first
+          order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").first
 
         if sample_job.blank?
           render json: [], include: "test_run.project" and  return
