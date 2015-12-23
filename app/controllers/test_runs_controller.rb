@@ -10,7 +10,7 @@ class TestRunsController < DashboardController
   end
 
   def show
-    @test_jobs = @test_run.test_jobs.order('status DESC, created_at ASC, id ASC')
+    @test_jobs = @test_run.test_jobs.order('status DESC, sent_at ASC, chunk_index ASC, created_at ASC, id ASC')
   end
 
   def create
