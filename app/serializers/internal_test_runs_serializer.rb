@@ -1,24 +1,12 @@
 class InternalTestRunsSerializer < ActiveModel::Serializer
+  include Models::HasRunningTime
+  include Models::HasStatus
   include Rails.application.routes.url_helpers
-  # In order to call distance_of_time_in_words
-  include ActionView::Helpers::DateHelper
-  attributes :id, :status_text, :status_css_class,
+
+  attributes :id, :status_text, :status_css_class, :unsuccessful,
     :retry_url, :total_running_time, :html_class, :cancel_url,
     :statuses, :test_run_link, :commit_message, :commit_info,
     :show_retry
-
-  def status_text
-    object.status.text
-  end
-
-  def status_css_class
-    object.status.css_class
-  end
-
-  def total_running_time
-    distance_of_time_in_words(0, object.total_running_time,
-                              include_seconds: true)
-  end
 
   def retry_url
     retry_project_test_run_path(object.project, object)
@@ -26,10 +14,6 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
 
   def cancel_url
     project_test_run_path(object.project, object, status: TestStatus::CANCELLED)
-  end
-
-  def html_class
-    TestStatus::STATUS_CLASS_MAP[object.status.code]
   end
 
   def statuses

@@ -39,7 +39,7 @@ class Testributor.Pages.TestRuns
         $newTr = $(jobTemplate(testJob))
         $tr.replaceWith($newTr)
         $error = $(errorTemplate(testJob))
-        if testJob.show_errors
+        if testJob.unsuccessful
           $error.insertAfter($newTr)
         $newTr.animate({backgroundColor: '#fff'}, 2000)
         progressBar.update(testJob.test_run_id, testJob.html_class)

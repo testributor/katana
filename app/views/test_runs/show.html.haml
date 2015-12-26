@@ -9,9 +9,9 @@
   .panel-heading.test-run-panel-heading
     .pull-left
       %h3
-        #{@test_run.decorate.commit_message(render_as_link: true)}
+        #{@test_run.commit_message(render_as_link: true)}
         %br
-        #{@test_run.decorate.commit_info}
+        #{@test_run.commit_info}
     .test
       .pull-right
         = render partial: 'test_run_actions', locals: { test_run: @test_run }
@@ -27,24 +27,28 @@
                 %th='File'
                 %th='Status'
                 %th='Sent at (UTC)'
-                %th='Chunk index'
-                %th='Cost prediction'
-                %th='Worker command seconds'
+                - if current_user.admin?
+                  %th='Chunk index'
+                  %th='Cost prediction'
+                  %th='Worker command seconds'
                 %th='Total running time'
                 %th='Actions'
             %tbody
               - @test_jobs.each do |test_job|
+                - test_job = test_job.decorate
                 %tr{id: "test-job-#{test_job.id}"}
                   %td= test_job.command
                   %td
                     %span{class: test_job.status.css_class}= test_job.status.text
                   %td= l(test_job.sent_at, format: :short) if test_job.sent_at
-                  %td= test_job.chunk_index
-                  %td= "#{test_job.avg_worker_command_run_seconds.try(:round, 2)} seconds"
-                  %td= "#{test_job.worker_command_run_seconds.try(:round, 2)} seconds"
+                  - if current_user.admin?
+                    %td= test_job.chunk_index
+                    %td
+                      = test_job.avg_worker_command_run_seconds
+                    %td
+                      = test_job.worker_command_run_seconds
                   %td
-                    - if test_job.total_running_time
-                      = "#{test_job.total_running_time.try(:round, 2)} seconds"
+                    = test_job.total_running_time
                   %td
                     - if test_job.status.terminal?
                       = link_to project_test_job_retry_path(current_project,
@@ -53,6 +57,6 @@
                         %i.fa.fa-refresh
                         %span= "Retry"
 
-                - if test_job.status.failed? || test_job.status.error?
+                - if test_job.status.unsuccessful?
                   %tr.danger
                     %td{ colspan: 10, style: "text-align: left" }= simple_format(test_job.result)

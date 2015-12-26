@@ -31,17 +31,18 @@
       %tbody
         - @test_runs.each_with_index do |test_run, index|
           - reverse_order_num = (index - @test_runs.size).abs
+          - test_run = test_run.decorate
           %tr{ id: "test-run-#{test_run.id}" }
             %td.col-md-1= link_to "##{reverse_order_num}",
               project_test_run_path(current_project, test_run)
             %td.col-md-4
-              = test_run.decorate.commit_message
+              = test_run.commit_message
               %br
-              %i= test_run.decorate.commit_info
+              %i= test_run.commit_info
             %td.col-md-1
               .test{class: test_run.status.css_class}
                 - if test_run.status.code == TestStatus::RUNNING
-                  %i.fa.fa-cog.fa-spin.fa-1x.fa-fw.m-r-5{style: "color: #{test_run.decorate.cog_color}" }
+                  %i.fa.fa-cog.fa-spin.fa-1x.fa-fw.m-r-5{style: "color: #{test_run.cog_color}" }
                 %span
                   = test_run.status.text
             %td.col-md-4

@@ -58,7 +58,7 @@ class TestRunsController < DashboardController
   private
 
   def set_test_run
-    @test_run = current_project.test_runs.find(params[:id])
+    @test_run = current_project.test_runs.find(params[:id]).decorate
   end
 
   def test_run_params

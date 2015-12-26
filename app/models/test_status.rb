@@ -90,4 +90,8 @@ class TestStatus
   def terminal?
     @code.in? [ERROR, FAILED, PASSED]
   end
+
+  def unsuccessful?
+    @code.in? [ERROR, FAILED]
+  end
 end
