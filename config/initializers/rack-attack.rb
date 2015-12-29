@@ -27,7 +27,7 @@ class Rack::Attack
   limit = ENV['RACK_ATTACK_LIMIT'] || 150
   period = (ENV['RACK_ATTACK_PERIOD_SECONDS'] || 60).seconds
   throttle('req/ip', :limit => limit.to_i, :period => period.to_i) do |req|
-    req.ip unless req.path.starts_with?('/assets')
+    req.ip unless (req.path.starts_with?('/assets') || req.path.starts_with?('/api'))
   end
 
   # Use different limits for api access since workers hit our application in
