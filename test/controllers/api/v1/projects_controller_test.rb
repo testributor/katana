@@ -35,16 +35,26 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
   end
 
   describe "active_workers (ApiController)" do
-    it "monitors the active workers" do
+    it "doesn't increase the active_workers_count on 'current' action" do
       point_in_time = Time.current
       Timecop.freeze(point_in_time) do
         request.env['HTTP_WORKER_UUID'] = '123'
         get :current, access_token: token.token, default: { format: :json }
 
+        project.active_workers.count.must_equal 0
+      end
+    end
+
+    it "monitors the active workers" do
+      point_in_time = Time.current
+      Timecop.freeze(point_in_time) do
+        request.env['HTTP_WORKER_UUID'] = '123'
+        post :beacon, access_token: token.token, default: { format: :json }
+
         project.active_workers.count.must_equal 1
 
         request.env['HTTP_WORKER_UUID'] = '124'
-        get :current, access_token: token.token, default: { format: :json }
+        post :beacon, access_token: token.token, default: { format: :json }
 
         project.active_workers.count.must_equal 2
       end

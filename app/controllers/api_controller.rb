@@ -1,10 +1,6 @@
 class ApiController < ActionController::Base
   before_action :doorkeeper_authorize!
-  # We ignore the current project in request to avoid showing
-  # the workers active during initialization. Initialization
-  # take some time to complete and workers appear as inactive
-  # for some seconds.
-  before_action :worker_report, except: :current_project
+  before_action :worker_report
 
   private
 
