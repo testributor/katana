@@ -1,7 +1,12 @@
 class TestJobSerializer < ActiveModel::Serializer
-  attributes :command, :created_at, :id, :sent_at_seconds_since_epoch
+  attributes :command, :created_at, :id, :cost_prediction,
+    :sent_at_seconds_since_epoch
 
   belongs_to :test_run
+
+  def cost_prediction
+    object.old_avg_worker_command_run_seconds
+  end
 
   # We serialise this attribute as seconds since epoch instead of Datetime to
   # allow easier parsing, as this travels via API calls between the server and

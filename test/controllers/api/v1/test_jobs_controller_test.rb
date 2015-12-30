@@ -47,5 +47,15 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
         result.count.must_equal 4
       end
     end
+
+    it "returns the cost_prediction for each job" do
+      TestJob.update_all(old_avg_worker_command_run_seconds: 2)
+      @controller.stub :doorkeeper_token, token do
+        patch :bind_next_batch, default: { format: :json }
+        result = JSON.parse(response.body)
+        result.count.must_equal 4
+        result.map{|j| j["cost_prediction"].to_i}.must_equal [2,2,2,2]
+      end
+    end
   end
 end
