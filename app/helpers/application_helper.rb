@@ -11,7 +11,7 @@ module ApplicationHelper
     {
       "js-class" => controller_path.camelize.gsub("::", "."),
       "js-method" => action_name.camelize(:lower),
-      "admin-user" => current_user.admin?.to_json
+      "admin-user" => current_user.try(:admin?).try(:to_json)
     }
   end
 
