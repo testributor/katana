@@ -1,5 +1,5 @@
 namespace :scheduler do
-  task :daily do
+  task daily: :environment do
     TrackedBranch.cleanup_old_runs
 
     # NOTE: If we never get this notification consider moving it to weekly.
