@@ -28,13 +28,14 @@ class Testributor.Pages.TestRuns
     jobTemplate = HandlebarsTemplates["test_jobs/test_job"]
     errorTemplate = HandlebarsTemplates["test_jobs/error"]
     testRunId = $('[data-test-run-id]').data('test-run-id')
+    userIsAdmin = $('[data-admin-user]').data('admin-user')
 
     progressBar = new Testributor.Widgets.ProgressBar(display_stats: false)
     Testributor.Widgets.LiveUpdates("TestRun#" + testRunId, (msg) ->
       if msg.retry
         progressBar.reset(msg.test_run_id)
       else
-        testJob = $.parseJSON(msg).test_job
+        testJob = $.extend($.parseJSON(msg).test_job, admin: userIsAdmin)
         $tr = $("#test-job-#{testJob.id}")
         $newTr = $(jobTemplate(testJob))
         $tr.replaceWith($newTr)

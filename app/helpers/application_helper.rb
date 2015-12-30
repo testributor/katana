@@ -10,7 +10,8 @@ module ApplicationHelper
   def page_data_attrs
     {
       "js-class" => controller_path.camelize.gsub("::", "."),
-      "js-method" => action_name.camelize(:lower)
+      "js-method" => action_name.camelize(:lower),
+      "admin-user" => current_user.admin?.to_json
     }
   end
 
