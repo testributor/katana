@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       resources :projects, only: [] do
         collection do
           get :current
+          post :beacon
         end
       end
       resources :test_runs
