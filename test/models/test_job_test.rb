@@ -61,6 +61,64 @@ class TestJobTest < ActiveSupport::TestCase
         (400 * TestJob::NUMBER_OF_SIGNIFICANT_RUNS + 123) /
           (TestJob::NUMBER_OF_SIGNIFICANT_RUNS + 1).to_d)
     end
+
+    it "does not set average on new records" do
+      subject = FactoryGirl.build(:testributor_job, test_run: _test_run,
+                         command: "and conquer", status: TestStatus::PASSED)
+      most_relevant_job
+      previous_run.update_column(:status, TestStatus::PASSED)
+
+      subject.valid?
+      subject.avg_worker_command_run_seconds.must_be :nil?
+    end
+  end
+
+  describe "#set_old_avg_worker_command_run_seconds" do
+    let(:_test_run) do
+      FactoryGirl.create(:testributor_run, commit_sha: '3333',
+                         sha_history: ['3333', '2222', '1111', '0000'])
+    end
+
+    let(:previous_run) do
+      FactoryGirl.create(:testributor_run, :passed, commit_sha: '1111',
+                         tracked_branch: _test_run.tracked_branch)
+    end
+
+    let(:most_relevant_job) do
+      FactoryGirl.create(:testributor_job, test_run: previous_run,
+        command: "and conquer", worker_command_run_seconds: 400)
+    end
+
+    subject do
+      FactoryGirl.create(:testributor_job, test_run: _test_run,
+                         command: "and conquer", status: TestStatus::PASSED)
+    end
+
+    it "does not run on persisted objects" do
+      subject.expects(:set_old_avg_worker_command_run_seconds).never
+      subject.valid?
+    end
+
+    it "sets old average to the avg of the most relevant job it exists" do
+      most_relevant_job
+      previous_run.update_column(:status, TestStatus::PASSED)
+
+      subject.valid?
+      subject.old_avg_worker_command_run_seconds.must_equal(
+        most_relevant_job.avg_worker_command_run_seconds)
+    end
+
+    it "does not change the old avg when already set" do
+      subject = FactoryGirl.build(:testributor_job,
+        test_run: _test_run, command: "and conquer",
+        status: TestStatus::PASSED, old_avg_worker_command_run_seconds: 30)
+
+      most_relevant_job
+      previous_run.update_column(:status, TestStatus::PASSED)
+
+      subject.valid?
+      subject.old_avg_worker_command_run_seconds.must_equal 30
+    end
   end
 
   describe "#most_relevant_job" do

@@ -20,6 +20,11 @@ class TestJob < ActiveRecord::Base
   validates :test_run, presence: true
 
   before_validation :set_completed_at
+  # avg_worker_command_run_seconds is the cost prediction for the next runs
+  # old_avg_worker_command_run_seconds is the cost prediction on which we based
+  # the "chunking" for this run
+  before_validation :set_old_avg_worker_command_run_seconds,
+    if: ->{ new_record? }
   before_validation :set_avg_worker_command_run_seconds,
     if: ->{ worker_command_run_seconds_changed? }
   after_save :update_test_run_status
@@ -77,10 +82,30 @@ class TestJob < ActiveRecord::Base
   end
 
   # test_run.most_relevant_run => matching command job
+  # NOTE: Memoizes value (even when value is nil)
   def most_relevant_job
-    return nil unless (test_run && (most_relevant_run = test_run.most_relevant_run))
+    if @most_relevant_job || @most_relevant_job_already_searched
+      return @most_relevant_job
+    end
 
-    most_relevant_run.test_jobs.detect{|j| j.command == command}
+    @most_relevant_job_already_searched = true
+    unless (test_run && (most_relevant_run = test_run.most_relevant_run))
+      return nil
+    end
+
+    @most_relevant_job =
+      most_relevant_run.test_jobs.detect{|j| j.command == command}
+  end
+
+  # We store the cost prediction for this test job on
+  # old_avg_worker_command_run_seconds column on new records.
+  def set_old_avg_worker_command_run_seconds
+    if old_avg_worker_command_run_seconds.nil? && most_relevant_job &&
+      most_relevant_job.avg_worker_command_run_seconds.present?
+
+      self.old_avg_worker_command_run_seconds =
+        most_relevant_job.avg_worker_command_run_seconds
+    end
   end
 
   private
@@ -92,13 +117,32 @@ class TestJob < ActiveRecord::Base
     end
   end
 
+  # We store the cost prediction for the next runs on
+  # avg_worker_command_run_seconds column when the worker_command_run_seconds
+  # column is set. This is the old_avg_worker_command_run_seconds updated with
+  # the actual cost of this job.
   def set_avg_worker_command_run_seconds
+    cost_prediction =
+      if avg_worker_command_run_seconds.present?
+        avg_worker_command_run_seconds # use the existing if already set
+      elsif old_avg_worker_command_run_seconds.present?
+        old_avg_worker_command_run_seconds # use the old cost prediction if already set
+      elsif most_relevant_job && most_relevant_job.avg_worker_command_run_seconds.present?
+        # find the old prediction if not already set.
+        # This should not happen since the set_old_avg_worker_command_run_seconds
+        # hook is run first
+        most_relevant_job.avg_worker_command_run_seconds
+      end
+
     self.avg_worker_command_run_seconds =
-      if most_relevant_job && most_relevant_job.worker_command_run_seconds.present?
-        ((most_relevant_job.worker_command_run_seconds * NUMBER_OF_SIGNIFICANT_RUNS) +
-         worker_command_run_seconds) / (NUMBER_OF_SIGNIFICANT_RUNS + 1).to_d
-      else
-        worker_command_run_seconds
+      # update the prediction when the actual cost is available
+      if cost_prediction.present? && worker_command_run_seconds.present?
+          ((cost_prediction * NUMBER_OF_SIGNIFICANT_RUNS) +
+            worker_command_run_seconds) / (NUMBER_OF_SIGNIFICANT_RUNS + 1).to_d
+      elsif cost_prediction.present?
+        cost_prediction # use the old prediction if worker_command_run_seconds is set to nil
+      elsif worker_command_run_seconds.present?
+        worker_command_run_seconds # use the actual cost if no prediction exists
       end
   end
 
