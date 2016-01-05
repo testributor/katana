@@ -26,7 +26,9 @@ module Api
         test_jobs = nil
 
         begin
-          TestJob.transaction(isolation: :serializable) do
+          # Prevent "cannot set transaction isolation in a nested transaction"
+          # error in tests (tests run inside a transaction)
+          TestJob.transaction(isolation: Rails.env.test? ? nil : :serializable) do
             test_jobs = TestJob.find_by_sql(sql)
           end
         rescue ActiveRecord::StatementInvalid => e
