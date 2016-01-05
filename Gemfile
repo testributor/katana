@@ -7,6 +7,7 @@ gem 'rails', '4.2.3'
 gem 'pg'
 gem 'redis'
 gem 'handlebars_assets'
+gem 'tunemygc'
 
 gem 'wicked'
 gem 'sidekiq'
