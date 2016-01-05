@@ -399,6 +399,7 @@ DEPENDENCIES
   cancancan (~> 1.10)
   capybara
   coffee-rails (~> 4.1.0)
+  connection_pool
   database_cleaner
   devise
   doorkeeper!
