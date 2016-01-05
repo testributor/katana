@@ -31,6 +31,8 @@ module Api
           end
         rescue ActiveRecord::StatementInvalid => e
           raise e unless e.original_exception.is_a?(PG::TRSerializationFailure)
+          # Prevent all threads from retrying simultaneously
+          sleep rand(0.010..0.100)
           retry
         end
 
