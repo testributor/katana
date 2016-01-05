@@ -5,28 +5,34 @@ module Api
       # To avoid race conditions, the selected jobs should be marked as running
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
+      # TODO: Write tests for this action
       def bind_next_batch
-        sample_job = current_project.test_jobs.
+        sample_job_sql = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
           where(status: TestStatus::QUEUED).
-          order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").first
-
-        if sample_job.blank?
-          render json: [], include: "test_run.project" and  return
-        end
-
-        preferred_jobs_sql = current_project.test_jobs.where(
-          test_run_id: sample_job.test_run_id,
-          chunk_index: sample_job.chunk_index).to_sql
-
+          order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").
+          limit(1).to_sql
         sql = <<-SQL
           UPDATE test_jobs SET status = #{TestStatus::RUNNING}
-          FROM (#{preferred_jobs_sql} FOR UPDATE) t
+          FROM (
+            WITH preferred_jobs AS (#{sample_job_sql})
+            SELECT test_jobs.* FROM test_jobs, preferred_jobs
+            WHERE test_jobs.test_run_id = preferred_jobs.test_run_id
+            AND test_jobs.chunk_index = preferred_jobs.chunk_index
+          FOR UPDATE) t
           WHERE test_jobs.id = t.id
           RETURNING test_jobs.*
         SQL
         test_jobs = nil
-        TestJob.transaction { test_jobs = TestJob.find_by_sql(sql) }
+
+        begin
+          TestJob.transaction(isolation: :serializable) do
+            test_jobs = TestJob.find_by_sql(sql)
+          end
+        rescue ActiveRecord::StatementInvalid => e
+          raise e unless e.original_exception.is_a?(PG::TRSerializationFailure)
+          retry
+        end
 
         render json: test_jobs, include: "test_run.project"
       end
