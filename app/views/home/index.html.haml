@@ -13,86 +13,113 @@
               = link_to root_path do
                 %div.navbar-brand.text-right-logo
                   %img{alt: "logo", src: image_path("logo.png")}
-                  %h2 Testributor
+                  %span.logo-text Testributor
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
               %ul.nav.navbar-nav.navbar-right
                 %li
                   %a.btn.btn-custom{href: new_user_session_path} Log in
                 %li
-                  %a.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+                  %a.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+  %section.signup-section
+    .container
       .row.hero-content
-        .col-xs-10.col-xs-offset-1
-          %h1.main-title Testing, as it should be
+        .col-md-7.col-lg-6
+          %h1.main-title Scale your test suite easily
+
           %p.main-text
-            If you are a programmer, you are probably familiar with the joys of
-            code testing. You are probably also aware that, in the real world,
-            test suites can get really big. The bigger and the more complete
-            the test suites are, the more substantial the time penalty that
-            programmers experience is. We are a humble team of programmers who
-            had to deal with exactly this pain as yourself, but no more.
+            Testributor will help you to magically slice up your suite and transparently run all
+            its “pieces” in parallel, on your computers or ours.
           %p.main-text
-            We created Testributor - an online service that aspires to help you
-            with the time consuming aspect of running testing. Testributor will
-            help you to magically slice up your suite and transparently run all
-            its “pieces” in parallel, on your computers or ours. In addition,
-            we are giving you a beautiful web UI, which is engineered with
-            simplicity in mind, to let you monitor your suite statuses and
-            track your breaking tests effortlessly.
-          .cta-container
-            %a.btn-cta.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign up for beta
+            No more legitimate slacking
+            %sup= link_to "?", "https://xkcd.com/303/", target: "_blank"
+            \. Testing time should be used for something good. Go have some fun.
+        .col-md-5.col-lg-6
+          .img-container
+            = image_tag("bkg_laptop", width: "100%")
+        .col-xs-12.text-center.cta-container
+          %a.btn-cta.btn.btn-tb-primary{href: new_user_registration_path} Sign up for Beta
+          .why-join
+            = link_to "Why join the beta?", "#why-join", data: {toggle: 'collapse'}
+        .col-xs-12
+          %p#why-join.collapse
+            By signing up for Beta you help us smooth out the rough edges and
+            for this reason, we will give you something in return.
+
+            Every verified
+            %sup{ data: { toggle: "tooltip", placement: "top" }, title: "Your account will be verified when you setup your worker(s) and run at least  one of your test suites. You also have to verify you email address." } ?
+
+            account that will open during the Beta period will be eligible for a
+            totally free, special plan, when we come out of the Beta!
+
+            We are confident that you will love it!
+            Check our list of supported technologies to make sure that you have
+            a smoother experience.
 
   %section.features
     .container
       .row.hero-content
-        .col-xs-10.col-xs-offset-1
-          %h2.main-title Features
-          %ul.feature-list
-            %li Run your tests in parallel batches with smart distribution
-            %li You are in charge of how your test suite is sliced up
-            %li Utilise your spare CPU cores to easily run your own workers
-            %li Set up your private workers with near-zero configuration
-            %li Opt for completely hassle-free managed cloud workers(coming soon)
-            %li Slick, beautiful web based UI
-            %li Re-run your individual breaking tests with a single click
-            %li Smart noise-free notification system (coming soon)
-            %li
-              Architectured using <a class='main-link' href="https://www.docker.com/what-docker">
-              Docker</a> technology to support
-              a limitless range of dependencies
+        .col-xs-12.text-center
+          %h2 Features
+        .col-xs-12
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-th-list
+                %span
+                  Smart distribution
+              Use simple configuration to split your test suite in multiple jobs
+              for running them in parallel.
+
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-laptop
+                Use your own resources
+              Utilise your spare CPU cores to easily run your own workers.
+              We provide near-zero configuration for worker setup.
+
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-cloud
+                Use managed resources
+              Opt for completely hassle-free managed cloud workers (coming soon).
+
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-bug
+                Re-run your tests
+              Almost every suite has some testing isolation holes. You can
+              just re-run an individual test when in doubt.
+
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-envelope
+                Notifications
+
+              Get notified about breaking tests. We do our best to keep notifications
+              relevant. If our intelligent defaults don't suit you, you can
+              adjust them at any time (coming soon).
+
+          .col-sm-6.col-lg-4
+            .feature
+              %h3
+                %i.fa.fa-docker
+                Crazy dependencies? We got you covered.
+
+              Architectured using
+              #{link_to "Docker", "https://www.docker.com/what-docker", target: "_blank"}
+              technology to support a limitless range of dependencies.
 
   %section
     .container
       .row.hero-content
-        .col-xs-10.col-xs-offset-1
-          %h2.main-title Beta Terms
-          %p.main-text
-            There are a few simple things we would like you know about before
-            signing up. Testributor is going to be in Beta phase for a
-            few weeks. What does this mean? Basically, it means that every now
-            and then you may hit a few bumps while running your tests. Fear not
-            though. We are here to help  everything you come across. In fact,
-            we do count a lot on your feedback and we want you to report to us
-            every small or big problem you encounter.
-            Of course, we want to give you something in return.
-          %p.main-text
-            Every <strong>verified</strong> account that will open
-            during the Beta period will be eligible for a totally free, special
-            plan, when we come out of the Beta! The only thing you have to do is
-            just use the Testributor service and set up your worker(s) and run
-            <strong>at least one</strong> of your test suites. We are confident that you will
-            love it! Check our list of
-            = link_to "supported technologies.", pages_path('faqs'), class: 'main-link'
-            to make sure that you have a smoother experience.
-          .cta-container
-            %a.btn-cta.disabled.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign up for beta
-
-  %section.features
-    .container
-      .row.hero-content
-        .col-xs-10.col-xs-offset-1
-          %h2 Can i skip the beta phase and sign up later? No problem!
+        .col-xs-10.col-xs-offset-1.text-center
+          %h2 Can I skip the Beta phase and sign up later? No problem!
           %p.submit-email-content
-            Just pop in your email address in the box below and click Submit.
+            Just pop in your email address in the box below and click Suscribe.
             That’s it! We’ll keep you posted about our release plans and
             we - obviously - promise that we’ll never share your details or spam you.
           .row
@@ -102,5 +129,29 @@
                   = f.text_field :email, class: 'submit-email-input',
                     placeholder: "Your e-mail"
                   = f.submit "Subscribe",
-                    class: 'btn btn-primary w-lg btn-lg m-l-10',
+                    class: 'btn-cta btn-tb-primary w-lg btn-lg m-l-10',
                     data: { disable_with: "Please wait..." }
+%footer.footer
+  .container
+    .row
+      .col-xs-12.col-sm-4.m-b-5
+        = link_to "#", class: 'btn-custom' do
+          About us
+        &#124;
+        = link_to pages_path("faqs"), class: 'btn-custom' do
+          FAQs
+      .col-xs-12.col-sm-4.m-b-5.text-center= "© #{Time.current.year} Testributor"
+      .col-xs-12.col-sm-4.m-b-5
+        %span.social
+          = link_to "https://www.twitter.com/testributor", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-twitter
+          = link_to "https://www.facebook.com/testributor/", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-facebook
+          = link_to "https://plus.google.com/115118310357583894547", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-google-plus
+          = link_to "https://www.linkedin.com/company/testributor", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-linkedin
