@@ -17,4 +17,5 @@
 //= require front/SmoothScroll
 //= require front/sweet-alert.min
 //= require init
+//= require front/common
 //= require_tree .

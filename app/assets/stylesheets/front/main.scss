@@ -1,9 +1,8 @@
 *, p, a, h1, h2, h3, h4, h5, h6 {
-  color: white;
 }
 
 html, body {
-  background-color: #383861;
+ color: #555;
 }
 
 form * {
@@ -12,7 +11,30 @@ form * {
 
 .btn-cta {
   padding: 25px 65px;
-  font-size: 20px;
+  background-color: #49497d;
+  border-radius: 5px;
+  color: #FFF;
+}
+
+section.features {
+  background: image-url("features-background")  no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  .feature {
+    padding: 20px;
+    min-height: 200px;
+    background: #000;
+    color: white;
+    opacity: 0.7;
+    margin-top: 20px;
+
+    .fa {
+      font-size: 120%;
+    }
+  }
 }
 
 .submit-email-group {
@@ -22,6 +44,10 @@ form * {
       margin: 20px auto 0 auto;
     }
   }
+
+  .btn-tb-primary {
+    padding: 9px 60px 13px 60px;
+  }
 }
 
 .submit-email-content {
@@ -29,6 +55,9 @@ form * {
 }
 .submit-email-input {
   min-width: 300px;
+  @media screen and (max-width: $screen-xs-max) {
+    min-width: 210px;
+  }
   padding: 10px 16px;
   border: 1px solid #5A5A9A;
   vertical-align: middle;
@@ -36,33 +65,44 @@ form * {
 }
 
 .top-section {
-  padding: 30px 0 0 0;
+  padding: 15px 0;
+  background-color: #4f4f86;
+}
+
+.home.index {
+  h2 {
+    font-size: 36px;
+    margin-top: 0;
+  }
+}
+
+.logo-text {
+  color: white;
+  text-transform: uppercase;
+  margin: 30px 10px;
+  display: inline-block;
 }
 
 .hero-content {
-  margin: 40px 0 60px 0;
+  margin: 40px 0 40px 0;
 }
 
 .main-title {
   font-weight: bold;
-  font-size: 65px;
-  @media screen and (max-width: $screen-xs-max) {
-    font-size: 45px;
+}
+
+@media screen and (max-width: $screen-sm-max) {
+  .img-container {
+    margin-top: 40px;
   }
 }
 
 .main-text {
-  margin-top: 40px;
   font-size: 20px;
-  line-height: 1.9;
-
-  @media screen and (max-width: $screen-xs-max) {
-    font-size: 18px;
-  }
+  line-height: 25px;
 }
 
 .inner-text {
-  font-size: 15px;
   line-height: 1.9;
 }
 
@@ -72,10 +112,6 @@ form * {
 
 .feature-list {
   margin-top: 40px;
-  font-size: 20px;
-  @media screen and (max-width: $screen-xs-max) {
-    font-size: 18px;
-  }
 
   li {
     margin-top: 20px;
@@ -83,16 +119,29 @@ form * {
 }
 
 .cta-container {
-  margin-top: 60px;
+  padding: 50px 0 0 0;
+}
+
+#why-join {
+  margin-top: 20px;
 }
 
 .features {
   background-color: #5A5A9A;
+  i {
+    padding-right: 5px;
+  }
 }
 
 .btn-tb-primary {
   border: 2px solid white;
   font-weight: bold;
+  opacity: 0.9;
+  font-size: 16px;
+  &:hover {
+    color: white;
+    opacity: 1;
+  }
 }
 
 .panel.panel-primary.panel-color {
@@ -102,3 +151,33 @@ form * {
 .panel.panel-primary .panel-heading {
   background-color: #4F4F86;
 }
+
+.footer {
+  color: #fff;
+  a {
+    color: #fff;
+    padding: 0 10px;
+  }
+}
+
+.footer .social a {
+  font-size: 150%;
+  padding: 5px;
+  opacity: 0.9;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.footer {
+  background-color: #4f4f86;
+  @media screen and (max-width: $screen-xs-max) {
+    text-align: center;
+  }
+  .social {
+    @media screen and (min-width: $screen-xs-max) {
+      float: right;
+    }
+  }
+}
+

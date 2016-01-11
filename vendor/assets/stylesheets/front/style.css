@@ -100,6 +100,7 @@ p {
   color: #C2BEBE;
   line-height: 26px;
 }
+
 .use-btn {
   display: inline-block;
   margin: 0 10px 10px 0;
@@ -111,6 +112,7 @@ p {
   font-weight: 700;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
 .navbar-custom {
   margin: 0px;
   border-radius: 0px;
@@ -118,7 +120,6 @@ p {
 .navbar-custom ul li a {
   color: #fff;
   font-size: 16px;
-  margin-bottom: 10px;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .navbar-brand {
@@ -126,9 +127,6 @@ p {
   font-size: 24px;
   font-weight: 700;
   padding: 0px;
-}
-.navbar-brand span {
-  color: #3bc0c3;
 }
 .navbar-brand i {
   font-size: 15px;
