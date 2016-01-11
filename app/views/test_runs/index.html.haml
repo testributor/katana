@@ -26,7 +26,7 @@
           %th= "Commit message (SHA)"
           %th= "Status"
           %th= "Results"
-          %th= "Total run time"
+          %th= "Duration"
           %th= "Actions"
       %tbody
         - @test_runs.each_with_index do |test_run, index|
@@ -35,22 +35,20 @@
           %tr{ id: "test-run-#{test_run.id}" }
             %td.col-md-1= link_to "##{reverse_order_num}",
               project_test_run_path(current_project, test_run)
-            %td.col-md-4
+            %td.col-md-3
               = test_run.commit_message
               %br
               %i= test_run.commit_info
             %td.col-md-1
               .test{class: test_run.status.css_class}
-                - if test_run.status.code == TestStatus::RUNNING
-                  %i.fa.fa-cog.fa-spin.fa-1x.fa-fw.m-r-5{style: "color: #{test_run.cog_color}" }
                 %span
                   = test_run.status.text
-            %td.col-md-4
+            %td.col-md-3
               = link_to project_test_run_path(current_project, test_run) do
                 .progress.status{ data: @statuses[test_run.id], id: test_run.id }
-            %td.col-md-2
+            %td.col-md-1
               - if test_run.total_running_time
                 = "#{(test_run.total_running_time / 60).to_i} min #{(test_run.total_running_time % 60).round} sec"
-            %td.col-md-2
+            %td.col-md-3
               - if reverse_order_num == @test_runs.size || test_run.status.code == TestStatus::RUNNING
                 = render partial: 'test_run_actions', locals: { test_run: test_run }

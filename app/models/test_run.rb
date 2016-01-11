@@ -128,10 +128,6 @@ class TestRun < ActiveRecord::Base
     github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path)
   end
 
-  def failing?
-    ([TestStatus::FAILED, TestStatus::ERROR] & test_jobs.pluck(:status)).any?
-  end
-
   def update_status!
     ActiveRecord::Base.connection.execute <<-SQL
       UPDATE test_runs SET status = (
