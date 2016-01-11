@@ -25,6 +25,7 @@ gem 'gretel'
 gem 'rack-timeout'
 gem 'redcarpet'
 gem 'rack-attack'
+gem 'awesome_print'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
