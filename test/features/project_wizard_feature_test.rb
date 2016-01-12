@@ -68,7 +68,7 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     project.docker_image_id.must_equal language2.id
     project.technologies.must_equal [technology]
     project.tracked_branches.
-      map(&:branch_name).must_equal ['aws', 'master']
+      map(&:branch_name).sort.must_equal ['aws', 'master'].sort
     project.repository_provider.must_equal 'github'
     project.repository_name.must_equal 'katana'
     project.repository_owner.must_equal 'ispyropoulos'
