@@ -12,10 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
-//= require front/jquery.easing.1.3.min
-//= require front/SmoothScroll
+//= require bootstrap/tooltip
+//= require bootstrap/collapse
+//= require underscore
 //= require front/sweet-alert.min
+//
 //= require init
-//= require front/common
-//= require_tree .
+//= require_tree ./front
+//= require autoload
