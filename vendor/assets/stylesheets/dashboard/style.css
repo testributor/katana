@@ -136,7 +136,7 @@ body, html {
 
 /******** 2. Left Panel (aside navigation) ********/
 aside.left-panel {
-  background-color: #333B4D;
+  background-color: rgb(53, 53, 68);
   width: 230px;
   position: fixed;
   height: 100%;
