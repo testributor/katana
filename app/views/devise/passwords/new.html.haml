@@ -3,7 +3,7 @@
     .panel-heading
       %h3.text-center.m-t-10
         = link_to root_path do
-          %div.text-right-logo
+          %div.logo
             %img{alt: "logo", src: image_path("logo.png")}
             %h2 Log in to Testributor
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
