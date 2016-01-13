@@ -15,7 +15,7 @@
 //= require bootstrap/tooltip
 //= require bootstrap/collapse
 //= require underscore
-//= require front/sweet-alert.min
+//= require sweet-alert.min
 //
 //= require init
 //= require_tree ./front

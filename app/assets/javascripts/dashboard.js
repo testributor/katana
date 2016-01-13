@@ -18,6 +18,7 @@
 //= require underscore
 //= require socket.io
 //= require select2
+//= require sweet-alert.min
 //= require dashboard/modernizr.min
 //= require dashboard/pace.min
 //= require dashboard/wow.min
