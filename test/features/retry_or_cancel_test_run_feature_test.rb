@@ -37,7 +37,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Passed"
-    find(".btn-primary").click
+    find(".btn-primary", text: "Retry").click
     page.must_have_content "Queued"
   end
 
@@ -59,18 +59,17 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Error"
-    find(".btn-primary").click
+    find(".btn-primary", text: "Retry").click
     page.must_have_content "Queued"
   end
 
   it "user won't be able to retry a cancelled test_run" do
-    _test_job.update_column(:status, TestStatus::CANCELLED)
-    _test_job.reload
     _test_run.update_column(:status, TestStatus::CANCELLED)
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Cancelled"
-    page.wont_have_selector ".btn-primary"
+    page.must_have_content "Cancelled"
+    page.wont_have_selector ".btn-primary", text: "Retry"
   end
 
   it "user is able to cancel a queued test_run" do
