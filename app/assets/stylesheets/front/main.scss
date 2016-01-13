@@ -2,7 +2,7 @@
 }
 
 html, body {
- color: #555;
+  color: #555;
 }
 
 .btn-cta {
@@ -144,14 +144,6 @@ section.features {
   background-color: #4F4F86;
 }
 
-.footer {
-  color: #fff;
-  a {
-    color: #fff;
-    padding: 0 10px;
-  }
-}
-
 .footer .social a {
   font-size: 150%;
   padding: 5px;
@@ -162,10 +154,18 @@ section.features {
 }
 
 .footer {
+  position: relative;
+  margin-top: -74px;
+  color: #fff;
+  a {
+    color: #fff;
+    padding: 0 10px;
+  }
   background-color: #4f4f86;
   @media screen and (max-width: $screen-xs-max) {
     text-align: center;
   }
+
   .social {
     @media screen and (min-width: $screen-xs-max) {
       float: right;
@@ -173,3 +173,16 @@ section.features {
   }
 }
 
+#page {
+  min-height: 100%;
+  padding-bottom: 75px;
+}
+
+.service-logos {
+  list-style: none;
+  padding: 10px;
+  span {
+    font-weight: bold;
+    padding-left: 10px;
+  }
+}

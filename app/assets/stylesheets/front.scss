@@ -1,10 +1,16 @@
+/* Loaded from gem */
 @import "bootstrap";
+@import "bootstrap-social";
+@import "font-awesome";
+
+/* Loaded from vendor */
 @import "front/bootstrap-reset";
 @import "font-awesome";
 @import "sweet-alert.min";
 @import "front/style";
 @import "dashboard/helper";
-@import "bootstrap-social";
-@import "front/main";
 @import "docker-font-awesome";
+
+/* Loaded from app */
 @import "common";
+@import "front/main";

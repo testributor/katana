@@ -1,27 +1,24 @@
 %footer.footer
   .container
     .row
-      .col-lg-3.col-md-3
-        %a.navbar-brand-footer{:href => "#"}
-          %img{:alt => "logo", :src => image_path("logo.png")}/
-      .col-lg-4.col-lg-offset-3.col-md-7
-        %ul.nav.navbar-nav
-          %li
-            %a{:href => "#how"} How it works
-          %li
-            %a{:href => "#features"} Features
-          %li
-            %a{:href => "#pricing"} Pricing
-          %li
-            %a{:href => "#clients"} Clients
-      .col-lg-2.col-md-2
-        %ul.social-icons
-          %li
-            %a{:href => "#"}
-              %i.fa.fa-facebook
-          %li
-            %a{:href => "#"}
-              %i.fa.fa-twitter
-          %li
-            %a{:href => "#"}
-              %i.fa.fa-google-plus
+      .col-xs-12.col-sm-4.m-b-5
+        = link_to pages_path('about_us'), class: 'btn-custom' do
+          About us
+        &#124;
+        = link_to pages_path("faqs"), class: 'btn-custom' do
+          FAQs
+      .col-xs-12.col-sm-4.m-b-5.text-center= "© #{Time.current.year} Testributor"
+      .col-xs-12.col-sm-4.m-b-5
+        %span.social
+          = link_to "https://www.twitter.com/testributor", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-twitter
+          = link_to "https://www.facebook.com/testributor/", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-facebook
+          = link_to "https://plus.google.com/115118310357583894547", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-google-plus
+          = link_to "https://www.linkedin.com/company/testributor", class: 'btn-custom',
+            target: "_blank" do
+            %i.fa.fa-linkedin

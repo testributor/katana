@@ -1,28 +1,12 @@
-%header
-  %section.hero
-    .container
-      .row.nav-wrapper
-        %nav.navbar.navbar-custom
-          .container-fluid
-            .navbar-header
-              %button.navbar-toggle.collapsed{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
-                %span.sr-only Toggle navigation
-                %span.icon-bar
-                %span.icon-bar
-                %span.icon-bar
-              = link_to root_path do
-                %div.navbar-brand.logo
-                  %img{alt: "logo", src: image_path("logo.png")}
-                  %h2 Testributor
-            #bs-example-navbar-collapse-1.collapse.navbar-collapse
-              %ul.nav.navbar-nav.navbar-right
-                %li
-                  %a.btn.btn-custom{href: new_user_session_path} Log in
-                %li
-                  %a.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+#page
+  = render partial: 'layouts/header_front'
+  %main
+    %section
+      .container
+        .row
           .col-xs-10.col-xs-offset-1
-            %h1.main-title{style: 'margin-bottom: 80px;'}
-              Frequently Asked Questions (FAQs)
+            %h1.main-title
+              Frequently Asked Questions
             %h2 What are the supported technologies?
             %p.inner-text
               We are working very hard to make the Testributor a stable and
@@ -30,9 +14,18 @@
               we strive to test ourselves as many as possible platforms and
               technology combinations as we can. So far, we promise that
               Testributor can run anything that is built on:
-            %ul
-              %li Ruby (MRI) 1.9.3, 2.0.0, 2.1.4, 2.1.5, 2.2.0, 2.2.1
-              %li PostgreSQL 9.3, 9.4
-              %li MySQL 5.5, 5.6, 5.7
-              %li Redis 2.6, 2.8, 3.0
+            %ul.service-logos
+              %li
+                = image_tag(asset_path('service-logos/ruby.png'), width: 45)
+                %span 1.9.3 &nbsp;&nbsp;·&nbsp;&nbsp; 2.0.0 &nbsp;&nbsp;·&nbsp;&nbsp; 2.1.4 &nbsp;&nbsp;·&nbsp;&nbsp; 2.1.5 &nbsp;&nbsp;·&nbsp;&nbsp; 2.2.0 &nbsp;&nbsp;·&nbsp;&nbsp; 2.2.1
+              %li
+                = image_tag(asset_path('service-logos/postgres.png'), width: 50)
+                %span 9.3 &nbsp;&nbsp;·&nbsp;&nbsp; 9.4
+              %li
+                = image_tag(asset_path('service-logos/mysql.png'), width: 50)
+                %span 5.5 &nbsp;&nbsp;·&nbsp;&nbsp; 5.6 &nbsp;&nbsp;·&nbsp;&nbsp; 5.7
+              %li
+                = image_tag(asset_path('service-logos/redis.png'), width: 50)
+                %span 2.6 &nbsp;&nbsp;·&nbsp;&nbsp; 2.8 &nbsp;&nbsp;·&nbsp;&nbsp; 3.0
             %p.inner-text We will update this list regularly.
+= render partial: 'layouts/footer_front'
