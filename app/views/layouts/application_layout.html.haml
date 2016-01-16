@@ -9,7 +9,8 @@
 
         ga('create', 'UA-72250863-1', 'auto');
         ga('send', 'pageview');
-    %title= brand_name
+    %title= meta_title
+    %meta{name: :description, content: meta_description }
     %meta{name: "viewport", content: "width=device-width"}
     %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     = render "layouts/favicon"

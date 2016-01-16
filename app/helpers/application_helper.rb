@@ -1,6 +1,11 @@
 module ApplicationHelper
-  def brand_name
-    'Testributor'
+  def meta_title
+    "Testributor: Parallel Testing for Ruby on Rails, Python, Javascript and more."
+  end
+
+  def meta_description
+    "Testributor will help you slice up your test suite and transparently "\
+    "run all its “pieces” in parallel, on your computers or ours."
   end
 
   def controller_and_action
