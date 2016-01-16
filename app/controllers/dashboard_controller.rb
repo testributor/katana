@@ -40,9 +40,9 @@ class DashboardController < ApplicationController
   end
 
   def reconnect_message
-    "Your Testributor account is not connected to GitHub. "\
-    "Please #{view_context.link_to 'Connect to Github',
-    view_context.github_oauth_authorize_url}.".
+    "It seems that we need some authorization for your Github account. "\
+    "Please #{view_context.link_to 'click here',
+    view_context.github_oauth_authorize_url} to proceed.".
       html_safe
   end
 end
