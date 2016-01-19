@@ -6,7 +6,7 @@ class CallbacksController < Devise::OmniauthCallbacksController
     else
       flash[:alert] = "Oops. It seems that your email is private."\
         "You can change your email settings on github or create a Testributor account."
-      redirect_to :back
+      redirect_to new_user_registration_path
     end
   end
 end
