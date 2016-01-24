@@ -122,12 +122,6 @@ p {
   font-size: 16px;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-.navbar-brand {
-  color: #fff;
-  font-size: 24px;
-  font-weight: 700;
-  padding: 0px;
-}
 .navbar-brand i {
   font-size: 15px;
 }
@@ -385,8 +379,6 @@ ul.social-icons li a i {
 }
 
 .navbar-brand.logo {
-  margin-top: -12px;
-
   h2 {
     padding-left: 10px;
   }
@@ -402,7 +394,7 @@ ul.social-icons li a i {
 .logo {
   img {
     float: left;
-    width: 70px;
+    width: 55px;
   }
 }
 
