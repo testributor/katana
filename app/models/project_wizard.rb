@@ -33,11 +33,12 @@ class ProjectWizard < ActiveRecord::Base
     return false unless client.present?
 
     existing_repo_names = user.projects.pluck(:repository_id)
-    client.repos.reject do |repo|
-      repo.owner.login != client.user.login || repo.id.in?(existing_repo_names)
-    end.map do |repo|
-      { id: repo.id, fork: repo.fork?, name: repo.full_name }
-    end
+
+    #https://developer.github.com/v3/repos/#list-user-repositories
+    repos = client.repos(nil, { type: "owner", per_page: 50 })
+    repos.reject do |repo|
+      repo.id.in?(existing_repo_names)
+    end.map { |repo| { id: repo.id, fork: repo.fork?, name: repo.full_name } }
   end
 
   # When repo_name is blank or client is blank, this method returns false.
