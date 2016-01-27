@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   devise_for :projects
   devise_for :users, :controllers => { :omniauth_callbacks => "callbacks" }
 
+  namespace :admin do
+    get :become
+  end
+
   namespace :api, default: { format: 'json' } do
     namespace :v1 do
       resources :projects, only: [] do
