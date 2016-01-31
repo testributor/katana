@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160113111518) do
+ActiveRecord::Schema.define(version: 20160131175737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,6 +166,7 @@ ActiveRecord::Schema.define(version: 20160113111518) do
     t.integer  "chunk_index",                                                 default: 0,  null: false
     t.decimal  "avg_worker_command_run_seconds",     precision: 10, scale: 6
     t.decimal  "old_avg_worker_command_run_seconds", precision: 10, scale: 6
+    t.string   "job_name"
   end
 
   create_table "test_runs", force: :cascade do |t|

@@ -74,7 +74,11 @@ class TestRun < ActiveRecord::Base
       file_names = project_file_names
       file_names.select{|f| f.match(pattern)}.each do |f|
         test_jobs.build(
-          command: command.gsub(/%{file}/, f), before: before, after: after)
+          job_name: f,
+          command: command.gsub(/%{file}/, f),
+          before: before,
+          after: after
+        )
       end
     end
 
@@ -82,7 +86,12 @@ class TestRun < ActiveRecord::Base
       command = description["command"]
       before = description["before"].to_s
       after = description["after"].to_s
-      test_jobs.build(command: command, before: before, after: after)
+      test_jobs.build(
+        job_name: job_name,
+        command: command,
+        before: before,
+        after: after
+      )
     end
     Katanomeas.new(self).assign_chunk_indexes_to_test_jobs
 
