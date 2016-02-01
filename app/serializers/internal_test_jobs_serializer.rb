@@ -7,8 +7,7 @@ class InternalTestJobsSerializer < ActiveModel::Serializer
   attributes :command, :id, :status_text, :status_css_class, :retry_url,
     :result, :unsuccessful, :total_running_time, :worker_command_run_seconds,
     :avg_worker_command_run_seconds, :sent_at, :chunk_index, :html_class,
-    :test_run_id
-
+    :test_run_id, :job_name
 
   # We serialise this attribute as seconds since epoch instead of Datetime to
   # allow easier parsing, as this travels via API calls between the server and

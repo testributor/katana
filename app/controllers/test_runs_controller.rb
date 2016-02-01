@@ -45,7 +45,7 @@ class TestRunsController < DashboardController
     @test_run.build_test_jobs
     @test_run.save
     Broadcaster.publish(@test_run.redis_live_update_resource_key, { retry: true, test_run_id: @test_run.id })
-    redirect_to :back, notice: 'Test run was successfully updated.'
+    redirect_to :back, notice: 'Test run was successfully queued.'
   end
 
   def destroy
