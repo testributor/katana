@@ -20,8 +20,10 @@ class Testributor.Widgets.ProgressBar
     testJobsLength = $progressBar.data('length')
     statusSize = if $progressBar.data(status) then (Number($progressBar.data(status)) + 1) else 1
     $progressBar.data(status, statusSize)
+
     width = (statusSize / testJobsLength) * 100
-    $progressBar.find(".progress-bar-#{status}").animate({ width: "#{width}%"}, 50)
+    $progressBar.find(".progress-bar-#{status}").css(width: "#{width}%")
+
     $progressBar.siblings().find(".#{status}").text(statusSize)
     unless @toggle($progressBar)
       $progressBar.find('.progress-bar-striped.active').removeClass('progress-bar-striped active')
