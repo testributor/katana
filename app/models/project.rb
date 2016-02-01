@@ -43,7 +43,7 @@ class Project < ActiveRecord::Base
   attr_accessor :fork
 
   def to_param
-    "#{id}-#{name}"
+    "#{id}-#{name.gsub(/[^a-z0-9]+/i, '-').downcase}"
   end
 
   def workers_redis_key

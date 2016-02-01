@@ -100,4 +100,11 @@ class ProjectTest < ActiveSupport::TestCase
         must_equal [ProjectFile::BUILD_COMMANDS_PATH]
     end
   end
+
+  describe "to_param" do
+    it "generates a simple/valid name for urls" do
+      project = Project.new(name: "This.is|an|ugly.and^complex(name)@*&^*&^*for'a`project")
+      project.to_param.must_equal "-this-is-an-ugly-and-complex-name-for-a-project"
+    end
+  end
 end
