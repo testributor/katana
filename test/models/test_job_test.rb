@@ -301,5 +301,68 @@ class TestJobTest < ActiveSupport::TestCase
         _test_run.reload.status.code.must_equal 1
       end
     end
+
+    describe "retry!" do
+      subject do
+        FactoryGirl.create(:testributor_job, completed_at: Time.now,
+                           sent_at: 1.day.ago, worker_in_queue_seconds: 2,
+                           worker_command_run_seconds: 10,
+                           reported_at: Time.now)
+      end
+
+      it "does not empty the completed_at column" do
+        subject.completed_at.wont_be :nil?
+        subject.retry!
+        subject.reload.completed_at.wont_be :nil?
+      end
+
+      it "does not empty the sent_at column" do
+        subject.sent_at.wont_be :nil?
+        subject.retry!
+        subject.reload.sent_at.wont_be :nil?
+      end
+
+      it "does not empty the worker_in_queue_seconds column" do
+        subject.worker_in_queue_seconds.wont_be :nil?
+        subject.retry!
+        subject.reload.worker_in_queue_seconds.wont_be :nil?
+      end
+
+      it "does not empty the worker_command_run_seconds column" do
+        subject.worker_command_run_seconds.wont_be :nil?
+        subject.retry!
+        subject.reload.worker_command_run_seconds.wont_be :nil?
+      end
+
+      it "does not empty the reported_at column" do
+        subject.reported_at.wont_be :nil?
+        subject.retry!
+        subject.reload.reported_at.wont_be :nil?
+      end
+
+      it "sets rerun attribute to true" do
+        subject.rerun.must_equal false
+        subject.retry!
+        subject.reload.rerun.must_equal true
+      end
+    end
+
+    describe "set_completed_at (private)" do
+      subject do
+        FactoryGirl.create(:testributor_job,
+                           worker_in_queue_seconds: 32,
+                           worker_command_run_seconds: 12)
+      end
+
+      it "does not set completed_at if already set" do
+        t = 1.day.ago.beginning_of_day
+        # The set_completed_at method would normally set completed_at to
+        # some time after sent_at. We set these in the opposite order here
+        # to verify that the command did not change completed_at
+        subject.update_columns(completed_at: t, sent_at: t + 1.hour)
+        subject.send(:set_completed_at)
+        subject.completed_at.must_equal t
+      end
+    end
   end
 end

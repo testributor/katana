@@ -58,4 +58,63 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
     end
   end
+
+  describe "PATCH#batch_update" do
+    let(:_test_job_json) do
+      { command: "rspec spec/validators/redirect_uri_validator_spec.rb",
+        cost_prediction: 23,
+        sent_at_seconds_since_epoch: 1454339875,
+        worker_in_queue_seconds: 20,
+        worker_command_run_seconds: 20,
+        test_run: { commit_sha: "21731d02b766f6978bf3b2bf69137338b081fcaf", id: _test_run.id},
+        result: "result",
+        status: TestStatus::PASSED }.to_json
+    end
+    let(:report_time) { 3.hours.ago }
+
+    before do
+      _test_jobs.each do |j|
+        j.update(status: TestStatus::RUNNING,
+          sent_at:  Date.new(2015, 01,01).beginning_of_day,
+          worker_in_queue_seconds: 10, worker_command_run_seconds: 10,
+          reported_at: report_time)
+      end
+    end
+
+    it "does not update sent_at if already set" do
+      @controller.stub :doorkeeper_token, token do
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+
+      _test_jobs.last.reload.sent_at.must_equal Date.new(2015, 01,01).beginning_of_day
+    end
+
+    it "does not update worker_in_queue_seconds if already set" do
+      @controller.stub :doorkeeper_token, token do
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+
+      _test_jobs.last.reload.worker_in_queue_seconds.must_equal 10
+    end
+
+    it "does not update worker_command_run_seconds if already set" do
+      @controller.stub :doorkeeper_token, token do
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+
+      _test_jobs.last.reload.worker_command_run_seconds.must_equal 10
+    end
+
+    it "does not update reported_at if already set" do
+      @controller.stub :doorkeeper_token, token do
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+
+      _test_jobs.last.reload.reported_at.to_i.must_equal report_time.to_i
+    end
+  end
 end

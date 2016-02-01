@@ -72,7 +72,19 @@ module Api
               delete_test_runs:  missing_or_cancelled_test_run_ids } and return
           end
 
-          job.update!(job_params.merge(reported_at: Time.current))
+          # Skips time attributes if already set (when retrying job)
+          if job.sent_at.present?
+            job_params.except!("sent_at_seconds_since_epoch")
+          end
+          if job.worker_in_queue_seconds.present?
+            job_params.except!("worker_in_queue_seconds")
+          end
+          if job.worker_command_run_seconds.present?
+            job_params.except!("worker_command_run_seconds")
+          end
+          job_params.merge!(reported_at: Time.current) if job.reported_at.nil?
+
+          job.update!(job_params)
           Broadcaster.publish(job.test_run.redis_live_update_resource_key,
                               { test_job: job.serialized_job, test_run: job.test_run.reload.serialized_run }.to_json)
         end

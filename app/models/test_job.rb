@@ -68,16 +68,12 @@ class TestJob < ActiveRecord::Base
   def retry!
     self.result = ''
     self.status = TestStatus::QUEUED
-    self.completed_at = nil
     self.test_errors = 0
     self.failures = 0
     self.count = 0
     self.assertions = 0
     self.skips = 0
-    self.sent_at = nil
-    self.worker_in_queue_seconds = nil
-    self.worker_command_run_seconds = nil
-    self.reported_at = nil
+    self.rerun = true
     save!
   end
 
