@@ -23,3 +23,4 @@ config/database.local.yml
 # Other files
 /.idea
 .env
+docker-compose.yml
