@@ -28,6 +28,10 @@
           = link_to settings_project_path(current_project) do
             %i.fa.fa-cog
             %span.nav-label= "Settings"
+        %li{ class: current_page?(instructions_project_path(current_project)) ? 'active' : nil }
+          = link_to instructions_project_path(current_project) do
+            %i.fa.fa-book
+            %span.nav-label= "Instructions"
     - if current_project
       %ul.list-unstyled
         %li
