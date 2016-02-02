@@ -77,6 +77,7 @@ class TestJob < ActiveRecord::Base
     self.count = 0
     self.assertions = 0
     self.skips = 0
+    self.worker_uuid = nil
     self.rerun = true
     save!
   end

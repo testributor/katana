@@ -3,6 +3,15 @@ require 'test_helper'
 class TestJobTest < ActiveSupport::TestCase
   subject { TestJob.new }
 
+  describe "retry!" do
+    subject { FactoryGirl.create(:testributor_job, worker_uuid: "some_uuid") }
+    it "sets worker_uuid to nil" do
+      subject.worker_uuid.must_equal 'some_uuid'
+      subject.retry!
+      subject.reload.worker_uuid.must_equal nil
+    end
+  end
+
   describe '#sent_at_seconds_since_epoch=' do
     describe 'when no seconds are passed' do
       it '#sent_at should return nil' do
