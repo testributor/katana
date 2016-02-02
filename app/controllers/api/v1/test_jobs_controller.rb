@@ -64,7 +64,9 @@ module Api
           where(id: test_run_ids).pluck(:id)
         missing_or_cancelled_test_run_ids = test_run_ids - test_run_id_keepers
 
-        current_project.test_jobs.running.where(id: job_ids).each do |job|
+        current_project.test_jobs.running.where(id: job_ids, worker_uuid: worker_uuid).
+          each do |job|
+
           begin
             job_params = jobs[job.id].keep_if do |k,v|
                 %w(result status id result runs assertions failures errors

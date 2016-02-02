@@ -39,7 +39,8 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
         request.env['HTTP_WORKER_UUID'] = 'this_is_a_worker_uuid'
         patch :bind_next_batch, default: { format: :json }
         result = JSON.parse(response.body)
-        _test_jobs.each(&:reload).map(&:worker_uuid).uniq.must_equal ['this_is_a_worker_uuid']
+        _test_jobs.each(&:reload).map(&:worker_uuid).compact.uniq.
+          must_equal ['this_is_a_worker_uuid']
       end
     end
 
@@ -128,6 +129,30 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
 
       _test_jobs.last.reload.reported_at.to_i.must_equal report_time.to_i
+    end
+
+    # Workers that became inactive for some reason might try to update the jobs
+    # after being reassigned to another worker. We simply ignore the old worker.
+    it "does not update jobs assigned to another worker" do
+      _test_jobs.each{|j| j.update_columns(worker_uuid: "the_original_uuid",
+                                         result: '') }
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'this_is_another_worker_uuid'
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+      _test_jobs.map(&:reload).map(&:result).uniq.must_equal ['']
+    end
+
+    it "updates jobs assigned to the calling worker" do
+      _test_jobs.each{|j| j.update_columns(worker_uuid: "the_original_uuid",
+                                         result: '') }
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'the_original_uuid'
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+      _test_jobs.map(&:reload).map(&:result).uniq.must_equal ['result']
     end
   end
 end
