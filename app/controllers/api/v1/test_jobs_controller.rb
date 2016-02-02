@@ -13,7 +13,7 @@ module Api
           order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").
           limit(1).to_sql
         sql = <<-SQL
-          UPDATE test_jobs SET status = #{TestStatus::RUNNING}
+          UPDATE test_jobs SET status = #{TestStatus::RUNNING}, worker_uuid = ?
           FROM (
             WITH preferred_jobs AS (#{sample_job_sql})
             SELECT test_jobs.* FROM test_jobs, preferred_jobs
@@ -32,6 +32,7 @@ module Api
           # Prevent "cannot set transaction isolation in a nested transaction"
           # error in tests (tests run inside a transaction)
           TestJob.transaction(isolation: Rails.env.test? ? nil : :serializable) do
+            sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, worker_uuid.to_s])
             test_jobs = TestJob.find_by_sql(sql)
           end
         rescue ActiveRecord::StatementInvalid => e

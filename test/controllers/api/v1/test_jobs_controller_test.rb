@@ -33,6 +33,16 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
     end
 
+    it "updates jobs worker_uuid the worker's uuid" do
+      _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING) }
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'this_is_a_worker_uuid'
+        patch :bind_next_batch, default: { format: :json }
+        result = JSON.parse(response.body)
+        _test_jobs.each(&:reload).map(&:worker_uuid).uniq.must_equal ['this_is_a_worker_uuid']
+      end
+    end
+
     it "does not count incosistent state jobs in workload" do
       terminal_state_test_run =
         FactoryGirl.create(:testributor_run, project: project)

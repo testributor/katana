@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160201141741) do
+ActiveRecord::Schema.define(version: 20160202105129) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 20160201141741) do
     t.decimal  "old_avg_worker_command_run_seconds", precision: 10, scale: 6
     t.string   "job_name"
     t.boolean  "rerun",                                                       default: false, null: false
+    t.string   "worker_uuid"
   end
 
   create_table "test_runs", force: :cascade do |t|

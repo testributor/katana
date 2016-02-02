@@ -4,7 +4,7 @@ class InternalTestJobsSerializer < ActiveModel::Serializer
   include Models::HasWorkerTime
   include Rails.application.routes.url_helpers
 
-  attributes :command, :id, :status_text, :status_css_class, :retry_url,
+  attributes :command, :id, :worker_uuid_short, :status_text, :status_css_class, :retry_url,
     :result, :unsuccessful, :total_running_time, :worker_command_run_seconds,
     :avg_worker_command_run_seconds, :sent_at, :chunk_index, :html_class,
     :test_run_id, :job_name

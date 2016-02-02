@@ -36,6 +36,10 @@ class TestJob < ActiveRecord::Base
   scope :error, -> { where(status: TestStatus::ERROR) }
   scope :cancelled, -> { where(status: TestStatus::CANCELLED) }
 
+  def worker_uuid_short
+    worker_uuid.to_s[0..7]
+  end
+
   # Converts seconds since epoch to datetime
   # The UTC timestamp recorded when Katana sent this job to the worker,
   # expressed in seconds since epoch.

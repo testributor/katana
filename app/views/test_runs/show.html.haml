@@ -27,6 +27,7 @@
                 %th='Job name'
                 %th='Status'
                 %th='Sent at (UTC)'
+                %th='Worker UUID'
                 - if current_user.admin?
                   %th='Chunk index'
                   %th='Cost prediction'
@@ -41,6 +42,7 @@
                   %td
                     %span{class: test_job.status.css_class}= test_job.status.text
                   %td= l(test_job.sent_at, format: :short) if test_job.sent_at
+                  %td= test_job.worker_uuid_short
                   - if current_user.admin?
                     %td= test_job.chunk_index
                     %td
