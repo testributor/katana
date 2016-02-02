@@ -21,6 +21,9 @@ module Api
             AND test_jobs.chunk_index = preferred_jobs.chunk_index
           FOR UPDATE) t
           WHERE test_jobs.id = t.id
+          /* Don't return all the jobs in the chunk. User might retried only
+             one job from the chunk so some of the jobs might already be run. */
+          AND test_jobs.status = #{TestStatus::QUEUED}
           RETURNING test_jobs.*
         SQL
         test_jobs = nil

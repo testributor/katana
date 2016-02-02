@@ -19,12 +19,15 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
 
   before { _test_jobs }
 
-  describe "PATCH#bind_next_queued" do
-    it "returns queued jobs and updates it's status to RUNNING" do
-      _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING) }
+  describe "PATCH#bind_next_batch" do
+    it "returns only queued jobs and updates it's status to RUNNING" do
+      # all jobs on the same chunk, only one has QUEUED status
+      _test_jobs.each{|j| j.update_column(:chunk_index, 0)}
+      _test_jobs[0..-2].each{|f| f.update_columns(status: TestStatus::RUNNING) }
       @controller.stub :doorkeeper_token, token do
         patch :bind_next_batch, default: { format: :json }
         result = JSON.parse(response.body)
+        result.count.must_equal 1
         result.first["command"].must_equal _test_jobs[-1].command
         _test_jobs[-1].reload.status.code.must_equal TestStatus::RUNNING
       end
