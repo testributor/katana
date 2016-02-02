@@ -5,13 +5,21 @@ module Api
       # To avoid race conditions, the selected jobs should be marked as running
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
-      # TODO: Write tests for this action
       def bind_next_batch
+        active_workers = current_project.active_workers.
+          map{|uuid| uuid.gsub(/project_#{current_project.id}_worker_/,'')}
+
+        worker_condition_sql = ActiveRecord::Base.send(:sanitize_sql_array,
+          ["test_jobs.status = ? OR "\
+           "(test_jobs.status = ? AND test_jobs.worker_uuid NOT IN (?))",
+           TestStatus::QUEUED, TestStatus::RUNNING, active_workers])
+
         sample_job_sql = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
-          where(status: TestStatus::QUEUED).
+          where(worker_condition_sql).
           order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").
           limit(1).to_sql
+
         sql = <<-SQL
           UPDATE test_jobs SET status = #{TestStatus::RUNNING}, worker_uuid = ?
           FROM (
@@ -23,7 +31,7 @@ module Api
           WHERE test_jobs.id = t.id
           /* Don't return all the jobs in the chunk. User might retried only
              one job from the chunk so some of the jobs might already be run. */
-          AND test_jobs.status = #{TestStatus::QUEUED}
+          AND #{worker_condition_sql}
           RETURNING test_jobs.*
         SQL
         test_jobs = nil
