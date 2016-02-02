@@ -1,5 +1,5 @@
 class ProjectSerializer < ActiveModel::Serializer
-  attributes :repository_name, :repository_owner, :repository_ssh_url
+  attributes :repository_ssh_url
 
   has_many :files
   has_one :docker_image

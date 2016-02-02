@@ -5,11 +5,46 @@
 .panel.panel-default
   .panel-heading
     %h3.panel-title
-      Docker compose file
-      = link_to docker_compose_project_path(current_project) do
-        %i.fa.fa-download
+      Worker Groups
+      .worker-groups-actions
+        = link_to project_worker_groups_path(current_project), method: :post,
+        class: 'btn btn-success btn-xs',
+        title: 'Create a new group of workers.' do
+          %i.fa.fa-plus-square
+          Add a new group
   .panel-body
-    %pre= current_project.generate_docker_compose_yaml
+    %table.table
+      %thead
+        %tr
+          %th
+            Friendly name
+          %th
+      %tbody
+        - current_project.oauth_applications.each do |app|
+          :ruby
+            worker_group = current_project.find_worker_group_by(oauth_application_id: app.id)
+          %tr
+            %td.worker-group
+              = render worker_group
+            %td
+              .worker-group-actions
+                = link_to docker_compose_project_path(current_project, client_id: app.id),
+                class: 'btn btn-info btn-xs',
+                title: 'Download the docker-compose.yml file that is needed for creating a worker.' do
+                  %i.fa.fa-download
+                  docker-compose.yml
+                = link_to project_worker_group_reset_ssh_key_path(current_project, worker_group),
+                method: :post, class: 'btn btn-danger btn-xs',
+                data: { confirm: 'Workers of this group will need to be restarted after resetting the key. Reset?' },
+                title: 'Reset the SSH key that the workers of this group use in order to access the repository linked with this project.' do
+                  %i.fa.fa-refresh
+                  Reset SSH key
+                = link_to project_worker_group_path(current_project, worker_group, client_id: app.id),
+                method: :delete, class: 'btn btn-danger btn-xs',
+                data: { confirm: "Workers of this group will not be able to access project '#{current_project.name}' anymore. Delete?" },
+                title: 'Delete the group and disable its workers from accessing this project.' do
+                  %i.fa.fa-trash
+                  Delete group
 
 .panel.panel-default
   .panel-heading

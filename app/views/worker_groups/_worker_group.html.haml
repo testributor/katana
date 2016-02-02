@@ -1,0 +1,15 @@
+.worker-group-form{ style: worker_group.errors.empty? ? 'display: none;' : nil }
+  = simple_form_for [current_project, worker_group],
+  html: { class: 'js-worker-group-form' }, remote: true do |f|
+    = f.input :oauth_application_id, as: :hidden
+    = f.input :friendly_name, label: false, wrapper_html: {class: 'form-inline' } do
+      = f.input_field :friendly_name
+      = f.button :button, class: 'btn btn-success btn-xs action',
+      data: { 'disable-with' => 'Saving...' } do
+        %i.fa.fa-save
+        Save
+.worker-group-info{ style: worker_group.errors.any? ? 'display: none;' : nil }
+  #{worker_group.friendly_name}
+  = link_to '', class: 'js-worker-group-edit-btn btn btn-warning btn-xs action' do
+    %i.fa.fa-edit
+    Edit

@@ -256,4 +256,16 @@ ActiveRecord::Schema.define(version: 20160224111403) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "worker_groups", force: :cascade do |t|
+    t.integer "oauth_application_id",           null: false
+    t.string  "friendly_name"
+    t.text    "encrypted_ssh_key_private"
+    t.string  "encrypted_ssh_key_private_salt"
+    t.string  "encrypted_ssh_key_private_iv"
+    t.text    "ssh_key_public"
+    t.integer "ssh_key_provider_reference_id"
+  end
+
+  add_index "worker_groups", ["oauth_application_id"], name: "index_worker_groups_on_oauth_application_id", using: :btree
+
 end

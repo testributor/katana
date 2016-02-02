@@ -10,23 +10,35 @@
     .panel-body
       Read the instructions on how to setup your project
       = link_to("here", instructions_project_path(current_project))
-  .panel.panel-default
-    .panel-heading
-      %h3.panel-title Application credentials:
-    .panel-body
-      %pre
-        = "Client id:     #{current_project.oauth_application.uid}".html_safe
-        %br
-        = "Client Secret: #{current_project.oauth_application.secret}".html_safe
 
   .panel.panel-default
     .panel-heading
       %h3.panel-title
-        Docker compose file
-        = link_to docker_compose_project_path(current_project) do
-          %i.fa.fa-download
+        Worker Groups
+        (#{link_to 'add another', create_worker_group_project_path(current_project), method: :post})
     .panel-body
-      %pre= current_project.generate_docker_compose_yaml
+      - current_project.oauth_applications.each do |app|
+        .well
+          %p
+            %strong
+              Configuration file:
+            %code
+              docker-compose.yml
+            = link_to docker_compose_project_path(current_project, client_id: app.id),
+            class: 'btn btn-primary btn-xs' do
+              %i.fa.fa-download
+              Download
+          %p
+            :ruby
+              api_client = current_project.
+                find_or_initialize_api_client_by_oauth_application_id(app.id)
+            = render partial: api_client.ssh_key_private.blank? ? 'ssh_key_form' : 'ssh_key_delete',
+            locals: {api_client: api_client, repository_provider: current_project.repository_provider}
+          %p
+            = link_to delete_worker_group_project_path(client_id: app.id),
+            method: :delete, class: 'btn btn-danger btn-lg' do
+              %i.fa.fa-trash
+              Delete Group
 
   .panel.panel-default
     .panel-heading

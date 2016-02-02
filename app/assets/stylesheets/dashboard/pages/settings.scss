@@ -14,4 +14,18 @@ body.settings {
       }
     }
   }
+
+  &.worker-setup {
+    .panel-title .worker-groups-actions {
+      float: right;
+    }
+
+    .panel-body .worker-group-actions {
+       float: right;
+     }
+
+    .panel-body .worker-group a.action {
+      margin-left: 10px;
+    }
+  }
 }

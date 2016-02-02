@@ -8,6 +8,12 @@ class ApiController < ActionController::Base
     @current_project ||= doorkeeper_token.application.owner
   end
 
+  def current_worker_group
+    @current_worker_group ||= current_project.find_worker_group_by(
+      oauth_application_id: doorkeeper_token.application_id
+    )
+  end
+
   def worker_uuid
     request.headers['HTTP_WORKER_UUID']
   end

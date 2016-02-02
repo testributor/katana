@@ -6,10 +6,15 @@ module Api
       # take some time to complete and workers will appear as inactive
       # for some seconds.
 
-      skip_before_action :worker_report, only: :current
+      skip_before_action :worker_report, only: :setup_data
 
-      def current
-        render json: current_project
+      def setup_data
+        render json: {
+          current_project:
+            ActiveModel::SerializableResource.new(current_project),
+          current_worker_group:
+            ActiveModel::SerializableResource.new(current_worker_group)
+        }
       end
 
       def beacon

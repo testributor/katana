@@ -45,9 +45,9 @@ class ProjectsController < DashboardController
   end
 
   def docker_compose
-    send_data current_project.generate_docker_compose_yaml,
-      :type => 'text/yml; charset=UTF-8;',
-      :disposition => 'attachment; filename=docker-compose.yml'
+    send_data current_project.generate_docker_compose_yaml(params[:client_id]),
+      type: 'text/yml; charset=UTF-8;',
+      disposition: 'attachment; filename=docker-compose.yml'
   end
 
   private
@@ -58,5 +58,10 @@ class ProjectsController < DashboardController
 
   def project_params
     params.require(:project).permit(:docker_image_id, technology_ids: [])
+  end
+
+  def api_client_params
+    params.require(:api_client).permit(:oauth_application_id, :ssh_key_private,
+      :ssh_key_provider_friendly_name)
   end
 end

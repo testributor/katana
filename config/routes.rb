@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :projects, only: [] do
         collection do
-          get :current
+          get :setup_data
           post :beacon
         end
       end
@@ -50,6 +50,10 @@ Rails.application.routes.draw do
     resource :settings, only: [:show] do
       get :worker_setup
       get :notifications
+    end
+
+    resources :worker_groups, only: [:create, :update, :destroy] do
+      post :reset_ssh_key
     end
 
     member do

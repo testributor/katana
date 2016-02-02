@@ -8,11 +8,15 @@ class Project < ActiveRecord::Base
   ACTIVE_WORKER_THRESHOLD_SECONDS = 20
 
   devise :database_authenticatable
+
   belongs_to :user # this is the owner of the project
+  belongs_to :docker_image # This is the base image
+
+  has_one :docker_image_selection
+
   has_many :tracked_branches, dependent: :destroy, inverse_of: :project
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
-  has_one :docker_image_selection
   has_many :project_participations, dependent: :destroy
   has_many :members, through: :project_participations, class_name: "User",
     source: :user
@@ -20,9 +24,8 @@ class Project < ActiveRecord::Base
   has_many :invited_users, through: :user_invitations, class_name: 'User',
     source: :user
   has_many :project_files, dependent: :destroy
-  has_one :oauth_application, class_name: 'Doorkeeper::Application',
+  has_many :oauth_applications, class_name: 'Doorkeeper::Application',
     as: :owner, dependent: :destroy
-  belongs_to :docker_image # This is the base image
   has_many :technology_selections
   has_many :technologies, through: :technology_selections
 
@@ -92,23 +95,34 @@ class Project < ActiveRecord::Base
   end
 
   def create_oauth_application!
-    app = Doorkeeper::Application.new(
-      name: repository_id,
-      redirect_uri: Katana::Application::HEROKU_URL)
-    app.owner_id = id
-    app.owner_type = 'Project'
-    app.save
-
-    app
+    WorkerGroup.transaction do
+      oauth_application = oauth_applications.create!(
+        name: repository_id,
+        redirect_uri: Katana::Application::HEROKU_URL
+      )
+      WorkerGroup.create!(oauth_application: oauth_application,
+        friendly_name: "#{name} Worker Group #{oauth_applications.count}")
+    end
   end
 
-  def generate_docker_compose_yaml
+  def destroy_oauth_application!(oauth_application_id)
+    worker_group =
+      find_worker_group_by!(oauth_application_id: oauth_application_id)
+
+    WorkerGroup.transaction do
+      worker_group.destroy!
+      worker_group.oauth_application.destroy!
+    end
+  end
+
+  def generate_docker_compose_yaml(oauth_app_id)
     return false if docker_image.blank?
 
+    oauth_application = oauth_applications.find(oauth_app_id)
     attributes_hash = {}
 
     # Add linked images
-    technologies.each_with_index do |technology, index|
+    technologies.each do |technology|
       data = technology.docker_compose_data
       image_attributes = {}
       image_attributes["image"] = technology.hub_image
@@ -146,6 +160,25 @@ class Project < ActiveRecord::Base
     attributes_hash[docker_image.standardized_name] = base_image_attributes
 
     attributes_hash.to_yaml
+  end
+
+  def find_worker_group_by(args, with_bang=false)
+    scope = WorkerGroup.joins(<<-SQL
+      INNER JOIN oauth_applications
+      ON oauth_applications.id = worker_groups.oauth_application_id
+      INNER JOIN projects
+      ON oauth_applications.owner_id = projects.id
+      AND oauth_applications.owner_type = 'Project'
+    SQL
+    ).where(
+      projects: { id: id },
+      worker_groups: args)
+
+    with_bang ? scope.take! : scope.take
+  end
+
+  def find_worker_group_by!(args)
+    find_worker_group_by(args, true)
   end
 
   private

@@ -107,4 +107,22 @@ class ProjectTest < ActiveSupport::TestCase
       project.to_param.must_equal "-this-is-an-ugly-and-complex-name-for-a-project"
     end
   end
+
+  describe '#destroy_oauth_application!' do
+    let(:project_1) do
+      FactoryGirl.create(:doorkeeper_application).owner
+    end
+    let(:project_2) do
+      FactoryGirl.create(:doorkeeper_application).owner
+    end
+
+    it 'must destroy an associated #oauth_application record' do
+      oauth_application_1 = project_1.oauth_applications.take
+      project_1.destroy_oauth_application!(oauth_application_1.id)
+
+      oauth_application_2 = project_2.oauth_applications.take
+      -> { project_1.destroy_oauth_application!(oauth_application_2.id) }.
+        must_raise ActiveRecord::RecordNotFound
+    end
+  end
 end

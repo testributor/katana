@@ -16,12 +16,12 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
 
   before { project_files }
 
-  describe "GET#current" do
+  describe "GET#setup_data" do
     it "returns the current project with project_files included" do
-      get :current, access_token: token.token,
+      get :setup_data, access_token: token.token,
         default: { format: :json }
 
-      result = JSON.parse(response.body)
+      result = JSON.parse(response.body)['current_project']
       files = result["files"]
       files.first["id"].must_equal build_commands.id
       files.first["path"].must_equal ProjectFile::BUILD_COMMANDS_PATH
@@ -30,16 +30,16 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
       files.last["path"].must_equal project_files.last.path
       files.last["contents"].must_equal project_files.last.contents
 
-      (%w(repository_name repository_owner github_access_token files) - result.keys).must_be :blank?
+      (%w(files docker_image repository_ssh_url) - result.keys).must_be :blank?
     end
   end
 
   describe "active_workers (ApiController)" do
-    it "doesn't increase the active_workers_count on 'current' action" do
+    it "doesn't increase the active_workers_count on 'setup_data' action" do
       point_in_time = Time.current
       Timecop.freeze(point_in_time) do
         request.env['HTTP_WORKER_UUID'] = '123'
-        get :current, access_token: token.token, default: { format: :json }
+        get :setup_data, access_token: token.token, default: { format: :json }
 
         project.active_workers.count.must_equal 0
       end
