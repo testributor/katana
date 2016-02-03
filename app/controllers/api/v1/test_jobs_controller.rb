@@ -5,15 +5,23 @@ module Api
       # To avoid race conditions, the selected jobs should be marked as running
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
-      # TODO: Write tests for this action
       def bind_next_batch
+        active_workers = current_project.active_workers.
+          map{|uuid| uuid.gsub(/project_#{current_project.id}_worker_/,'')}
+
+        worker_condition_sql = ActiveRecord::Base.send(:sanitize_sql_array,
+          ["test_jobs.status = ? OR "\
+           "(test_jobs.status = ? AND test_jobs.worker_uuid NOT IN (?))",
+           TestStatus::QUEUED, TestStatus::RUNNING, active_workers])
+
         sample_job_sql = current_project.test_jobs.
           where(test_runs: { status: [TestStatus::RUNNING, TestStatus::QUEUED]}).
-          where(status: TestStatus::QUEUED).
+          where(worker_condition_sql).
           order("test_runs.status DESC, test_runs.created_at DESC, test_jobs.chunk_index ASC").
           limit(1).to_sql
+
         sql = <<-SQL
-          UPDATE test_jobs SET status = #{TestStatus::RUNNING}
+          UPDATE test_jobs SET status = #{TestStatus::RUNNING}, worker_uuid = ?
           FROM (
             WITH preferred_jobs AS (#{sample_job_sql})
             SELECT test_jobs.* FROM test_jobs, preferred_jobs
@@ -23,7 +31,7 @@ module Api
           WHERE test_jobs.id = t.id
           /* Don't return all the jobs in the chunk. User might retried only
              one job from the chunk so some of the jobs might already be run. */
-          AND test_jobs.status = #{TestStatus::QUEUED}
+          AND #{worker_condition_sql}
           RETURNING test_jobs.*
         SQL
         test_jobs = nil
@@ -32,6 +40,7 @@ module Api
           # Prevent "cannot set transaction isolation in a nested transaction"
           # error in tests (tests run inside a transaction)
           TestJob.transaction(isolation: Rails.env.test? ? nil : :serializable) do
+            sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, worker_uuid.to_s])
             test_jobs = TestJob.find_by_sql(sql)
           end
         rescue ActiveRecord::StatementInvalid => e
@@ -63,7 +72,9 @@ module Api
           where(id: test_run_ids).pluck(:id)
         missing_or_cancelled_test_run_ids = test_run_ids - test_run_id_keepers
 
-        current_project.test_jobs.running.where(id: job_ids).each do |job|
+        current_project.test_jobs.running.where(id: job_ids, worker_uuid: worker_uuid).
+          each do |job|
+
           begin
             job_params = jobs[job.id].keep_if do |k,v|
                 %w(result status id result runs assertions failures errors

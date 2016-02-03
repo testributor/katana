@@ -20,16 +20,53 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
   before { _test_jobs }
 
   describe "PATCH#bind_next_batch" do
-    it "returns only queued jobs and updates it's status to RUNNING" do
+    it "returns queued jobs and updates it's status to RUNNING" do
       # all jobs on the same chunk, only one has QUEUED status
-      _test_jobs.each{|j| j.update_column(:chunk_index, 0)}
-      _test_jobs[0..-2].each{|f| f.update_columns(status: TestStatus::RUNNING) }
+      _test_jobs.each{|j| j.update_columns(chunk_index: 0,
+                                           worker_uuid: "alive_worker_uuid")}
+      _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING)}
+
       @controller.stub :doorkeeper_token, token do
+        # the request will also make this worker active
+        request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
         patch :bind_next_batch, default: { format: :json }
         result = JSON.parse(response.body)
         result.count.must_equal 1
         result.first["command"].must_equal _test_jobs[-1].command
         _test_jobs[-1].reload.status.code.must_equal TestStatus::RUNNING
+      end
+    end
+
+    it "returns inactive-worker jobs and updates their worker_uuid" do
+      _test_jobs.each{|f| f.update_columns(status: TestStatus::RUNNING)}
+      # These are in RUNNING status but they will be returned because their
+      # worker is not in the "active_workers" list of this project
+      _test_jobs[0..-2].each{|f| f.update_column(:worker_uuid, "dead_worker_uuid")}
+      # "alive_worker_uuid" will be added to the active workers as soon as the
+      # request is sent.
+      _test_jobs.last.update_column(:worker_uuid, "alive_worker_uuid")
+
+      @controller.stub :doorkeeper_token, token do
+        # the request will also make this worker active
+        request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
+        patch :bind_next_batch, default: { format: :json }
+        result = JSON.parse(response.body)
+        result.count.must_equal 3
+        _test_jobs[0..-2].each(&:reload).map(&:worker_uuid).uniq.
+          must_equal ['alive_worker_uuid']
+        _test_jobs[0..-2].map{|j| j.status.code}.uniq.
+          must_equal [TestStatus::RUNNING]
+      end
+    end
+
+    it "updates active-worker jobs worker_uuid to the worker's uuid" do
+      _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING)}
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'this_is_a_worker_uuid'
+        patch :bind_next_batch, default: { format: :json }
+        result = JSON.parse(response.body)
+        _test_jobs.each(&:reload).map(&:worker_uuid).compact.uniq.
+          must_equal ['this_is_a_worker_uuid']
       end
     end
 
@@ -118,6 +155,30 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
 
       _test_jobs.last.reload.reported_at.to_i.must_equal report_time.to_i
+    end
+
+    # Workers that became inactive for some reason might try to update the jobs
+    # after being reassigned to another worker. We simply ignore the old worker.
+    it "does not update jobs assigned to another worker" do
+      _test_jobs.each{|j| j.update_columns(worker_uuid: "the_original_uuid",
+                                         result: '') }
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'this_is_another_worker_uuid'
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+      _test_jobs.map(&:reload).map(&:result).uniq.must_equal ['']
+    end
+
+    it "updates jobs assigned to the calling worker" do
+      _test_jobs.each{|j| j.update_columns(worker_uuid: "the_original_uuid",
+                                         result: '') }
+      @controller.stub :doorkeeper_token, token do
+        request.env['HTTP_WORKER_UUID'] = 'the_original_uuid'
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+      _test_jobs.map(&:reload).map(&:result).uniq.must_equal ['result']
     end
   end
 end
