@@ -1,8 +1,92 @@
 %p
   In this file you can put any commands needed before your test suite is run.
   It is a bash script and it will run in an Ubuntu 15.10 system. If you find that
-  a needed package is missing you can use "apt-get" to install it.
+  a needed package is missing you can use
+  %code
+    apt-get
+  to install it.
 
 %p
-  You can also run commands to create your database (like 'rake db:create' in
-  Run on Rails).
+  You can also run commands to create your database (like
+  %code
+    rake db:create
+  in Ruby on Rails).
+
+%p
+  To give you more flexibility on what commands run and when,
+  the following environment variables are available in your script:
+
+  %ul
+    %li
+      %strong WORKER_INITIALIZING
+      %br
+
+      This variable is set only when the worker is initializing. It will only run
+      once. It is useful when you want to run one off commands.
+
+      %p
+        E.g. You want to install bundler gem and phantomjs. This can be achieved as this:
+        %br
+
+        :ruby
+          code=<<-CODE
+          if [[ -n $WORKER_INITIALIZING ]]
+          then
+            gem install bundler
+            apt-get update
+            apt-get install -y phantomjs
+          fi
+          CODE
+        %pre= code
+
+    %li
+      %strong changed_file_paths_match
+      %br
+
+      This is a bash function which checks if any of the changed files between
+      the current commit and the previous matches the given string. It might
+      be useful when you want to run database migrations of install new gems.
+
+      %p
+        E.g. You want to run "bundle install" only when there are changes in the
+        Gemfile.lock. This can be achieved as this:
+        %br
+
+        :ruby
+          code = <<-CODE
+          if changed_file_paths_match "Gemfile.lock"
+          then
+            bundle install --deployment --path /vendor/bundle --jobs 2 --retry 2
+          fi
+          CODE
+        %pre= code
+        or to setup the database
+        :ruby
+          code= <<-CODE
+          if changed_file_paths_match "db/migrations"
+          then
+            rake db:setup
+          fi
+          CODE
+        %pre=code
+
+    %li
+      %strong commit_changed
+      %br
+
+      This is a bash function that exists with 1 when the current commit is
+      different than the last job's. It is useful when you want to run commands
+      whenever the commit changes.
+
+      %p
+        E.g. You want to call a cleanup script before running a new commit.
+        This can be achieved as this:
+
+        :ruby
+          code = <<-CODE
+          if commit_changed
+          then
+            rake my_cleanup_task
+          fi
+          CODE
+        %pre= code
