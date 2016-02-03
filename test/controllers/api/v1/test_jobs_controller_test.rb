@@ -59,7 +59,7 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
     end
 
-    it "updates jobs worker_uuid the worker's uuid" do
+    it "updates active-worker jobs worker_uuid to the worker's uuid" do
       _test_jobs[0..-2].each{|f| f.update_column(:status, TestStatus::RUNNING)}
       @controller.stub :doorkeeper_token, token do
         request.env['HTTP_WORKER_UUID'] = 'this_is_a_worker_uuid'
