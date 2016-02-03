@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_filter :set_redirect_url_in_cookie
+  before_filter :exception_notification_additional_data
+
   layout 'application_layout'
 
   helper_method :current_project
@@ -25,5 +27,14 @@ class ApplicationController < ActionController::Base
 
   def set_redirect_url_in_cookie
     cookies[:redirect_to_url] = request.url
+  end
+
+  def exception_notification_additional_data
+    # add here whatever you like to be displayed at the data section
+    # of your exception notifications
+
+    request.env["exception_notifier.exception_data"] = {
+      :params => params
+    }
   end
 end

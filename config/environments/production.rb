@@ -105,5 +105,13 @@ Rails.application.configure do
     sender_address: %{"notifier" <notifier@testributor.com>},
     exception_recipients: %w{devs@testributor.com},
     email_format: :html
+  },
+    slack: {
+      webhook_url: ENV['SLACK_EXCEPTIONS_WEBHOOK'],
+      channel: "#alerts",
+      additional_parameters: {
+        mrkdwn: true,
+        color: "danger"
+      }
   }
 end
