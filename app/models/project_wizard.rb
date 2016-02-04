@@ -2,6 +2,7 @@ class ProjectWizard < ActiveRecord::Base
 
   ORDERED_STEPS = [:add_project, :add_branches, :configure_testributor,
     :select_technologies]
+  PROJECTS_PER_PAGE = 20
   STEP_REQUIREMENTS = {
     add_project: "repo_name",
     add_branches: "branch_names",
@@ -28,17 +29,17 @@ class ProjectWizard < ActiveRecord::Base
 
   # When github client is not set, this method returns false.
   # We should prompt the user to connect to github.
-  def fetch_repos
+  def fetch_repos(page=0)
     client = user.github_client
+    page = page.to_i
     return false unless client.present?
 
-    existing_repo_names = user.projects.pluck(:repository_id)
-
     #https://developer.github.com/v3/repos/#list-user-repositories
-    repos = client.repos(nil, { type: "owner", per_page: 50 })
-    repos.reject do |repo|
-      repo.id.in?(existing_repo_names)
-    end.map { |repo| { id: repo.id, fork: repo.fork?, name: repo.full_name } }
+    repos = client.repos(nil,
+      { type: "owner", per_page: PROJECTS_PER_PAGE }.merge(page > 0 ? { page: page } : {})
+    ).map { |repo| { id: repo.id, fork: repo.fork?, name: repo.full_name } }
+
+    { repos: repos, last_response: client.last_response }
   end
 
   # When repo_name is blank or client is blank, this method returns false.

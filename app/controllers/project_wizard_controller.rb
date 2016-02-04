@@ -79,7 +79,7 @@ class ProjectWizardController < DashboardController
   def fetch_repos
     redirect_to project_wizard_path(:add_project) and return if !request.xhr?
 
-    @repos = @project_wizard.fetch_repos
+    @repos = @project_wizard.fetch_repos(params[:page])
     render 'fetch_repos', layout: false
   end
 

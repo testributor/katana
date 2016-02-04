@@ -1,0 +1,85 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/user/repos?page=4&per_page=3&type=owner
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Fri, 05 Feb 2016 16:21:49 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4995'
+      X-Ratelimit-Reset:
+      - '1454691278'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Etag:
+      - W/"e26dca0c8d50d2cbf7c783a35192fa27"
+      X-Oauth-Scopes:
+      - repo, user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Oauth-Client-Id:
+      - b18d68d68471de920bdb
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Link:
+      - <https://api.github.com/user/repos?page=1&per_page=3&type=owner>; rel="first",
+        <https://api.github.com/user/repos?page=3&per_page=3&type=owner>; rel="prev"
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - 52437fedc85beec8da3449496900fb9a
+      X-Github-Request-Id:
+      - 4D319F70:14595:6AA7270:56B4CC1C
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"id":43504279,"name":"testributor_gem","full_name":"ispyropoulos/testributor_gem","owner":{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false},"private":true,"html_url":"https://github.com/ispyropoulos/testributor_gem","description":"","fork":false,"url":"https://api.github.com/repos/ispyropoulos/testributor_gem","forks_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/forks","keys_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/teams","hooks_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/hooks","issue_events_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/issues/events{/number}","events_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/events","assignees_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/assignees{/user}","branches_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/branches{/branch}","tags_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/tags","blobs_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/git/refs{/sha}","trees_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/statuses/{sha}","languages_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/languages","stargazers_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/stargazers","contributors_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/contributors","subscribers_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/subscribers","subscription_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/subscription","commits_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/commits{/sha}","git_commits_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/git/commits{/sha}","comments_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/comments{/number}","issue_comment_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/issues/comments{/number}","contents_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/contents/{+path}","compare_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/merges","archive_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/downloads","issues_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/issues{/number}","pulls_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/pulls{/number}","milestones_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/milestones{/number}","notifications_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/labels{/name}","releases_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/releases{/id}","deployments_url":"https://api.github.com/repos/ispyropoulos/testributor_gem/deployments","created_at":"2015-10-01T15:24:58Z","updated_at":"2016-02-03T07:41:56Z","pushed_at":"2016-02-05T15:51:03Z","git_url":"git://github.com/ispyropoulos/testributor_gem.git","ssh_url":"git@github.com:ispyropoulos/testributor_gem.git","clone_url":"https://github.com/ispyropoulos/testributor_gem.git","svn_url":"https://github.com/ispyropoulos/testributor_gem","homepage":null,"size":61,"stargazers_count":0,"watchers_count":0,"language":"Ruby","has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":1,"mirror_url":null,"open_issues_count":2,"forks":1,"open_issues":2,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true}},{"id":48741851,"name":"worker_benchmark_tool","full_name":"ispyropoulos/worker_benchmark_tool","owner":{"login":"ispyropoulos","id":355984,"avatar_url":"https://avatars.githubusercontent.com/u/355984?v=3","gravatar_id":"","url":"https://api.github.com/users/ispyropoulos","html_url":"https://github.com/ispyropoulos","followers_url":"https://api.github.com/users/ispyropoulos/followers","following_url":"https://api.github.com/users/ispyropoulos/following{/other_user}","gists_url":"https://api.github.com/users/ispyropoulos/gists{/gist_id}","starred_url":"https://api.github.com/users/ispyropoulos/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ispyropoulos/subscriptions","organizations_url":"https://api.github.com/users/ispyropoulos/orgs","repos_url":"https://api.github.com/users/ispyropoulos/repos","events_url":"https://api.github.com/users/ispyropoulos/events{/privacy}","received_events_url":"https://api.github.com/users/ispyropoulos/received_events","type":"User","site_admin":false},"private":true,"html_url":"https://github.com/ispyropoulos/worker_benchmark_tool","description":"","fork":false,"url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool","forks_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/forks","keys_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/teams","hooks_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/hooks","issue_events_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/issues/events{/number}","events_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/events","assignees_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/assignees{/user}","branches_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/branches{/branch}","tags_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/tags","blobs_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/git/refs{/sha}","trees_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/statuses/{sha}","languages_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/languages","stargazers_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/stargazers","contributors_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/contributors","subscribers_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/subscribers","subscription_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/subscription","commits_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/commits{/sha}","git_commits_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/git/commits{/sha}","comments_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/comments{/number}","issue_comment_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/issues/comments{/number}","contents_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/contents/{+path}","compare_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/merges","archive_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/downloads","issues_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/issues{/number}","pulls_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/pulls{/number}","milestones_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/milestones{/number}","notifications_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/labels{/name}","releases_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/releases{/id}","deployments_url":"https://api.github.com/repos/ispyropoulos/worker_benchmark_tool/deployments","created_at":"2015-12-29T10:22:07Z","updated_at":"2015-12-29T10:23:25Z","pushed_at":"2016-01-04T14:04:23Z","git_url":"git://github.com/ispyropoulos/worker_benchmark_tool.git","ssh_url":"git@github.com:ispyropoulos/worker_benchmark_tool.git","clone_url":"https://github.com/ispyropoulos/worker_benchmark_tool.git","svn_url":"https://github.com/ispyropoulos/worker_benchmark_tool","homepage":null,"size":11,"stargazers_count":0,"watchers_count":0,"language":"Ruby","has_issues":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"open_issues_count":0,"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":true,"push":true,"pull":true}}]'
+    http_version: 
+  recorded_at: Fri, 05 Feb 2016 16:21:49 GMT
+recorded_with: VCR 2.9.3

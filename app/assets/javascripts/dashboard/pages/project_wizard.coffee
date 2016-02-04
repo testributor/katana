@@ -6,20 +6,28 @@ class Testributor.Pages.ProjectWizard
     $(".multi-select").select2()
 
     $fetchRepos = $('.js-fetch-repos')
-    $fetchingRepos = $('.js-fetching-repos')
     currentPath = $fetchRepos.data('current-path')
-
     if $fetchRepos
-      Pace.ignore ->
-        jqxhr = $.ajax
-          url: currentPath,
-          success: (data)->
-            $fetchRepos.append(data).fadeIn('slow')
-          fail: ->
-            alert('Connection with github interrupted!')
-            $fetchRepos.append('We were not able to complete this action.').fadeIn('slow')
-          error: ->
-            $fetchRepos.append('Oops! Something went wrong. We are working on it.').fadeIn('slow')
-          complete: ->
-            $fetchingRepos.hide()
+      @performAjaxFor(currentPath, @attachFetchEvent)
 
+  performAjaxFor: (url, callback) =>
+    Pace.ignore =>
+      jqxhr = $.ajax
+        url: url,
+        beforeSend: ->
+          $('.js-fetching-repos').show()
+        success: (data)->
+          $('.js-fetch-repos').html(data).fadeIn('slow')
+        fail: ->
+          alert('Connection with github interrupted!')
+          $('.js-fetch-repos').append('We were not able to complete this action.').fadeIn('slow')
+        error: ->
+          $('.js-fetch-repos').append('Oops! Something went wrong. We are working on it.').fadeIn('slow')
+        complete: ->
+          $('.js-fetching-repos').hide()
+          callback()
+
+  attachFetchEvent: () =>
+    $('.pagination li a').on 'click', (e) =>
+      e.preventDefault()
+      _this.performAjaxFor($(e.currentTarget).attr('href'), _this.attachFetchEvent)
