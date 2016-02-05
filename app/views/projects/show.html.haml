@@ -2,6 +2,13 @@
 
 - content_for :page_title do
   Branches
+
+- content_for :page_actions do
+  = link_to new_project_branch_path(current_project),
+    class: 'btn btn-xs btn-success' do
+    %i.fa.fa-plus
+    %span= 'Track a branch'
+
 .panel.panel-default
   - if @branches.empty?
     .panel-heading
@@ -11,11 +18,6 @@
   - else
     .panel-body
       .row
-        .col-md-12.col-sm-12.col-xs-12
-          .pull-right
-            = link_to new_project_branch_path(current_project), class: 'body-gray' do
-              %i.fa.fa-plus-circle.m-b-10
-              Add a branch
         .col-md-12.col-sm-12.col-xs-12
           .table-responsive
             %table.table

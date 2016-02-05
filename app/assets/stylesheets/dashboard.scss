@@ -1,3 +1,4 @@
+/* loaded from vendor */
 @import "bootstrap";
 @import "select2";
 @import "select2-bootstrap";
@@ -9,7 +10,9 @@
 @import "dashboard/style";
 @import "dashboard/helper";
 @import "dashboard/style-responsive";
-@import "dashboard-style";
 @import "codemirror";
 @import "neat";
+
+/* loaded from app */
 @import "common";
+@import "dashboard/custom-style";

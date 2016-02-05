@@ -1,9 +1,13 @@
-%div{ class: @docs.present? ? 'col-lg-8' : 'col-xs-12' }
+- content_for :page_title do
+  Project Files
+
+%div.panel.panel-default{ class: @docs.present? ? 'col-lg-8' : 'col-xs-12' }
   %p
     You can create any files needed for your test suite here. You can also
     override existing files. Specify the path relative to the project's root
     directory.
-  .panel.panel-default
+  %hr
+  %div
     %ul.nav.nav-pills.m-b-15
       - @project_files.each do |file|
         %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}

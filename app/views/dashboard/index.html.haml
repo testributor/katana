@@ -1,18 +1,18 @@
 = content_for :page_title do
-  %h3= "Your projects"
-
-- if @projects.empty?
-  .panel.panel-default
-    .panel-heading
-      %h3
-        = "You haven't added any projects yet."
-        = link_to "Add a project", project_wizard_path(:add_project),
-          class: 'btn btn-primary m-l-10'
+  - if @projects.any?
+    Your projects
+  - else
+    = "You haven't added any projects yet."
+    = link_to "Add a project", project_wizard_path(:add_project),
+      class: 'btn btn-primary m-l-10'
 
 - @projects.each do |project|
-  .panel.panel-default
-    .panel-heading
-      %h4= link_to project.owner_and_name, project_path(project)
+  .panel
+    .panel-header
+      .row
+        .col-md-12.col-sm-12.col-xs-12
+          %h4= link_to project.owner_and_name, project_path(project)
+          %hr
     .panel-body
       .row
         .col-md-12.col-sm-12.col-xs-12
@@ -35,4 +35,3 @@
                 .col-md-2
                   - if branch.last_run.try(:completed_at)
                     = time_ago_in_words(branch.last_run.completed_at)
-              %hr

@@ -29,15 +29,16 @@
           .alert.alert-info= flash[:notice]
         - if flash[:alert].present?
           .alert.alert-danger= flash[:alert].html_safe
-        .pull-right
-          = breadcrumbs pretext: "You are here: ", style: :bootstrap,
-            display_single_fragment: true
         - if content_for?(:page_title)
           .page-title
             %h3= yield :page_title
-        .row
-          .col-md-12
-            = yield
+        %div.breadcrumb-bar
+          %div.breadcrumb-left-side
+            = breadcrumbs pretext: "You are here: ", style: :bootstrap,
+              display_single_fragment: true
+          %div.breadcrumb-actions
+            = yield :page_actions
+        = yield
 
     = javascript_include_tag 'dashboard'
     = yield(:in_page_js) if content_for?(:in_page_js)

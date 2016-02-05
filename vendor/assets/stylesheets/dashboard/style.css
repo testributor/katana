@@ -449,12 +449,6 @@ header {
   padding-bottom: 20px;
   min-height: 550px;
 }
-.page-title {
-  padding: 10px 0px 30px;
-}
-.page-title h3 {
-  margin: 0px;
-}
 
 .page-title.breadcrumb {
   margin-bottom: 0px;

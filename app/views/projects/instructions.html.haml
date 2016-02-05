@@ -1,49 +1,52 @@
 - breadcrumb :project_instructions, current_project
 
-.col-lg-12
-  .panel.panel-default
-    .panel-heading
-      %h2 Instructions
-    .panel-body
-      %h3 Create any needed non tracked files
+- content_for :page_title do
+  Instructions
 
-      %p
-        In many projects there are files which are not tracked by the version control
-        system to let developers use different versions in their machines.
-        %br
-        Still some of them are needed for a successfull test suite run.
-      %p
-        An example is the
-        %strong "config/database.yml"
-        file in a Rails application which holds the information
-        on how to connect to the database.
-        %br
-          = "You can create or override any project files #{link_to "here", project_files_path(current_project)}.".html_safe
+.panel.panel-default
+  .panel-heading
+    %h3 Create any needed non tracked files
+  .panel-body
+    %p
+      In many projects there are files which are not tracked by the version control
+      system to let developers use different versions in their machines.
+      %br
+      Still some of them are needed for a successfull test suite run.
+    %p
+      An example is the
+      %strong "config/database.yml"
+      file in a Rails application which holds the information
+      on how to connect to the database.
+      %br
+        = "You can create or override any project files #{link_to "here", project_files_path(current_project)}.".html_safe
 
-        %br
-        %strong "testributor.yml"
-        file is the one that describes the jobs that constitute
-        each test run and for this reason it cannot be deleted.
+      %br
+      %strong "testributor.yml"
+      file is the one that describes the jobs that constitute
+      each test run and for this reason it cannot be deleted.
 
-      %h3 Create a worker on your machine
+.panel.panel-default
+  .panel-heading
+    %h3 Create a worker on your machine
 
-      %ol
-        %li
-          Install docker and docker-compose.
-          You can find instructions on how to do that on the
-          #{link_to ' official Docker site', 'https://docs.docker.com/'}.
+  .panel-body
+    %ol
+      %li
+        Install docker and docker-compose.
+        You can find instructions on how to do that on the
+        #{link_to ' official Docker site', 'https://docs.docker.com/'}.
 
-        %li
-          Download the docker-compose.yml file for this project.
-          %div{style: 'padding: 10px;'}
-            = link_to docker_compose_project_path(current_project), class: "btn btn-default" do
-              Download
-              %i.fa.fa-download
+      %li
+        Download the docker-compose.yml file for this project.
+        %p
+          = link_to docker_compose_project_path(current_project), class: "btn btn-default" do
+            Download
+            %i.fa.fa-download
 
-        %li
-          Create a worker by running the following command in the same directory where
-          you saved the file:
-          %div{style: 'padding: 10px;'}
-            %code docker-compose up
-          For more options and documentation on docker-compose visit the
-          #{link_to 'official Docker site', 'https://docs.docker.com/compose/'}.
+      %li
+        Create a worker by running the following command in the same directory where
+        you saved the file:
+        %p
+          %code docker-compose up
+        For more options and documentation on docker-compose visit the
+        #{link_to 'official Docker site', 'https://docs.docker.com/compose/'}.
