@@ -9,8 +9,8 @@ class Testributor.Pages.TestRuns
       if msg.retry
         progressBar.reset(msg.test_run_id)
       else
-        testJob = $.parseJSON(msg).test_job
-        testRun = $.parseJSON(msg).test_run
+        testJob = msg.test_job
+        testRun = msg.test_run
         progressBar.update(testJob.test_run_id, testJob.html_class)
         data = {
           id: testRun.id,
@@ -35,7 +35,10 @@ class Testributor.Pages.TestRuns
       if msg.retry
         progressBar.reset(msg.test_run_id)
       else
-        testJob = $.extend($.parseJSON(msg).test_job, admin: userIsAdmin)
+        if msg.test_run.terminal_status
+          $("#test_run_retry_button").show()
+
+        testJob = $.extend(msg.test_job, admin: userIsAdmin)
         $tr = $("#test-job-#{testJob.id}")
         $newTr = $(jobTemplate(testJob))
         $tr.replaceWith($newTr)

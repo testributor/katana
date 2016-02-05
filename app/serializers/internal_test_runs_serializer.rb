@@ -6,7 +6,7 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   attributes :id, :run_index, :status_text, :status_css_class, :unsuccessful,
     :retry_url, :total_running_time, :html_class, :cancel_url,
     :statuses, :test_run_link, :commit_message, :commit_info,
-    :show_retry
+    :terminal_status
 
   def retry_url
     retry_project_test_run_path(object.project, object)
@@ -32,7 +32,7 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
     object.decorate.commit_info
   end
 
-  def show_retry
-    object.status.code != TestStatus::RUNNING
+  def terminal_status
+    object.status.terminal?
   end
 end
