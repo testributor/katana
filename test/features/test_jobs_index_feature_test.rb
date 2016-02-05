@@ -67,4 +67,10 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
     error.find(".btn-primary").must_have_content "Retry"
     passed.find(".btn-primary").must_have_content "Retry"
   end
+
+  it 'displays the test run commit message truncated and escaped (fixed bug)' do
+    _test_run.update_column(:commit_message, "Addition: Send notification for exceptions in rake tasks through e-mail & Slack")
+    visit project_test_run_path(project, _test_run)
+    page.must_have_content "Addition: Send notification for exceptions in rake tasks through e-mail & Slack"
+  end
 end
