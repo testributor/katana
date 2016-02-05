@@ -3,7 +3,7 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   include Models::HasStatus
   include Rails.application.routes.url_helpers
 
-  attributes :id, :status_text, :status_css_class, :unsuccessful,
+  attributes :id, :run_index, :status_text, :status_css_class, :unsuccessful,
     :retry_url, :total_running_time, :html_class, :cancel_url,
     :statuses, :test_run_link, :commit_message, :commit_info,
     :show_retry

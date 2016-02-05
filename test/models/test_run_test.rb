@@ -3,6 +3,33 @@ require 'test_helper'
 class TestRunTest < ActiveSupport::TestCase
   let(:_test_run) { FactoryGirl.create(:testributor_run, :passed) }
 
+  describe "before_validation -> set_run_index" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:tracked_branch) do
+      FactoryGirl.create(:tracked_branch, project: project)
+    end
+
+    describe "when previous runs exist" do
+      before do
+        FactoryGirl.create(:testributor_run, run_index: 23,
+                           tracked_branch: tracked_branch)
+      end
+      it "sets the run_index to the next index" do
+        run = tracked_branch.test_runs.build
+        run.valid?
+        run.run_index.must_equal 24
+      end
+    end
+
+    describe "when no previous runs exist" do
+      it "set the run_index to 1" do
+        run = tracked_branch.test_runs.build
+        run.valid?
+        run.run_index.must_equal 1
+      end
+    end
+  end
+
   describe "#cancel_test_jobs" do
     subject { FactoryGirl.create(:testributor_run, :passed) }
     before do

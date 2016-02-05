@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160202105129) do
+ActiveRecord::Schema.define(version: 20160205093759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,6 +187,7 @@ ActiveRecord::Schema.define(version: 20160202105129) do
     t.string   "commit_committer_email"
     t.string   "commit_committer_username"
     t.text     "sha_history",               default: [], null: false, array: true
+    t.integer  "run_index"
   end
 
   add_index "test_runs", ["tracked_branch_id"], name: "index_test_runs_on_tracked_branch_id", using: :btree

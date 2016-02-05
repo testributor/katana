@@ -17,10 +17,12 @@ class TestRun < ActiveRecord::Base
     where(status: [TestStatus::PASSED, TestStatus::FAILED, TestStatus::ERROR])
   }
 
+  before_validation :set_run_index,
+    if: ->{ run_index.nil? && tracked_branch.present? }
+  before_create :cancel_queued_runs_of_same_branch
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
 
-  before_create :cancel_queued_runs_of_same_branch
 
   def total_running_time
     if completed_at = test_jobs.maximum(:completed_at)
@@ -225,6 +227,12 @@ class TestRun < ActiveRecord::Base
 
   def failed?
     test_jobs.any? { |job| job.status.failed? }
+  end
+
+  def set_run_index
+    return nil if run_index.present? || tracked_branch.blank?
+
+    self.run_index = (tracked_branch.test_runs.maximum(:run_index) || 0) + 1
   end
 
   def cancel_test_jobs
