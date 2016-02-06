@@ -79,7 +79,9 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Queued"
-    find(".btn-danger").click
+    within "#test-run-#{_test_run.id}" do
+      find(".btn-danger").click
+    end
     page.must_have_content "Cancelled"
   end
 
@@ -90,7 +92,9 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Running"
-    find(".btn-danger").click
+    within "#test-run-#{_test_run.id}" do
+      find(".btn-danger").click
+    end
     page.must_have_content "Cancelled"
   end
 end
