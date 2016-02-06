@@ -13,8 +13,13 @@ crumb :new_invitation do |project|
 end
 
 crumb :settings do |project|
-  link "Settings", settings_project_path(project)
+  link "Settings", project_settings_path(project)
   parent :project, project
+end
+
+crumb :settings_worker_setup do |project|
+  link "Worker setup", worker_setup_project_settings_path(project)
+  parent :settings, project
 end
 
 crumb :project_instructions do |project|

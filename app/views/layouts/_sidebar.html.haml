@@ -24,8 +24,8 @@
           = link_to project_participations_path(current_project) do
             %i.fa.fa-users
             %span.nav-label Users
-        %li{ class: current_page?(settings_project_path(current_project)) ? 'active' : nil }
-          = link_to settings_project_path(current_project) do
+        %li{ class: controller_name == 'settings' ? 'active' : nil }
+          = link_to project_settings_path(current_project) do
             %i.fa.fa-cog
             %span.nav-label= "Settings"
         %li{ class: current_page?(instructions_project_path(current_project)) ? 'active' : nil }

@@ -1,0 +1,10 @@
+- content_for :page_title do
+  Project settings
+
+%ul.nav.nav-tabs
+  - link = project_settings_path(current_project)
+  %li{ class: current_page?(link) ? 'active' : nil }
+    = link_to "General", link
+  - link = worker_setup_project_settings_path(current_project)
+  %li{ class: current_page?(link) ? 'active' : nil }
+    = link_to "Worker setup", link

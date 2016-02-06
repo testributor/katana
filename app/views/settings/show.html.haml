@@ -1,0 +1,11 @@
+- breadcrumb :settings, current_project
+
+= render 'settings_common_header'
+
+.tab-content
+  - if can? :manage, current_project
+    .well
+      %strong Delete project from Testributor (cannot be reverted): 
+      = link_to "Delete", project_path(current_project), method: :delete,
+        data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
+        class: 'btn btn-danger'
