@@ -31,7 +31,7 @@
           %tr{ id: "test-run-#{test_run.id}" }
             %td.col-md-1= link_to "##{test_run.run_index}",
               project_test_run_path(current_project, test_run)
-            %td.col-md-3
+            %td.col-md-4
               = test_run.commit_message
               %br
               %i= test_run.commit_info
@@ -45,6 +45,6 @@
             %td.col-md-1
               - if test_run.total_running_time
                 = "#{(test_run.total_running_time / 60).to_i} min #{(test_run.total_running_time % 60).round} sec"
-            %td.col-md-3
+            %td.col-md-1
               - if test_run == @test_runs[0] || test_run.status.code == TestStatus::RUNNING
                 = render partial: 'test_run_actions', locals: { test_run: test_run }

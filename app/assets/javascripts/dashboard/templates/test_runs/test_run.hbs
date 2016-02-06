@@ -10,15 +10,15 @@
   <td class="col-md-1 status">
     <span class="{{ status_css_class }}">{{ status_text }}</span>
   </td>
-  <td class="col-md-4">
+  <td class="col-md-3">
     <a href="{{ test_run_link }}">
      {{> progress_bar progressBarData}}
     </a>
   </td>
-  <td class="running_time">
+  <td class="col-md-1 running_time">
     {{ total_running_time }}
   </td>
-  <td class="col-md-2" >
+  <td class="col-md-1" >
     {{#if terminal_status}}
       <a class="btn btn-primary btn-xs m-b-5" rel="nofollow" data-method="post" href="{{ retry_url }}">
         <i class="fa fa-refresh"></i>
