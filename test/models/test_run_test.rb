@@ -116,7 +116,10 @@ class TestRunTest < ActiveSupport::TestCase
       end
 
       describe "when there are no TestRuns at all" do
-        before { most_recent_non_previous_run.destroy }
+        before do
+          TestRunStatusEmailNotificationService.any_instance.stubs(:schedule_notifications).returns(true)
+          most_recent_non_previous_run.destroy
+        end
 
         it 'returns nil' do
           subject.most_relevant_run.must_be :nil?
@@ -341,7 +344,7 @@ class TestRunTest < ActiveSupport::TestCase
     end
   end
 
-  describe "update_status!" do
+  describe "update_status" do
     let(:branch) { FactoryGirl.create(:tracked_branch) }
 
     let(:_test_run) do
@@ -359,8 +362,9 @@ class TestRunTest < ActiveSupport::TestCase
 
       it "does not try to send any emails" do
         branch.expects(:notifiable_users).never
+        _test_run.send(:update_status)
         perform_enqueued_jobs do
-          _test_run.send(:update_status!)
+          _test_run.save
         end
       end
     end
@@ -368,30 +372,39 @@ class TestRunTest < ActiveSupport::TestCase
     describe "when the run's status changes" do
       describe "when the new status is not terminal" do
         before do
+          Octokit::Client.any_instance.stubs(:create_status).returns(nil)
           _test_job.update_column(:status, TestStatus::RUNNING)
         end
 
         it "does not send any emails" do
           branch.expects(:notifiable_users).never
+          _test_run.send(:update_status)
           perform_enqueued_jobs do
-            _test_run.send(:update_status!)
+            VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+              _test_run.save
+            end
           end
+          ActionMailer::Base.deliveries.length.must_equal 0
         end
       end
 
       describe "when the new status is terminal" do
         before do
           _test_job.update_column(:status, TestStatus::PASSED)
-        end
-
-        it "sends emails to all recipients returned by the branch's notifiable_users" do
-          branch.expects(:notifiable_users).once.returns([
+          Octokit::Client.any_instance.stubs(:create_status).returns(nil)
+          TrackedBranch.any_instance.stubs(:notifiable_users).returns([
             User.new(email: 'harry_potter@example.com'),
             User.new(email: 'lara_croft@example.com')
           ])
+        end
 
+        it "sends emails to all recipients returned by the branch's notifiable_users" do
+
+          _test_run.send(:update_status)
           perform_enqueued_jobs do
-            _test_run.send(:update_status!)
+            VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+               _test_run.save
+            end
           end
 
           ActionMailer::Base.deliveries.length.must_equal 2

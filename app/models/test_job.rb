@@ -27,7 +27,8 @@ class TestJob < ActiveRecord::Base
     if: ->{ new_record? }
   before_validation :set_avg_worker_command_run_seconds,
     if: ->{ worker_command_run_seconds_changed? }
-  after_save :update_test_run_status
+  after_commit :update_test_run_status,
+    if: -> { previous_changes.has_key?('status') }
 
   scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
@@ -148,6 +149,8 @@ class TestJob < ActiveRecord::Base
   end
 
   def update_test_run_status
-    test_run.update_status!
+    test_run.update_status && test_run.save!
+
+    true # don't break callback chain
   end
 end

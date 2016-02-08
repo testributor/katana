@@ -161,7 +161,10 @@ class TestJobTest < ActiveSupport::TestCase
     end
 
     describe "when the test_run most_relevant_run is nil" do
-      before { previous_run.destroy }
+      before do
+        TestRunStatusEmailNotificationService.any_instance.stubs(:schedule_notifications).returns(true)
+        previous_run.destroy
+      end
 
       it "returns nil" do
         subject.most_relevant_job.must_be :nil?
@@ -228,7 +231,9 @@ class TestJobTest < ActiveSupport::TestCase
           _test_run.test_jobs.update_all(:status => status)
 
           _test_run.test_jobs.size.must_equal 2
-          _test_run.update_status!
+          _test_run.update_status
+          _test_run.save!
+
           _test_run.reload.status.code.must_equal status
         end
       end
@@ -240,7 +245,8 @@ class TestJobTest < ActiveSupport::TestCase
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
 
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal TestStatus::RUNNING
       end
 
@@ -249,7 +255,8 @@ class TestJobTest < ActiveSupport::TestCase
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
 
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal TestStatus::ERROR
       end
 
@@ -258,7 +265,8 @@ class TestJobTest < ActiveSupport::TestCase
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
 
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal TestStatus::FAILED
       end
     end
@@ -269,7 +277,8 @@ class TestJobTest < ActiveSupport::TestCase
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::PASSED)
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
 
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal TestStatus::RUNNING
       end
 
@@ -278,7 +287,8 @@ class TestJobTest < ActiveSupport::TestCase
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::FAILED)
         FactoryGirl.create(:testributor_job, test_run: _test_run, status: TestStatus::ERROR)
 
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal TestStatus::ERROR
       end
     end
@@ -294,7 +304,8 @@ class TestJobTest < ActiveSupport::TestCase
         end
 
         _test_run.test_jobs.size.must_equal 4
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal 5
       end
 
@@ -306,7 +317,8 @@ class TestJobTest < ActiveSupport::TestCase
         end
 
         _test_run.test_jobs.size.must_equal 4
-        _test_run.update_status!
+        _test_run.update_status
+        _test_run.save!
         _test_run.reload.status.code.must_equal 1
       end
     end

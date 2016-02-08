@@ -9,7 +9,7 @@ class TestJobStatusIntegrationTest < ActionDispatch::IntegrationTest
     end
 
     # https://trello.com/c/wE1KtJjx
-    it 'should update the TestRun statuses to RUNNING' do
+    it 'should update the TestRun status to RUNNING' do
       failed_job = failed_test_jobs.first
       failed_test_run.status.code.must_equal TestStatus::FAILED
       failed_job.update(status: TestStatus::QUEUED)

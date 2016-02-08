@@ -1,0 +1,74 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.github.com/repositories/1/statuses/123456
+    body:
+      encoding: UTF-8
+      string: '{"context":"testributor.com","target_url":"http://example.com/projects/87/test_runs/74","description":"All
+        checks have passed!","state":"success"}'
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token 878321d52c0b0aa55b84cca76cf3f07bf3937b0f
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Mon, 15 Feb 2016 16:07:42 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 404 Not Found
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4990'
+      X-Ratelimit-Reset:
+      - '1455552918'
+      X-Oauth-Scopes:
+      - repo, user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Oauth-Client-Id:
+      - b18d68d68471de920bdb
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Github-Request-Id:
+      - 4D319F70:16021:11F74ABB:56C1F7CE
+    body:
+      encoding: ASCII-8BIT
+      string: '{"message":"Not Found","documentation_url":"https://developer.github.com/v3"}'
+    http_version: 
+  recorded_at: Mon, 15 Feb 2016 16:07:42 GMT
+recorded_with: VCR 2.9.3

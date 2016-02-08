@@ -41,8 +41,6 @@ class ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   ActiveRecord::Migration.check_pending!
-  Sidekiq::Testing.inline!
-
   before do
     yaml = <<-YAML
       each:

@@ -11,6 +11,7 @@ gem 'handlebars_assets'
 
 gem 'wicked'
 gem 'sidekiq'
+gem 'sinatra', require: false
 gem 'select2-rails'
 gem 'draper'
 gem 'haml-rails'
@@ -55,6 +56,7 @@ group :production do
 end
 
 group :test do
+  gem 'test_after_commit'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'poltergeist'

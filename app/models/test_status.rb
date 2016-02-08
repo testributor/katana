@@ -25,6 +25,24 @@ class TestStatus
     ERROR => 'pink'
   }
 
+   GITHUB_STATUS_MAP = {
+     FAILED => 'failure',
+     QUEUED => 'pending',
+     RUNNING => 'pending',
+     ERROR => 'error',
+     CANCELLED => 'error',
+     PASSED => 'success'
+   }
+
+   GITHUB_DESCRIPTION_MAP = {
+     FAILED => 'Some specs are failing.',
+     QUEUED => 'Build is going to be testributed soon.',
+     RUNNING => 'Build is being testributed.',
+     ERROR => 'There are some errors in your build.',
+     CANCELLED => 'Your build has been cancelled.',
+     PASSED => 'All checks have passed!'
+   }
+
   def initialize(code)
     @code = code
   end
@@ -85,6 +103,14 @@ class TestStatus
     when @code.in?([QUEUED, RUNNING])
       'btn btn-primary'
     end
+  end
+
+  def to_github_status
+    GITHUB_STATUS_MAP[code]
+  end
+
+  def to_github_description
+    GITHUB_DESCRIPTION_MAP[code]
   end
 
   def terminal?

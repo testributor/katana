@@ -37,7 +37,6 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
     _test_job_passed
     _test_job_error
     _test_job_queued
-    _test_job_cancelled
     _test_job_running
     login_as owner, scope: :user
     visit project_test_run_path(project, _test_run)
@@ -46,14 +45,12 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
   it "displays test jobs with correct statuses and ctas", js: true do
     page.driver.resize_window(1600, 1200)
     job_trs = all("tr[id^='test-job']")
-    cancelled = job_trs[0]
-    error = job_trs[1]
-    failed = job_trs[2]
-    passed = job_trs[3]
-    running = job_trs[4]
-    queued = job_trs[5]
+    error = job_trs[0]
+    failed = job_trs[1]
+    passed = job_trs[2]
+    running = job_trs[3]
+    queued = job_trs[4]
 
-    cancelled.must_have_content "Cancelled"
     error.must_have_content "Error"
     failed.must_have_content "Failed"
     passed.must_have_content "Passed"
@@ -62,7 +59,6 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
     queued.all(".btn-danger").length.must_equal 0
     running.all(".btn-danger").length.must_equal 0
-    cancelled.all(".btn-primary").length.must_equal 0
     failed.find(".btn-primary").must_have_content "Retry"
     error.find(".btn-primary").must_have_content "Retry"
     passed.find(".btn-primary").must_have_content "Retry"

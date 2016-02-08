@@ -23,6 +23,9 @@ class TestRun < ActiveRecord::Base
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
 
+  #https://github.com/mperham/sidekiq/wiki/Problems-and-Troubleshooting#cannot-find-modelname-with-id12345
+  after_commit :send_notifications, on: [:create, :update],
+    if: -> { previous_changes.has_key?('status') || previous_changes.has_key?('created_at') }
 
   def total_running_time
     if completed_at = test_jobs.maximum(:completed_at)
@@ -139,45 +142,30 @@ class TestRun < ActiveRecord::Base
     github_client.tree(repo, commit_sha, recursive: true)[:tree].map(&:path)
   end
 
-  def update_status!
-    old_status = self.status.code
-    result = ActiveRecord::Base.connection.execute <<-SQL
-      UPDATE test_runs SET status = (
-         SELECT COALESCE (
-          CASE array_length(sub.status, 1)
-          WHEN 1 THEN status[1]
-          ELSE ( CASE WHEN #{TestStatus::CANCELLED} = ANY(sub.status) THEN #{TestStatus::CANCELLED}
-                      WHEN #{TestStatus::QUEUED} = ANY(sub.status) THEN #{TestStatus::RUNNING}
-                      WHEN #{TestStatus::RUNNING} = ANY(sub.status) THEN #{TestStatus::RUNNING}
-                      WHEN #{TestStatus::ERROR} = ANY(sub.status) THEN #{TestStatus::ERROR}
-                      ELSE #{TestStatus::FAILED} END )
-          END, 0)
-        FROM (
-          SELECT uniq(array_agg(status)) status
-          FROM test_jobs
-          WHERE test_run_id = #{id}
-          GROUP BY test_run_id) sub)
-        WHERE test_runs.id = #{id}
-        RETURNING test_runs.status
+  def update_status
+    previous_status_code = status.code
+    db_return = ActiveRecord::Base.connection.execute <<-SQL
+      SELECT COALESCE (
+        CASE array_length(sub.status, 1)
+        WHEN 1 THEN status[1]
+        ELSE ( CASE WHEN #{TestStatus::CANCELLED} = ANY(sub.status) THEN #{TestStatus::CANCELLED}
+                    WHEN #{TestStatus::QUEUED} = ANY(sub.status) THEN #{TestStatus::RUNNING}
+                    WHEN #{TestStatus::RUNNING} = ANY(sub.status) THEN #{TestStatus::RUNNING}
+                    WHEN #{TestStatus::ERROR} = ANY(sub.status) THEN #{TestStatus::ERROR}
+                    ELSE #{TestStatus::FAILED} END )
+        END, 0)
+      FROM (
+        SELECT uniq(array_agg(status)) status
+        FROM test_jobs
+        WHERE test_run_id = #{id}
+        GROUP BY test_run_id) sub
     SQL
 
+    # http://www.rubydoc.info/gems/pg/0.17.1/PG%2FResult%3Avalues
+    new_status_code = db_return.values.flatten[0].to_i
 
-    new_status = result.first["status"].to_i
-    # Only the first time the status changes to a terminal one
-    if old_status != new_status &&
-      # TODO: Include CANCELLED? Does the user care about cancelled runs?
-      [TestStatus::ERROR, TestStatus::FAILED, TestStatus::PASSED,
-       TestStatus::CANCELLED].include?(new_status)
-
-      previous_status = tracked_branch.test_runs.
-        where("created_at < ?", self.created_at).
-        where(status: [TestStatus::FAILED, TestStatus::PASSED, TestStatus::ERROR]).
-        order("created_at DESC").limit(1).pluck(:status).first
-
-      tracked_branch.notifiable_users(previous_status, new_status).each do |user|
-        TestRunNotificationMailer.test_run_complete(self.id, user.email).deliver_later
-      end
-    end
+    # we intentionally check both in order to return true or false
+    previous_status_code != new_status_code && self.status = new_status_code
   end
 
   # https://trello.com/c/ITi9lURr/127
@@ -226,6 +214,12 @@ class TestRun < ActiveRecord::Base
     sql.map { |t| [t.id, t.attributes.reject! { |k| k == 'id' }] }.to_h
   end
 
+  def branch_previous_terminal_status
+    tracked_branch.test_runs.where("created_at < ?", self.created_at).
+      where(status: [TestStatus::FAILED, TestStatus::PASSED, TestStatus::ERROR]).
+      order("created_at DESC").limit(1).pluck(:status).first
+  end
+
   private
 
   # TODO: this almost the same as ProjectWizard#copy_errors. DRY
@@ -267,5 +261,14 @@ class TestRun < ActiveRecord::Base
     }).update_all(status: TestStatus::CANCELLED)
     TestRun.queued.where(tracked_branch_id: tracked_branch.id).
       update_all(status: TestStatus::CANCELLED)
+  end
+
+  def send_notifications
+    VcsStatusNotifier.perform_later(id)
+
+    old_status = previous_changes[:status] || status.code
+    TestRunStatusEmailNotificationService.new(id, old_status, status.code).schedule_notifications
+
+    true
   end
 end
