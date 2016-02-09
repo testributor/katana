@@ -89,3 +89,57 @@
     padding: 7px;
   }
 }
+
+.more-info {
+  color: grey;
+  display: block;
+  font-size: 12px;
+}
+
+.display-error {
+  text-align: left;
+  border-top: 0px !important;
+  padding: 0px !important;
+
+  div {
+    max-height: 500px;
+    overflow: auto;
+    white-space: pre-line;
+  }
+}
+
+.show-all-area {
+  cursor: pointer;
+
+  label {
+    float: right;
+    padding: 3px;
+  }
+
+  input {
+    float: right;
+  }
+}
+
+.console {
+  font-family:Courier;
+  color: #CCCCCC;
+  background: #000000;
+  padding: 10px;
+  scrollbar-face-color: #b46868;
+}
+.console::-webkit-scrollbar {
+  width:12px;
+  color: black;
+  background-color:#cccccc;
+}
+
+.console::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: grey;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+.console::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255,0,0,0.4);
+}

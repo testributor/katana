@@ -50,3 +50,9 @@ class Testributor.Pages.TestRuns
     )
     $('[data-toggle="popover"]').popover()
 
+    #show all button
+    $('.show-all-area').on 'click', (e) ->
+      if $('#show_all').is(':checked')
+        $("div[id^='error']").collapse('show')
+      else
+        $("div[id^='error']").collapse('hide')

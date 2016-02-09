@@ -2,6 +2,11 @@
   <td>{{job_name}}</td>
   <td class="status">
     <span class="{{status_css_class}}">{{status_text}}</span>
+    {{#if status_is_unsuccessful }}
+      <a href="#error-{{id}}" class="more-info" data-toggle="collapse" aria-expanded="false">
+        Toggle logs
+      </a>
+    {{/if}}
   </td>
   <td class="sent_at">{{sent_at}}</td>
   <td>{{worker_uuid_short}}</td>
