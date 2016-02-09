@@ -111,7 +111,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         branch_id: _test_run.tracked_branch.id)
     end
 
-    it 'must delete all test_jobs', js: true do
+    it 'must delete all test_jobs' do
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
       page.find('td .btn.btn-danger', text: "Cancel").click
       page.must_have_selector("#test-run-#{_test_run.id}", text: "Cancelled")
