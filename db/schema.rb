@@ -11,11 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205093759) do
+ActiveRecord::Schema.define(version: 20160209153752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "intarray"
+
+  create_table "branch_notification_settings", force: :cascade do |t|
+    t.integer  "project_participation_id",             null: false
+    t.integer  "tracked_branch_id"
+    t.integer  "notify_on",                default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "branch_notification_settings", ["project_participation_id"], name: "index_branch_notification_settings_on_project_participation_id", using: :btree
+  add_index "branch_notification_settings", ["tracked_branch_id"], name: "index_branch_notification_settings_on_tracked_branch_id", using: :btree
 
   create_table "docker_images", force: :cascade do |t|
     t.string "public_name",         default: "",         null: false
@@ -126,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160205093759) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "new_branch_notify_on", default: 0, null: false
   end
 
   add_index "projects_users", ["project_id"], name: "index_projects_users_on_project_id", using: :btree

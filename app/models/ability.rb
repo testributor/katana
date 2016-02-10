@@ -9,6 +9,7 @@ class Ability
 
     # Normal users can remove only themselves from a project
     can :destroy, ProjectParticipation, user_id: user.id
+    can :update, ProjectParticipation, user_id: user.id
 
     if project.present?
       project_owner_permissions if project.user == user

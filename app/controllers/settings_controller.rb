@@ -6,4 +6,7 @@ class SettingsController < DashboardController
 
   def worker_setup
   end
+
+  def notifications
+  end
 end

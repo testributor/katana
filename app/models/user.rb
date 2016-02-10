@@ -25,8 +25,11 @@ class User < ActiveRecord::Base
   has_one :project_wizard
   has_many :feedback_submissions
 
-
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
+
+  def participation_for_project(project_id)
+    project_participations.find_by!(project_id: project_id)
+  end
 
   def can_create_new_project?
     projects_limit >= Project.where(user_id: id).count + 1

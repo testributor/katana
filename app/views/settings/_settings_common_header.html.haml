@@ -8,3 +8,6 @@
   - link = worker_setup_project_settings_path(current_project)
   %li{ class: current_page?(link) ? 'active' : nil }
     = link_to "Worker setup", link
+  - link = notifications_project_settings_path(current_project)
+  %li{ class: current_page?(link) ? 'active' : nil }
+    = link_to "Notifications", link

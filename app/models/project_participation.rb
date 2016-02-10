@@ -3,6 +3,7 @@ class ProjectParticipation < ActiveRecord::Base
 
   belongs_to :project
   belongs_to :user
+  has_many :branch_notification_settings, dependent: :destroy
 
   after_destroy :remove_invitation_if_any
 

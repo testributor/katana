@@ -4,6 +4,8 @@ class TrackedBranch < ActiveRecord::Base
 
   belongs_to :project
   has_many :test_runs, dependent: :destroy
+  has_many :branch_notification_settings, dependent: :destroy
+
   # TODO : Write tests for this validation
   validates :branch_name, uniqueness: { scope: :project_id }
 

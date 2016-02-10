@@ -1,0 +1,21 @@
+- breadcrumb :settings, current_project
+
+= render 'settings_common_header'
+
+.panel.panel-default
+  .panel-heading
+    %h3.panel-title
+      Email notifications
+  .panel-body
+    .col-md-6
+      = simple_form_for current_user.participation_for_project(current_project),
+        url: project_participation_path(current_project,
+          current_user.participation_for_project(current_project)),
+        wrapper: "horizontal_form" do |f|
+
+        = f.input :new_branch_notify_on, as: :select,
+          collection: BranchNotificationSetting::NOTIFY_ON_MAP.invert,
+          include_blank: false, label: "New branch default notification",
+          hint: "Specify the default notification setting for new branches"
+
+        = f.submit "Save", class: 'btn btn-primary'
