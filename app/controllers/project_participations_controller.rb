@@ -46,6 +46,7 @@ class ProjectParticipationsController < DashboardController
 
   def participation_params
     params.require(:project_participation).
-      permit(:new_branch_notify_on, branch_notification_settings: [])
+      permit(:new_branch_notify_on,
+             branch_notification_settings_attributes: [:notify_on, :tracked_branch_id, :id])
   end
 end

@@ -27,4 +27,31 @@ class TrackedBranchTest < ActiveSupport::TestCase
       tracked_branch.test_runs.count.must_equal old_count
     end
   end
+
+  describe "when a new branch is created" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:participants) do
+      2.times { project.members << FactoryGirl.create(:user) }
+      project.project_participations.each_with_index do |participation, index|
+        participation.new_branch_notify_on = index
+        participation.save!
+      end
+
+      project.members
+    end
+
+    before { participants }
+
+    it "creates branch_notification_settings for all project's members" do
+      tracked_branch = FactoryGirl.build(:tracked_branch, project: project)
+      tracked_branch.save!
+      tracked_branch.branch_notification_settings.count.must_equal 3
+      tracked_branch.branch_notification_settings.
+        map{|n| n.project_participation.user_id}.sort.
+        must_equal(project.members.map(&:id).sort)
+
+      tracked_branch.branch_notification_settings.map(&:notify_on).sort.
+        must_equal([0,1,2])
+    end
+  end
 end

@@ -9,6 +9,8 @@ class TrackedBranch < ActiveRecord::Base
   # TODO : Write tests for this validation
   validates :branch_name, uniqueness: { scope: :project_id }
 
+  after_create :create_branch_notification_settings
+
   delegate :status, :total_running_time, :commit_sha, to: :last_run,
     allow_nil: true
 
@@ -109,5 +111,13 @@ class TrackedBranch < ActiveRecord::Base
 
   def client
     @client ||= project.user.github_client
+  end
+
+  def create_branch_notification_settings
+    project.project_participations.each do |participation|
+      self.branch_notification_settings.create!(
+        project_participation: participation,
+        notify_on: participation.new_branch_notify_on)
+    end
   end
 end
