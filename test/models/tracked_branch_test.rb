@@ -54,4 +54,127 @@ class TrackedBranchTest < ActiveSupport::TestCase
         must_equal([0,1,2])
     end
   end
+
+  describe "notifiable_users" do
+    let(:notify_on_map) { BranchNotificationSetting::NOTIFY_ON_MAP.invert }
+    let(:never_user) do
+      user = FactoryGirl.create(:user)
+      tracked_branch.project.reload.members << user
+      user.project_participations.first.
+        branch_notification_settings.first.
+        update_column(:notify_on, notify_on_map[:never])
+
+      user
+    end
+    let(:always_user) do
+      user = FactoryGirl.create(:user)
+      tracked_branch.project.reload.members << user
+      user.project_participations.first.
+        branch_notification_settings.first.
+        update_column(:notify_on, notify_on_map[:always])
+
+      user
+    end
+    let(:status_change_user) do
+      user = FactoryGirl.create(:user)
+      tracked_branch.project.reload.members << user
+      user.project_participations.first.
+        branch_notification_settings.first.
+        update_column(:notify_on, notify_on_map[:status_change])
+
+      user
+    end
+    let(:every_failure_user) do
+      user = FactoryGirl.create(:user)
+      tracked_branch.project.reload.members << user
+      user.project_participations.first.
+        branch_notification_settings.first.
+        update_column(:notify_on, notify_on_map[:every_failure])
+
+      user
+    end
+
+    before do
+      always_user; never_user; status_change_user; every_failure_user
+    end
+
+    describe "when status has changed" do
+      let(:old_status) { TestStatus::QUEUED }
+      let(:new_status) { TestStatus::FAILED }
+
+      it "does not include 'never' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          wont_include(never_user)
+      end
+
+      it "includes 'always' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(always_user)
+      end
+
+      it "includes 'status_change' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(status_change_user)
+      end
+    end
+
+    describe "when new status is FAIL" do
+      let(:old_status) { TestStatus::QUEUED }
+      let(:new_status) { TestStatus::FAILED }
+
+      it "does not include 'never' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          wont_include(never_user)
+      end
+
+      it "includes 'always' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(always_user)
+      end
+
+      it "includes 'every_failure' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(every_failure_user)
+      end
+    end
+    describe "when new status is ERROR" do
+      let(:old_status) { TestStatus::QUEUED }
+      let(:new_status) { TestStatus::ERROR }
+
+      it "does not include 'never' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          wont_include(never_user)
+      end
+
+      it "includes 'always' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(always_user)
+      end
+
+      it "includes 'every_failure' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(every_failure_user)
+      end
+    end
+
+    describe "when status is not changed" do
+      let(:old_status) { TestStatus::PASSED }
+      let(:new_status) { TestStatus::PASSED }
+
+      it "does not include 'never' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          wont_include(never_user)
+      end
+
+      it "includes 'always' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          must_include(always_user)
+      end
+
+      it "does not include 'status_change' user" do
+        tracked_branch.notifiable_users(old_status, new_status).
+          wont_include(status_change_user)
+      end
+    end
+  end
 end

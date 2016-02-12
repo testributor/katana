@@ -340,4 +340,67 @@ class TestRunTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe "update_status!" do
+    let(:branch) { FactoryGirl.create(:tracked_branch) }
+
+    let(:_test_run) do
+      FactoryGirl.create(:testributor_run, tracked_branch: branch,
+                        status: TestStatus::QUEUED)
+    end
+
+    let(:_test_job) do
+      FactoryGirl.create(:testributor_job, test_run: _test_run,
+                         status: TestStatus::QUEUED)
+    end
+
+    describe "when the run's status does not change" do
+      before { _test_job }
+
+      it "does not try to send any emails" do
+        branch.expects(:notifiable_users).never
+        perform_enqueued_jobs do
+          _test_run.send(:update_status!)
+        end
+      end
+    end
+
+    describe "when the run's status changes" do
+      describe "when the new status is not terminal" do
+        before do
+          _test_job.update_column(:status, TestStatus::RUNNING)
+        end
+
+        it "does not send any emails" do
+          branch.expects(:notifiable_users).never
+          perform_enqueued_jobs do
+            _test_run.send(:update_status!)
+          end
+        end
+      end
+
+      describe "when the new status is terminal" do
+        before do
+          _test_job.update_column(:status, TestStatus::PASSED)
+        end
+
+        it "sends emails to all recipients returned by the branch's notifiable_users" do
+          branch.expects(:notifiable_users).once.returns([
+            User.new(email: 'harry_potter@example.com'),
+            User.new(email: 'lara_croft@example.com')
+          ])
+
+          perform_enqueued_jobs do
+            _test_run.send(:update_status!)
+          end
+
+          ActionMailer::Base.deliveries.length.must_equal 2
+          ActionMailer::Base.deliveries.map(&:to).sort.must_equal([
+            ['harry_potter@example.com'],
+            ['lara_croft@example.com']
+          ])
+        end
+      end
+    end
+  end
 end

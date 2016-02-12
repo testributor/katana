@@ -13,13 +13,12 @@
         might have different notification settings.
       .col-md-6
         = simple_form_for current_user.participation_for_project(current_project),
-          url: project_participation_path(current_project,
-            current_user.participation_for_project(current_project)),
+          url: project_participation_path(current_project, current_user.participation_for_project(current_project)),
           wrapper: "horizontal_form" do |f|
 
           %h4 New branches
           = f.input :new_branch_notify_on, as: :select,
-            collection: BranchNotificationSetting::NOTIFY_ON_MAP.invert,
+            collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
             include_blank: false, label: "Default setting"
 
           .col-xs-12
@@ -28,7 +27,7 @@
 
           = f.simple_fields_for :branch_notification_settings do |ff|
             = ff.input :notify_on, as: :select,
-              collection: BranchNotificationSetting::NOTIFY_ON_MAP.invert,
+              collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
               include_blank: false, label: ff.object.tracked_branch.branch_name
             = ff.input :tracked_branch_id, as: :hidden
             = ff.input :id, as: :hidden

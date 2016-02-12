@@ -19,24 +19,24 @@ class EmailNotificationsSettingsFeatureTest < Capybara::Rails::TestCase
       select "Never", from: "Default setting"
       click_on "Save"
       owner.participation_for_project(project).new_branch_notify_on.
-        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert["Never"]
+        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert[:never]
 
       select "Always", from: "Default setting"
       click_on "Save"
       owner.participation_for_project(project).new_branch_notify_on.
-        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert["Always"]
+        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always]
     end
 
     it "allows the user to change the setting of each branch" do
       select "Always", from: "meaningless_feature"
       click_on "Save"
       tracked_branch.branch_notification_settings.first.notify_on.
-        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert["Always"]
+        must_equal BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always]
 
       select "On every failure", from: "meaningless_feature"
       click_on "Save"
       tracked_branch.branch_notification_settings.first.notify_on.must_equal(
-        BranchNotificationSetting::NOTIFY_ON_MAP.invert["On every failure"])
+        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:every_failure])
     end
   end
 end

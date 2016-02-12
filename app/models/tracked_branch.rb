@@ -2,7 +2,7 @@ class TrackedBranch < ActiveRecord::Base
   OLD_RUNS_LIMIT = 20
   HISTORY_COMMITS_LIMIT = 30
 
-  belongs_to :project
+  belongs_to :project, inverse_of: :tracked_branches
   has_many :test_runs, dependent: :destroy
   has_many :branch_notification_settings, dependent: :destroy
 
@@ -95,6 +95,23 @@ class TrackedBranch < ActiveRecord::Base
   def sha_history(sha = nil)
     client.commits(project.repository_id, sha || branch_name).
       first(HISTORY_COMMITS_LIMIT)
+  end
+
+  def notifiable_users(old_status, new_status)
+    flag_map = BranchNotificationSetting::NOTIFY_ON_MAP.invert
+    flags_to_notify = [flag_map[:always]]
+
+    if [TestStatus::FAILED, TestStatus::ERROR].include?(new_status)
+      flags_to_notify << flag_map[:every_failure]
+    end
+
+    if old_status != new_status
+      flags_to_notify << flag_map[:status_change]
+    end
+
+    branch_notification_settings.where(notify_on: flags_to_notify).map do |bns|
+      bns.user
+    end
   end
 
   private
