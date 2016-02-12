@@ -12,24 +12,29 @@
         These are settings only for you. Other users participating in this project
         might have different notification settings.
       .col-md-6
+        %br
+        %strong When do you want to receive email notifications?
         = simple_form_for current_user.participation_for_project(current_project),
           url: project_participation_path(current_project, current_user.participation_for_project(current_project)),
           wrapper: "horizontal_form" do |f|
 
-          %h4 New branches
-          = f.input :new_branch_notify_on, as: :select,
-            collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
-            include_blank: false, label: "Default setting"
+          .col-xs-12
+            %h4 New branches
+            .col-xs-12.form-row
+              = f.input :new_branch_notify_on, as: :select,
+                collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
+                include_blank: false, label: "Default setting"
 
           .col-xs-12
-            %hr
-          %h4 Existing branches
+            %h4 Existing branches
 
-          = f.simple_fields_for :branch_notification_settings do |ff|
-            = ff.input :notify_on, as: :select,
-              collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
-              include_blank: false, label: ff.object.tracked_branch.branch_name
-            = ff.input :tracked_branch_id, as: :hidden
-            = ff.input :id, as: :hidden
+            = f.simple_fields_for :branch_notification_settings do |ff|
+              .col-xs-12.form-row
+                = ff.input :notify_on, as: :select,
+                  collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
+                  include_blank: false, label: ff.object.tracked_branch.branch_name
+                = ff.input :tracked_branch_id, as: :hidden
+                = ff.input :id, as: :hidden
 
-          = f.submit "Save", class: 'btn btn-primary'
+          .col-xs-12
+            = f.submit "Save", class: 'btn btn-primary'

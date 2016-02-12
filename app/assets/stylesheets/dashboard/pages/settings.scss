@@ -1,0 +1,17 @@
+body.settings {
+  &.notifications {
+    h4 {
+      margin-top: 30px;
+    }
+
+    form {
+      input[type='submit'] {
+        margin-top: 10px;
+      }
+
+      .form-row {
+        margin-top: 10px;
+      }
+    }
+  }
+}
