@@ -9,3 +9,6 @@
       = link_to "Delete", project_path(current_project), method: :delete,
         data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
         class: 'btn btn-danger'
+  - else
+    - # Remove this when we add general settings which the non-owner users can change
+    .alert.alert-danger Only the owner of this project can edit these settings
