@@ -11,6 +11,7 @@ class Testributor.Widgets.ProgressBar
         statuses: $currentBar.data(),
         active: if _this.toggle($currentBar) then 'progress-bar-striped active',
         id: $currentBar.attr('id')
+        display_stats: @display_stats
       }
       $currentBar.parent().html(@progressBarTemplate(progressBarData))
     )

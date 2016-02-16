@@ -2,7 +2,7 @@ Testributor.Pages ||= {}
 class Testributor.Pages.TestRuns
   index: ->
     testRunTemplate = HandlebarsTemplates["test_runs/test_run"]
-    progressBar = new Testributor.Widgets.ProgressBar(display_stats: true)
+    progressBar = new Testributor.Widgets.ProgressBar(display_stats: false)
     Handlebars.registerPartial('progress_bar', HandlebarsTemplates["progress_bar"])
 
     Testributor.Widgets.LiveUpdates("TestRun#" + $('.progress')[0].id, (msg) ->
@@ -30,7 +30,7 @@ class Testributor.Pages.TestRuns
     testRunId = $('[data-test-run-id]').data('test-run-id')
     userIsAdmin = $('[data-admin-user]').data('admin-user')
 
-    progressBar = new Testributor.Widgets.ProgressBar(display_stats: false)
+    progressBar = new Testributor.Widgets.ProgressBar(display_stats: true)
     Testributor.Widgets.LiveUpdates("TestRun#" + testRunId, (msg) ->
       if msg.retry
         progressBar.reset(msg.test_run_id)
@@ -39,13 +39,15 @@ class Testributor.Pages.TestRuns
           $("#test_run_retry_button").show()
 
         testJob = $.extend(msg.test_job, admin: userIsAdmin)
-        $tr = $("#test-job-#{testJob.id}")
-        $newTr = $(jobTemplate(testJob))
-        $tr.replaceWith($newTr)
+        $("#test-job-#{testJob.id}").fadeOut('slow', () ->
+           $("#test-job-#{testJob.id}").replaceWith $(jobTemplate(testJob))
+           $(jobTemplate(testJob)).fadeIn('slow')
+        )
+
+
         $error = $(errorTemplate(testJob))
         if testJob.unsuccessful
-          $error.insertAfter($newTr)
-        $newTr.animate({backgroundColor: '#fff'}, 2000)
+          $error.insertAfter($(jobTemplate(testJob)))
         progressBar.update(testJob.test_run_id, testJob.html_class)
     )
     $('[data-toggle="popover"]').popover()
