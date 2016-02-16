@@ -1,14 +1,12 @@
 class ProjectsController < DashboardController
   include ApplicationHelper
+  include Controllers::EnsureProject
+
+  skip_before_action :ensure_project_exists!, only: [:destroy]
 
   def show
-    ActiveRecord::RecordNotFound unless current_project
     @branches = current_project.tracked_branches.
       includes(test_runs: :test_jobs)
-  end
-
-  def settings
-    ActiveRecord::RecordNotFound unless current_project
   end
 
   def instructions

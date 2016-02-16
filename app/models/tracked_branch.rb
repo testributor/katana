@@ -2,10 +2,14 @@ class TrackedBranch < ActiveRecord::Base
   OLD_RUNS_LIMIT = 20
   HISTORY_COMMITS_LIMIT = 30
 
-  belongs_to :project
+  belongs_to :project, inverse_of: :tracked_branches
   has_many :test_runs, dependent: :destroy
+  has_many :branch_notification_settings, dependent: :destroy
+
   # TODO : Write tests for this validation
   validates :branch_name, uniqueness: { scope: :project_id }
+
+  after_create :create_branch_notification_settings
 
   delegate :status, :total_running_time, :commit_sha, to: :last_run,
     allow_nil: true
@@ -93,6 +97,23 @@ class TrackedBranch < ActiveRecord::Base
       first(HISTORY_COMMITS_LIMIT)
   end
 
+  def notifiable_users(old_status, new_status)
+    flag_map = BranchNotificationSetting::NOTIFY_ON_MAP.invert
+    flags_to_notify = [flag_map[:always]]
+
+    if [TestStatus::FAILED, TestStatus::ERROR].include?(new_status)
+      flags_to_notify << flag_map[:every_failure]
+    end
+
+    if old_status != new_status
+      flags_to_notify << flag_map[:status_change]
+    end
+
+    branch_notification_settings.where(notify_on: flags_to_notify).map do |bns|
+      bns.user
+    end
+  end
+
   private
 
   # TODO: this is almost the same as ProjectWizard#copy_errors
@@ -107,5 +128,13 @@ class TrackedBranch < ActiveRecord::Base
 
   def client
     @client ||= project.user.github_client
+  end
+
+  def create_branch_notification_settings
+    project.project_participations.each do |participation|
+      self.branch_notification_settings.create!(
+        project_participation: participation,
+        notify_on: participation.new_branch_notify_on)
+    end
   end
 end

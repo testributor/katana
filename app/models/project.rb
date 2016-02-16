@@ -9,7 +9,7 @@ class Project < ActiveRecord::Base
 
   devise :database_authenticatable
   belongs_to :user # this is the owner of the project
-  has_many :tracked_branches, dependent: :destroy
+  has_many :tracked_branches, dependent: :destroy, inverse_of: :project
   has_many :test_runs, through: :tracked_branches
   has_many :test_jobs, through: :test_runs
   has_one :docker_image_selection

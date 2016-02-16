@@ -45,7 +45,9 @@ class UserInvitationsControllerTest < ActionController::TestCase
     subject { FactoryGirl.create(:user_invitation, project: project) }
 
     it "sends an email for an existing invitation" do
-      post :resend, project_id: project.id, id: subject.id
+      perform_enqueued_jobs do
+        post :resend, project_id: project.id, id: subject.id
+      end
       flash[:notice].must_equal "Invitation will be sent shortly"
       ActionMailer::Base.deliveries.last.body.to_s.must_match(subject.token)
     end

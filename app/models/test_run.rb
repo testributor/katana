@@ -140,7 +140,8 @@ class TestRun < ActiveRecord::Base
   end
 
   def update_status!
-    ActiveRecord::Base.connection.execute <<-SQL
+    old_status = self.status.code
+    result = ActiveRecord::Base.connection.execute <<-SQL
       UPDATE test_runs SET status = (
          SELECT COALESCE (
           CASE array_length(sub.status, 1)
@@ -157,7 +158,26 @@ class TestRun < ActiveRecord::Base
           WHERE test_run_id = #{id}
           GROUP BY test_run_id) sub)
         WHERE test_runs.id = #{id}
+        RETURNING test_runs.status
     SQL
+
+
+    new_status = result.first["status"].to_i
+    # Only the first time the status changes to a terminal one
+    if old_status != new_status &&
+      # TODO: Include CANCELLED? Does the user care about cancelled runs?
+      [TestStatus::ERROR, TestStatus::FAILED, TestStatus::PASSED,
+       TestStatus::CANCELLED].include?(new_status)
+
+      previous_status = tracked_branch.test_runs.
+        where("created_at < ?", self.created_at).
+        where(status: [TestStatus::FAILED, TestStatus::PASSED, TestStatus::ERROR]).
+        order("created_at DESC").limit(1).pluck(:status).first
+
+      tracked_branch.notifiable_users(previous_status, new_status).each do |user|
+        TestRunNotificationMailer.test_run_complete(self.id, user.email).deliver_later
+      end
+    end
   end
 
   # https://trello.com/c/ITi9lURr/127

@@ -37,6 +37,9 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   #fixtures :all
 
+  # https://blog.engineyard.com/2015/testing-async-emails-rails-42
+  include ActiveJob::TestHelper
+
   ActiveRecord::Migration.check_pending!
   Sidekiq::Testing.inline!
 
