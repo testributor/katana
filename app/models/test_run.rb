@@ -24,7 +24,7 @@ class TestRun < ActiveRecord::Base
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
 
   #https://github.com/mperham/sidekiq/wiki/Problems-and-Troubleshooting#cannot-find-modelname-with-id12345
-  after_commit :send_notifications, on: [:create, :update],
+  after_commit :send_notifications,
     if: -> { previous_changes.has_key?('status') || previous_changes.has_key?('created_at') }
 
   def total_running_time

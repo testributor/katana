@@ -378,7 +378,7 @@ class TestRunTest < ActiveSupport::TestCase
 
         it "does not send any emails" do
           branch.expects(:notifiable_users).never
-          _test_run.send(:update_status)
+          _test_run.update_status
           perform_enqueued_jobs do
             VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
               _test_run.save
