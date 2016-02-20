@@ -30,7 +30,7 @@ class ProjectParticipationsController < DashboardController
     authorize! :update, @participation
 
     if @participation.update(participation_params)
-      flash[:notice] = "Your options where saved"
+      flash[:notice] = "Your options were saved"
     else
       flash[:alert] = @participation.errors.full_messages.to_sentence
     end
