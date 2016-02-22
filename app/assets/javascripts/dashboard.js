@@ -26,6 +26,7 @@
 //= require dashboard/jquery.nicescroll.js
 //= require dashboard/jquery.app
 //= require handlebars.runtime
+//= require ansi_up.js
 //
 //= require init
 //= require_tree ./dashboard
