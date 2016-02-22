@@ -108,7 +108,10 @@
   div {
     max-height: 500px;
     overflow: auto;
-    white-space: pre-line;
+    white-space: pre-wrap;
+    max-width: 100vw;
+    font-size: 12px;
+    clear: left;
   }
 }
 
@@ -126,11 +129,11 @@
 }
 
 .console {
-  font-family:Courier;
+  font-family: Monaco, monospace;
   color: #CCCCCC;
   background: #000000;
   padding: 10px;
-  scrollbar-face-color: #b46868;
+  scrollbar-face-color: #ccc;
 }
 .console::-webkit-scrollbar {
   width:12px;
@@ -143,9 +146,6 @@
   border-radius: 10px;
   background: grey;
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-}
-.console::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255,0,0,0.4);
 }
 
 .left-panel {

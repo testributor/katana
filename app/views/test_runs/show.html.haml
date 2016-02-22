@@ -76,4 +76,6 @@
                   %tr
                     %td{colspan: 10, class: 'display-error'}
                       %div{id: "error-#{test_job.id}", class: "well console collapse"}
-                        = test_job.result
+                        :preserve
+                          #{'\n'}
+                          #{test_job.result.html_safe}
