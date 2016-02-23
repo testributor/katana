@@ -10,4 +10,4 @@
 if Rails.env.development?
   Rack::Timeout.timeout = 0 # disable
 end
-Rack::Timeout::Logger.level  = Logger::ERROR
+#Rack::Timeout::Logger.level  = Logger::ERROR
