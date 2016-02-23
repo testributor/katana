@@ -88,6 +88,33 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       end
     end
 
+    describe "when there are other running test jobs on other projects" do
+      let(:irrelevant_project) { FactoryGirl.create(:project) }
+      let(:irrelevant_test_run) do
+        FactoryGirl.create(:testributor_run, project: irrelevant_project)
+      end
+      let(:irrelevant_test_job) do
+        FactoryGirl.create(:testributor_job, test_run: irrelevant_test_run,
+          status: TestStatus::RUNNING, worker_uuid: "irrelevant_worker")
+      end
+
+      before { irrelevant_test_job }
+
+      it "does not return test jobs of irrelevant test runs (fixed bug)" do
+        _test_jobs.each{|j| j.update_columns(chunk_index: 0,
+                                            worker_uuid: "alive_worker_uuid")}
+
+        @controller.stub :doorkeeper_token, token do
+          # the request will also make this worker active
+          request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
+          patch :bind_next_batch, default: { format: :json }
+          result = JSON.parse(response.body)
+          result.map{|r| r["id"]}.wont_include irrelevant_test_job.id
+          result.count.must_equal 4
+        end
+      end
+    end
+
     it "returns the cost_prediction for each job" do
       TestJob.update_all(old_avg_worker_command_run_seconds: 2)
       @controller.stub :doorkeeper_token, token do
