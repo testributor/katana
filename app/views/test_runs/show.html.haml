@@ -42,7 +42,7 @@
               - @test_jobs.each do |test_job|
                 - test_job = test_job.decorate
                 %tr{id: "test-job-#{test_job.id}"}
-                  %td= test_job.job_name
+                  %td= @test_run.project.in_demo_mode? ? test_job.demo_job_name : test_job.job_name
                   %td
                     %span{class: test_job.status.css_class}= test_job.status.text
                     - if test_job.status.unsuccessful?
