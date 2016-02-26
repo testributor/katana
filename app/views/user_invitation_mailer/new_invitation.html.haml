@@ -1,8 +1,8 @@
 %h2
   = "Hello #{@user_invitation.email}"
 %p
-  You are invited to participate in project
-  = "\"#{@user_invitation.project.name}\""
+  You are invited by user #{@project.user.email} to participate in project
+  = "\"#{@project.name}\""
   on testributor.com
 %p
   Click
