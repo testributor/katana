@@ -232,7 +232,7 @@ class TestRun < ActiveRecord::Base
   end
 
   def last_file_run
-    test_jobs.where('completed_at IS NOT NULL').sort_by(&:completed_at).last
+    test_jobs.reject { |j| j.completed_at.nil? }.sort_by(&:completed_at).last
   end
 
   def github_client

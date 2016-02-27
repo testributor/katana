@@ -6,7 +6,8 @@ class DashboardController < ApplicationController
 
   def index
     @projects = current_user.participating_projects.
-      includes(tracked_branches: { test_runs: :test_jobs })
+      includes(tracked_branches: { test_runs: :test_jobs }).
+      order(:repository_owner, :name)
   end
 
   def current_ability
