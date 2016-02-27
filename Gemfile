@@ -4,20 +4,28 @@ ruby '2.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2'
+gem 'haml-rails'
+gem 'sass-rails', '~> 5.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.1.0'
+
+# See https://github.com/rails/execjs#readme for more supported runtimes
+# gem 'therubyracer', platforms: :ruby
+
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jbuilder', '~> 2.0'
+gem 'sdoc', '~> 0.4.0', group: :doc
+
 gem 'pg'
 gem 'redis'
 gem 'connection_pool'
 gem 'handlebars_assets'
-
 gem 'wicked'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'select2-rails'
 gem 'draper'
-gem 'haml-rails'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.1.0'
 gem 'bootstrap-sass'
 gem 'bootstrap-social-rails'
 gem 'font-awesome-rails'
@@ -29,15 +37,6 @@ gem 'redcarpet'
 gem 'rack-attack'
 gem 'awesome_print'
 gem 'sshkey'
-
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-gem 'jbuilder', '~> 2.0'
-gem 'sdoc', '~> 0.4.0', group: :doc
-
 gem 'devise'
 gem 'cancancan', '~> 1.10'
 gem 'underscore-rails'
@@ -49,6 +48,7 @@ gem 'oauth2'
 gem 'omniauth-github'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', ref: '1f0886' # 0.10 rc version
 gem 'simple_form'
+gem 'actionview-encoded_mail_to'
 
 group :production do
   gem 'rails_12factor'
