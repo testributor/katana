@@ -1,14 +1,42 @@
 %footer.footer
   .container
     .row
-      .col-xs-12.col-sm-4.m-b-5
-        = link_to pages_path('about_us'), class: 'btn-custom' do
-          About us
-        &#124;
-        = link_to pages_path("faqs"), class: 'btn-custom' do
-          FAQs
-      .col-xs-12.col-sm-4.m-b-5.text-center= "© #{Time.current.year} Testributor"
-      .col-xs-12.col-sm-4.m-b-5
+      .col-xs-12.col-sm-4
+        %div
+          .logo.text-center
+            %img{alt: "logo", src: image_path("logo.png"), style: 'float: none;'}
+            %span.logo-text Testributor
+            %h4.white-color Faster testing on your hardware
+
+      .col-xs-12.col-sm-4
+        .col-xs-6
+          %ul{style: "list-style-type: none;"}
+            %li
+              = link_to root_path(anchor: 'features'), class: 'btn-custom' do
+                Features
+            %li
+              = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
+                Documentation
+            %li
+              = link_to 'http://blog.testributor.com', class: 'btn-custom' do
+                Blog
+            %li
+              = link_to pages_path("pricing"), class: 'btn-custom' do
+                Pricing
+            %li
+              = link_to pages_path("faqs"), class: 'btn-custom' do
+                FAQs
+            %li
+              = link_to pages_path("about_us"), class: 'btn-custom' do
+                About
+
+        .col-xs-6
+          %ul{style: "list-style-type: none;"}
+            %li
+              = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
+            %li
+              = link_to 'Sign up', new_user_registration_path, class: 'btn btn-primary'
+      .col-xs-12.col-sm-4
         %span.social
           = link_to "https://www.twitter.com/testributor", class: 'btn-custom',
             target: "_blank" do

@@ -113,15 +113,6 @@ p {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.navbar-custom {
-  margin: 0px;
-  border-radius: 0px;
-}
-.navbar-custom ul li a {
-  color: #fff;
-  font-size: 16px;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
 .navbar-brand i {
   font-size: 15px;
 }
@@ -389,13 +380,6 @@ ul.social-icons li a i {
 .wrapper-page {
   width: 380px;
   margin: 90px auto 140px;
-}
-
-.logo {
-  img {
-    float: left;
-    width: 55px;
-  }
 }
 
 body {

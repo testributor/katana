@@ -1,6 +1,9 @@
 Testributor.Pages ||= {}
 class Testributor.Pages.Home
   index: ->
+
+    $('#tour').carousel()
+
     $('.navbar-nav a').on 'click', (event) ->
       $anchor = $(@)
       $('html, body').stop().animate({

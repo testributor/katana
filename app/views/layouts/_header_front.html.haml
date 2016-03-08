@@ -9,9 +9,28 @@
                 %div.navbar-brand.logo
                   %img{alt: "logo", src: image_path("logo.png")}
                   %span.logo-text Testributor
+            %ul.nav.navbar-nav.navbar-left.collapse.navbar-collapse
+              %li
+                = link_to root_path(anchor: 'features'), class: 'btn-custom' do
+                  Features
+              %li
+                = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
+                  Documentation
+              %li
+                = link_to 'http://blog.testributor.com', class: 'btn-custom' do
+                  Blog
+              %li
+                = link_to pages_path("pricing"), class: 'btn-custom' do
+                  Pricing
+              %li
+                = link_to pages_path("faqs"), class: 'btn-custom' do
+                  FAQs
+              %li
+                = link_to pages_path("about_us"), class: 'btn-custom' do
+                  About
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
               %ul.nav.navbar-nav.navbar-right
                 %li
-                  %a.btn.btn-custom{href: new_user_session_path} Log in
+                  = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
                 %li
-                  %a.w-lg.btn.btn-tb-primary.btn-custom{href: new_user_registration_path} Sign Up
+                  = link_to 'Sign up', new_user_registration_path, class: 'btn nav-btn-primary'

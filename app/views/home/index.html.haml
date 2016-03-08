@@ -4,38 +4,37 @@
     %section.signup-section
       .container
         .row.hero-content
-          .col-md-7.col-lg-6
-            %h1.main-title Scale your test suite easily
+          .col-lg-12.text-center
+            %h1.main-title Faster testing on your hardware
 
             %p.main-text
-              Testributor will help you to magically slice up your suite and transparently run all
+              Testributor will help you to efficiently slice up your suite and run all
               its “pieces” in parallel, on your computers or ours.
-            %p.main-text
-              No more legitimate slacking
-              %sup= link_to "?", "https://xkcd.com/303/", target: "_blank"
-              \. Testing time should be used for something good. Go have some fun.
-          .col-md-5.col-lg-6
-            .img-container
-              = image_tag("bkg_laptop.png", width: "100%")
-          .col-xs-12.text-center.cta-container
-            %a.btn-cta.btn.btn-tb-primary{href: new_user_registration_path} Sign up for Beta
-            .why-join
-              = link_to "Why join the beta?", "#why-join", data: {toggle: 'collapse'}
-          .col-xs-12
-            %p#why-join.collapse
-              By signing up for Beta you help us smooth out the rough edges and
-              for this reason, we will give you something in return.
 
-              Every verified
-              %sup{ data: { toggle: "tooltip", placement: "top" }, title: "Your account will be verified when you setup your worker(s) and run at least  one of your test suites. You also have to verify you email address." } ?
+          .col-lg-12.text-center.cta-container
+            %a.btn.btn-cta.btn-primary.flat-logo{href: new_user_registration_path}
+              = image_tag('flat-logo.png', width: '50', class: 'm-r-10')
+              Sign up
+            %p.m-t-20
+              != "Every beta user will be able to use Testributor's #{ link_to 'starter pack for free', pages_path('pricing'), class: 'main-link'}  for 6 months."
+          .col-lg-12.text-center.m-t-20
+            #macbook
+              #tour.carousel.slide{ 'data-ride' => "carousel" }
+                %ol.carousel-indicators
+                  %li{ data: { 'slide-to' => '0', 'target' => '#tour' }, class: "active"}
+                  %li{ data: { 'slide-to' => '1', 'target' => '#tour' }, class: "" }
+                  %li{ data: { 'slide-to' => '2', 'target' => '#tour' }, class: "" }
 
-              account that will open during the Beta period will be eligible for a
-              totally free, special plan, when we come out of the Beta!
+                .carousel-inner{ role: "listbox"}
+                  .item.active
+                    = image_tag('carousel/carousel_1.png', class: 'slide-img')
+                  .item
+                    = image_tag('carousel/carousel_2.png', class: 'slide-img')
+                  .item
+                    = image_tag('carousel/carousel_3.png', class: 'slide-img')
 
-              We are confident that you will love it!
-              Check our list of supported technologies to make sure that you have
-              a smoother experience.
     %section.features
+      #features
       .container
         .row.hero-content
           .col-xs-12.text-center
@@ -45,8 +44,7 @@
               .feature
                 %h3
                   %i.fa.fa-th-list
-                  %span
-                    Smart distribution
+                  Smart distribution
                 Use simple configuration to split your test suite in multiple jobs
                 for running them in parallel.
 
@@ -69,7 +67,7 @@
               .feature
                 %h3
                   %i.fa.fa-bug
-                  Re-run your tests
+                  Re-run a test unit
                 Almost every suite has some testing isolation holes. You can
                 just re-run an individual test when in doubt.
 
@@ -81,17 +79,75 @@
 
                 Get notified about breaking tests. We do our best to keep notifications
                 relevant. If our intelligent defaults don't suit you, you can
-                adjust them at any time (coming soon).
+                adjust them at any time.
 
             .col-sm-6.col-lg-4
               .feature
                 %h3
                   %i.fa.fa-docker
-                  Crazy dependencies? We got you covered.
+                  Docker Support
 
                 Architectured using
                 #{link_to "Docker", "https://www.docker.com/what-docker", target: "_blank"}
                 technology to support a limitless range of dependencies.
+            .col-sm-6.col-lg-4
+              .feature
+                %h3
+                  %i.fa.fa-code
+                  Multi-language support
+                Select your prefered code language and start testing in some
+                minutes
+
+            .col-sm-6.col-lg-4
+              .feature
+                %h3
+                  %i.fa.fa-code-fork
+                  Multiple SVCs to choose from
+                Import your projects and watch
+                your build passes in your prefered SVC
+                (Coming soon, we are currently supporting Github)
+
+            .col-sm-6.col-lg-4
+              .feature
+                %h3
+                  %i.fa.fa-television
+                  Unified test output
+                Watch your test results in a single page no matter how many workers you use.
+    %section#how.section.bg-white
+      .container.text-center
+        .row
+          .col-sm-12
+            %h2.title How It Works ?
+            %p.slogan
+              All you have to do is create a project, select your technologies and run the docker-compose file.
+              You can have as many workers running as your hardware can handle.
+        / End row
+        .row.pt80
+          .col-sm-4
+            .features-2
+              = image_tag 'how-it-works/code-window.png'
+            %div
+              %h3 Configure setup
+              %p Select a project you want to test, select your dependencies and insert your build commands.
+          / end col
+          .col-sm-4
+            .features-2
+              = image_tag 'how-it-works/drawing-tablet.png'
+            %div
+              %h3 Pick your docker-compose file
+              %p We create your docker compose file based on the selected technologies and dependencies.
+          / end col
+          .col-sm-4
+            .features-2
+              = image_tag 'how-it-works/clock.png'
+            %div
+              %h3 Run tests on your hardware
+              %p
+                Either you choose to run concarent buids or build parallelism, you will gain time in the testing procedure.
+                Just type
+                %code docker-compose up
+                in a docker environment and your are good to go.
+
     %section
       .container
         .row.hero-content

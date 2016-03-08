@@ -12,10 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap/tooltip
-//= require bootstrap/collapse
+//= require bootstrap
 //= require underscore
 //= require sweet-alert.min
+//= require SmoothScroll
 //
 //= require init
 //= require_tree ./front

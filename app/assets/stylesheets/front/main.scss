@@ -1,4 +1,9 @@
 *, p, a, h1, h2, h3, h4, h5, h6 {
+
+}
+
+span, h1, h2, h3, h4, h5, h6 {
+  color:  #333b4d;
 }
 
 html, body {
@@ -6,10 +11,15 @@ html, body {
 }
 
 .btn-cta {
-  padding: 25px 65px;
-  background-color: #49497d;
-  border-radius: 5px;
-  color: #FFF;
+  font-size: 30px;
+  padding: 9px 15px;
+  font-weight: 300;
+  opacity: 1;
+
+  &:hover {
+    opacity: 0.9;
+    color: white;
+  }
 }
 
 section.features {
@@ -27,6 +37,9 @@ section.features {
     opacity: 0.7;
     margin-top: 20px;
 
+    h3 {
+      color: white;
+    }
     .fa {
       font-size: 120%;
     }
@@ -55,14 +68,14 @@ section.features {
     min-width: 210px;
   }
   padding: 10px 16px;
-  border: 1px solid #5A5A9A;
+  border: 1px solid #333b4d;
   vertical-align: middle;
   border-radius: 2px;
 }
 
 .top-section {
-  padding: 15px 0;
-  background-color: #4f4f86;
+  padding: 4px;
+  background-color: #333b4d;
 }
 
 .home.index {
@@ -71,12 +84,32 @@ section.features {
     margin-top: 0;
   }
 }
+.navbar-custom {
+  margin: 0px;
+}
+.navbar-custom ul li a {
+  color: #fff;
+}
 
-.logo-text {
+.btn-white {
+  border-color: white;
   color: white;
-  text-transform: uppercase;
-  margin: 19px 10px;
-  display: inline-block;
+}
+
+.logo {
+  img {
+    margin-top: 1px;
+    float: left;
+    width: 50px;
+  }
+
+  .logo-text {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    margin: 16px 5px 10px 4px;
+    display: inline-block;
+  }
 }
 
 .hero-content {
@@ -84,7 +117,9 @@ section.features {
 }
 
 .main-title {
-  font-weight: bold;
+  font-size: 80px;
+  text-align: center;
+  color: #333b4d;
 }
 
 @media screen and (max-width: $screen-sm-max) {
@@ -96,6 +131,7 @@ section.features {
 .main-text {
   font-size: 20px;
   line-height: 25px;
+  text-align: center;
 }
 
 .inner-text {
@@ -115,7 +151,7 @@ section.features {
 }
 
 .cta-container {
-  padding: 50px 0 0 0;
+  padding: 16px 0 0 0;
 }
 
 #why-join {
@@ -130,18 +166,30 @@ section.features {
 }
 
 .btn-tb-primary {
+  color: white;
+  background-color: #3bc0c3;
   border: 2px solid white;
   font-weight: bold;
-  opacity: 0.9;
+  opacity: 1;
   font-size: 16px;
   &:hover {
+    opacity: 0.9;
     color: white;
-    opacity: 1;
   }
 }
 
 .panel.panel-primary .panel-heading {
-  background-color: #4F4F86;
+  background-color: #333b4d;
+
+  h2 {
+    color: white;
+  }
+
+  .logo {
+    img {
+      width: 60px;
+    }
+  }
 }
 
 .footer .social a {
@@ -161,15 +209,9 @@ section.features {
     color: #fff;
     padding: 0 10px;
   }
-  background-color: #4f4f86;
+  background-color: #333b4d;
   @media screen and (max-width: $screen-xs-max) {
     text-align: center;
-  }
-
-  .social {
-    @media screen and (min-width: $screen-xs-max) {
-      float: right;
-    }
   }
 }
 
@@ -209,4 +251,75 @@ section.features {
   i {
     line-height: 30px;
   }
+}
+
+#macbook {
+  @media screen and (max-width: $screen-xs-max) {
+    display: none;
+  }
+
+  margin: auto;
+  text-align: center;
+  display: block;
+  background: url("mac.png");
+  width: 967px;
+  height: 484px;
+}
+#tour {
+  margin: 0 auto;
+  width: 652px;
+  height: 432px;
+  position: relative;
+  top: 22px;
+  left: -4px;
+}
+
+.dark-blue {
+  background-color: #333b4d;
+  color: white;
+
+  &:hover {
+    color: white;
+  }
+}
+
+.most-popular {
+  border: 1px solid #333b4d;
+}
+
+.main-link {
+  text-decoration: underline;
+  color: #333b4d;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.price_card {
+  span {
+    color: white;
+  }
+}
+
+.flat-logo {
+  -webkit-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.48);
+  -moz-box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.48);
+  box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.48);
+}
+
+.nav-btn-primary {
+  padding: 10px !important;
+  top: 5px;
+  color: white;
+  background-color: #3bc0c3;
+
+  &:hover {
+    color: white !important;
+    background-color: #3bc0c3 !important;
+  }
+}
+
+.white-text {
+  color: white !important;
 }

@@ -1,0 +1,103 @@
+#page
+  = render partial: 'layouts/header_front'
+  %main
+    %section
+      .container
+        .col-md-12
+          .row
+            %h1.main-title
+              Pricing
+          %hr
+          .row.pt40
+            .col-md-3
+              .price_card.text-center
+                .header.bg-info
+                  %span.price 34€
+                  %span.name Starter Pack
+                %ul.price-features
+                  %li Up to 5 Workers
+                  %li Unlimited Projects
+                  %li Unlimited Builds
+                  %li Unlimited Users
+                  %li
+                    %del Free for 1 month
+                    %p Free for 6 months (Beta)
+                = link_to 'Sign up', new_user_registration_path, class: 'btn btn-info w-md'
+              / end Pricing_card
+            / end col
+            .col-md-3
+              .price_card.text-center.most-popular
+                .header.dark-blue
+                  %span.price 69€
+                  %span.name Small Pack
+                %ul.price-features
+                  %li Up to 10 Workers
+                  %li Unlimited Projects
+                  %li Unlimited Builds
+                  %li Unlimited Users
+                  %li
+                    %del Free for 15 days
+                    %p Free for 1 month (Beta)
+                = link_to 'Sign up', new_user_registration_path, class: 'btn dark-blue w-md'
+              %span.tip * Most popular!
+            / end col
+            .col-md-3
+              .price_card.text-center
+                .header.bg-info
+                  %span.price 104€
+                  %span.name Medium Pack
+                %ul.price-features
+                  %li Up to 15 workers
+                  %li Unlimited Projects
+                  %li Unlimited Builds
+                  %li Unlimited Users
+                  %li
+                    %del Free for 15 days
+                    %p Free for 1 month (Beta)
+                = link_to 'Sign up', new_user_registration_path, class: 'btn btn-info w-md'
+            .col-md-3
+              .price_card.text-center
+                .header.bg-info
+                  %span.price 139€
+                  %span.name Big Pack
+                %ul.price-features
+                  %li Up to 20 Workers
+                  %li Unlimited Projects
+                  %li Unlimited Builds
+                  %li Unlimited Users
+                  %li
+                    %del Free for 15 days
+                    %p Free for 1 month (Beta)
+                = link_to 'Sign up', new_user_registration_path, class: 'btn btn-info w-md'
+          .row.pt40
+            .col-md-12.text-center
+              %hr
+              %h1 In need of a bigger pack?
+              If 20 workers are not enough for you, send us an e-mail and we will help you.
+              .pt40
+                = mail_to 'support@testributor.com', 'Contact us', class: 'btn btn-primary btn-lg m-l-10'
+          .row.pt40
+            .col-md-12
+              %hr
+              .col-md-4.text-center
+                %h3 What is a worker?
+                %br
+                %br
+                %p
+                  A worker is a piece of code that runs on your machine via Docker.
+                  This will run your tests efficiently.
+              .col-md-4.text-center
+                %h3 What happends at the end of the trial period?
+                %br
+                %p
+                  When the trial period ends, you have the option to continue on the plan you selected.
+                  Otherwise you return to the free pack which includes 1 worker and unlimited builds and
+                  projects. You can upgrade whenever you like.
+              .col-md-4.text-center
+                %h3 How do i pay?
+                %br
+                %br
+                %p
+                  You can pay monthly and you can upgrade anytime. You can also downgrade after the paid month ends.
+          .row.pt40
+= render partial: 'layouts/footer_front'
