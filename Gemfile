@@ -49,6 +49,8 @@ gem 'omniauth-github'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', ref: '1f0886' # 0.10 rc version
 gem 'simple_form'
 gem 'actionview-encoded_mail_to'
+gem 'sitemap_generator'
+gem 'fog-aws'
 
 group :production do
   gem 'rails_12factor'
