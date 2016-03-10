@@ -4,8 +4,8 @@ module ApplicationHelper
   end
 
   def meta_description
-    "Testributor will help you slice up your test suite and transparently "\
-    "run all its “pieces” in parallel, on your computers or ours."
+    "Testributor will help you slice up your test suite efficiently and run all "\
+    "its “pieces” in parallel, on your computers or ours."
   end
 
   def controller_and_action
