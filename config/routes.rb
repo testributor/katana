@@ -53,7 +53,9 @@ Rails.application.routes.draw do
     end
 
     resources :worker_groups, only: [:create, :update, :destroy] do
-      post :reset_ssh_key
+      member do
+        post :reset_ssh_key
+      end
     end
 
     member do
