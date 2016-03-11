@@ -14,6 +14,19 @@ class WorkerGroupTest < ActiveSupport::TestCase
         subject.valid?
         subject.errors.added?(:friendly_name, :blank).must_equal false
       end
+
+      it "must be unique in the project scope" do
+        FactoryGirl.create(:worker_group, project: subject.project,
+                           friendly_name: "FastWorker")
+        other_project_worker_name = "OtherProjectWorker"
+        FactoryGirl.create(:worker_group, friendly_name: other_project_worker_name)
+
+        subject.friendly_name = "FastWorker"
+        subject.save.must_equal false
+        subject.errors[:friendly_name].must_equal ["has already been taken"]
+        subject.friendly_name = other_project_worker_name
+        subject.save.must_equal true
+      end
     end
   end
 

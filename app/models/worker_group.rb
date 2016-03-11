@@ -7,6 +7,7 @@ class WorkerGroup < ActiveRecord::Base
 
   validates :project, presence: true
   validates :friendly_name, presence: true
+  validates :friendly_name, uniqueness: { scope: :project }
 
   before_validation :generate_ssh_keys, on: :create,
     if: ->{ ssh_key_private.blank? }
