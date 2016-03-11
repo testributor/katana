@@ -1,5 +1,6 @@
 %p
-  In this file you can put any commands needed before your test suite is run.
+  In this file you can put any commands you need to run before each Build
+  or to setup your worker.
   It is a bash script and it will run in an Ubuntu 15.10 system. If you find that
   a needed package is missing you can use
   %code
@@ -11,6 +12,17 @@
   %code
     rake db:create
   in Ruby on Rails).
+
+%p
+  %strong
+    This script is invoked:
+    %ul
+      %li
+        Once when the worker is first started, after the code
+        is fetched.
+      %li
+        Before every build. Each worker will run this script when running a
+        job for a different Build than the Build of the previous job.
 
 %p
   To give you more flexibility on what commands run and when,
@@ -44,49 +56,38 @@
       %br
 
       This is a bash function which checks if any of the changed files between
-      the current commit and the previous matches the given string. It might
-      be useful when you want to run database migrations of install new gems.
+      the current commit and the previous matches the given string.
 
       %p
-        E.g. You want to run "bundle install" only when there are changes in the
-        Gemfile.lock. This can be achieved as this:
+        E.g. You want to reset the database when db/schema.rb file is changed.
+        This can be achieved as this:
         %br
 
         :ruby
           code = <<-CODE
-          if changed_file_paths_match "Gemfile.lock"
+          if changed_file_paths_match "db/schema.rb"
           then
-            bundle install --deployment --path /vendor/bundle --jobs 2 --retry 2
+            RAILS_ENV=test rake db:reset
           fi
           CODE
         %pre= code
-        or to setup the database
-        :ruby
-          code= <<-CODE
-          if changed_file_paths_match "db/migrations"
-          then
-            rake db:setup
-          fi
-          CODE
-        %pre=code
-
     %li
       %strong commit_changed
       %br
 
-      This is a bash function that exists with 1 when the current commit is
+      This is a bash function that exits with 1 when the current commit is
       different than the last job's. It is useful when you want to run commands
       whenever the commit changes.
 
       %p
-        E.g. You want to call a cleanup script before running a new commit.
+        E.g. You want to install any new gems before running a new commit.
         This can be achieved as this:
 
         :ruby
           code = <<-CODE
           if commit_changed
           then
-            rake my_cleanup_task
+            bundle check || bundle install --deployment --path /vendor/bundle --jobs 2 --retry 2
           fi
           CODE
         %pre= code
