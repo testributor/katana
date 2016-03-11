@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20160224111403) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "intarray"
+  enable_extension "pg_stat_statements"
 
   create_table "branch_notification_settings", force: :cascade do |t|
     t.integer  "project_participation_id",             null: false
