@@ -37,15 +37,29 @@
         #{link_to ' official Docker site', 'https://docs.docker.com/'}.
 
       %li
-        Download the docker-compose.yml file for this project.
-        %p
-          = link_to docker_compose_project_path(current_project), class: "btn btn-default" do
-            Download
-            %i.fa.fa-download
+        Download a docker-compose.yml file for this project.
+        %br
+        You can create groups of workers in the relevant
+        = link_to "Settings", worker_setup_project_settings_path(current_project)
+        page.
+        Each group will have its own docker-compose.yml file with different
+        set of credentials on Testributor and different ssh key to access the
+        code.
+        This way, if you want to revoke access to some
+        workers, you don't have to setup the rest of the workers too.
+
+        - if worker_group = current_project.worker_groups.first
+          %br
+          This is the docker-compose.yml file for your first worker group:
+          %p
+            = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
+              class: "btn btn-default" do
+              Download
+              %i.fa.fa-download
 
       %li
         Create a worker by running the following command in the same directory where
-        you saved the file:
+        you saved the docker-compose.yml file:
         %p
           %code docker-compose up
         For more options and documentation on docker-compose visit the
