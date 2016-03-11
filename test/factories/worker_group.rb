@@ -54,5 +54,11 @@ NztD91fVguUoMO8G/eZ4g26YN5ZxUpdy3SXHS99HvZnyrhdCLHmHa7n3Bn+v0jaQ
 fjbKV5rSNSP5cvOqs8cK4CgOmKHPgpT1Fx0+pi7mk+JXCQ3GUr71JYMDpw==
 -----END RSA PRIVATE KEY-----
     KEY
+
+    after(:build) do |worker_group, evaluator|
+      if worker_group.project.blank?
+        worker_group.project = evaluator.oauth_application.try(:owner)
+      end
+    end
   end
 end

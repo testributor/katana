@@ -22,7 +22,7 @@
       %tbody
         - current_project.oauth_applications.each do |app|
           :ruby
-            worker_group = current_project.find_worker_group_by(oauth_application_id: app.id)
+            worker_group = current_project.worker_groups.find_by(oauth_application_id: app.id)
           %tr
             %td.worker-group
               = render worker_group

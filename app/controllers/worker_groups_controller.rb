@@ -11,9 +11,7 @@ class WorkerGroupsController < DashboardController
   def update
     head :bad_request unless request.xhr?
 
-    worker_group = current_project.find_worker_group_by!(
-      oauth_application_id: worker_group_params[:oauth_application_id]
-    )
+    worker_group = current_project.worker_groups.find(params[:id])
     worker_group.update!(worker_group_params)
 
     render worker_group
@@ -27,9 +25,7 @@ class WorkerGroupsController < DashboardController
   end
 
   def reset_ssh_key
-    worker_group = current_project.find_worker_group_by!(
-      id: params[:worker_group_id]
-    )
+    worker_group = current_project.worker_groups.find(params[:worker_group_id])
     worker_group.reset_ssh_key!
 
     flash[:notice] =
@@ -41,6 +37,6 @@ class WorkerGroupsController < DashboardController
 
   private
   def worker_group_params
-    params.require(:worker_group).permit(:oauth_application_id, :friendly_name)
+    params.require(:worker_group).permit(:friendly_name)
   end
 end

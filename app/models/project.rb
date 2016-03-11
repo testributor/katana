@@ -26,6 +26,7 @@ class Project < ActiveRecord::Base
   has_many :project_files, dependent: :destroy
   has_many :oauth_applications, class_name: 'Doorkeeper::Application',
     as: :owner, dependent: :destroy
+  has_many :worker_groups, dependent: :destroy
   has_many :technology_selections
   has_many :technologies, through: :technology_selections
 
@@ -100,18 +101,17 @@ class Project < ActiveRecord::Base
         name: repository_id,
         redirect_uri: Katana::Application::HEROKU_URL
       )
-      WorkerGroup.create!(oauth_application: oauth_application,
+      worker_groups.create!(oauth_application: oauth_application,
         friendly_name: "#{name} Worker Group #{oauth_applications.count}")
     end
   end
 
   def destroy_oauth_application!(oauth_application_id)
-    worker_group =
-      find_worker_group_by!(oauth_application_id: oauth_application_id)
-
+    oauth_application = oauth_applications.find(oauth_application_id)
     WorkerGroup.transaction do
-      worker_group.destroy!
-      worker_group.oauth_application.destroy!
+      worker_groups.where(oauth_application_id: oauth_application_id).
+        each(&:destroy!)
+      oauth_application.destroy!
     end
   end
 
@@ -160,25 +160,6 @@ class Project < ActiveRecord::Base
     attributes_hash[docker_image.standardized_name] = base_image_attributes
 
     attributes_hash.to_yaml
-  end
-
-  def find_worker_group_by(args, with_bang=false)
-    scope = WorkerGroup.joins(<<-SQL
-      INNER JOIN oauth_applications
-      ON oauth_applications.id = worker_groups.oauth_application_id
-      INNER JOIN projects
-      ON oauth_applications.owner_id = projects.id
-      AND oauth_applications.owner_type = 'Project'
-    SQL
-    ).where(
-      projects: { id: id },
-      worker_groups: args)
-
-    with_bang ? scope.take! : scope.take
-  end
-
-  def find_worker_group_by!(args)
-    find_worker_group_by(args, true)
   end
 
   private

@@ -9,7 +9,7 @@ class ApiController < ActionController::Base
   end
 
   def current_worker_group
-    @current_worker_group ||= current_project.find_worker_group_by(
+    @current_worker_group ||= current_project.worker_groups.find_by(
       oauth_application_id: doorkeeper_token.application_id
     )
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160224111403) do
+ActiveRecord::Schema.define(version: 20160311093211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 20160224111403) do
     t.string  "encrypted_ssh_key_private_iv"
     t.text    "ssh_key_public"
     t.integer "ssh_key_provider_reference_id"
+    t.integer "project_id",                     null: false
   end
 
   add_index "worker_groups", ["oauth_application_id"], name: "index_worker_groups_on_oauth_application_id", using: :btree
