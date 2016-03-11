@@ -1,5 +1,6 @@
 %p
-  In this file you can put any commands needed before your test suite is run.
+  In this file you can put any commands you need to run before each Build
+  or to setup your worker.
   It is a bash script and it will run in an Ubuntu 15.10 system. If you find that
   a needed package is missing you can use
   %code
@@ -11,6 +12,17 @@
   %code
     rake db:create
   in Ruby on Rails).
+
+%p
+  %strong
+    This script is invoked:
+    %ul
+      %li
+        Once when the worker is first started, after the code
+        is fetched.
+      %li
+        Before every build. Each worker will run this script when running a
+        job for a different Build than the Build of the previous job.
 
 %p
   To give you more flexibility on what commands run and when,
