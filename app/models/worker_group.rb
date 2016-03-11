@@ -1,10 +1,13 @@
 class WorkerGroup < ActiveRecord::Base
   belongs_to :oauth_application, class_name: 'Doorkeeper::Application'
+  belongs_to :project
 
   attr_encryptor :ssh_key_private, key: ENV['ENCRYPTED_TOKEN_SECRET'],
     mode: :per_attribute_iv_and_salt, unless: Rails.env.test?
 
+  validates :project, presence: true
   validates :friendly_name, presence: true
+  validates :friendly_name, uniqueness: { scope: :project }
 
   before_validation :generate_ssh_keys, on: :create,
     if: ->{ ssh_key_private.blank? }
@@ -24,8 +27,6 @@ class WorkerGroup < ActiveRecord::Base
 
   private
   def set_ssh_key_in_repo
-    project = oauth_application.owner
-
     case project.repository_provider
     when 'github'
       begin
@@ -50,16 +51,12 @@ class WorkerGroup < ActiveRecord::Base
   end
 
   def generate_ssh_keys
-    project = oauth_application.owner
-
     ssh_key = SSHKey.generate(bits: 4096, comment: project.user.email)
     self.ssh_key_private = ssh_key.private_key
     self.ssh_key_public = ssh_key.ssh_public_key
   end
 
   def remove_ssh_key_from_repo
-    project = oauth_application.owner
-
     # This API call will return a boolean upon success or failure to remove
     # the deploy key. A false return value will not stop the record destruction.
     project.user.github_client.remove_deploy_key(
