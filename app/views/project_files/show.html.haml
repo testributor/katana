@@ -39,6 +39,12 @@
         %hr
         = render 'build_commands_documentation'
 
+      -elsif @file.path == ProjectFile::JOBS_YML_PATH
+        %br
+        Read the
+        = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
+        for more details about the syntax and what you can do in this file.
+
   - if @file.testributor_yml? || @file.build_commands?
     - content_for :in_page_js do
       = javascript_include_tag asset_path 'codemirror.js'
