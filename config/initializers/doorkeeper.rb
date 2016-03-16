@@ -3,12 +3,34 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  # TODO: This does not seem relevant to the "client credentials" flow. Remove?
+  # TODO: Check that we didn't break access to the Worker API
   resource_owner_from_credentials do |routes|
-    # Put your resource owner authentication logic here.
-    # Example implementation:
-    Project.find_for_database_authentication(:id => params["username"],
-                                          :secure_random => params["password"])
+    # Projects are associated with Doorkeeper::Applications with
+    # the application's owner association.
+    # So when a worker hits the api, the Doorkeeper::AccessToken will have an
+    # application association.
+    #
+    # When a user hits the user api, the token does not have a related
+    # Doorkeeper::Application (since the credentials live on the user himself)
+    # but it does have an owner_id pointing to that user.
+    #
+    # The way to tell whether it is a user or a worker that is knocking our door
+    # (so as to authorise access to the relevant API) is to check whether the
+    # token has an application associated or not. If yes, then it is a worker.
+    # If no, then it is a User.
+    #
+    # Since Doorkeer::AccessToken#resource_owner_id field does not have a related
+    # resource_owner_type field and there is no polymorphic association we don't
+    # set the resource_owner_id when it is a project. This way, when resource_owner_id
+    # is set, we know it points to a User. See the following links for more:
+    # https://github.com/doorkeeper-gem/doorkeeper/issues/651
+    # https://gist.github.com/thibaudgg/3aa7e3276fbcdd712cbf
+    if params[:grant_type] == "password"
+      user = User.find_for_database_authentication(email: params[:username])
+      if user && user.valid_for_authentication? { user.valid_password?(params[:password]) }
+        user
+      end
+    end
   end
 
   skip_authorization do |resource_owner, client|
@@ -111,3 +133,4 @@ Doorkeeper.configure do
   # WWW-Authenticate Realm (default "Doorkeeper").
   # realm "Doorkeeper"
 end
+Doorkeeper.configuration.token_grant_types << "password"

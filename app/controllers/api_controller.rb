@@ -1,11 +1,16 @@
 class ApiController < ActionController::Base
   before_action :doorkeeper_authorize!
   before_action :worker_report
+  before_action :ensure_current_project!
 
   private
 
+  def ensure_current_project!
+    head :unauthorized unless current_project
+  end
+
   def current_project
-    @current_project ||= doorkeeper_token.application.owner
+    @current_project ||= doorkeeper_token.application.try(:owner)
   end
 
   def current_worker_group

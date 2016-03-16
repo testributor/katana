@@ -14,6 +14,22 @@ Rails.application.routes.draw do
     get :become
   end
 
+  namespace :users_api, default: { format: 'json' } do
+    namespace :v1 do
+      resources :users, only: [] do
+        collection do
+          get :current
+        end
+      end
+
+      resources :commits, only: [] do
+        member do
+          get :status
+        end
+      end
+    end
+  end
+
   namespace :api, default: { format: 'json' } do
     namespace :v1 do
       resources :projects, only: [] do

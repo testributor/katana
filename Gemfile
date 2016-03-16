@@ -43,7 +43,7 @@ gem 'underscore-rails'
 gem 'octokit', '~> 4.0'
 gem 'attr_encrypted'
 # commit that fixes the creation of tokens in client_credentials flow
-gem 'doorkeeper', github: 'doorkeeper-gem/doorkeeper', ref: ' f9d5e3d'
+gem 'doorkeeper', '~>3.1.0'
 gem 'oauth2'
 gem 'omniauth-github'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', ref: '1f0886' # 0.10 rc version

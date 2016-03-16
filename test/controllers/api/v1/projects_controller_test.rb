@@ -16,6 +16,19 @@ class Api::V1::ProjectsControllerTest < ActionController::TestCase
 
   before { project_files }
 
+  describe "#ensure_current_project!" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:user_token) do
+      Doorkeeper::AccessToken.create(resource_owner_id: user.id)
+    end
+
+    it "returns 401 unauthorized when token owner is a User (and current_project does not exist)" do
+      get :setup_data, access_token: user_token.token,
+        default: { format: :json }
+      response.status.must_equal 401
+    end
+  end
+
   describe "GET#setup_data" do
     it "returns the current project with project_files included" do
       get :setup_data, access_token: token.token,

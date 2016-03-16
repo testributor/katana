@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/doorkeeper-gem/doorkeeper.git
-  revision: f9d5e3df1a7dc0b944f6c075e9a9823126b54b80
-  ref:  f9d5e3d
-  specs:
-    doorkeeper (3.0.1)
-      railties (>= 3.2)
-
-GIT
   remote: git://github.com/ispyropoulos/bitbucket.git
   revision: a52787ff6be9e80891f8168f8ba99b3a094425d4
   branch: webhooks-api
@@ -160,6 +152,8 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    doorkeeper (3.1.0)
+      railties (>= 3.2)
     dotenv (2.0.2)
     draper (2.1.0)
       actionpack (>= 3.0)
@@ -456,7 +450,7 @@ DEPENDENCIES
   connection_pool
   database_cleaner
   devise
-  doorkeeper!
+  doorkeeper (~> 3.1.0)
   draper
   exception_notification (~> 4.1.4)
   factory_girl_rails
