@@ -8,87 +8,199 @@ class WebhooksControllerTest < ActionController::TestCase
   let(:filename_1) { "test/models/user_test.rb" }
   let(:filename_2) { "test/models/hello_test.rb" }
 
-  before do
-    tracked_branch
-    project.update_column(:repository_provider, 'github')
-    project.reload
-    # Successful authorization for github
-    @controller.stubs(:verify_request_from_github!).returns(nil)
-  end
-
   describe "POST#github" do
-    describe "delete event" do
+    describe "when request is verified" do
       before do
-        request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
-        GithubRepositoryManager.any_instance.stubs(:project_file_names).returns(
-          [filename_1, filename_2])
-        post :github,
-          { repository: { id: project.repository_id },
-            ref_type: 'branch',
-            ref: "#{tracked_branch.branch_name}" }
+        project.update_column(:repository_provider, 'github')
+        # Successful authorization for GitHub
+        @controller.stubs(:verify_request_from_github!).returns(nil)
       end
 
-      it "destroys the branch" do
-        TrackedBranch.count.must_equal 0
-      end
-    end
+      describe "delete event" do
+        before do
+          request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
+          GithubRepositoryManager.any_instance.stubs(:project_file_names).
+            returns([filename_1, filename_2])
+          post :github,
+            { repository: { id: project.repository_id },
+              ref_type: 'branch',
+              ref: "#{tracked_branch.branch_name}" }
+        end
 
-    describe "push event" do
-      let(:github_response) do
-        Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
-          {
-            sha: commit_sha,
-            commit: {
+        it "destroys the branch" do
+          TrackedBranch.count.must_equal 0
+        end
+      end
+
+      describe "push event" do
+        let(:github_response) do
+          Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
+            {
+              sha: commit_sha,
+              commit: {
+                message: 'Some commit messsage',
+                html_url: 'Some url',
+                author: {
+                  name: 'Great Author',
+                  email: 'great@author.com',
+                },
+                committer: {
+                  name: 'Great Committer',
+                  email: 'great@committer.com',
+                }
+              },
+              author: { login: 'authorlogin' },
+              committer: { login: 'committerlogin' }
+            }
+          )
+        end
+
+        before do
+          request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
+          GithubRepositoryManager.any_instance.stubs(:sha_history).
+            returns([github_response])
+
+          GithubRepositoryManager.any_instance.stubs(:project_file_names).
+            returns([filename_1, filename_2])
+          post :github, {
+            head_commit: {
+              id: commit_sha,
               message: 'Some commit messsage',
-              html_url: 'Some url',
+              timestamp: '2015-11-17 11:42:24 UTC',
+              url: 'Some url',
               author: {
                 name: 'Great Author',
                 email: 'great@author.com',
+                username: 'authorusername'
               },
               committer: {
                 name: 'Great Committer',
                 email: 'great@committer.com',
+                username: 'committerusername'
               }
             },
-            author: { login: 'authorlogin' },
-            committer: { login: 'committerlogin' }
+            repository: { id: project.repository_id },
+            ref: "refs/head/ispyropoulos/#{tracked_branch.branch_name}"
           }
-        )
-      end
-      before do
-        request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
-        GithubRepositoryManager.any_instance.stubs(:sha_history).
-          returns([github_response])
+        end
 
-        GithubRepositoryManager.any_instance.stubs(:project_file_names).returns(
-          [filename_1, filename_2])
-        post :github, {
-          head_commit: {
-            id: commit_sha,
-            message: 'Some commit messsage',
-            timestamp: '2015-11-17 11:42:24 UTC',
-            url: 'Some url',
-            author: {
-              name: 'Great Author',
-              email: 'great@author.com',
-              username: 'authorusername'
-            },
-            committer: {
-              name: 'Great Committer',
-              email: 'great@committer.com',
-              username: 'committerusername'
-            }
+        it "creates a test run with correct attributes" do
+          testrun = TestRun.last
+          testrun.tracked_branch_id.must_equal tracked_branch.id
+          testrun.commit_sha.must_equal commit_sha
+          testrun.status.code.must_equal TestStatus::SETUP
+        end
+
+        it "responds with :ok" do
+          assert_response :ok
+        end
+      end
+    end
+
+    describe "when request is unverified" do
+      before do
+        ENV['GITHUB_WEBHOOK_SECRET'] = 'our little secret'
+        request.headers['HTTP_X_HUB_SIGNATURE'] = 'rogue signature'
+      end
+
+      after do
+        ENV['GITHUB_WEBHOOK_SECRET'] = nil
+      end
+
+      describe "delete event" do
+        before do
+          request.headers['HTTP_X_GITHUB_EVENT'] = 'delete'
+          post :github
+        end
+
+        it "responds with :unauthorized" do
+          assert_response :unauthorized
+        end
+      end
+
+      describe "delete push" do
+        before do
+          request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
+          post :github
+        end
+
+        it "responds with :unauthorized" do
+          assert_response :unauthorized
+        end
+      end
+    end
+  end
+
+  describe "POST#bitbucket" do
+    before do
+      project.update_columns({
+        repository_provider: 'bitbucket',
+        repository_slug: project.repository_name.downcase,
+      })
+    end
+
+    describe "push event" do
+      let(:bitbucket_response) do
+        [
+          Hashie::Mash.new({
+            hash: commit_sha,
+            message: "Move directory depth to env var",
+            date: "2016-03-21T16:05:37+00:00",
+            links: Hashie::Mash.new({
+              html: Hashie::Mash.new({
+                href: "https://bitbucket.org/ispyropoulos/katana/commits/8559bdcb5969ae5b703c7c054c8126d64e6ebd76"
+              })
+            }),
+            author: Hashie::Mash.new({
+              raw: "Dimitris Karakasilis <jimmykarily@gmail.com>",
+              user: Hashie::Mash.new({
+                username: "jimmykarily",
+                display_name: "Jimmy Karily"
+              })
+            })
+          })
+        ]
+      end
+
+      before do
+        request.headers['X-Event-Key'] = 'repo:push'
+        BitbucketRepositoryManager.any_instance.stubs(:sha_history).
+          returns(bitbucket_response)
+
+        BitbucketRepositoryManager.any_instance.stubs(:project_file_names).
+          returns([filename_1, filename_2])
+        post :bitbucket, {
+          repository: {
+            name: project.repository_slug
           },
-          repository: { id: project.repository_id },
-          ref: "refs/head/ispyropoulos/#{tracked_branch.branch_name}"
+          push: {
+            changes:
+              [
+                {
+                  new: {
+                    name: tracked_branch.branch_name,
+                    target: {
+                      hash: commit_sha,
+                      message: "Move directory depth to env var",
+                      date: "2016-03-21T16:05:37+00:00",
+                      links: {
+                        html: {
+                          href: "https://bitbucket.org/ispyropoulos/katana/commits/8559bdcb5969ae5b703c7c054c8126d64e6ebd76"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+          }
         }
-        @testrun = TestRun.last
       end
 
       it "creates a test run with correct attributes" do
-        @testrun.tracked_branch_id.must_equal tracked_branch.id
-        @testrun.commit_sha.must_equal commit_sha
-        @testrun.status.code.must_equal TestStatus::SETUP
+        testrun = TestRun.last
+        testrun.tracked_branch_id.must_equal tracked_branch.id
+        testrun.commit_sha.must_equal commit_sha
+        testrun.status.code.must_equal TestStatus::SETUP
       end
 
       it "responds with :ok" do

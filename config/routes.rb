@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'oauth/github_callback' => 'oauth#github_callback', as: :github_callback
   get 'oauth/bitbucket_callback' => 'oauth#bitbucket_callback', as: :bitbucket_callback
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
+  post 'webhooks/bitbucket' => 'webhooks#bitbucket', as: :bitbucket_webhook
 
   authenticated :user do
     root to: "dashboard#index", as: :authenticated_root
