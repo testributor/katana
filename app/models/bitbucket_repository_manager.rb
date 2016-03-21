@@ -205,17 +205,19 @@ class BitbucketRepositoryManager
     # Some of the params might already be there but since we have them fresh
     # we reassign them (we could reverse merge but that should produce the same
     # result).
+    author = latest_commit.author
+    user = author.user
     test_run.assign_attributes({
       commit_sha: latest_commit['hash'],
       commit_message: latest_commit.message,
       commit_timestamp: latest_commit['date'],
       commit_url: latest_commit['links'].html.href,
-      commit_author_name: latest_commit.author.user.display_name,
+      commit_author_name: user ? user.display_name : author.raw,
       commit_author_email: latest_commit.author.raw,
-      commit_author_username: latest_commit.author.user.username,
-      commit_committer_name: latest_commit.author.user.display_name,
+      commit_author_username: user ? user.username : author.raw,
+      commit_committer_name: user ? user.display_name : author.raw,
       commit_committer_email: latest_commit.author.raw,
-      commit_committer_username: latest_commit.author.user.username,
+      commit_committer_username: user ? user.username : author.raw,
       sha_history: history.map{|c|c['hash']}
     })
 

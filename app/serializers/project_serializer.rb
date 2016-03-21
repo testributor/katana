@@ -10,6 +10,8 @@ class ProjectSerializer < ActiveModel::Serializer
     case object.repository_provider
     when 'github'
       "git@github.com:#{object.repository_owner}/#{object.repository_name}.git"
+    when 'bitbucket'
+      "git@bitbucket.org:#{object.repository_owner}/#{object.repository_slug}.git"
     else
       nil # don't know how to construct the SSH url
     end
