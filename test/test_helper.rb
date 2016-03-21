@@ -42,6 +42,7 @@ class ActiveSupport::TestCase
 
   ActiveRecord::Migration.check_pending!
   before do
+    ActionMailer::Base.deliveries.clear
     yaml = <<-YAML
       each:
         pattern: ".*"
@@ -54,31 +55,6 @@ class ActiveSupport::TestCase
       tree: [OpenStruct.new({path: 'test/models/stub_test_1.rb'}),
              OpenStruct.new({path: 'test_models/stub_test_2.rb'})])
     Octokit::Client.any_instance.stubs(:tree).returns(tree)
-
-    commit_github_response =
-      Sawyer::Resource.new(Sawyer::Agent.new('api.example.com'),
-        {
-          sha: '034df43',
-          commit: {
-            message: 'Some commit messsage',
-            html_url: 'Some url',
-            author: {
-              name: 'Great Author',
-              email: 'great@author.com',
-            },
-            committer: {
-              name: 'Great Committer',
-              email: 'great@committer.com',
-            }
-          },
-          author: { login: 'authorlogin' },
-          committer: { login: 'committerlogin' }
-        }
-      )
-    TrackedBranch.any_instance.stubs(:sha_history).returns([
-      commit_github_response,
-      commit_github_response,
-      commit_github_response])
   end
 end
 
@@ -100,7 +76,7 @@ class Capybara::Rails::TestCase
   self.use_transactional_fixtures = false
 
   before do
-    Project.any_instance.stubs(:create_webhooks!).returns(1)
+    RepositoryManager.any_instance.stubs(:post_add_repository_setup).returns(1)
     # Stub client_id with a random id so that
     # ApplicationHelper#github_oauth_authorize_url won't break
     Octokit.stubs(:client_id).returns("aRandomID")
@@ -123,6 +99,31 @@ class Capybara::Rails::TestCase
   def teardown
     DatabaseCleaner.clean
     Warden.test_reset!
+  end
+
+  def wait_for_requests_to_finish
+    if metadata[:js]
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        sleep 0.1 until pending_requests.empty?
+      end
+    end
+  end
+
+  def pending_requests
+    if page.driver.respond_to?(:network_traffic)
+
+      page.driver.network_traffic.select do |r|
+        r.url.slice(0..15) == 'http://127.0.0.1' && # only app URLS
+          r.url.match(/\/assets\//).nil? && # ignore assets
+          #r.url.match(/\/test_uploads\//).nil? && # ignore uploads
+          ((r.response_parts.size > 0 &&
+            (200..399).cover?(r.response_parts.first.status) && # ignore errors
+            r.response_parts.last.instance_variable_get('@data')['stage'] != 'end') ||
+          r.response_parts.empty?) # pending requests
+      end
+    else
+      []
+    end
   end
 end
 require 'minitest/unit'

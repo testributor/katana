@@ -8,7 +8,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
   let(:owner) { project.user }
 
   before do
-    TestRun.any_instance.stubs(:project_file_names).
+    GithubRepositoryManager.any_instance.stubs(:project_file_names).
       returns(['test/controllers/shitty_test.rb'])
     _test_job.test_run.project.
       project_files << FactoryGirl.create(:project_file,
@@ -38,7 +38,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Passed"
     find(".btn-primary", text: "Retry").click
-    page.must_have_content "Queued"
+    page.must_have_content "Setup"
   end
 
   it "user is able to retry a failed test_run", js: true do
@@ -49,7 +49,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Failed"
     find(".btn-primary").click
-    page.must_have_content "Queued"
+    page.must_have_content "Setup"
   end
 
   it "user is able to retry an error test_run" do
@@ -60,7 +60,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_branch_test_runs_path(project, branch)
     page.must_have_content "Error"
     find(".btn-primary", text: "Retry").click
-    page.must_have_content "Queued"
+    page.must_have_content "Setup"
   end
 
   it "user won't be able to retry a cancelled test_run" do

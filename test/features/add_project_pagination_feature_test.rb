@@ -11,22 +11,25 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     before do
       # instead of creating 60 projects we change the number
       # of fetched projects because we already have 11
-      ProjectWizard.send(:remove_const, :PROJECTS_PER_PAGE)
-      ProjectWizard.const_set(:PROJECTS_PER_PAGE, 3)
+      GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 3)
+      ProjectWizard.find_or_create_by(user_id: user.id,
+                                      repository_provider: 'github')
 
       VCR.use_cassette 'repos_with_4_pages' do
-        visit project_wizard_path(id: :add_project)
+        visit project_wizard_path(id: :choose_repo)
+        wait_for_requests_to_finish
       end
     end
 
     after do
-      ProjectWizard.send(:remove_const, :PROJECTS_PER_PAGE)
-      ProjectWizard.const_set(:PROJECTS_PER_PAGE, 20)
+      GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
     end
 
     it 'displays pagination according to the number of projects', js: true do
       # 1 - 2 - 3 - 4 - next
-      page.all('.pagination li').size.must_equal 5
+      page.find_all('.pagination li').size.must_equal 5
       page.must_have_content 'ispyropoulos/aroma-kouzinas'
       page.must_have_content 'ispyropoulos/business_plan'
       page.must_have_content 'ispyropoulos/dockerfiles'
@@ -37,7 +40,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       it 'displays the corrent page options', js: true do
         VCR.use_cassette 'repos_second_page' do
           click_on '2'
-          sleep 2 # ajax call
+          wait_for_requests_to_finish
           page.must_have_content 'ispyropoulos/intl-tel-input-rails'
           page.must_have_content 'ispyropoulos/katana'
           page.must_have_content 'ispyropoulos/legendary-broccoli'
@@ -48,10 +51,10 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     end
 
     describe 'when he is at the last page' do
-      it 'displayes the corrent page options', js: true do
+      it 'displays the corrent page options', js: true do
         VCR.use_cassette 'repos_last_page' do
           click_on '4'
-          sleep 2
+          wait_for_requests_to_finish
           page.find('.pagination li.active').text.must_equal '4'
           page.all('.pagination li').size.must_equal 5
         end
@@ -61,8 +64,11 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
 
   describe 'when users has projects enough for one page' do
     before do
+      ProjectWizard.find_or_create_by(user_id: user.id,
+        repository_provider: 'github')
+
       VCR.use_cassette 'repos_without_page' do
-        visit project_wizard_path(id: :add_project)
+        visit project_wizard_path(id: :choose_repo)
       end
     end
 

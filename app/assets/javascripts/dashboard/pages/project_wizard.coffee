@@ -7,25 +7,35 @@ class Testributor.Pages.ProjectWizard
 
     $fetchRepos = $('.js-fetch-repos')
     currentPath = $fetchRepos.data('current-path')
-    if $fetchRepos
+    if $fetchRepos.length > 0
       @performAjaxFor(currentPath, @attachFetchEvent)
+
+    $('.provider-box input[type="radio"]').on "change", (e)->
+      $target = $(e.currentTarget)
+      $target.closest('form').find('label').removeClass('selected')
+      $target.closest('label').addClass('selected')
 
   performAjaxFor: (url, callback) =>
     Pace.ignore =>
-      jqxhr = $.ajax
+      jqxhr = $.ajax(
         url: url,
         beforeSend: ->
           $('.js-fetching-repos').show()
-        success: (data)->
-          $('.js-fetch-repos').html(data).fadeIn('slow')
-        fail: ->
-          alert('Connection with github interrupted!')
-          $('.js-fetch-repos').append('We were not able to complete this action.').fadeIn('slow')
-        error: ->
-          $('.js-fetch-repos').append('Oops! Something went wrong. We are working on it.').fadeIn('slow')
-        complete: ->
+      ).done((data)->
+        # If redirect_path is present it means that the provider's client
+        # (e.g. GitHub, BitBucket, etc.) was unauthorized, so follow the
+        # redirection.
+        window.location.href = data['redirect_path'] if data['redirect_path']
+
+        $('.js-fetch-repos').html(data).fadeIn('slow')
+      ).fail((jqXHR, textStatus, errorThrown) ->
+        $('.js-fetch-repos').
+          append('Oops! Something went wrong. We are working on it.').
+          fadeIn('slow')
+      ).always(->
           $('.js-fetching-repos').hide()
           callback()
+      )
 
   attachFetchEvent: () =>
     $('.pagination li a').on 'click', (e) =>

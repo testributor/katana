@@ -2,8 +2,6 @@ class Project < ActiveRecord::Base
   attr_accessor :about_to_be_destroyed
 
   include Models::RedisLiveUpdates
-  # We want this for github_webhook_url
-  include Rails.application.routes.url_helpers
 
   ACTIVE_WORKER_THRESHOLD_SECONDS = 20
 
@@ -15,7 +13,7 @@ class Project < ActiveRecord::Base
   has_one :docker_image_selection
 
   has_many :tracked_branches, dependent: :destroy, inverse_of: :project
-  has_many :test_runs, through: :tracked_branches
+  has_many :test_runs
   has_many :test_jobs, through: :test_runs
   has_many :project_participations, dependent: :destroy
   has_many :members, through: :project_participations, class_name: "User",
@@ -76,29 +74,10 @@ class Project < ActiveRecord::Base
     "#{repository_owner}/#{repository_name}"
   end
 
-  def create_webhooks!
-    begin
-      hook = user.github_client.create_hook(repository_id, 'web',
-        {
-          secret: ENV['GITHUB_WEBHOOK_SECRET'],
-          url: webhook_url, content_type: 'json'
-        }, events: %w(push delete))
-    rescue Octokit::UnprocessableEntity => e
-      if e.message =~ /hook already exists/i
-        hooks = user.github_client.hooks(repository_id)
-        hook = hooks.select do |h|
-          h.config.url == webhook_url && h.events == %w(push delete)
-        end.first
-      else
-        raise e
-      end
-    end
-  end
-
   def create_oauth_application!
     WorkerGroup.transaction do
       oauth_application = oauth_applications.create!(
-        name: repository_id,
+        name: repository_id || repository_slug,
         redirect_uri: Katana::Application::HEROKU_URL
       )
       worker_groups.create!(oauth_application: oauth_application,
@@ -174,11 +153,6 @@ class Project < ActiveRecord::Base
     if user && !user.can_create_new_project?
       errors.add(:base, :project_limit_reached)
     end
-  end
-
-  def webhook_url
-    ENV['GITHUB_WEBHOOK_URL'] ||
-      github_webhook_url(host: "www.testributor.com")
   end
 
   # TODO: Add tests for this

@@ -1,16 +1,11 @@
 class TrackedBranchesController < DashboardController
   include Controllers::EnsureProject
 
-  # TODO : Redirect to "connect your github account" page
-  # when github_client doesn't exist
   def new
-    if client = current_user.github_client
-      branch_names_to_reject = current_project.
-        tracked_branches.map(&:branch_name)
-      @branches = client.
-        branches(current_project.repository_id).reject do |branch|
-          branch.name.in?(branch_names_to_reject)
-        end.map { |b| TrackedBranch.new(branch_name: b.name) }
+    manager = RepositoryManager.new({ project: current_project })
+
+    @branches = manager.fetch_branches.reject do |branch|
+      branch.branch_name.in?(current_project.tracked_branches.map(&:branch_name))
     end
   end
 
@@ -18,22 +13,20 @@ class TrackedBranchesController < DashboardController
     tracked_branch = current_project.
       tracked_branches.create(branch_name: params[:branch_name])
 
-    if tracked_branch.invalid?
-      flash[:alert] = tracked_branch.errors.values.join(', ')
-      redirect_to project_path(current_project) and return
-    end
+    if tracked_branch.persisted?
+      manager = RepositoryManager.new({project: tracked_branch.project})
+      test_run =
+        manager.create_test_run!({ tracked_branch_id: tracked_branch.id })
 
-    build_success = tracked_branch.build_test_run_and_jobs
-    if build_success && tracked_branch.save
-      flash[:notice] =
-        "Successfully started tracking" +
-        "'#{tracked_branch.branch_name}' branch."
-    elsif build_success.nil?
-      # TODO : Add these as validations in model
-      flash[:alert] = "#{tracked_branch.branch_name} doesn't exist " +
-      "anymore on github"
+      if test_run
+        flash[:notice] =
+          "Successfully started tracking '#{tracked_branch.branch_name}' branch."
+      else
+        tracked_branch.destroy!
+        flash[:alert] = manager.errors.join(', ')
+      end
     else
-      flash[:alert] = tracked_branch.errors.values.join(', ')
+      flash[:alert] = tracked_branch.errors.full_messages.join(', ')
     end
 
     redirect_to project_path(current_project)
@@ -51,10 +44,6 @@ class TrackedBranchesController < DashboardController
   end
 
   private
-
-  def github_client
-    current_user.github_client
-  end
 
   def branch_params
     params.require(:tracked_branch).permit(:branch_name)
