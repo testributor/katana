@@ -67,7 +67,7 @@ class ProjectWizard < ActiveRecord::Base
         _project.repository_provider = repository_provider
         _project.repository_id       = repository_id
         _project.repository_name     = repo_name
-        _project.webhook_id          = repository_manager.post_add_repository_setup.id
+        _project.webhook_id          = repository_manager.post_add_repository_setup.try(:id)
         # TODO: Add a repository url column and remove repository_owner
         _project.repository_owner    = repository_owner
         _project.docker_image        = docker_image
