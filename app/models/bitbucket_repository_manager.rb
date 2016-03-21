@@ -3,6 +3,8 @@
 class BitbucketRepositoryManager
   HISTORY_COMMITS_LIMIT = 30
   REPOSITORIES_PER_PAGE = 20
+  PROJECT_FILES_DIRECTORY_DEPTH =
+    ENV["BITBUCKET_PROJECT_FILES_DIRECTORY_DEPTH"] || 3
 
   attr_reader :project, :project_wizard, :bitbucket_client, :errors
 
@@ -239,7 +241,7 @@ class BitbucketRepositoryManager
   # level = 2 -> 60.81 sec
   # level = 3 -> 78.52 sec
   #
-  def project_file_names(commit_sha, path='/', level=3)
+  def project_file_names(commit_sha, path='/', level=PROJECT_FILES_DIRECTORY_DEPTH)
     sources = bitbucket_client.repos.sources.list(username, repository_slug, commit_sha, path)
     paths = sources['files'].map { |file| file['path'] }
     if level > -1
