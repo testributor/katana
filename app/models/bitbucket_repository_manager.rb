@@ -149,6 +149,10 @@ class BitbucketRepositoryManager
     end
   end
 
+  def cleanup_for_removal
+    # TODO: Remove webhooks etc. Implement when we actually add webhooks.
+  end
+
   def post_add_repository_setup
     # TODO We need to implement this and submit a PR to the BitBucketAPI gem
   end
