@@ -13,6 +13,21 @@
     %meta{name: :description, content: meta_description }
     %meta{name: "viewport", content: "width=device-width"}
     %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %script{ type: 'application/ld+json' }
+      :plain
+        {
+          "@context" : "http://schema.org",
+          "@type" : "http://schema.org/WebPage",
+          "name" : "Testributor",
+          "url" : "http://www.testributor.com",
+          "logo" : "#{ asset_url('logo.png') }",
+          "sameAs" : [
+            "http://www.facebook.com/testributor",
+            "http://www.twitter.com/testributor",
+            "http://www.linkedin.com/company/testributor",
+            "http://angel.co/testributor"
+          ]
+        }
     = render "layouts/favicon"
     = stylesheet_link_tag 'front', media: 'all'
     %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
