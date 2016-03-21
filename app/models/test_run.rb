@@ -110,9 +110,9 @@ class TestRun < ActiveRecord::Base
 
   def self.test_job_statuses(ids=[])
     sql = select("test_run_id id, "\
-        "SUM( CASE test_jobs.status WHEN 3 THEN 1 ELSE 0 END) danger, "\
-        "SUM( CASE test_jobs.status WHEN 4 THEN 1 ELSE 0 END) pink, "\
-        "SUM( CASE test_jobs.status WHEN 2 THEN 1 ELSE 0 END) success, "\
+        "SUM( CASE test_jobs.status WHEN #{TestStatus::FAILED} THEN 1 ELSE 0 END) danger, "\
+        "SUM( CASE test_jobs.status WHEN #{TestStatus::ERROR} THEN 1 ELSE 0 END) pink, "\
+        "SUM( CASE test_jobs.status WHEN #{TestStatus::PASSED} THEN 1 ELSE 0 END) success, "\
         "COUNT(test_jobs.id) length").joins(:test_jobs).group(:test_run_id)
     sql = sql.where(id: ids) if ids.any?
 
