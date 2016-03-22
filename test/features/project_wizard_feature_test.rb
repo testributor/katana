@@ -25,9 +25,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   it "creates a project with correct attributes after successful completion",
     js: true do
 
-    visit root_path
     VCR.use_cassette 'bitbucket_oauth_authorize_url' do
-      find('aside').click_on 'Add a project'
+      visit project_wizard_path(id: :choose_provider)
     end
     page.must_have_content "GitHub"
     find('label', text: "GitHub").click
