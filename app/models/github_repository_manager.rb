@@ -129,8 +129,6 @@ class GithubRepositoryManager
     file
   end
 
-  # When GitHub client is not set, this method returns false.
-  # We should prompt the user to connect to GitHub.
   def fetch_repos(page=0)
     page = page.to_i
     # https://developer.github.com/v3/repos/#list-user-repositories

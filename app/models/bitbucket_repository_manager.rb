@@ -113,7 +113,7 @@ class BitbucketRepositoryManager
   def jobs_yml(commit_sha)
     file =
       begin
-        file = bitbucket_client.repos.sources.get(username, repository_slug,
+        file = bitbucket_client.repos.sources.get(repository_owner, repository_slug,
           commit_sha, ProjectFile::JOBS_YML_PATH)
         Base64.decode64(file.content)
       rescue BitBucket::Error::NotFound
@@ -128,15 +128,32 @@ class BitbucketRepositoryManager
     file
   end
 
+  # Return a Hash with all the BitBucket repositories that the current user
+  # a) owns, or
+  # b) has administrative rights in Teams that owns them.
   def fetch_repos(page=0)
-    # https://confluence.atlassian.com/display/BITBUCKET/user+Endpoint#userEndpoint-GETauserprofile
-    repos = bitbucket_client.user_api.profile.repositories.map do |repo|
+    # https://confluence.atlassian.com/display/bitbucket/user+endpoint#userEndpoint-GETalistofuserprivileges
+    administered_teams = bitbucket_client.user_api.privileges[:teams].
+      reject { |_,v| v != 'admin' }.keys
+
+    team_projects_already_tracked = Project.bitbucket.
+      where(repository_owner: administered_teams).includes(:user)
+    slugs_already_added = user.participating_projects.
+      pluck(:repository_slug)
+    # https://confluence.atlassian.com/display/bitbucket/user+endpoint#userEndpoint-GETalistofrepositoriesvisibletoanaccount
+    repos = bitbucket_client.user_api.repositories.select do |repo|
+      repo[:owner] == username || repo[:owner].in?(administered_teams)
+    end.map do |repo|
+      project_owner_email = team_projects_already_tracked.
+        select{|p|p.repository_slug == repo[:slug]}.first.try(:user).try(:email)
       {
-        slug: repo['slug'],
-        fork: repo['is_fork'],
-        full_name: "#{repo['owner']}/#{repo['name']}",
-        owner: repo['owner'],
-        name: repo['name']
+        slug: repo[:slug],
+        fork: repo[:is_fork],
+        full_name: "#{repo[:owner]}/#{repo[:name]}",
+        owner: repo[:owner],
+        name: repo[:name],
+        is_participating_project: repo[:slug].in?(slugs_already_added),
+        already_added_by: project_owner_email
       }
     end
 
@@ -144,7 +161,7 @@ class BitbucketRepositoryManager
   end
 
   def fetch_branches
-    bitbucket_client.repos.branches(username, repository_slug).map do |name, _|
+    bitbucket_client.repos.branches(repository_owner, repository_slug).map do |name, _|
       TrackedBranch.new(branch_name: name)
     end
   end
@@ -158,13 +175,13 @@ class BitbucketRepositoryManager
   end
 
   def set_deploy_key(key, options={})
-    bitbucket_client.repos.keys.create(username, repository_slug,
+    bitbucket_client.repos.keys.create(repository_owner, repository_slug,
       label: options[:friendly_name],
       key: key)
   end
 
   def remove_deploy_key(key_id)
-    bitbucket_client.repos.keys.delete(username, repository_slug, key_id)
+    bitbucket_client.repos.keys.delete(repository_owner, repository_slug, key_id)
   end
 
   def publish_status_notification(test_run)
@@ -174,14 +191,14 @@ class BitbucketRepositoryManager
   private
 
   def repository_slug
-    project.try(:repository_slug) || project_wizard.try(:repository_slug)
+    (project || project_wizard).try(:repository_slug)
   end
 
   # Fetches the requested branch HEAD with the last 30 commits in history
   # If sha is set, it will be used instead of the branch name.
   def sha_history(sha_or_branch_name)
     bitbucket_client.repos.commits.
-      list(username, repository_slug, nil, include: sha_or_branch_name)['values'].
+      list(repository_owner, repository_slug, nil, include: sha_or_branch_name)['values'].
       first(HISTORY_COMMITS_LIMIT)
   end
 
@@ -246,7 +263,7 @@ class BitbucketRepositoryManager
   # level = 3 -> 78.52 sec
   #
   def project_file_names(commit_sha, path='/', level=PROJECT_FILES_DIRECTORY_DEPTH)
-    sources = bitbucket_client.repos.sources.list(username, repository_slug, commit_sha, path)
+    sources = bitbucket_client.repos.sources.list(repository_owner, repository_slug, commit_sha, path)
     paths = sources['files'].map { |file| file['path'] }
     if level > -1
       sources['directories'].each do |directory|
@@ -259,5 +276,13 @@ class BitbucketRepositoryManager
 
   def username
     @username ||= bitbucket_client.user_api.profile.user.username
+  end
+
+  def repository_owner
+    (project || project_wizard).try(:repository_owner)
+  end
+
+  def user
+    (project || project_wizard).user
   end
 end

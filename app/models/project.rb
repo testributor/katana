@@ -44,6 +44,9 @@ class Project < ActiveRecord::Base
 
   attr_accessor :fork
 
+  scope :bitbucket, ->{ where(repository_provider: 'bitbucket') }
+  scope :github, ->{ where(repository_provider: 'github') }
+
   def to_param
     "#{id}-#{name.gsub(/[^a-z0-9]+/i, '-').downcase}"
   end
