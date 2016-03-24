@@ -28,6 +28,10 @@ module ApplicationHelper
   # The Ruby library we use for accessing the BitBucket API does not support
   # any of the OAuth1/OAuth2 authorisation flows. For this reason we do this
   # semi-manually, using the OAuth gem. We are using OAuth v1.
+  # NOTE: Avoid calling this method on the view to generate the
+  # authorize link when the user might not click on it.
+  # This methods make external requests which we can avoided by showing to the
+  # user a link to OauthController#authorize_bitbucket action.
   def bitbucket_oauth_authorize_url
     consumer = OAuth::Consumer.new(ENV['BITBUCKET_CLIENT_ID'],
       ENV['BITBUCKET_CLIENT_SECRET'], site: 'https://bitbucket.org',

@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   get 'oauth/github_callback' => 'oauth#github_callback', as: :github_callback
   get 'oauth/bitbucket_callback' => 'oauth#bitbucket_callback', as: :bitbucket_callback
+  get 'oauth/authorize_bitbucket' => 'oauth#authorize_bitbucket', as: :authorize_bitbucket_access
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
   post 'webhooks/bitbucket' => 'webhooks#bitbucket', as: :bitbucket_webhook
 

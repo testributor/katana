@@ -1,6 +1,7 @@
 class OauthController < ApplicationController
   before_filter :authenticate_user!
   skip_filter :set_redirect_url_in_cookie
+  include ApplicationHelper
 
   def github_callback
     begin
@@ -38,5 +39,14 @@ class OauthController < ApplicationController
 
     redirect_to cookies[:redirect_to_url],
       notice: 'We can now access your BitBucket repositories.'
+  end
+
+  # This action simply redirects the user to the authorization url.
+  # To generate the authorization url, a request to the provider must be sent.
+  # To avoid making this request simply to show a link which the user might
+  # not click, we only generate the authorization url when the user actually
+  # clicks the link to this action.
+  def authorize_bitbucket
+    redirect_to bitbucket_oauth_authorize_url
   end
 end
