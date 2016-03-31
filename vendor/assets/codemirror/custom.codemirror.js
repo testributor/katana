@@ -19,11 +19,14 @@
         var $el = $('.code');
         // TODO: Fix this to work with any kind of file (as long as the
         // related js is imported)
-        CodeMirror.fromTextArea($el[0], {
-            mode: {name: $el.hasClass("code-shell") ? 'shell' : 'yaml'},
-            lineNumbers: true,
-            theme: 'neat'
-        });
+        if($el.length > 0) {
+          CodeMirror.fromTextArea($el[0], {
+              mode: {name: $el.hasClass("code-shell") ? 'shell' : 'yaml'},
+              lineNumbers: true,
+              theme: 'neat',
+              readOnly: $el.hasClass("code-readonly")
+          });
+        };
 
         //binding controlls
         $('.autoformat').click(function(){

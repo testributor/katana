@@ -7,17 +7,16 @@ class GithubRepositoryManager
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
 
-  attr_reader :project, :project_wizard, :github_client, :errors
+  attr_reader :project, :github_client, :errors
 
-  def initialize(options)
-    @project = options[:project] if options[:project]
-    @project_wizard = options[:project_wizard] if options[:project_wizard]
+  def initialize(project)
+    @project = project
 
-    unless @project.is_a?(Project) || @project_wizard.is_a?(ProjectWizard)
-      raise "GithubRepositoryProvider needs a Project or a ProjectWizard to be initialized"
+    unless @project.is_a?(Project)
+      raise "GithubRepositoryProvider needs a Project to be initialized"
     end
 
-    @github_client = (@project || @project_wizard).user.github_client
+    @github_client = @project.user.github_client
   end
 
   # Adds a new TestRun for the given commit in the current project
@@ -195,7 +194,7 @@ class GithubRepositoryManager
   private
 
   def repository_id
-    project.try(:repository_id) || project_wizard.try(:repository_id)
+    project.try(:repository_id)
   end
 
   def webhook_url

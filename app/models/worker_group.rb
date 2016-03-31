@@ -50,7 +50,6 @@ class WorkerGroup < ActiveRecord::Base
   end
 
   def repository_manager
-    @repository_manager ||=
-      RepositoryManager.new({ project: project })
+    @repository_manager ||= RepositoryManager.new(project)
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317112416) do
+ActiveRecord::Schema.define(version: 20160330145039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,23 +103,6 @@ ActiveRecord::Schema.define(version: 20160317112416) do
     t.datetime "updated_at"
   end
 
-  create_table "project_wizards", force: :cascade do |t|
-    t.integer  "user_id",                            null: false
-    t.string   "repo_name"
-    t.text     "branch_names",          default: [],              array: true
-    t.text     "testributor_yml"
-    t.text     "selected_technologies", default: [],              array: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "docker_image_id"
-    t.string   "repository_provider"
-    t.integer  "repository_id"
-    t.string   "repository_slug"
-    t.string   "repository_owner"
-  end
-
-  add_index "project_wizards", ["user_id"], name: "index_project_wizards_on_user_id", using: :btree
-
   create_table "projects", force: :cascade do |t|
     t.integer  "user_id",                             null: false
     t.string   "repository_provider"
@@ -151,7 +134,6 @@ ActiveRecord::Schema.define(version: 20160317112416) do
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id", using: :btree
 
   create_table "technology_selections", force: :cascade do |t|
-    t.integer  "project_wizard_id"
     t.integer  "project_id"
     t.integer  "docker_image_id"
     t.string   "version"
@@ -161,7 +143,6 @@ ActiveRecord::Schema.define(version: 20160317112416) do
 
   add_index "technology_selections", ["docker_image_id"], name: "index_technology_selections_on_docker_image_id", using: :btree
   add_index "technology_selections", ["project_id"], name: "index_technology_selections_on_project_id", using: :btree
-  add_index "technology_selections", ["project_wizard_id"], name: "index_technology_selections_on_project_wizard_id", using: :btree
 
   create_table "test_jobs", force: :cascade do |t|
     t.integer  "test_run_id"

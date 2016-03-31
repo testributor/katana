@@ -13,16 +13,32 @@ class ProjectsController < DashboardController
   end
 
   def update
+    notice = nil
+    alert = nil
     begin
       current_project.assign_attributes(project_params)
       current_project.technologies = DockerImage.technologies.
         where(id: project_params[:technology_ids])
       current_project.save
-      flash[:notice] = "Project successfully updated"
-      redirect_to :back
+      notice = "Project successfully updated"
     rescue ActiveRecord::RecordInvalid => invalid
-      flash[:alert] = invalid.record.errors.messages.values.join(', ')
-      redirect_to :back
+      alert = invalid.record.errors.messages.values.join(', ')
+    end
+
+    respond_to do |fmt|
+      fmt.json do
+        yml_contents = current_project.generate_docker_compose_yaml(
+          current_project.worker_groups.first.oauth_application_id)
+
+        render json: { notice: notice, alert: alert,
+                       docker_compose_yml_contents: yml_contents }
+      end
+
+      fmt.html do
+        flash[:notice] = notice
+        flash[:alert] = alert
+        redirect_to :back
+      end
     end
   end
 
@@ -30,7 +46,7 @@ class ProjectsController < DashboardController
     project = current_user.projects.find(params[:id])
 
     if project.destroy
-      manager = RepositoryManager.new({ project: project })
+      manager = RepositoryManager.new(project)
       manager.cleanup_for_removal
 
       flash[:notice] =

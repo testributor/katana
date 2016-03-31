@@ -144,6 +144,18 @@ class Project < ActiveRecord::Base
     attributes_hash.to_yaml
   end
 
+  # For now we simply create the file based on a template. In the future
+  # we might want to "look" at the code to decide about the code, testing
+  # framework etc to be able to build a more sophisticated yml file.
+  def create_testributor_yml_file!
+    testributor_yml_file =
+      project_files.find_or_initialize_by(path: ProjectFile::JOBS_YML_PATH)
+    testributor_yml_file.contents = File.read(
+      File.join(Rails.root, 'app', 'file_templates', ProjectFile::JOBS_YML_PATH))
+
+    testributor_yml_file.save!
+  end
+
   private
 
   def set_about_to_be_destroyed

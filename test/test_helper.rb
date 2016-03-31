@@ -111,9 +111,8 @@ class Capybara::Rails::TestCase
 
   def pending_requests
     if page.driver.respond_to?(:network_traffic)
-
       page.driver.network_traffic.select do |r|
-        r.url.slice(0..15) == 'http://127.0.0.1' && # only app URLS
+        r.url.match(%r{(http://127\.0\.0\.1|http://localhost)}) && # only app URLS
           r.url.match(/\/assets\//).nil? && # ignore assets
           #r.url.match(/\/test_uploads\//).nil? && # ignore uploads
           ((r.response_parts.size > 0 &&

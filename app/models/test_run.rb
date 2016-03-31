@@ -127,7 +127,6 @@ class TestRun < ActiveRecord::Base
 
   private
 
-  # TODO: this almost the same as ProjectWizard#copy_errors. DRY
   def copy_errors(errors)
     errors.to_hash.each do |key, value|
       value.each do |message|
@@ -160,7 +159,8 @@ class TestRun < ActiveRecord::Base
       test_runs: { status: TestStatus::QUEUED,
         tracked_branch_id: tracked_branch.id
     }).update_all(status: TestStatus::CANCELLED)
-    TestRun.queued.where(tracked_branch_id: tracked_branch.id).
+    TestRun.where(status: [TestStatus::QUEUED, TestStatus::SETUP]).
+      where(tracked_branch_id: tracked_branch.id).
       update_all(status: TestStatus::CANCELLED)
   end
 

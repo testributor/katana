@@ -8,19 +8,14 @@ class RepositoryManager
     :set_deploy_key, :remove_deploy_key, :publish_status_notification,
     to: :manager
 
-  # Can be initialized either with a project of a project_wizard
-  # @option options [Hash]
-  #
-  # E.g. { project: <Project> } or { project_wizard: <ProjectWizard> }
-  def initialize(options)
-    repository_provider =
-      (options[:project] || options[:project_wizard]).repository_provider
-
-    @manager = case repository_provider
+  # Must be initialized with a Project
+  # @project [Project]
+  def initialize(project)
+    @manager = case project.repository_provider
                when "github"
-                 GithubRepositoryManager.new(options)
+                 GithubRepositoryManager.new(project)
                when "bitbucket"
-                 BitbucketRepositoryManager.new(options)
+                 BitbucketRepositoryManager.new(project)
                else
                  raise "Unknown repository provider"
                end

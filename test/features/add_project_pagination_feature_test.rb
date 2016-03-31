@@ -13,11 +13,9 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       # of fetched projects because we already have 11
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
       GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 3)
-      ProjectWizard.find_or_create_by(user_id: user.id,
-                                      repository_provider: 'github')
-
       VCR.use_cassette 'repos_with_4_pages' do
-        visit project_wizard_path(id: :choose_repo)
+        visit project_wizard_path(id: :select_repository)
+        find(".fa-github").click
         wait_for_requests_to_finish
       end
     end
@@ -37,7 +35,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     end
 
     describe 'when he is at the second page' do
-      it 'displays the corrent page options', js: true do
+      it 'displays the correct page options', js: true do
         VCR.use_cassette 'repos_second_page' do
           click_on '2'
           wait_for_requests_to_finish
@@ -51,7 +49,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     end
 
     describe 'when he is at the last page' do
-      it 'displays the corrent page options', js: true do
+      it 'displays the correct page options', js: true do
         VCR.use_cassette 'repos_last_page' do
           click_on '4'
           wait_for_requests_to_finish
@@ -64,11 +62,10 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
 
   describe 'when users has projects enough for one page' do
     before do
-      ProjectWizard.find_or_create_by(user_id: user.id,
-        repository_provider: 'github')
-
       VCR.use_cassette 'repos_without_page' do
-        visit project_wizard_path(id: :choose_repo)
+        visit project_wizard_path(id: :select_repository)
+        find(".fa-github").click
+        wait_for_requests_to_finish
       end
     end
 

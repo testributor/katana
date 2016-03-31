@@ -1,0 +1,49 @@
+.col-xs-12
+  = render 'layouts/wizard_steps'
+.col-xs-12
+  .panel.panel-default
+    .panel-heading
+      %h3 Select a repository provider:
+    .panel-body
+      .col-md-12.m-t-10
+        = form_tag url: project_wizard_path do
+          .col-sm-6
+            - if current_user.github_access_token
+              .radio
+                %label.provider-box.btn.btn-default
+                  = radio_button_tag "repository_provider", "github", false,
+                    data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
+                            repository_provider: "github") }
+
+                  %i.fa.fa-github
+                  GitHub
+            - else
+              = link_to github_oauth_authorize_url do
+                .provider-box.btn.btn-default
+                  %i.fa.fa-github
+                  GitHub
+                  %br
+                  %small
+                    (You will be redirected to authorize)
+          .col-sm-6
+            - if current_user.bitbucket_access_token
+              .radio
+                %label.provider-box.btn.btn-default
+                  = radio_button_tag "repository_provider", "bitbucket", false,
+                    data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
+                            repository_provider: "bitbucket") }
+                  %i.fa.fa-bitbucket
+                  BitBucket
+            - else
+              = link_to authorize_bitbucket_access_path do
+                .provider-box.btn.btn-default
+                  %i.fa.fa-bitbucket
+                  BitBucket
+                  %br
+                  %small
+                    (You will be redirected to authorize)
+          .col-xs-12.fetch-repos
+            .js-fetching-repos.text-center.loading-overlay
+              %h3 Fetching your repositories. Please give us a few seconds...
+              %p= image_tag('loading_spinner.gif')
+            .js-fetch-repos

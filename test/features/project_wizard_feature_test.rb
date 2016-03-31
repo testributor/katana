@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ProjectWizardFeatureTest < Capybara::Rails::TestCase
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, projects_limit: 10) }
   let(:repo_name) { 'ispyropoulos/katana' }
   let(:language) do
     FactoryGirl.create(:docker_image, :language, public_name: 'Ruby 2.0')
@@ -22,25 +22,21 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     login_as user, scope: :user
   end
 
-  it "creates a project with correct attributes after successful completion",
-    js: true do
-
-    VCR.use_cassette 'bitbucket_oauth_authorize_url' do
-      visit project_wizard_path(id: :choose_provider)
-    end
-    page.must_have_content "GitHub"
-    find('label', text: "GitHub").click
-
+  it "creates a project with correct attributes after successful completion", js: true do
     VCR.use_cassette 'repos'  do
-      click_on "Next"
+      visit project_wizard_path(:select_repository)
+      page.must_have_content "GitHub"
+      find('label', text: "GitHub").click
       page.must_have_content repo_name
+      click_on repo_name
     end
 
-    VCR.use_cassette 'branches', allow_playback_repeats: true do
-      click_on repo_name
-      check 'aws'
-      click_on 'Next'
-    end
+    wait_for_requests_to_finish
+    project = Project.last
+    project.docker_image_id.must_equal DockerImage.first.id
+    project.repository_provider.must_equal 'github'
+    project.repository_name.must_equal 'katana'
+    project.repository_owner.must_equal 'ispyropoulos'
 
     # 'Configure Testributor' page
     yaml = <<-YAML
@@ -51,25 +47,18 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
 
     fill_in 'testributor_yml', with: yaml
     click_on 'Next'
-
-    # 'Select technologies' page
-    select technology.public_name
-    select language2.public_name
-    VCR.use_cassette 'repo' do
-      click_on 'Create project'
-    end
-
-    project = Project.last
-    project.docker_image_id.must_equal language2.id
-    project.technologies.must_equal [technology]
-    project.tracked_branches.
-      map(&:branch_name).sort.must_equal ['aws', 'master'].sort
-    project.repository_provider.must_equal 'github'
-    project.repository_name.must_equal 'katana'
-    project.repository_owner.must_equal 'ispyropoulos'
+    wait_for_requests_to_finish
     testributor_file = project.project_files.
       where(path: ProjectFile::JOBS_YML_PATH).first
     testributor_file.wont_equal nil
     page.wont_have_content "Please upgrade your plan"
+
+    page.must_have_selector("#waiting_for_worker", visible: true)
+    wait_for_requests_to_finish # Let socketio connection be initialized
+    Broadcaster.publish(
+      project.redis_live_update_resource_key, { event: "worker_added" })
+    click_on "Done!"
+    page.must_have_content("No branches found for project #{project.repository_owner}/#{project.name}")
+    page.current_path.must_equal project_path(project)
   end
 end

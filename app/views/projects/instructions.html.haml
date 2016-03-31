@@ -21,7 +21,7 @@
         = "You can create or override any project files #{link_to "here", project_files_path(current_project)}.".html_safe
 
       %br
-      %strong "testributor.yml"
+      %strong= ProjectFile::JOBS_YML_PATH
       file is the one that describes the jobs that constitute
       each test run and for this reason it cannot be deleted.
 

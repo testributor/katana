@@ -8,7 +8,7 @@ class GithubRepositoryManager::TestRunSetupJob < ActiveJob::Base
                  TestRun.find(test_run_or_id)
                end
 
-    GithubRepositoryManager.new({project: test_run.project}).
+    GithubRepositoryManager.new(test_run.project).
       setup_test_run(test_run)
   end
 end

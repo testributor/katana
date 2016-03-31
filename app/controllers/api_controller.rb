@@ -32,7 +32,7 @@ class ApiController < ActionController::Base
 
     redis = Katana::Application.redis
     # Add an expiring key for the worker if not already there
-    redis.setnx worker_uuid_redis_key, worker_uuid_redis_key
+    existed = redis.setnx worker_uuid_redis_key, worker_uuid_redis_key
     redis.expire worker_uuid_redis_key, Project::ACTIVE_WORKER_THRESHOLD_SECONDS
     # Add the worker to the project's set of workers
     redis.sadd current_project.workers_redis_key, worker_uuid_redis_key
@@ -40,6 +40,11 @@ class ApiController < ActionController::Base
     # size small. If we cleaned the list only on "reads" and a read did not come
     # for too long, we could end up bloating the memory (that might not be an
     # issue but better safe than sorry).
-    current_project.update_active_workers
+    current_project.update_active_workers.count
+
+    if !existed
+      Broadcaster.publish(current_project.redis_live_update_resource_key,
+        { event: "worker_added" })
+    end
   end
 end

@@ -6,17 +6,16 @@ class BitbucketRepositoryManager
   PROJECT_FILES_DIRECTORY_DEPTH =
     ENV["BITBUCKET_PROJECT_FILES_DIRECTORY_DEPTH"] || 3
 
-  attr_reader :project, :project_wizard, :bitbucket_client, :errors
+  attr_reader :project, :bitbucket_client, :errors
 
-  def initialize(options)
-    @project = options[:project] if options[:project]
-    @project_wizard = options[:project_wizard] if options[:project_wizard]
+  def initialize(project)
+    @project = project
 
-    unless @project.is_a?(Project) || @project_wizard.is_a?(ProjectWizard)
-      raise "BitbucketRepositoryProvider needs a Project or a ProjectWizard to be initialized"
+    unless @project.is_a?(Project)
+      raise "BitbucketRepositoryProvider needs a Project to be initialized"
     end
 
-    @bitbucket_client = (@project || @project_wizard).user.bitbucket_client
+    @bitbucket_client = @project.user.bitbucket_client
   end
 
   # Adds a new TestRun for the given commit in the current project
@@ -191,7 +190,7 @@ class BitbucketRepositoryManager
   private
 
   def repository_slug
-    (project || project_wizard).try(:repository_slug)
+    project.try(:repository_slug)
   end
 
   # Fetches the requested branch HEAD with the last 30 commits in history
@@ -279,10 +278,10 @@ class BitbucketRepositoryManager
   end
 
   def repository_owner
-    (project || project_wizard).try(:repository_owner)
+    project.try(:repository_owner)
   end
 
   def user
-    (project || project_wizard).user
+    project.user
   end
 end

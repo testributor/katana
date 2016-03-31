@@ -1,36 +1,22 @@
 class ProjectWizardController < DashboardController
   include Wicked::Wizard
-  REDIRECT_MESSAGES = {
-    choose_provider: "You need to choose a repository provider first",
-    choose_repo: "You need to select a repository first",
-    choose_branches: "You need to select a branch first",
-    configure_testributor: "You need to configure testributor.yml",
-    select_technologies: "You need to select technologies first",
-  }
-  steps *ProjectWizard::ORDERED_STEPS
-  before_action :fetch_project_wizard
+  steps :select_repository, :configure, :add_worker
+  before_action :fetch_project
 
   def show
     # Inform user that he has reached project limit
-    unless current_user.can_create_new_project?
+    if step == steps.first && !current_user.can_create_new_project?
       flash[:alert] =
         I18n.t('activerecord.errors.models.project.attributes.base.project_limit_reached')
 
       redirect_to root_path and return
     end
 
-    if (step_to_show = @project_wizard.step_to_show) != step && step_to_show &&
-      ProjectWizard::ORDERED_STEPS.index(step_to_show).to_i <
-        ProjectWizard::ORDERED_STEPS.index(step).to_i
-
-      flash[:alert] = REDIRECT_MESSAGES[step_to_show]
-      redirect_to project_wizard_path(step_to_show) and return
-    end
-
-    # TODO Make this asynchronous, as in choose_repo
-    if step ==  :choose_branches
-      manager = RepositoryManager.new({ project_wizard: @project_wizard })
-      @branches = manager.fetch_branches
+    # All steps but the first need @project to exist
+    if step != steps.first && @project.blank?
+      flash[:alert] = "You need to select a repository first"
+      redirect_to project_wizard_path(steps.first)
+      return
     end
 
     render_wizard
@@ -38,68 +24,72 @@ class ProjectWizardController < DashboardController
 
   def update
     case step
-    when :choose_provider
-      @project_wizard.assign_attributes({
-        repository_provider: params[:repository_provider]
-      })
-    when :choose_repo
-      @project_wizard.assign_attributes({
-        repository_owner: params[:repo_owner],
-        repo_name: params[:repo_name],
-        repository_id: params[:repo_id],
-        repository_slug: params[:repo_slug]
-      })
-    when :choose_branches
-      # We use the overriden branch_names= method because postgres
-      # array type requires branch_names_will_change! in order to save
-      # branch_names to DB
-      @project_wizard.branch_names = params[:branch_names]
-    when :configure_testributor
-      @project_wizard.assign_attributes({
-        testributor_yml: params[:testributor_yml]})
-    when :select_technologies
-      @project_wizard.assign_attributes(selected_technologies_params)
-      begin
-        @project_wizard.technologies =
-          DockerImage.technologies.where(id: params[:technology_ids])
-      rescue ActiveRecord::RecordInvalid => invalid
-        flash[:alert] = invalid.record.errors.to_a.to_sentence
-        render :select_technologies and return
-      end
-    end
+    when :select_repository
+      project = current_user.projects.new(
+        project_params.merge(docker_image: DockerImage.first,
+                             name: project_params[:repository_name]))
 
-    if @project_wizard.save(context: step)
-      if step == ProjectWizard::ORDERED_STEPS.last
-        project = @project_wizard.to_project
-        @project_wizard.create_branches
-        @project_wizard.destroy
-        redirect_to instructions_project_path(project) and return
+      if project.save
+        repository_manager = RepositoryManager.new(project)
+        project.webhook_id = repository_manager.post_add_repository_setup.try(:id)
+        project.save!
+
+        project.create_testributor_yml_file!
+        project.create_oauth_application!
+
+        cookies[:wizard_project_id] = project.id
+        flash[:notice] = "Project was created!"
+        redirect_to next_wizard_path
+      else
+        flash[:alert] = project.errors.full_messages.to_sentence
+        redirect_to :back
+      end
+    when :configure
+      unless @project.present?
+        redirect_to project_wizard_path(steps.first) && return
       end
 
-      redirect_to next_wizard_path
-    else
-      flash[:alert] = @project_wizard.errors.messages.values.join(',')
-      redirect_to :back
+      testributor_yml =
+        @project.project_files.find_or_initialize_by(path: ProjectFile::JOBS_YML_PATH)
+      testributor_yml.contents = params[:testributor_yml]
+      if testributor_yml.save
+        redirect_to next_wizard_path
+      else
+        flash[:alert] = testributor_yml.errors.full_messages.to_sentence
+        redirect_to :back
+      end
+    when :add_worker
+      unless @project.present?
+        redirect_to project_wizard_path(steps.first) && return
+      end
+
+      cookies.delete(:wizard_project_id)
+      redirect_to project_path(@project)
     end
   end
 
   def fetch_repos
-    redirect_to project_wizard_path(:choose_repo) and return if !request.xhr?
+    if !request.xhr? || params[:repository_provider].empty?
+      redirect_to project_wizard_path(steps.first) and return
+    end
 
-    manager = RepositoryManager.new({ project_wizard: @project_wizard })
+    project = current_user.projects.new(
+      repository_provider: params[:repository_provider])
+
+    manager = RepositoryManager.new(project)
     @response_data = manager.fetch_repos(params[:page])
 
-    render "#{@project_wizard.repository_provider}_fetch_repos", layout: false
+    render "#{project.repository_provider}_fetch_repos", layout: false
   end
 
   private
 
-  def fetch_project_wizard
-    @project_wizard =
-      ProjectWizard.find_or_create_by(user_id: current_user.id)
+  def fetch_project
+    @project ||= Project.where(id: cookies[:wizard_project_id]).first
   end
 
-  def selected_technologies_params
-    params.require(:project_wizard).permit(:docker_image_id)
+  def project_params
+    params.permit(:repository_provider, :repository_owner, :repository_name,
+      :repository_id, :repository_slug)
   end
 end

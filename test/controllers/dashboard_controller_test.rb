@@ -27,6 +27,19 @@ class DashboardControllerTest < ActionController::TestCase
 
         response.status.must_equal 302
       end
+
+      describe "but cannot create any projects" do
+        before do
+          user_without_project.update_column(:projects_limit, 0)
+        end
+
+        it "flashes an error and does not redirect" do
+          get :index, id: user_without_project.id
+          flash[:alert].must_equal("You can't create any projects. <a href=\"mailto:support@testributor.com\">Contact us</a> if you think this is a mistake.")
+
+          response.status.must_equal 200
+        end
+      end
     end
   end
 end

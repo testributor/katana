@@ -2,7 +2,7 @@ class TrackedBranchesController < DashboardController
   include Controllers::EnsureProject
 
   def new
-    manager = RepositoryManager.new({ project: current_project })
+    manager = RepositoryManager.new(current_project)
 
     @branches = manager.fetch_branches.reject do |branch|
       branch.branch_name.in?(current_project.tracked_branches.map(&:branch_name))
@@ -14,7 +14,7 @@ class TrackedBranchesController < DashboardController
       tracked_branches.create(branch_name: params[:branch_name])
 
     if tracked_branch.persisted?
-      manager = RepositoryManager.new({project: tracked_branch.project})
+      manager = RepositoryManager.new(tracked_branch.project)
       test_run =
         manager.create_test_run!({ tracked_branch_id: tracked_branch.id })
 

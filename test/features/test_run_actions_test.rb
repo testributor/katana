@@ -42,8 +42,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   end
 
   before do
-    _test_job.test_run.project.
-      project_files << FactoryGirl.create(:project_file, path: ProjectFile::JOBS_YML_PATH)
+    _test_job
     TrackedBranch.any_instance.stubs(:from_github).returns(branch_github_response)
     login_as owner, scope: :user
   end

@@ -29,7 +29,13 @@ class DashboardController < ApplicationController
       order(:repository_owner, :name)
 
     if @projects.empty?
-      redirect_to project_wizard_path(:choose_provider)
+      if current_user.can_create_new_project?
+        redirect_to project_wizard_path(:select_repository)
+      else
+        email_link = view_context.mail_to("support@testributor.com", "Contact us")
+        flash[:alert] =
+          "You can't create any projects. #{email_link} if you think this is a mistake."
+      end
     end
   end
 

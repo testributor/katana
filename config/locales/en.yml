@@ -54,9 +54,6 @@ en:
           attributes:
             email:
               taken: "An invitation for this user already exists"
-  choose_provider: "Select provider"
-  choose_repo: "Select a repo"
-  choose_branches: "Select branches"
-  configure_testributor: "Configure testributor.yml"
-  select_technologies: "Select technologies"
-  add_files: "Add more files"
+  select_repository: "Select repository"
+  configure: "Configure"
+  add_worker: "Add worker"

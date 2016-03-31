@@ -23,7 +23,6 @@ class User < ActiveRecord::Base
     class_name: "Project", source: :project
   has_many :tracked_branches, through: :participating_projects
   has_many :test_runs, through: :tracked_branches
-  has_one :project_wizard
   has_many :feedback_submissions
 
   GITHUB_REQUIRED_SCOPES = %w(user:email repo)
