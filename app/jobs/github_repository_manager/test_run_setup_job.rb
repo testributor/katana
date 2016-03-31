@@ -8,6 +8,8 @@ class GithubRepositoryManager::TestRunSetupJob < ActiveJob::Base
                  TestRun.find(test_run_or_id)
                end
 
+    return nil if test_run.db_status_is_cancelled?
+
     GithubRepositoryManager.new(test_run.project).
       setup_test_run(test_run)
   end

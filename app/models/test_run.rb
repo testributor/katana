@@ -47,6 +47,13 @@ class TestRun < ActiveRecord::Base
     TestStatus.new(read_attribute(:status))
   end
 
+  # Check for the current status in database
+  # If something/someone cancelled the test_run while in memory,
+  # we want to skip some actions to avoid setting the status back to non-cancelled.
+  def db_status_is_cancelled?
+    TestRun.where(id: id).limit(1).pluck(:status).first == TestStatus::CANCELLED
+  end
+
   def update_status
     previous_status_code = status.code
     db_return = ActiveRecord::Base.connection.execute <<-SQL

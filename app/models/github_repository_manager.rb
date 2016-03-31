@@ -59,6 +59,9 @@ class GithubRepositoryManager
       # TODO: Show this in the view
       test_run.setup_error = "#{ProjectFile::JOBS_YML_PATH} file is invalid: "
       test_run.setup_error += testributor_yml.errors.full_messages.to_sentence
+
+      return nil if test_run.db_status_is_cancelled?
+
       test_run.save!
 
       return
@@ -97,6 +100,7 @@ class GithubRepositoryManager
     Katanomeas.new(test_run).assign_chunk_indexes_to_test_jobs
     test_run.status = TestStatus::QUEUED
 
+    return nil if test_run.db_status_is_cancelled?
     test_run.save!
 
     Broadcaster.publish(test_run.redis_live_update_resource_key,
