@@ -31,7 +31,7 @@ class WorkerGroup < ActiveRecord::Base
     deploy_key = repository_manager.set_deploy_key(ssh_key_public,
       { friendly_name: friendly_name, read_only: true })
 
-    self.ssh_key_provider_reference_id = deploy_key.pk
+    self.ssh_key_provider_reference_id = deploy_key.id || deploy_key.pk
   end
 
   def generate_ssh_keys
