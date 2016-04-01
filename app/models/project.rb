@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
   has_many :oauth_applications, class_name: 'Doorkeeper::Application',
     as: :owner, dependent: :destroy
   has_many :worker_groups, dependent: :destroy
-  has_many :technology_selections
+  has_many :technology_selections, dependent: :destroy
   has_many :technologies, through: :technology_selections
 
   validates :name, :user, presence: true
