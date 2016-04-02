@@ -37,6 +37,10 @@ class Ability
       test_run.project.members.include?(user)
     end
 
+    can :read_live_updates, TrackedBranch do |branch|
+      branch.project.members.include?(user)
+    end
+
     can :read_live_updates, Project do |project|
       project.members.include?(user)
     end

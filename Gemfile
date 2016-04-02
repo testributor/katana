@@ -21,6 +21,8 @@ gem 'pg'
 gem 'redis'
 gem 'connection_pool'
 gem 'handlebars_assets'
+gem 'react-rails', '~> 1.6.0'
+gem 'react-bootstrap-rails'
 gem 'wicked'
 gem 'sidekiq'
 gem 'sinatra', require: false

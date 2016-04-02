@@ -30,3 +30,29 @@ $(document).on 'ready', ->
     # so this event is attached last (so run first)
     $.cookie('left_panel_collapsed', !$('aside.left-panel').hasClass('collapsed'),
       { expires: 1000, path: '/' })
+
+  renderFlash = (flashText, bootstrapClass) ->
+    if flashText && $('.wraper').find('.alert-danger').length == 0
+      flash = """
+        <div class="alert alert-#{bootstrapClass} fade in">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+          <span>#{flashText}</span>
+        </div>
+      """
+      $('.wraper').prepend(flash)
+      setTimeout (->
+        $('.wraper').find('.alert').remove()), 10000
+
+  $(".js-remote-submission").on("ajax:complete", (data, status, xhr) ->
+    if status.status == 200
+      if status.responseText
+        flashText = status.responseText
+        renderFlash(flashText, 'info')
+    else if status.status == 422 # Unprocessable entity
+      flashText = status.responseText || 'We were not able to process your request.'
+      renderFlash(flashText, 'danger')
+  ).on("ajax:error", (data, status, xhr) ->
+    defaultText = '<strong>Oops! Something went wrong.</strong> Please try reloading  page...'
+    flashText = status.responseText || defaultText
+    renderFlash(flashText, 'danger')
+  )

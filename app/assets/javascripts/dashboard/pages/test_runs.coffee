@@ -1,29 +1,6 @@
 Testributor.Pages ||= {}
 class Testributor.Pages.TestRuns
   index: ->
-    testRunTemplate = HandlebarsTemplates["test_runs/test_run"]
-    progressBar = new Testributor.Widgets.ProgressBar(display_stats: false)
-    Handlebars.registerPartial('progress_bar', HandlebarsTemplates["progress_bar"])
-
-    Testributor.Widgets.LiveUpdates("TestRun#" + $('.progress')[0].id, (msg) ->
-      if msg.retry
-        progressBar.reset(msg.test_run_id)
-      else
-        testJob = msg.test_job
-        testRun = msg.test_run
-        if testJob
-          progressBar.update(testJob.test_run_id, testJob.html_class)
-          data = {
-            id: testRun.id,
-            active: if progressBar.toggle($("##{testRun.id}")) then 'progress-bar-striped active',
-            statuses: testRun.statuses
-          }
-
-          testRun.progressBarData = data
-
-        $("#test-run-#{testRun.id}").replaceWith(testRunTemplate(testRun))
-        $('[data-toggle="popover"]').popover()
-    )
     $('[data-toggle="popover"]').popover()
 
   show: ->

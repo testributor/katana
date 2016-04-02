@@ -21,8 +21,10 @@ class TestRunsController < DashboardController
 
     if test_run
       flash[:notice] = 'Your build is being setup'
+      head :ok and return if request.xhr?
       redirect_to :back
     else
+      head 422 and return if request.xhr?
       flash[:alert] = manager.errors.join(', ')
       redirect_to project_path(current_project)
     end
@@ -30,8 +32,10 @@ class TestRunsController < DashboardController
 
   def update
     if @test_run.update(test_run_params)
+      head :ok and return if request.xhr?
       redirect_to :back, notice: 'Test run was successfully updated.'
     else
+      head 422 and return if request.xhr?
       render :edit
     end
   end
@@ -45,7 +49,8 @@ class TestRunsController < DashboardController
     @test_run.status = TestStatus::SETUP
     @test_run.save!
     RepositoryManager::TestRunSetupJob.perform_later(@test_run.id)
-    Broadcaster.publish(@test_run.redis_live_update_resource_key, { retry: true, test_run_id: @test_run.id })
+
+    head :ok and return if request.xhr?
     redirect_to :back, notice: 'The Build will soon be retried'
   end
 

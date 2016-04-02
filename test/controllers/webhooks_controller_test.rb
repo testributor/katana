@@ -47,6 +47,7 @@ class WebhooksControllerTest < ActionController::TestCase
                 committer: {
                   name: 'Great Committer',
                   email: 'great@committer.com',
+                  date: Date.current.to_s
                 }
               },
               author: { login: 'authorlogin' },
@@ -66,7 +67,6 @@ class WebhooksControllerTest < ActionController::TestCase
             head_commit: {
               id: commit_sha,
               message: 'Some commit messsage',
-              timestamp: '2015-11-17 11:42:24 UTC',
               url: 'Some url',
               author: {
                 name: 'Great Author',

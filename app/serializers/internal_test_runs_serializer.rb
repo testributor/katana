@@ -5,34 +5,66 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
 
   attributes :id, :run_index, :status_text, :status_css_class, :unsuccessful,
     :retry_url, :total_running_time, :html_class, :cancel_url,
-    :statuses, :test_run_link, :commit_message, :commit_info,
-    :terminal_status
+    :statuses, :test_run_link, :commit_message, :branch_id,
+    :terminal_status, :commit_author, :commit_timestamp, :commit_time_ago,
+    :can_be_retried, :is_running, :cancelled
+
 
   def retry_url
-    retry_project_test_run_path(object.project, object)
+    retry_project_test_run_path(object.project_id, object)
   end
 
   def cancel_url
-    project_test_run_path(object.project, object, status: TestStatus::CANCELLED)
+    project_test_run_path(object.project_id, object, status: TestStatus::CANCELLED)
   end
 
   def statuses
+    return { success: 0, length: 0, pink: 0, danger: 0 } if object.status.code == TestStatus::SETUP
+
     TestRun.test_job_statuses([object.id])[object.id]
   end
 
   def test_run_link
-    project_test_run_path(object.project, object)
+    project_test_run_path(object.project_id, object)
   end
 
   def commit_message
-    object.decorate.commit_message
+    decorated_object.commit_message
   end
 
-  def commit_info
-    object.decorate.commit_info
+  def commit_author
+    decorated_object.commit_author
+  end
+
+  def commit_time_ago
+    decorated_object.commit_time_ago
+  end
+
+  def commit_timestamp
+    decorated_object.decorated_commit_timestamp
   end
 
   def terminal_status
     object.status.terminal?
+  end
+
+  def branch_id
+    object.tracked_branch_id
+  end
+
+  def can_be_retried
+    object.status.can_be_retried?
+  end
+
+  def is_running
+    object.status.code == TestStatus::RUNNING
+  end
+
+  def cancelled
+    object.status.cancelled?
+  end
+
+  def decorated_object
+    object.decorate
   end
 end

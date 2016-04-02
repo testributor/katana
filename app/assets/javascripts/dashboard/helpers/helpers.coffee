@@ -5,3 +5,6 @@ class Testributor.Helpers.Helper
       (number1 / number2) * 100
     )
 
+class Testributor.Helpers.WithDots
+  constructor: (text)->
+    "#{text}<span class='dot'></span><span class='dot'></span><span class='dot'></span>"

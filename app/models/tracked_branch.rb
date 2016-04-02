@@ -1,4 +1,7 @@
 class TrackedBranch < ActiveRecord::Base
+  # For redis_live_update_resource_key
+  include Models::RedisLiveUpdates
+
   OLD_RUNS_LIMIT = 20
 
   belongs_to :project, inverse_of: :tracked_branches

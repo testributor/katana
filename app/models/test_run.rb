@@ -172,6 +172,7 @@ class TestRun < ActiveRecord::Base
   end
 
   def send_notifications
+    Broadcaster.publish(tracked_branch.redis_live_update_resource_key, { event: 'TestRunUpdate', test_run: serialized_run })
     VcsStatusNotifier.perform_later(id)
 
     old_status = previous_changes[:status] || status.code

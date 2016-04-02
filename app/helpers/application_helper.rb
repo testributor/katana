@@ -110,4 +110,8 @@ module ApplicationHelper
       capture &block
     end
   end
+
+  def with_dots(text)
+    "#{text}<span class='dot'></span><span class='dot'></span><span class='dot'></span>".html_safe
+  end
 end

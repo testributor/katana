@@ -4,47 +4,19 @@
   #{@tracked_branch.try(:branch_name)}
 
 - content_for :page_actions do
-  = link_to project_branch_test_runs_path, method: :post,
-    action: :create, class: 'btn btn-xs btn-success m-r-5' do
+  = link_to project_branch_test_runs_path, method: :post, remote: true,
+    data: { disable_with: with_dots("Adding build") },
+    action: :create, class: 'btn btn-xs btn-success m-r-5 js-remote-submission' do
     %i.fa.fa-plus
     %span= 'Add a new build'
 
   = link_to project_branch_path(current_project, @tracked_branch),
     method: :delete, class: 'btn btn-xs btn-danger',
-    data: { confirm: "Branch will be removed from this project. Are you sure?" } do
+    data: { disable_with: with_dots('Untracking branch'),
+            confirm: "Branch will be removed from this project. Are you sure?" } do
     %i.fa.fa-times
     %span= "Untrack branch"
 .panel
   .panel-body
-    %table.table
-      %thead
-        %tr
-          %th= "Build"
-          %th= "Commit message (SHA)"
-          %th= "Status"
-          %th= "Results"
-          %th= "Duration"
-          %th= "Actions"
-      %tbody
-        - @test_runs.each do |test_run|
-          - test_run = test_run.decorate
-          %tr{ id: "test-run-#{test_run.id}" }
-            %td.col-md-1= link_to "##{test_run.run_index}",
-              project_test_run_path(current_project, test_run)
-            %td.col-md-4
-              = test_run.commit_message
-              %br
-              %i= test_run.commit_info
-            %td.col-md-1
-              .test{class: test_run.status.css_class}
-                %span
-                  = test_run.status.text
-            %td.col-md-3
-              = link_to project_test_run_path(current_project, test_run) do
-                .progress.status{ data: @statuses[test_run.id], id: test_run.id }
-            %td.col-md-1
-              - if test_run.total_running_time
-                = "#{(test_run.total_running_time / 60).to_i} min #{(test_run.total_running_time % 60).round} sec"
-            %td.col-md-1
-              - if test_run == @test_runs[0] || test_run.status.code == TestStatus::RUNNING
-                = render partial: 'test_run_actions', locals: { test_run: test_run }
+    = react_component 'TestRunPresenter',
+      testRuns: { testRuns: @test_runs.map(&:serialized_run) }.to_json

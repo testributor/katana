@@ -27,6 +27,11 @@
 //= require dashboard/jquery.app
 //= require handlebars.runtime
 //= require ansi_up.js
+//= require react
+//= require react_ujs
+//= require react_bootstrap
+//= require components
+//
 //
 //= require init
 //= require_tree ./dashboard

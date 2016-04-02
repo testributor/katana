@@ -34,6 +34,6 @@ class LiveUpdatesController < ApplicationController
   end
 
   def whitelisted_params
-    [Project, TestRun, TestJob].map(&:to_s)
+    [Project, TestRun, TestJob, TrackedBranch].map(&:to_s)
   end
 end

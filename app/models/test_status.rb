@@ -130,4 +130,8 @@ class TestStatus
   def unsuccessful?
     @code.in? [ERROR, FAILED]
   end
+
+  def can_be_retried?
+    !@code.in? [CANCELLED, RUNNING, QUEUED, SETUP]
+  end
 end

@@ -48,7 +48,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
   end
 
   describe 'when a user visits the test_runs index' do
-    it 'displays the retry action when the run is passed' do
+    it 'displays the retry action when the run is passed', js: true do
       _test_run.update_column(:status, TestStatus::PASSED)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -56,7 +56,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.must_have_content('Retry')
     end
 
-    it 'displays the retry action when the run is errored' do
+    it 'displays the retry action when the run is errored', js: true do
       _test_run.update_column(:status, TestStatus::ERROR)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -64,7 +64,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.must_have_content('Retry')
     end
 
-    it 'displays the retry action when the run is failed' do
+    it 'displays the retry action when the run is failed', js: true do
       _test_run.update_column(:status, TestStatus::FAILED)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -72,7 +72,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.must_have_content('Retry')
     end
 
-    it 'does not display the retry action when the run is queued' do
+    it 'does not display the retry action when the run is queued', js: true do
       _test_run.update_column(:status, TestStatus::QUEUED)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -80,7 +80,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.wont_have_content('Retry')
     end
 
-    it 'does not display the retry action when the run is running' do
+    it 'does not display the retry action when the run is running', js: true do
       _test_run.update_column(:status, TestStatus::RUNNING)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -88,7 +88,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.wont_have_content('Retry')
     end
 
-    it 'does not display the retry action when the run is cancelled' do
+    it 'does not display the retry action when the run is cancelled', js: true do
       _test_run.update_column(:status, TestStatus::CANCELLED)
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
@@ -96,7 +96,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.wont_have_content('Retry')
     end
 
-    it 'displays the cancel action' do
+    it 'displays the cancel action', js: true do
       visit project_branch_test_runs_path(
         project_id: _test_run.project.id,
         branch_id: _test_run.tracked_branch.id)
@@ -110,9 +110,10 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         branch_id: _test_run.tracked_branch.id)
     end
 
-    it 'must delete all test_jobs' do
+    it 'must delete all test_jobs', js: true do
       _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
       page.find('td .btn.btn-danger', text: "Cancel").click
+      wait_for_requests_to_finish
       page.must_have_selector("#test-run-#{_test_run.id}", text: "Cancelled")
       TestRun.cancelled.count.must_equal 1
     end
@@ -127,6 +128,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
     it 'turns all previous queued test_jobs to cancelled', js: true do
       page.must_have_content 'Queued'
       page.find('a[action="create"]').click
+      wait_for_requests_to_finish
       _test_run.reload.status.code.must_equal TestStatus::CANCELLED
       _test_run.test_jobs.pluck(:status).uniq.must_equal [TestStatus::CANCELLED]
     end
