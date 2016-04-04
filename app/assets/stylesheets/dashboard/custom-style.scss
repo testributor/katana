@@ -199,3 +199,40 @@
   -webkit-transition: width 2s; /* For Safari 3.1 to 6.0 */
   transition: width 2s;
 }
+
+.branch {
+  border-top: solid 1px #CCC;
+  padding: 10px;
+  vertical-align: middle;
+
+  .status {
+    margin-top: 10px;
+  }
+
+  .time {
+    margin-top: 10px;
+  }
+
+  .name {
+    margin: 10px 0px 10px 0px;
+    font-weight: bold;
+
+    a {
+      text-decoration: none;
+    }
+
+    ::before {
+      opacity: 0.65;
+      background-color: #CCC;
+      margin-top: 2px;
+      margin-right: 2px;
+      float: left;
+      content: '';
+      display: block;
+      width: 20px;
+      height: 20px;
+      background: image-url("branch_icon")  no-repeat center center;
+      background-size: 20px 20px;
+    }
+  }
+}
