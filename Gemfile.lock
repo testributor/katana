@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/ispyropoulos/bitbucket.git
-  revision: a52787ff6be9e80891f8168f8ba99b3a094425d4
+  revision: 411567973a2e4105bb3a70cb093bc7ed7511c730
   branch: webhooks-api
   specs:
     bitbucket_rest_api (0.1.7)

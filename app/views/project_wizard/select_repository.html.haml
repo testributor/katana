@@ -33,12 +33,12 @@
                     data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
                             repository_provider: "bitbucket") }
                   %i.fa.fa-bitbucket
-                  BitBucket
+                  Bitbucket
             - else
               = link_to authorize_bitbucket_access_path do
                 .provider-box.btn.btn-default
                   %i.fa.fa-bitbucket
-                  BitBucket
+                  Bitbucket
                   %br
                   %small
                     (You will be redirected to authorize)

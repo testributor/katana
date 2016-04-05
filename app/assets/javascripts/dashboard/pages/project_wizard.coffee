@@ -55,7 +55,7 @@ class Testributor.Pages.ProjectWizard
           $('.js-fetching-repos').show()
       ).done((data)->
         # If redirect_path is present it means that the provider's client
-        # (e.g. GitHub, BitBucket, etc.) was unauthorized, so follow the
+        # (e.g. GitHub, Bitbucket, etc.) was unauthorized, so follow the
         # redirection.
         window.location.href = data['redirect_path'] if data['redirect_path']
 
