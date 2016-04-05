@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511095116) do
+ActiveRecord::Schema.define(version: 20160404151854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.string   "repository_slug"
     t.boolean  "is_private",          default: true,  null: false
     t.boolean  "auto_track_branches", default: true,  null: false
+    t.string   "repository_url"
   end
 
   add_index "projects", ["user_id", "repository_provider", "repository_id"], name: "index_projects_on_user_and_provider_and_repository_id", unique: true, using: :btree
@@ -193,6 +194,7 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.integer  "project_id",                              null: false
     t.string   "setup_error",                default: "", null: false
     t.string   "commit_committer_photo_url", default: "", null: false
+    t.integer  "initiator_id"
   end
 
   add_index "test_runs", ["tracked_branch_id"], name: "index_test_runs_on_tracked_branch_id", using: :btree
@@ -249,6 +251,7 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.string   "encrypted_bitbucket_access_token_secret"
     t.string   "encrypted_bitbucket_access_token_secret_salt"
     t.string   "encrypted_bitbucket_access_token_secret_iv"
+    t.boolean  "notify_on_manual_builds",                      default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

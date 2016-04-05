@@ -30,6 +30,8 @@ class Project < ActiveRecord::Base
 
   validates :name, :user, presence: true
   validates :name, uniqueness: { scope: [:user, :repository_provider, :repository_owner] }
+  validates :repository_url, presence: true,
+    if: ->{ repository_provider == 'bare_repo' }
   validate :check_user_limit, if: :user_id_changed?
 
   before_create :set_secure_random
@@ -47,6 +49,7 @@ class Project < ActiveRecord::Base
   scope :bitbucket, ->{ where(repository_provider: 'bitbucket') }
   scope :github, ->{ where(repository_provider: 'github') }
   scope :non_private, ->{ where(is_private: false) }
+  scope :bare_repo, ->{ where(repository_provider: 'bare_repo') }
 
   def to_param
     "#{id}-#{name.gsub(/[^a-z0-9]+/i, '-').downcase}"
@@ -78,13 +81,20 @@ class Project < ActiveRecord::Base
     "#{repository_owner}/#{repository_name}"
   end
 
-  def create_oauth_application!
+  def bare_repo?
+    repository_provider == "bare_repo"
+  end
+
+  # @param private_ssh_key [String] it is used as the private ssh key when it
+  # exists
+  def create_oauth_application!(ssh_key_private=nil)
     WorkerGroup.transaction do
       oauth_application = oauth_applications.create!(
-        name: repository_id || repository_slug,
+        name: repository_id || repository_slug || repository_name,
         redirect_uri: Katana::Application::HEROKU_URL
       )
       worker_groups.create!(oauth_application: oauth_application,
+        ssh_key_private: ssh_key_private,
         friendly_name: "#{name} Worker Group #{oauth_applications.count}")
     end
   end

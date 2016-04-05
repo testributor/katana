@@ -24,22 +24,24 @@ class TestRunDecorator < ApplicationDecorator
     end
   end
 
- def commit_info
-   author = if commit_author_email == commit_committer_email
-              commit_author_name
-            else
-              "#{commit_author_name} (with #{commit_committer_name})"
-            end
-   info = <<-HTML
-     #{author}
-     committed
-     <span title='#{l(commit_timestamp, format: :long)}'>
-       #{h.time_ago_in_words(commit_timestamp)} ago
-     <span>
-   HTML
+  def commit_info
+    return nil if commit_timestamp.nil? # generic repo on setup state
 
-   info.html_safe
- end
+    author = if commit_author_email == commit_committer_email
+                commit_author_name
+              else
+                "#{commit_author_name} (with #{commit_committer_name})"
+              end
+    info = <<-HTML
+      #{author}
+      committed
+      <span title='#{l(commit_timestamp, format: :long)}'>
+        #{h.time_ago_in_words(commit_timestamp)} ago
+      <span>
+    HTML
+
+    info.html_safe
+  end
 
   def commit_author
     if commit_author_email == commit_committer_email

@@ -7,8 +7,13 @@ class ProjectsController < DashboardController
   before_action :authorize_resource!
 
   def show
-    @branches = current_project.tracked_branches.
-      includes(test_runs: :test_jobs)
+    if current_project.repository_provider == "bare_repo"
+      @test_runs = current_project.test_runs.where(initiator: current_user).
+        order("created_at DESC").limit(10)
+    else
+      @branches = current_project.tracked_branches.
+        includes(test_runs: :test_jobs)
+    end
   end
 
   def instructions

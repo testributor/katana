@@ -6,12 +6,13 @@
       %h3 Select a repository provider:
     .panel-body
       .col-md-12.m-t-10
-        = form_tag url: project_wizard_path do
-          .col-sm-6
+        = form_tag project_wizard_path(id: step), method: :put do
+          .col-sm-4
             - if current_user.github_access_token
               .radio
                 %label.provider-box.btn.btn-default
-                  = radio_button_tag "repository_provider", "github", false,
+                  = radio_button_tag "repository_provider", "github",
+                    params[:repository_provider] == "github",
                     data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
                             repository_provider: "github") }
 
@@ -25,11 +26,12 @@
                   %br
                   %small
                     (You will be redirected to authorize)
-          .col-sm-6
+          .col-sm-4
             - if current_user.bitbucket_access_token
               .radio
                 %label.provider-box.btn.btn-default
-                  = radio_button_tag "repository_provider", "bitbucket", false,
+                  = radio_button_tag "repository_provider", "bitbucket",
+                    params[:repository_provider] == "bitbucket",
                     data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
                             repository_provider: "bitbucket") }
                   %i.fa.fa-bitbucket
@@ -42,8 +44,32 @@
                   %br
                   %small
                     (You will be redirected to authorize)
+          .col-sm-4
+            .radio
+              %label.provider-box.btn.btn-default
+                = radio_button_tag "repository_provider", "bare_repo",
+                  params[:repository_provider] == "bare_repo"
+                %i.fa.fa-code-fork
+                Bare repo
+
           .col-xs-12.fetch-repos
             .js-fetching-repos.text-center.loading-overlay
               %h3 Fetching your repositories. Please give us a few seconds...
               %p= image_tag('loading_spinner.gif')
             .js-fetch-repos
+
+            .bare-repo{ style: "display: none" }
+              %h3 Git bare repository
+              .form-group
+                = label_tag :repository_name, "Name"
+                = text_field_tag :repository_name, params[:repository_name], class: "form-control"
+              .form-group
+                = label_tag :repository_url
+                = text_field_tag :repository_url, params[:repository_url], placeholder: "git@github.com:username/repository.git",
+                  class: "form-control"
+              .form-group
+                = label_tag :private_key
+                = text_area_tag :private_key, params[:private_key],
+                  placeholder: 'Paste the private SSH key here',
+                  class: 'form-control'
+              = submit_tag "Next", class: "btn btn-primary w-lg btn-lg pull-right"

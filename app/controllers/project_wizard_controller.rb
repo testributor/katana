@@ -34,20 +34,41 @@ class ProjectWizardController < DashboardController
         project_params.merge(docker_image: DockerImage.first,
                              name: project_params[:repository_name]))
 
+      ssh_key_private = nil
+      if params[:repository_provider] == 'bare_repo'
+        if params[:private_key].blank?
+          flash.now[:alert] = "You must provide a private SSH key"
+          render project_wizard_path(step)
+          return
+        else
+          # Make sure the SSH key is valid or the creation of WorkerGroup will
+          # fail.
+          begin
+            # Consider asking the user for the passphrase, when we enable
+            # HTTPS everywhere, instead of assuming there is no passphrase.
+            ssh_key_private = SSHKey.new(params[:private_key], passphrase: '').private_key
+          rescue OpenSSL::PKey::DSAError
+            flash.now[:alert] = "The SSH key is invalid or passphrase protected"
+            render project_wizard_path(step)
+            return
+          end
+        end
+      end
+
       if project.save
         repository_manager = RepositoryManager.new(project)
         project.webhook_id = repository_manager.post_add_repository_setup.try(:id)
         project.save!
 
         project.create_testributor_yml_file!
-        project.create_oauth_application!
+        project.create_oauth_application!(ssh_key_private)
 
         cookies[:wizard_project_id] = project.id
         flash[:notice] = "Project was created!"
         redirect_to next_wizard_path
       else
-        flash[:alert] = project.errors.full_messages.to_sentence
-        redirect_to :back
+        flash.now[:alert] = project.errors.full_messages.to_sentence
+        render project_wizard_path(step)
       end
     when :configure
       unless @project.present?
@@ -96,6 +117,6 @@ class ProjectWizardController < DashboardController
 
   def project_params
     params.permit(:repository_provider, :repository_owner, :repository_name,
-      :repository_id, :repository_slug, :is_private)
+      :repository_id, :repository_slug, :repository_url, :is_private)
   end
 end

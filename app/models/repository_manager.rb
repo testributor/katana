@@ -16,6 +16,8 @@ class RepositoryManager
                  GithubRepositoryManager.new(project)
                when "bitbucket"
                  BitbucketRepositoryManager.new(project)
+               when "bare_repo"
+                 BareRepositoryManager.new(project)
                else
                  raise "Unknown repository provider"
                end

@@ -42,6 +42,29 @@ class TestRunTest < ActiveSupport::TestCase
         run.run_index.must_equal 1
       end
     end
+
+    describe "when no there is no tracked_branch associated" do
+      let(:branch_associated_run) do
+        FactoryGirl.create(:testributor_run, project: project,
+                           tracked_branch: tracked_branch)
+      end
+
+      let(:non_associated_runs) do
+        FactoryGirl.create_list(:testributor_run, 3, project: project,
+                           tracked_branch: nil)
+      end
+
+      it "sets the index among the rest of the non-branch-associated runs" do
+        branch_associated_run.run_index.must_equal 1
+        non_associated_runs
+        non_associated_runs.map(&:run_index).sort.must_equal [1,2,3]
+
+        _test_run = FactoryGirl.build(:testributor_run, project: project,
+                          tracked_branch: nil)
+        _test_run.valid?
+        _test_run.run_index.must_equal 4
+      end
+    end
   end
 
   describe "#cancel_queued_runs_of_same_branch" do
@@ -211,6 +234,22 @@ class TestRunTest < ActiveSupport::TestCase
     it "returns true when TestRun is error" do
       subject.status = TestStatus::ERROR
       subject.must_be :retry?
+    end
+  end
+
+  describe "branch_previous_terminal_status" do
+    let(:project) { FactoryGirl.create(:project) }
+    describe "when no tracked_branch is set" do
+      subject do
+        FactoryGirl.build(:testributor_run, project: project,
+                          tracked_branch: nil)
+      end
+      it "returns nil" do
+        subject.branch_previous_terminal_status.must_equal nil
+      end
+    end
+
+    describe "when a branch is set" do
     end
   end
 

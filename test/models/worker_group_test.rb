@@ -37,5 +37,19 @@ class WorkerGroupTest < ActiveSupport::TestCase
       subject.ssh_key_private.must_match /^-----BEGIN RSA PRIVATE KEY-----/
       subject.ssh_key_private.must_match /-----END RSA PRIVATE KEY-----$/
     end
+
+    it "does not generate a new pair if a private key is already set" do
+      new_pair = SSHKey.generate(bits: 4096)
+      subject.ssh_key_private = new_pair.private_key
+      subject.valid?
+      subject.ssh_key_private.must_equal new_pair.private_key
+      subject.ssh_key_public.must_equal new_pair.ssh_public_key + " #{subject.oauth_application.owner.user.email}"
+    end
+
+    it "is invalid if the provided private key is not valid" do
+      subject.ssh_key_private = '1234'
+      subject.wont_be :valid?
+      subject.errors[:ssh_key_private].must_equal ["The private key is invalid"]
+    end
   end
 end

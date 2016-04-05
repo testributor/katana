@@ -39,7 +39,11 @@ end
 
 crumb :test_run do |project, run|
   link "Build ##{run.run_index}", project_test_run_path(project, run)
-  parent :tracked_branch , project, run.tracked_branch
+  if run.tracked_branch
+    parent :tracked_branch , project, run.tracked_branch
+  else
+    parent :project, project
+  end
 end
 
 # If you want to split your breadcrumbs configuration over multiple files, you

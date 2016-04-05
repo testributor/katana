@@ -3,6 +3,7 @@ class TestRun < ActiveRecord::Base
   include Models::RedisLiveUpdates
   belongs_to :tracked_branch
   belongs_to :project
+  belongs_to :initiator, class_name: "User"
   has_many :test_jobs, dependent: :delete_all, inverse_of: :test_run
 
   delegate :completed_at, to: :last_file_run, allow_nil: true
@@ -21,7 +22,7 @@ class TestRun < ActiveRecord::Base
   validates :commit_sha, presence: true
 
   before_validation :set_run_index,
-    if: ->{ run_index.nil? && tracked_branch.present? }
+    if: ->{ run_index.nil? && (tracked_branch.present? || project.present?) }
   before_create :cancel_queued_runs_of_same_branch, if: -> { tracked_branch }
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
@@ -127,6 +128,8 @@ class TestRun < ActiveRecord::Base
   end
 
   def branch_previous_terminal_status
+    return nil unless tracked_branch.present?
+
     tracked_branch.test_runs.where("created_at < ?", self.created_at).
       where(status: [TestStatus::FAILED, TestStatus::PASSED, TestStatus::ERROR]).
       order("created_at DESC").limit(1).pluck(:status).first
@@ -151,9 +154,16 @@ class TestRun < ActiveRecord::Base
   end
 
   def set_run_index
-    return nil if run_index.present? || tracked_branch.blank?
+    return nil if run_index.present?
 
-    self.run_index = (tracked_branch.test_runs.maximum(:run_index) || 0) + 1
+    if tracked_branch.blank?
+      return nil if project.nil?
+
+      self.run_index = (project.test_runs.where(tracked_branch: nil).
+                        maximum(:run_index) || 0) + 1
+    else
+      self.run_index = (tracked_branch.test_runs.maximum(:run_index) || 0) + 1
+    end
   end
 
   def cancel_test_jobs

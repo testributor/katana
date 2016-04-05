@@ -34,6 +34,8 @@ module Katana
     config.active_job.queue_adapter = :sidekiq
     config.exceptions_app = self.routes
 
+    config.filter_parameters << :private_key
+
     config.middleware.use Rack::Attack
     ActiveSupport::Notifications.subscribe('rack.attack') do |name, start, finish, request_id, req|
       if req.env["rack.attack.match_type"] == :throttle

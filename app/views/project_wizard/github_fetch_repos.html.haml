@@ -13,6 +13,7 @@
               { data: {toggle: 'tooltip', trigger: 'hover'}, title: repo[:cannot_import_message] }
           else
             url = project_wizard_path(repository_owner: repo[:owner],
+              repository_url: repo[:repository_url],
               repository_name: repo[:name], repository_id: repo[:id],
               is_private: repo[:is_private],
               repository_provider: 'github')

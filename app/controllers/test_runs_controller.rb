@@ -22,10 +22,24 @@ class TestRunsController < DashboardController
     @user_can_manage_run = can?(:manage, @test_run)
   end
 
+  def new
+    @test_run = current_project.test_runs.new(initiator: current_user)
+  end
+
   def create
-    branch = current_project.tracked_branches.find(params[:branch_id])
-    manager = RepositoryManager.new(branch.project)
-    test_run = manager.create_test_run!({ tracked_branch_id: branch.id })
+    # Specifying the branch means the user want the latest commit on that
+    # else she must specify the commit_sha
+    if params[:branch_id]
+      branch_id = current_project.tracked_branches.find(params[:branch_id]).id
+    else
+      commit_sha = params[:test_run].try(:[],:commit_sha)
+    end
+
+    manager = RepositoryManager.new(current_project)
+    test_run = manager.create_test_run!(
+      { tracked_branch_id: branch_id, initiator_id: current_user.id,
+        commit_sha: commit_sha })
+
     if test_run
       flash[:notice] = 'Your build is being setup'
       head :ok and return if request.xhr?
@@ -72,10 +86,12 @@ class TestRunsController < DashboardController
   def destroy
     authorize! :destroy, @test_run
 
-    tracked_branch_id = @test_run.tracked_branch_id
+    # TODO: This is probably needed. Check after rebase
+    #tracked_branch_id = @test_run.tracked_branch_id
+
     @test_run.destroy
-    redirect_to project_branch_test_runs_url(current_project, tracked_branch_id),
-      notice: 'Test run was successfully cancelled.'
+
+    redirect_to :back, notice: 'Test run was successfully cancelled.'
   end
 
   private

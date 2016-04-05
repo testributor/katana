@@ -8,9 +8,9 @@ class WorkerGroup < ActiveRecord::Base
   validates :project, presence: true
   validates :friendly_name, presence: true
   validates :friendly_name, uniqueness: { scope: :project }
+  validate :valid_keys
 
-  before_validation :generate_ssh_keys, on: :create,
-    if: ->{ ssh_key_private.blank? }
+  before_validation :generate_ssh_keys, on: :create
   before_create :set_ssh_key_in_repo, unless: ->{ Rails.env.test? }
   before_update :rename_ssh_key_in_repo,
     if: ->{ friendly_name_changed? && !Rails.env.test? }
@@ -31,13 +31,33 @@ class WorkerGroup < ActiveRecord::Base
     deploy_key = repository_manager.set_deploy_key(ssh_key_public,
       { friendly_name: friendly_name, read_only: true })
 
-    self.ssh_key_provider_reference_id = deploy_key.id || deploy_key.pk
+    self.ssh_key_provider_reference_id =
+      deploy_key.try(:id) || deploy_key.try(:pk)
   end
 
   def generate_ssh_keys
-    ssh_key = SSHKey.generate(bits: 4096, comment: project.user.email)
-    self.ssh_key_private = ssh_key.private_key
-    self.ssh_key_public = ssh_key.ssh_public_key
+    if ssh_key_private.blank? && ssh_key_public.blank?
+      ssh_key = SSHKey.generate(bits: 4096, comment: project.user.email)
+      self.ssh_key_private = ssh_key.private_key
+      self.ssh_key_public = ssh_key.ssh_public_key
+    elsif ssh_key_public.blank?
+      begin
+        ssh_key = SSHKey.new(ssh_key_private, comment: project.user.email)
+        self.ssh_key_public = ssh_key.ssh_public_key
+      rescue OpenSSL::PKey::DSAError
+        nil # Leave public key empty if private is invalid
+      end
+    end
+  end
+
+  def valid_keys
+    return nil if ssh_key_private.blank?
+
+    begin
+      ssh_key = SSHKey.new(ssh_key_private)
+    rescue OpenSSL::PKey::DSAError
+      errors.add(:ssh_key_private, :invalid)
+    end
   end
 
   def remove_ssh_key_from_repo

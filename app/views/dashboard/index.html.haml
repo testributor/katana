@@ -12,24 +12,39 @@
     .panel-body
       .row
         .col-md-12
-          - if project.tracked_branches.empty?
-            = render partial: "no_branches",
-              locals: { project: project}
+          - if project.repository_provider == "bare_repo"
+            - @current_user_test_runs_per_project[project.id].to_a.each do |test_run|
+              .row
+                .col-sm-2= link_to "##{test_run.commit_sha}",
+                    project_test_run_path(project, test_run)
+                .col-sm-6
+                  = test_run.decorate.commit_message
+                  %br
+                  %i= test_run.decorate.commit_info
+                .col-sm-2
+                  %span{class: test_run.status.try(:css_class)}
+                    = test_run.status.try(:text)
+                .col-md-2
+                  - if test_run.try(:completed_at)
+                    = time_ago_in_words(test_run.completed_at)
           - else
-            - project.tracked_branches.each do |branch|
-              .col-md-12.branch
-                .row
-                  .col-sm-3.name
-                    = link_to branch.branch_name,
-                      project_branch_test_runs_path(branch.project, branch)
-                  .col-sm-6
-                    - if branch.last_run
-                      = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }
-                  .col-sm-2
-                    .status
-                      %span{class: branch.status.try(:css_class)}
-                        = branch.status.try(:text)
-                  .col-md-1
-                    .time
-                      - if branch.last_run.try(:completed_at)
-                        = time_ago_in_words(branch.last_run.completed_at)
+            - if project.tracked_branches.empty?
+              = render partial: "no_branches", locals: { project: project}
+            - else
+              - project.tracked_branches.each do |branch|
+                .col-md-12.branch
+                  .row
+                    .col-sm-3.name
+                      = link_to branch.branch_name,
+                        project_branch_test_runs_path(branch.project, branch)
+                    .col-sm-6
+                      - if branch.last_run
+                        = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }
+                    .col-sm-2
+                      .status
+                        %span{class: branch.status.try(:css_class)}
+                          = branch.status.try(:text)
+                    .col-md-1
+                      .time
+                        - if branch.last_run.try(:completed_at)
+                          = time_ago_in_words(branch.last_run.completed_at)

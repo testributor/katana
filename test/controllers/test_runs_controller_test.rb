@@ -202,6 +202,17 @@ class TestRunsControllerTest < ActionController::TestCase
         end
       end
     end
+
+    it "creates a TestRun with correct attributes when repo provider is bare_repo and branch is missing" do
+      project.update_column(:repository_provider, "bare_repo")
+      post :create, { project_id: project.to_param, test_run: { commit_sha: '1234' } }
+
+      TestRun.count.must_equal 2
+      _test_run = TestRun.last
+      _test_run.commit_sha.must_equal '1234'
+      _test_run.status.code.must_equal TestStatus::SETUP
+      _test_run.initiator.must_equal project.user
+    end
   end
 
   describe 'when the project is public' do
