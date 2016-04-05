@@ -17,8 +17,9 @@
       :plain
         {
           "@context" : "http://schema.org",
-          "@type" : "http://schema.org/WebPage",
+          "@type" : "WebSite",
           "name" : "Testributor",
+          "alternateName" : "Testributor - Parallel testing on your hardware",
           "url" : "http://www.testributor.com",
           "image" : "#{ asset_url('logo.png') }",
           "sameAs" : [
@@ -28,6 +29,15 @@
             "http://angel.co/testributor"
           ]
         }
+    - if content_for(:schema_title) && content_for(:schema_description)
+      %script{ type: 'application/ld+json' }
+        :plain
+          {
+            "@context" : "http://schema.org",
+            "@type" : "WebPage",
+            "name" : "#{content_for(:schema_title)}",
+            "description" : "#{content_for(:schema_description)}"
+          }
     = render "layouts/favicon"
     = stylesheet_link_tag 'front', media: 'all'
     %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
