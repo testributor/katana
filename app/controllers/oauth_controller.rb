@@ -38,7 +38,7 @@ class OauthController < ApplicationController
       bitbucket_access_token_secret: access_token.secret)
 
     redirect_to cookies[:redirect_to_url],
-      notice: 'We can now access your BitBucket repositories.'
+      notice: 'We can now access your Bitbucket repositories.'
   end
 
   # This action simply redirects the user to the authorization url.

@@ -223,9 +223,9 @@ class BitbucketRepositoryManager
       @errors ||= []
       @errors <<
         if test_run.commit_sha
-          ["Commit doesn't exist anymore on BitBucket"]
+          ["Commit doesn't exist anymore on Bitbucket"]
         else
-          ["Branch doesn't exist anymore on BitBucket"]
+          ["Branch doesn't exist anymore on Bitbucket"]
         end
 
       return nil
