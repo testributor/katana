@@ -124,6 +124,42 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
         result.map{|j| j["cost_prediction"].to_i}.must_equal [2,2,2,2]
       end
     end
+
+    describe "when there are no pending jobs and the provider is 'bare_repo'" do
+      let(:oldest_pending_setup_run) do
+        FactoryGirl.create(:testributor_run, project: project,
+                           status: TestStatus::SETUP, created_at: 3.minutes.ago)
+      end
+
+      let(:newest_pending_setup_run) do
+        FactoryGirl.create(:testributor_run, project: project,
+                           status: TestStatus::SETUP, created_at: 1.minutes.ago)
+      end
+
+      before do
+        TestJob.delete_all
+        project.update_column(:repository_provider, "bare_repo")
+        oldest_pending_setup_run
+        newest_pending_setup_run
+      end
+
+      it 'returns the oldest pending "Setup" job' do
+        result = nil
+        @controller.stub :doorkeeper_token, token do
+          request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
+          patch :bind_next_batch, default: { format: :json }
+          result = JSON.parse(response.body)
+        end
+
+        result.must_equal(
+          { "test_run" => { "id" => oldest_pending_setup_run.id,
+                            "commit_sha" => oldest_pending_setup_run.commit_sha },
+            "testributor_yml" => "" })
+
+        oldest_pending_setup_run.reload.
+          setup_worker_uuid.must_equal("alive_worker_uuid")
+      end
+    end
   end
 
   describe "PATCH#batch_update" do

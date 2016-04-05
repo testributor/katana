@@ -171,6 +171,10 @@ class Project < ActiveRecord::Base
     !is_private
   end
 
+  def testributor_yml_contents
+    project_files.where(path: ProjectFile::JOBS_YML_PATH).first.try(:contents)
+  end
+
   private
 
   def set_about_to_be_destroyed
