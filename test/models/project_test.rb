@@ -5,68 +5,113 @@ class ProjectTest < ActiveSupport::TestCase
   let(:owner) { project.user }
   let(:new_owner) { FactoryGirl.create(:user) }
 
-  describe "technologies validations" do
-    subject { FactoryGirl.create(:project) }
+  describe "validations" do
+    describe "#technologies" do
+      subject { FactoryGirl.create(:project) }
 
-    let(:postgres_9_3) do
-      FactoryGirl.create(:docker_image,
-                         standardized_name: "postgres", version: "9.3")
+      let(:postgres_9_3) do
+        FactoryGirl.create(:docker_image,
+                           standardized_name: "postgres", version: "9.3")
+      end
+
+      let(:postgres_9_4) do
+        FactoryGirl.create(:docker_image,
+                           standardized_name: "postgres", version: "9.4")
+      end
+
+      it "validates uniqueness of technology standardized names" do
+        ->{ subject.technologies = [postgres_9_3, postgres_9_4] }.
+          must_raise(ActiveRecord::RecordInvalid)
+      end
     end
 
-    let(:postgres_9_4) do
-      FactoryGirl.create(:docker_image,
-                         standardized_name: "postgres", version: "9.4")
+    describe "#check_user_limit" do
+      it "doesn't get called when user id hasn't changed" do
+        owner.update_column(:projects_limit, 2)
+        owner.reload
+        project.save!
+        project.expects(:check_user_limit).never
+        project.save!
+      end
+
+      it "gets called when user id has changed" do
+        owner.update_column(:projects_limit, 2)
+        owner.reload
+        project.user = new_owner
+        project.expects(:check_user_limit).once
+        project.save!
+      end
+
+      it "gets called when project is created" do
+        project = Project.new(name: "Test", user: owner)
+        project.expects(:check_user_limit).once
+        project.save!
+      end
     end
 
-    it "validates uniqueness of technology standardized names" do
-      ->{ subject.technologies = [postgres_9_3, postgres_9_4] }.
-        must_raise(ActiveRecord::RecordInvalid)
-    end
-  end
+    describe "#projects_limit" do
+      it "is valid if projects limit is greater than user's projects" do
+        owner.update_column(:projects_limit, 2)
+        owner.reload
 
-  describe "project limit on user validation" do
-    it "doesn't get called when user id hasn't changed" do
-      owner.update_column(:projects_limit, 2)
-      owner.reload
-      project.save!
-      project.expects(:check_user_limit).never
-      project.save!
-    end
+        project.valid?.must_equal true
+      end
 
-    it "gets called when user id has changed" do
-      owner.update_column(:projects_limit, 2)
-      owner.reload
-      project.user = new_owner
-      project.expects(:check_user_limit).once
-      project.save!
-    end
+      it "is valid if projects limit is equal to user's projects" do
+        owner.update_column(:projects_limit, 1)
+        owner.reload
 
-    it "gets called when project is created" do
-      project = Project.new(name: "Test", user: owner)
-      project.expects(:check_user_limit).once
-      project.save!
+        project.valid?.must_equal true
+      end
+
+      it "is invalid if projects limit is less than user's projects" do
+        owner.update_column(:projects_limit, 0)
+        owner.reload
+
+        project.valid?.must_equal false
+        project.errors.keys.must_include :base
+      end
     end
 
-    it "is valid if projects limit is greater than user's projects" do
-      owner.update_column(:projects_limit, 2)
-      owner.reload
+    describe "#name" do
+      subject { FactoryGirl.build(:project, repository_provider: 'github') }
 
-      project.valid?.must_equal true
-    end
+      describe "when #repository_provider is different" do
+        let(:another_project) do
+          subject.user.update_column(:projects_limit, 2)
+          FactoryGirl.create(:project,
+            repository_provider: 'bitbucket', user: subject.user)
+        end
 
-    it "is valid if projects limit is equal to user's projects" do
-      owner.update_column(:projects_limit, 1)
-      owner.reload
+        it "is valid when another project with same name exists" do
+          subject.name = another_project.name
+          subject.valid?.must_equal true
+        end
+      end
 
-      project.valid?.must_equal true
-    end
+      describe "when #user is different" do
+        let(:another_project) do
+          FactoryGirl.create(:project, repository_provider: 'github')
+        end
 
-    it "is invalid if projects limit is less than user's projects" do
-      owner.update_column(:projects_limit, 0)
-      owner.reload
+        it "is valid when another project with same name exists" do
+          subject.name = another_project.name
+          subject.valid?.must_equal true
+        end
+      end
 
-      project.valid?.must_equal false
-      project.errors.keys.must_include :base
+      describe "when #repository_provider and #user are the same" do
+        let(:another_project) do
+          subject.user.update_column(:projects_limit, 2)
+          FactoryGirl.create(:project,
+            repository_provider: subject.repository_provider, user: subject.user)
+        end
+
+        it "is invalid when another project with same name exists" do
+          subject.name = another_project.name
+          subject.valid?.must_equal false
+        end
+      end
     end
   end
 

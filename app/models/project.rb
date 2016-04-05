@@ -29,7 +29,7 @@ class Project < ActiveRecord::Base
   has_many :technologies, through: :technology_selections
 
   validates :name, :user, presence: true
-  validates :name, uniqueness: { scope: :user }
+  validates :name, uniqueness: { scope: [:user, :repository_provider, :repository_owner] }
   validate :check_user_limit, if: :user_id_changed?
 
   before_create :set_secure_random
