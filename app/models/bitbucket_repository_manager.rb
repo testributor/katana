@@ -128,8 +128,10 @@ class BitbucketRepositoryManager
   end
 
   # Return a Hash with all the BitBucket repositories that the current user
-  # a) owns, or
-  # b) has administrative rights in Teams that owns them.
+  # a) owns (implicit admin), or
+  # b) has administrative rights in Teams that owns them (implicit admin), or
+  # c) has administrative rights for (explicit admin). This is the case when the
+  #    user is an admin only on this repository and not the team that owns it.
   def fetch_repos(page=0)
     # https://confluence.atlassian.com/display/bitbucket/user+endpoint#userEndpoint-GETalistofuserprivileges
     administered_teams = bitbucket_client.user_api.privileges[:teams].
@@ -141,7 +143,14 @@ class BitbucketRepositoryManager
       pluck(:repository_slug)
     # https://confluence.atlassian.com/display/bitbucket/user+endpoint#userEndpoint-GETalistofrepositoriesvisibletoanaccount
     repos = bitbucket_client.user_api.repositories.select do |repo|
-      repo[:owner] == username || repo[:owner].in?(administered_teams)
+      begin
+        repo[:owner] == username || repo[:owner].in?(administered_teams) ||
+          username.in?(bitbucket_client.privileges.
+            list_on_repo(repo[:owner], repo[:slug], filter: 'admin').
+            map{ |p| p.user.username })
+      rescue BitBucket::Error::Forbidden
+        next
+      end
     end.map do |repo|
       project_owner_email = team_projects_already_tracked.
         select{|p|p.repository_slug == repo[:slug]}.first.try(:user).try(:email)
