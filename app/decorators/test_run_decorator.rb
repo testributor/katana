@@ -13,6 +13,8 @@ class TestRunDecorator < ApplicationDecorator
                       escape: false, separator: ' ')
       cm = "#{cm} (##{commit_sha[0...7]})"
 
+      # TODO: Fix this hardcoded "GitHub". On bare repos there should be no
+      # link.
       if options[:render_as_link]
         cm = h.link_to cm, commit_url, title: 'See this commit on GitHub',
           target: '_blank'

@@ -88,6 +88,7 @@ class Project < ActiveRecord::Base
   # @param private_ssh_key [String] it is used as the private ssh key when it
   # exists
   def create_oauth_application!(ssh_key_private=nil)
+    # TODO: Make sure this works because I couldn't find a worker group for bare repo projects
     WorkerGroup.transaction do
       oauth_application = oauth_applications.create!(
         name: repository_id || repository_slug || repository_name,

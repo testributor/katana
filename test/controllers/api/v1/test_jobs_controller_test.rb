@@ -151,10 +151,12 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
           result = JSON.parse(response.body)
         end
 
-        result.must_equal(
-          { "test_run" => { "id" => oldest_pending_setup_run.id,
-                            "commit_sha" => oldest_pending_setup_run.commit_sha },
-            "testributor_yml" => "" })
+        result["test_run"].must_equal({
+          "id" => oldest_pending_setup_run.id,
+           "commit_sha" => oldest_pending_setup_run.commit_sha
+        })
+        result["testributor_yml"].must_equal ''
+        result["type"].must_equal 'setup'
 
         oldest_pending_setup_run.reload.
           setup_worker_uuid.must_equal("alive_worker_uuid")

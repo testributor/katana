@@ -1,6 +1,12 @@
 module Api
   module V1
     class TestJobsController < ApiController
+      # We use hardcoded value for now to avoid having worker's Manager
+      # fetch multiple setup jobs with consecutive calls because they will
+      # be considered as zero cost jobs. 20 seconds should be enough to
+      # checkout a commit and return a list of files based on a regex.
+      SETUP_JOB_COST = 20 # seconds.
+
       # PATCH test_jobs/bind_next_batch
       # To avoid race conditions, the selected jobs should be marked as running
       # in an atomic operation.
@@ -23,37 +29,36 @@ module Api
         end
       end
 
-      # TODO: When the reporter sends reports for cancelled/destroyed test_runs
-      # send back a list of cancelled/missing test_run ids so that the worker
-      # can cancel any left jobs for those runs.
       def batch_update
+        test_run_ids = []
         jobs = params[:jobs].map do |id, json|
-          [id.to_i, JSON.parse(json)] rescue nil
+          if (test_run_id_for_setup = id.to_s.match(/^setup_job_(\d+)$/).try(:[], 1))
+            test_run_ids << test_run_id_for_setup.to_i
+            handle_test_run_setup(test_run_id_for_setup.to_i, json)
+            nil # Nothing else to do. A background job will finish the setup.
+          else
+            [id.to_i, JSON.parse(json)] rescue nil
+          end
         end.compact
         jobs = Hash[jobs]
         job_ids = params[:jobs].keys
+        test_run_ids += jobs.values.map{|j| j["test_run_id"].to_i}.uniq
 
         # Store the TestRun ids of any missing or cancelled TestRuns to let
         # the worker know that they should be removed from the jobs queue.
-        test_run_ids = jobs.values.map{|j| j["test_run_id"].to_i}.uniq
         # Anything not cancelled is a keeper (we still want them to run)
         test_run_id_keepers =
           current_project.test_runs.where("status != ?", TestStatus::CANCELLED).
           where(id: test_run_ids).pluck(:id)
         missing_or_cancelled_test_run_ids = test_run_ids - test_run_id_keepers
 
-        current_project.test_jobs.running.where(id: job_ids, worker_uuid: worker_uuid).
-          each do |job|
+        current_project.test_jobs.running.
+          where(id: job_ids, worker_uuid: worker_uuid).each do |job|
 
-          begin
-            job_params = jobs[job.id].keep_if do |k,v|
-                %w(result status id result runs assertions failures errors
-                   skips sent_at_seconds_since_epoch worker_in_queue_seconds
-                   worker_command_run_seconds).include?(k)
-            end
-          rescue Exception => e
-            render json: { error: e.message,
-              delete_test_runs:  missing_or_cancelled_test_run_ids } and return
+          job_params = jobs[job.id].keep_if do |k,v|
+            %w(result status id result runs assertions failures errors
+               skips sent_at_seconds_since_epoch worker_in_queue_seconds
+               worker_command_run_seconds).include?(k)
           end
 
           # Skips time attributes if already set (when retrying job)
@@ -184,8 +189,21 @@ module Api
         sql = ActiveRecord::Base.send(:sanitize_sql_array, [sql, worker_uuid])
         test_run = TestRun.find_by_sql(sql).first
 
-        return { test_run: { id: test_run.id, commit_sha: test_run.commit_sha },
-                 testributor_yml: current_project.testributor_yml_contents.to_s }
+        if test_run
+          { type: "setup",
+            sent_at_seconds_since_epoch: Time.current.utc.to_i,
+            cost_prediction: SETUP_JOB_COST,
+            test_run: { id: test_run.id, commit_sha: test_run.commit_sha },
+            testributor_yml: current_project.testributor_yml_contents.to_s }
+        else
+          nil
+        end
+      end
+
+      def handle_test_run_setup(test_run_id, json)
+        if current_project.test_runs.where(id: test_run_id).exists?
+          BareRepositoryManager::TestRunSetupJob.perform_later(test_run_id, json)
+        end
       end
 
       def test_job_params
