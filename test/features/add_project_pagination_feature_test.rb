@@ -12,7 +12,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       # instead of creating 60 projects we change the number
       # of fetched projects because we already have 11
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
-      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 3)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 6)
       VCR.use_cassette 'repos_with_4_pages' do
         visit project_wizard_path(id: :select_repository)
         find(".fa-github").click
@@ -29,7 +29,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       # 1 - 2 - 3 - 4 - next
       page.find_all('.pagination li').size.must_equal 5
       page.must_have_content 'ispyropoulos/aroma-kouzinas'
-      page.must_have_content 'ispyropoulos/business_plan'
+      page.must_have_content 'ispyropoulos/bitbucket'
       page.must_have_content 'ispyropoulos/dockerfiles'
       page.find('.pagination li.active').text.must_equal '1'
     end
@@ -62,11 +62,18 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
 
   describe 'when users has projects enough for one page' do
     before do
+      GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 30)
       VCR.use_cassette 'repos_without_page' do
         visit project_wizard_path(id: :select_repository)
         find(".fa-github").click
         wait_for_requests_to_finish
       end
+    end
+
+    after do
+      GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
     end
 
     it 'does not display any pagination', js: true do

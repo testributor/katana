@@ -127,7 +127,7 @@ class BitbucketRepositoryManager
     file
   end
 
-  # Return a Hash with all the BitBucket repositories that the current user
+  # Return a Hash with all the Bitbucket repositories that the current user
   # a) owns (implicit admin), or
   # b) has administrative rights in Teams that owns them (implicit admin), or
   # c) has administrative rights for (explicit admin). This is the case when the
@@ -137,7 +137,7 @@ class BitbucketRepositoryManager
     administered_teams = bitbucket_client.user_api.privileges[:teams].
       reject { |_,v| v != 'admin' }.keys
 
-    team_projects_already_tracked = Project.bitbucket.
+    team_projects_already_added = Project.bitbucket.
       where(repository_owner: administered_teams).includes(:user)
     slugs_already_added = user.participating_projects.
       pluck(:repository_slug)
@@ -152,7 +152,7 @@ class BitbucketRepositoryManager
         next
       end
     end.map do |repo|
-      project_owner_email = team_projects_already_tracked.
+      project_owner_email = team_projects_already_added.
         select{|p|p.repository_slug == repo[:slug]}.first.try(:user).try(:email)
       {
         slug: repo[:slug],

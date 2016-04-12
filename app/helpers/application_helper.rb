@@ -25,8 +25,9 @@ module ApplicationHelper
   end
 
   def github_oauth_authorize_url
-    Octokit.authorize_url(Octokit.client_id, scope: 'user:email,repo',
-                         redirect_uri: github_callback_url)
+    Octokit.authorize_url(Octokit.client_id,
+      scope: User::GITHUB_REQUIRED_SCOPES.join(","),
+      redirect_uri: github_callback_url)
   end
 
   # The Ruby library we use for accessing the BitBucket API does not support

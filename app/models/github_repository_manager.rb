@@ -132,21 +132,39 @@ class GithubRepositoryManager
     file
   end
 
+  # Return a Hash that contains all the GitHub repositories that the current user
+  # a) owns (implicit admin), or
+  # b) has administrative rights in Organizations that owns them (implicit admin), or
+  # c) has administrative rights in Teams that can access them (implicit admin)
   def fetch_repos(page=0)
+    # https://developer.github.com/v3/repos/#list-user-repositories
+    owners_of_administered_repos = github_client.repositories.
+      select { |r| r.permissions.admin? }.map { |m| m.owner.login }.uniq
+
+    projects_already_added = Project.github.
+      where(repository_owner: owners_of_administered_repos).includes(:user)
+
+    repo_ids_already_added_by_current_user =
+      project.user.participating_projects.pluck(:repository_id)
+
     page = page.to_i
     # https://developer.github.com/v3/repos/#list-user-repositories
-    repos =
-      github_client.repos(nil, { type: 'owner', per_page: REPOSITORIES_PER_PAGE }.
-        merge(page > 0 ? { page: page } : {})).
-        map do |repo|
-        {
-          id: repo.id,
-          fork: repo.fork?,
-          full_name: repo.full_name,
-          owner: repo.owner.login,
-          name: repo.name
-        }
-      end
+    repos = github_client.repositories(nil, { per_page: REPOSITORIES_PER_PAGE }.
+      merge(page > 0 ? { page: page } : {})).
+      map do |repo|
+      project_owner_email = projects_already_added.
+        select{|p|p.repository_id == repo.id}.first.try(:user).try(:email)
+      {
+        id: repo.id,
+        fork: repo.fork?,
+        full_name: repo.full_name,
+        owner: repo.owner.login,
+        name: repo.name,
+        can_be_imported: repo.permissions.admin?,
+        is_participating_project: repo.id.in?(repo_ids_already_added_by_current_user),
+        already_added_by: project_owner_email
+      }
+    end
 
     { repos: repos, last_response: github_client.last_response }
   end
