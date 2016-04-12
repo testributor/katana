@@ -98,6 +98,13 @@ module Api
           end
           job_params.merge!(reported_at: Time.current) if job.reported_at.nil?
 
+          Broadcaster.publish(
+            job.test_run.redis_live_update_resource_key,
+            { test_job: job.serialized_job,
+              test_run: job.test_run.reload.serialized_run,
+              event: 'TestJobUpdate'
+          })
+
           job.update!(job_params)
         end
 

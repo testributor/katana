@@ -49,6 +49,12 @@ class TestRunsController < DashboardController
     @test_run.status = TestStatus::SETUP
     @test_run.save!
     RepositoryManager::TestRunSetupJob.perform_later(@test_run.id)
+    Broadcaster.publish(
+      @test_run.redis_live_update_resource_key,
+      { retry: true,
+        test_run_id: @test_run.id,
+        event: 'TestRunRetry'
+    })
 
     head :ok and return if request.xhr?
     redirect_to :back, notice: 'The Build will soon be retried'
