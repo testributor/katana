@@ -7,7 +7,7 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
     :retry_url, :total_running_time, :html_class, :cancel_url,
     :statuses, :test_run_link, :commit_message, :branch_id,
     :terminal_status, :commit_author, :commit_timestamp, :commit_time_ago,
-    :can_be_retried, :is_running, :cancelled
+    :can_be_retried, :is_running, :cancelled, :commit_info
 
 
   def retry_url
@@ -19,9 +19,11 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   end
 
   def statuses
-    return { success: 0, length: 0, pink: 0, danger: 0 } if object.status.code == TestStatus::SETUP
+    test_job_stats = TestRun.test_job_statuses([object.id])[object.id]
 
-    TestRun.test_job_statuses([object.id])[object.id]
+    # if TestRun is setting up or it has an error which did not allow
+    # it to create TestJobs we assign 0 to every attribute
+    test_job_stats ||= { success: 0, total: 0, pink: 0, danger: 0 }
   end
 
   def test_run_link
@@ -66,5 +68,9 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
 
   def decorated_object
     object.decorate
+  end
+
+  def commit_info
+    decorated_object.commit_info
   end
 end

@@ -50,6 +50,13 @@ module Api
           retry
         end
 
+        test_jobs.each do |job|
+          Broadcaster.publish(job.test_run.redis_live_update_resource_key,
+            { test_job: job.serialized_job,
+              test_run: job.test_run.reload.serialized_run,
+              event: 'TestJobUpdate'
+            })
+        end
         render json: test_jobs, include: "test_run.project"
       end
 
@@ -98,14 +105,12 @@ module Api
           end
           job_params.merge!(reported_at: Time.current) if job.reported_at.nil?
 
-          Broadcaster.publish(
-            job.test_run.redis_live_update_resource_key,
+          job.update!(job_params)
+          Broadcaster.publish(job.test_run.redis_live_update_resource_key,
             { test_job: job.serialized_job,
               test_run: job.test_run.reload.serialized_run,
               event: 'TestJobUpdate'
-          })
-
-          job.update!(job_params)
+            })
         end
 
         render json: { delete_test_runs:  missing_or_cancelled_test_run_ids }

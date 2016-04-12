@@ -18,7 +18,7 @@ class Testributor.Widgets.ProgressBar
 
   update: (id, status) =>
     $progressBar = $("##{id}")
-    testJobsLength = $progressBar.data('length')
+    testJobsLength = $progressBar.data('total')
     statusSize = if $progressBar.data(status) then (Number($progressBar.data(status)) + 1) else 1
     $progressBar.data(status, statusSize)
 
@@ -32,7 +32,8 @@ class Testributor.Widgets.ProgressBar
   toggle: (currentBar) ->
     $currentBar = $(currentBar)
     data = $currentBar.data()
-    data['length'] != data['pink'] + data['danger'] + data['success']
+    if data
+      data['total'] != data['pink'] + data['danger'] + data['success']
 
   reset: (id) =>
     $currentBar = $("##{id}")
@@ -42,7 +43,7 @@ class Testributor.Widgets.ProgressBar
         pink: 0,
         danger: 0,
         success: 0,
-        length: $currentBar.data('length')
+        total: $currentBar.data('total')
       }
     }
     $currentBar.parent().html(@progressBarTemplate(progressBarData))

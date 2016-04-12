@@ -4,7 +4,7 @@ var ProgressBars = React.createClass({
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
 
-    var bool = (this.props.statuses.length > ( this.props.statuses.pink + this.props.statuses.danger + this.props.statuses.success))
+    var bool = (this.props.total > ( this.props.statuses.pink + this.props.statuses.danger + this.props.statuses.success))
 
     progressBarWidth =  function (value, length) {
       width = (value / length) * 100
@@ -29,7 +29,7 @@ var ProgressBars = React.createClass({
           data-html="true"
           active={ bool }
           bsStyle="success"
-          now={ progressBarWidth(this.props.statuses.success, this.props.statuses.length) }
+          now={ progressBarWidth(this.props.statuses.success, this.props.total) }
           key={1}
         />
         <ProgressBar
@@ -42,7 +42,7 @@ var ProgressBars = React.createClass({
           data-html="true"
           active={ bool }
           bsStyle="danger"
-          now={ progressBarWidth(this.props.statuses.danger, this.props.statuses.length) }
+          now={ progressBarWidth(this.props.statuses.danger, this.props.total) }
           key={2}
         />
 
@@ -56,7 +56,7 @@ var ProgressBars = React.createClass({
           data-html="true"
           active={ bool }
           className='progress-bar-pink'
-          now={ progressBarWidth(this.props.statuses.pink, this.props.statuses.length) }
+          now={ progressBarWidth(this.props.statuses.pink, this.props.total) }
           key={3}
         />
       </ProgressBar>

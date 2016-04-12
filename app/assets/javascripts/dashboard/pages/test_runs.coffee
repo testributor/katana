@@ -14,20 +14,21 @@ class Testributor.Pages.TestRuns
       if msg.retry
         progressBar.reset(msg.test_run_id)
       else
-        if msg.test_run.terminal_status
-          $("#test_run_retry_button").show()
+        requiredUpdates = (testRun, testJob) ->
+          if testRun.terminal_status
+            $("#test_run_retry_button").show()
 
-        testJob = $.extend(msg.test_job, admin: userIsAdmin)
-        $("#test-job-#{testJob.id}").fadeOut('slow', () ->
-           $("#test-job-#{testJob.id}").replaceWith $(jobTemplate(testJob))
-           $(jobTemplate(testJob)).fadeIn('slow')
-        )
+          $("#test-job-#{testJob.id}").fadeOut('slow', () ->
+             $("#test-job-#{testJob.id}").replaceWith $(jobTemplate(testJob))
+             $(jobTemplate(testJob)).fadeIn('slow')
+          )
 
+          $error = $(errorTemplate(testJob))
+          if testJob.unsuccessful
+            $error.insertAfter($(jobTemplate(testJob)))
+          progressBar.update(testJob.test_run_id, testJob.html_class)
 
-        $error = $(errorTemplate(testJob))
-        if testJob.unsuccessful
-          $error.insertAfter($(jobTemplate(testJob)))
-        progressBar.update(testJob.test_run_id, testJob.html_class)
+        requiredUpdates(msg.test_run, $.extend(msg.test_job, admin: userIsAdmin))
     )
     $('[data-toggle="popover"]').popover()
 

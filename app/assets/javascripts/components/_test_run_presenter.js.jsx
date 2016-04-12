@@ -1,6 +1,6 @@
 var TestRunPresenter = React.createClass({
   getInitialState: function () {
-    return JSON.parse(this.props.testRuns);
+    return { testRuns: this.props.testRuns }
   },
 
   handleUpdate: function (msg) {
@@ -12,10 +12,10 @@ var TestRunPresenter = React.createClass({
 
       if (existedRun) {
         testRuns.splice(testRuns.indexOf(existedRun),1, msg.test_run)
-        this.setState({testRuns: testRuns})
+        this.setState({ testRuns: testRuns })
       } else {
         testRuns.unshift(msg.test_run)
-        this.setState({testRuns: testRuns})
+        this.setState({ testRuns: testRuns })
       }
     }
   },
@@ -29,7 +29,7 @@ var TestRunPresenter = React.createClass({
 
   componentDidMount: function() {
     var _this = this;
-    _this.subscribe(this.state.testRuns[0].branch_id)
+    _this.subscribe(this.props.branchId)
   },
 
  render: function () {

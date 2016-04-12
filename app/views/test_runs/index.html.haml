@@ -19,4 +19,4 @@
 .panel
   .panel-body
     = react_component 'TestRunPresenter',
-      testRuns: { testRuns: @test_runs.map(&:serialized_run) }.to_json
+      { testRuns: @test_runs.map(&:serialized_run), branchId: @tracked_branch.id }

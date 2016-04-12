@@ -1,8 +1,4 @@
 var TestRun = React.createClass({
-  getInitialState: function () {
-    return (this.props.testRun)
-  },
-
   render: function () {
     var testRunCtas = [];
 
@@ -32,7 +28,7 @@ var TestRun = React.createClass({
         </td>
         <td className="col-md-3">
           <a href={ this.props.testRun.test_run_link }>
-            <ProgressBars statuses={ this.props.testRun.statuses } length={ this.props.testRun.statuses.length } key={3} />
+            <ProgressBars statuses={ this.props.testRun.statuses } total={ this.props.testRun.statuses.total } key={3} />
           </a>
         </td>
         <td className="col-md-1 running_time">

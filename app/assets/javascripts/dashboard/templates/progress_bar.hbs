@@ -1,18 +1,18 @@
 <div class="progress status" id="{{ id }}"
-     data-length="{{ statuses.length }}"
+     data-total="{{ statuses.total }}"
      data-pink="{{ statuses.pink }}"
      data-danger="{{ statuses.danger }}"
      data-success="{{ statuses.success }}">
 
 {{#if display_stats}}
     <div class="progress-bar progress-bar-success {{ active }}"
-      style="width:{{percentage statuses.success statuses.length }}%">
+      style="width:{{percentage statuses.success statuses.total }}%">
     </div>
     <div class="progress-bar progress-bar-danger {{ active }}"
-      style="width:{{percentage statuses.danger statuses.length }}%">
+      style="width:{{percentage statuses.danger statuses.total }}%">
     </div>
     <div class="progress-bar progress-bar-pink {{ active }}"
-      style="width:{{percentage statuses.pink statuses.length}}%">
+      style="width:{{percentage statuses.pink statuses.total}}%">
     </div>
   </div>
   <div class='pull-right'>
@@ -39,7 +39,7 @@
         data-html="true"
         data-placement="top"
         data-trigger="hover"
-        style="width:{{percentage statuses.success statuses.length }}%">
+        style="width:{{percentage statuses.success statuses.total }}%">
       </div>
       <div class="progress-bar progress-bar-danger {{ active }}"
         data-toggle="popover"
@@ -48,7 +48,7 @@
         data-content="<i class='fa fa-times' style='color: crimson;'></i>
           <span> Failed: </span><span class='danger' >{{ statuses.danger }}</span>"
         data-html="true"
-        style="width:{{percentage statuses.danger statuses.length }}%">
+        style="width:{{percentage statuses.danger statuses.total }}%">
       </div>
       <div class="progress-bar progress-bar-pink {{ active }}"
         data-toggle="popover"
@@ -57,7 +57,7 @@
         data-content="<i class='fa fa-warning' style='color: pink;'></i>
           <span> Errors: </span><span class='deeppink' >{{ statuses.pink }}</span>"
         data-html="true"
-        style="width:{{percentage statuses.pink statuses.length}}%">
+        style="width:{{percentage statuses.pink statuses.total}}%">
       </div>
   </div>
 {{/if}}

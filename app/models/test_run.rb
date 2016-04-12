@@ -120,7 +120,7 @@ class TestRun < ActiveRecord::Base
         "SUM( CASE test_jobs.status WHEN #{TestStatus::FAILED} THEN 1 ELSE 0 END) danger, "\
         "SUM( CASE test_jobs.status WHEN #{TestStatus::ERROR} THEN 1 ELSE 0 END) pink, "\
         "SUM( CASE test_jobs.status WHEN #{TestStatus::PASSED} THEN 1 ELSE 0 END) success, "\
-        "COUNT(test_jobs.id) length").joins(:test_jobs).group(:test_run_id)
+        "COUNT(test_jobs.id) total").joins(:test_jobs).group(:test_run_id)
     sql = sql.where(id: ids) if ids.any?
 
     sql.map { |t| [t.id, t.attributes.reject! { |k| k == 'id' }] }.to_h
