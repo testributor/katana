@@ -11,7 +11,7 @@
         ga('create', 'UA-72250863-1', 'auto');
         ga('set', 'userId', 'User:#{current_user.id}');
         ga('send', 'pageview');
-    %title= meta_title
+    %title= title
     %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
     = render "layouts/favicon"

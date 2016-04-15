@@ -1,15 +1,19 @@
 module ApplicationHelper
-  def meta_title
-    if content_for? :meta_title
-      content_for(:meta_title)
+  def title
+    if content_for? :title
+      content_for(:title)
     else
       "Testributor: Parallel Testing for Ruby on Rails, Python, Javascript and more."
     end
   end
 
   def meta_description
-    "Testributor will help you slice up your test suite efficiently and run all "\
-    "its “pieces” in parallel, on your computers or ours."
+    if content_for? :meta_description
+      content_for(:meta_description)
+    else
+      "Testributor will help you slice up your test suite efficiently and run all "\
+      "its “pieces” in parallel, on your computers or ours."
+    end
   end
 
   def controller_and_action

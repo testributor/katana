@@ -1,3 +1,6 @@
+= content_for :title do
+  Testributor: Sign up for a new account
+
 .wrapper-page.animated.fadeInDown
   .panel.panel-color.panel-primary
     .panel-heading.text-center
@@ -5,7 +8,7 @@
         = link_to root_path do
           %div.logo
             %img{alt: "logo", src: image_path("logo.png")}
-            %h2 Sign Up - Testributor
+            %h2 Sign up for Testributor
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!
       = flash_messages
