@@ -12,6 +12,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   let(:technology) { FactoryGirl.create(:docker_image) }
 
   before do
+    GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+    GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
     webhook = Sawyer::Resource.new(
       Sawyer::Agent.new('api.example.com'), { id: 1 }
     )
