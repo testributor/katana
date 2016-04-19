@@ -28,6 +28,14 @@ class WorkerGroupTest < ActiveSupport::TestCase
         subject.save.must_equal true
       end
     end
+
+    it "is invalid when keys are missing" do
+      subject.project.update_column(:repository_provider, "bare_repo")
+      subject.project.reload
+      subject.ssh_key_private = nil
+      subject.ssh_key_public = nil
+      subject.wont_be :valid?
+    end
   end
 
   describe '#ssh_key_private' do
@@ -46,10 +54,33 @@ class WorkerGroupTest < ActiveSupport::TestCase
       subject.ssh_key_public.must_equal new_pair.ssh_public_key + " #{subject.oauth_application.owner.user.email}"
     end
 
+    it "does not generate a new pair when repository_provider is bare_repo" do
+      subject.project.update_column(:repository_provider, "bare_repo")
+      subject.project.reload
+      subject.ssh_key_private = nil
+      subject.ssh_key_public = nil
+      subject.valid?
+      subject.ssh_key_private.must_equal nil
+      subject.ssh_key_public.must_equal nil
+    end
+
     it "is invalid if the provided private key is not valid" do
       subject.ssh_key_private = '1234'
       subject.wont_be :valid?
-      subject.errors[:ssh_key_private].must_equal ["The private key is invalid"]
+      subject.errors[:ssh_key_private].must_equal ["is invalid"]
+    end
+  end
+
+  describe "#create_oauth_application [hook]" do
+    it "does not create a worker group when oauth application creation fails" do
+      subject.stubs(:create_oauth_application).raises(Exception)
+      ->{ subject.save }.must_raise(Exception)
+      subject.wont_be :persisted?
+    end
+
+    it "creates the worker group when oauth application creation succeeds" do
+      subject.save
+      subject.must_be :persisted?
     end
   end
 end

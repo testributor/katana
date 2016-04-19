@@ -7,11 +7,16 @@
     %h3.panel-title
       Worker Groups
       .worker-groups-actions
-        = link_to project_worker_groups_path(current_project), method: :post,
-        class: 'btn btn-success btn-xs',
-        title: 'Create a new group of workers.' do
-          %i.fa.fa-plus-square
-          Add a new group
+        - if current_project.repository_provider == "bare_repo"
+          %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newWorkerGroupModal" } }
+            %i.fa.fa-plus-square
+            New worker group
+        - else
+          = link_to project_worker_groups_path(current_project), method: :post,
+          class: 'btn btn-success btn-xs',
+          title: 'Create a new group of workers.' do
+            %i.fa.fa-plus-square
+            Add a new group
   .panel-body
     %table.table
       %thead
@@ -23,7 +28,13 @@
         - current_project.worker_groups.each do |worker_group|
           %tr
             %td.worker-group
-              = render worker_group
+              .worker-group-info{ style: worker_group.errors.any? ? 'display: none;' : nil }
+                #{worker_group.friendly_name}
+                %button.btn.btn-success.btn-xs{ data: { toggle: "modal",
+                  target: "#workerGroupModal#{worker_group.id}" } }
+
+                  %i.fa.fa-edit
+                  Edit
             %td
               .worker-group-actions
                 = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
@@ -31,12 +42,13 @@
                 title: 'Download the docker-compose.yml file that is needed for creating a worker.' do
                   %i.fa.fa-download
                   docker-compose.yml
-                = link_to reset_ssh_key_project_worker_group_path(current_project, worker_group),
-                method: :post, class: 'btn btn-danger btn-xs',
-                data: { confirm: 'Workers of this group will need to be restarted after resetting the key. Reset?' },
-                title: 'Reset the SSH key that the workers of this group use in order to access the repository linked with this project.' do
-                  %i.fa.fa-refresh
-                  Reset SSH key
+                - unless current_project.repository_provider == "bare_repo"
+                  = link_to reset_ssh_key_project_worker_group_path(current_project, worker_group),
+                  method: :post, class: 'btn btn-danger btn-xs',
+                  data: { confirm: 'Workers of this group will need to be restarted after resetting the key. Reset?' },
+                  title: 'Reset the SSH key that the workers of this group use in order to access the repository linked with this project.' do
+                    %i.fa.fa-refresh
+                    Reset SSH key
                 = link_to project_worker_group_path(current_project, worker_group),
                 method: :delete, class: 'btn btn-danger btn-xs',
                 data: { confirm: "Workers of this group will not be able to access project '#{current_project.name}' anymore. Delete?" },
@@ -63,3 +75,47 @@
       .col-xs-12
         .pull-right.m-t-15
           = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
+
+- # Now build the form modals for each worker group
+- current_project.worker_groups.each do |worker_group|
+  .worker-group-modal.modal.fade{ role: "dialog", tabindex: '-1',
+    id: "workerGroupModal#{worker_group.id}" }
+    .modal-dialog
+      .modal-content
+        = simple_form_for [current_project, worker_group] do |f|
+          .modal-header
+            %button.close{ type: "button", "aria-label" => "Close",data: { dismiss: "modal" } }
+              %span{ "aria-hidden" => "true" }
+                &times;
+            %h4.modal-title
+              Edit
+              = "\"#{worker_group.friendly_name}\""
+          .modal-body
+            = f.input :friendly_name, label: false, placeholder: "Friendly name"
+            - if current_project.repository_provider == "bare_repo"
+              = f.input :ssh_key_private, as: :text, label: false,
+                placeholder: "Enter a new SSH key to change the current or leave empty to keep it as is",
+                input_html: { value: '' }
+          .modal-footer
+            %button.btn.btn-default{ data: { dismiss: "modal" } }
+              Close
+            = f.submit "Save", class: "btn btn-primary"
+
+- # And one modal for the new worker group form
+#newWorkerGroupModal.modal.fade{ role: "dialog", tabindex: '-1' }
+  .modal-dialog
+    .modal-content
+      = simple_form_for [current_project, current_project.worker_groups.new] do |f|
+        .modal-header
+          %button.close{ type: "button", "aria-label" => "Close",data: { dismiss: "modal" } }
+            %span{ "aria-hidden" => "true" }
+              &times;
+          %h4.modal-title
+            New worker group
+        .modal-body
+          = f.input :friendly_name, label: false, placeholder: "Friendly name"
+          = f.input :ssh_key_private, as: :text, label: false, placeholder: "Private key"
+        .modal-footer
+          %button.btn.btn-default{ data: { dismiss: "modal" } }
+            Close
+          = f.submit "Save", class: "btn btn-primary"

@@ -57,7 +57,7 @@ en:
         worker_group:
           attributes:
             ssh_key_private:
-              invalid: "The private key is invalid"
+              invalid: "is invalid"
   select_repository: "Select repository"
   configure: "Configure"
   add_worker: "Add worker"

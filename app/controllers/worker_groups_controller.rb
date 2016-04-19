@@ -5,20 +5,34 @@ class WorkerGroupsController < DashboardController
   before_action :authorize_resource!
 
   def create
-    current_project.create_oauth_application!
-    flash[:notice] = "A Worker Group has been created."
+    errors =
+      if params[:worker_group].present?
+        current_project.create_oauth_application!(
+          worker_group_params[:ssh_key_private],
+          worker_group_params[:friendly_name])
+      else
+        current_project.create_oauth_application!
+      end
+
+    if errors.present?
+      flash[:alert] = errors
+    else
+      flash[:notice] = "A Worker Group has been created."
+    end
 
     redirect_to :back
   end
 
   def update
-    unless request.xhr?
-      head :bad_request and return
+    @worker_group.update(worker_group_params)
+
+    if @worker_group.errors.any?
+      flash[:alert] = @worker_group.errors.full_messages.to_sentence
+    else
+      flash[:notice] = "Successfully updated worker group"
     end
 
-    @worker_group.update!(worker_group_params)
-
-    render @worker_group
+    redirect_to :back
   end
 
   def destroy
@@ -45,7 +59,13 @@ class WorkerGroupsController < DashboardController
   end
 
   def worker_group_params
-    params.require(:worker_group).permit(:friendly_name)
+    result = params.require(:worker_group).permit(:friendly_name, :ssh_key_private)
+
+    if current_project.repository_provider != "bare_repo" || result[:ssh_key_private].blank?
+      result.delete(:ssh_key_private)
+    end
+
+    result
   end
 
   def authorize_resource!

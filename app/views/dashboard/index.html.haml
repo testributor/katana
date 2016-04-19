@@ -15,7 +15,7 @@
           - if project.repository_provider == "bare_repo"
             - @current_user_test_runs_per_project[project.id].to_a.each do |test_run|
               .row
-                .col-sm-2= link_to "##{test_run.commit_sha}",
+                .col-sm-3= link_to "##{test_run.commit_sha}",
                     project_test_run_path(project, test_run)
                 .col-sm-6
                   = test_run.decorate.commit_message
@@ -24,7 +24,7 @@
                 .col-sm-2
                   %span{class: test_run.status.try(:css_class)}
                     = test_run.status.try(:text)
-                .col-md-2
+                .col-md-1
                   - if test_run.try(:completed_at)
                     = time_ago_in_words(test_run.completed_at)
           - else

@@ -78,7 +78,11 @@ class Project < ActiveRecord::Base
   alias :active_workers :update_active_workers
 
   def owner_and_name
-    "#{repository_owner}/#{repository_name}"
+    result = ""
+    result << "#{repository_owner}/" if repository_owner.present?
+    result << repository_name
+
+    result
   end
 
   def bare_repo?
@@ -87,17 +91,35 @@ class Project < ActiveRecord::Base
 
   # @param private_ssh_key [String] it is used as the private ssh key when it
   # exists
-  def create_oauth_application!(ssh_key_private=nil)
-    # TODO: Make sure this works because I couldn't find a worker group for bare repo projects
+  # TODO: Remove the bang from method name
+  def create_oauth_application!(ssh_key_private=nil, friendly_name=nil)
+    errors = nil
     WorkerGroup.transaction do
-      oauth_application = oauth_applications.create!(
+      oauth_application = oauth_applications.new(
         name: repository_id || repository_slug || repository_name,
         redirect_uri: Katana::Application::HEROKU_URL
       )
-      worker_groups.create!(oauth_application: oauth_application,
+
+      unless oauth_application.save
+        errors = oauth_application.errors.full_messages.to_sentence
+        # Silently rollback
+        # http://api.rubyonrails.org/classes/ActiveRecord/Rollback.html
+        raise ActiveRecord::Rollback, "Validation errors!"
+      end
+
+      worker_group = worker_groups.new(oauth_application: oauth_application,
         ssh_key_private: ssh_key_private,
-        friendly_name: "#{name} Worker Group #{oauth_applications.count}")
+        friendly_name: friendly_name || "#{name} Worker Group #{oauth_applications.count}")
+
+      unless worker_group.save
+        errors = worker_group.errors.full_messages.to_sentence
+        # Silently rollback
+        # http://api.rubyonrails.org/classes/ActiveRecord/Rollback.html
+        raise ActiveRecord::Rollback, "Validation errors!"
+      end
     end
+
+    errors
   end
 
   def destroy_oauth_application!(oauth_application_id)

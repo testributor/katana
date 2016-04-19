@@ -9,9 +9,11 @@ class WorkerGroup < ActiveRecord::Base
   validates :friendly_name, presence: true
   validates :friendly_name, uniqueness: { scope: :project }
   validate :valid_keys
+  validates :ssh_key_private, :ssh_key_public, presence: true
 
   before_validation :generate_ssh_keys, on: :create
   before_create :set_ssh_key_in_repo, unless: ->{ Rails.env.test? }
+  after_create :create_oauth_application
   before_update :rename_ssh_key_in_repo,
     if: ->{ friendly_name_changed? && !Rails.env.test? }
   after_destroy :remove_ssh_key_from_repo,
@@ -27,6 +29,14 @@ class WorkerGroup < ActiveRecord::Base
 
   private
 
+  def create_oauth_application
+    oauth_application = project.oauth_applications.create!(
+      name: project.repository_id || project.repository_slug ||
+        project.repository_name,
+      redirect_uri: Katana::Application::HEROKU_URL)
+    save!
+  end
+
   def set_ssh_key_in_repo
     deploy_key = repository_manager.set_deploy_key(ssh_key_public,
       { friendly_name: friendly_name, read_only: true })
@@ -36,11 +46,13 @@ class WorkerGroup < ActiveRecord::Base
   end
 
   def generate_ssh_keys
-    if ssh_key_private.blank? && ssh_key_public.blank?
+    if ssh_key_private.blank? && ssh_key_public.blank? &&
+      project.repository_provider != "bare_repo"
+
       ssh_key = SSHKey.generate(bits: 4096, comment: project.user.email)
       self.ssh_key_private = ssh_key.private_key
       self.ssh_key_public = ssh_key.ssh_public_key
-    elsif ssh_key_public.blank?
+    elsif ssh_key_public.blank? && ssh_key_private.present?
       begin
         ssh_key = SSHKey.new(ssh_key_private, comment: project.user.email)
         self.ssh_key_public = ssh_key.ssh_public_key
