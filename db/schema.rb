@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160420095450) do
+ActiveRecord::Schema.define(version: 20160421071551) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -237,7 +237,7 @@ ActiveRecord::Schema.define(version: 20160420095450) do
     t.string   "encrypted_github_access_token_salt"
     t.string   "encrypted_github_access_token_iv"
     t.boolean  "admin",                                        default: false
-    t.integer  "projects_limit",                               default: 1,     null: false
+    t.integer  "projects_limit",                               default: 10,    null: false
     t.string   "provider"
     t.string   "uid"
     t.string   "encrypted_bitbucket_access_token"
