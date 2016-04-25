@@ -22,7 +22,8 @@ class TrackedBranchesControllerTest < ActionController::TestCase
         committer: {
           name: "Great Commiter",
           email: "great@comitter.com",
-          date: "2016-03-07 09:29:00 UTC"
+          date: "2016-03-07 09:29:00 UTC",
+          avatar_url: "http://dummy.url"
         },
         message: "Some commit message",
         tree: {
@@ -38,6 +39,7 @@ class TrackedBranchesControllerTest < ActionController::TestCase
       },
       committer: {
         login: "committerlogin",
+        avatar_url: "http://dummy.url"
       }
     })]
   end

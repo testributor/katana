@@ -8,5 +8,5 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += %w( dashboard.js dashboard.css front.css front.js codemirror.js formatting.js yaml.js shell.js custom.codemirror.js favicon-16x16.png)
+Rails.application.config.assets.precompile += %w( dashboard.js dashboard.css front.css front.js codemirror.js formatting.js yaml.js shell.js custom.codemirror.js github-logo.png bitbucket-logo.png anonymous-icon.png favicon-16x16.png)
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|ttf)\z/

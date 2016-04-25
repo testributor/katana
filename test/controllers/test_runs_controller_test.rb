@@ -36,7 +36,8 @@ class TestRunsControllerTest < ActionController::TestCase
         committer: {
           name: "Great Commiter",
           email: "great@comitter.com",
-          date: "2016-03-07 09:29:00 UTC"
+          date: "2016-03-07 09:29:00 UTC",
+          avatar_url: 'http://avatar.url'
         },
         message: "Some commit message",
         tree: {
@@ -52,6 +53,7 @@ class TestRunsControllerTest < ActionController::TestCase
       },
       committer: {
         login: "spyrbri",
+        avatar_url: 'http://avatar.url'
       }
     })]
   end

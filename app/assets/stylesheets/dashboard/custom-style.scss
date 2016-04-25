@@ -69,14 +69,72 @@
 .breadcrumb {
   margin-bottom: 10px;
 }
-
+.panel {
+  min-width: 800px;
+}
 .commit-info {
-  .title {
-    font-size: 20px;
+  white-space: nowrap;
+  float: left;
+  margin-top: 2px;
+  height: 43px;
+
+  .message {
+    display:inline-block;
+    max-width: 325px;
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
   }
 
-  .author {
-    font-size: 15px;
+  .build-link {
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .text {
+    line-height: 16px;
+    font-size: 14px;
+    display: inline-block;
+
+    i {
+      color: grey;
+    }
+  }
+
+  .photo {
+    border: 1px solid #ddd;
+    float: left;
+    margin: -1px 5px 3px 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+  }
+}
+
+.source-button {
+  margin-top: -3px;
+  width: 100px;
+  height: 34px;
+  float: right;
+  margin-left: 10px;
+
+  .source-link {
+    text-decoration: none;
+
+    .message {
+      text-decoration: underline;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .source-logo{
+    margin: -3px 4px 0px -2px;
+    width: 20px;
+    height: 20px;
   }
 }
 

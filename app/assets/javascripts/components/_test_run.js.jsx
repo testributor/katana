@@ -17,9 +17,7 @@ var TestRun = React.createClass({
           <a href={ this.props.testRun.test_run_link }>#{ this.props.testRun.run_index }</a>
         </td>
         <td className="col-md-4">
-          { this.props.testRun.commit_message }
-          <br></br>
-          <i> { this.props.testRun.commit_author } committed <span title={ this.props.testRun.commit_timestamp }> { this.props.testRun.commit_time_ago } ago</span></i>
+          <TestRunCommit commit={ this.props.testRun.commit_info } key={5} />
         </td>
         <td className="col-md-1 status">
           <div className='status-label'>

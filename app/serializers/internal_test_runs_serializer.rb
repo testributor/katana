@@ -4,10 +4,9 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
 
   attributes :id, :run_index, :status_text, :status_css_class, :unsuccessful,
-    :retry_url, :total_running_time, :html_class, :cancel_url,
-    :statuses, :test_run_link, :commit_message, :branch_id,
-    :terminal_status, :commit_author, :commit_timestamp, :commit_time_ago,
-    :can_be_retried, :can_be_cancelled, :is_running, :commit_info
+    :retry_url, :total_running_time, :html_class, :cancel_url, :can_be_cancelled,
+    :statuses, :test_run_link,  :branch_id, :terminal_status, :can_be_retried,
+    :is_running, :commit_info
 
   def retry_url
     retry_project_test_run_path(object.project_id, object)
@@ -27,22 +26,6 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
 
   def test_run_link
     project_test_run_path(object.project_id, object)
-  end
-
-  def commit_message
-    decorated_object.commit_message
-  end
-
-  def commit_author
-    decorated_object.commit_author
-  end
-
-  def commit_time_ago
-    decorated_object.commit_time_ago
-  end
-
-  def commit_timestamp
-    decorated_object.decorated_commit_timestamp
   end
 
   def terminal_status
@@ -70,6 +53,6 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   end
 
   def commit_info
-    decorated_object.commit_info
+    decorated_object.commit_info_as_hash
   end
 end

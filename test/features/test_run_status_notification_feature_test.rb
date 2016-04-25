@@ -55,11 +55,13 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
                 name: 'Great Committer',
                 email: 'great@committer.com',
                 date: DateTime.current,
-                login: 'committerlogin'
+                login: 'committerlogin',
+                avatar_url: 'http://dummy.url'
               }
             },
               committer: {
-                login: 'committerlogin'
+                login: 'committerlogin',
+                avatar_url: 'http://dummy.url'
             },
               author: {
                 login: 'authorlogin'

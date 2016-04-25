@@ -272,6 +272,7 @@ class BitbucketRepositoryManager
       commit_committer_name: user ? user.display_name : author.raw,
       commit_committer_email: latest_commit.author.raw,
       commit_committer_username: user ? user.username : author.raw,
+      commit_committer_photo_url: photo_url(latest_commit),
       sha_history: history.map{|c|c['hash']}
     })
 
@@ -315,5 +316,11 @@ class BitbucketRepositoryManager
 
   def user
     project.user
+  end
+
+  private
+
+  def photo_url(commit)
+    commit["author"].try(:[], "user").try(:[], "links").try(:[],"avatar").try(:[], "href")
   end
 end

@@ -40,17 +40,18 @@ class WebhooksController < ApplicationController
       head_commit = params[:head_commit]
 
       manager.create_test_run!({
-        commit_sha:                head_commit[:id],
-        commit_message:            head_commit[:message],
-        commit_timestamp:          head_commit[:timestamp],
-        commit_url:                head_commit[:url],
-        commit_author_name:        head_commit[:author][:name],
-        commit_author_email:       head_commit[:author][:email],
-        commit_author_username:    head_commit[:author][:username],
-        commit_committer_name:     head_commit[:committer][:name],
-        commit_committer_email:    head_commit[:committer][:email],
-        commit_committer_username: head_commit[:committer][:username],
-        tracked_branch_id:         tracked_branch.id,
+        commit_sha:                 head_commit[:id],
+        commit_message:             head_commit[:message],
+        commit_timestamp:           head_commit[:timestamp],
+        commit_url:                 head_commit[:url],
+        commit_author_name:         head_commit[:author][:name],
+        commit_author_email:        head_commit[:author][:email],
+        commit_author_username:     head_commit[:author][:username],
+        commit_committer_name:      head_commit[:committer][:name],
+        commit_committer_email:     head_commit[:committer][:email],
+        commit_committer_username:  head_commit[:committer][:username],
+        commit_committer_photo_url: head_commit[:committer][:avatar_url],
+        tracked_branch_id:          tracked_branch.id,
       })
     end
   end
@@ -70,6 +71,7 @@ class WebhooksController < ApplicationController
         commit_message:    head_commit[:message],
         commit_timestamp:  head_commit[:date],
         commit_url:        head_commit[:links][:html][:href],
+        commit_committer_photo_url: head_commit[:author][:user][:links][:avatar][:href],
         tracked_branch_id: tracked_branch.id,
       })
     end

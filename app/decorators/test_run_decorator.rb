@@ -53,4 +53,23 @@ class TestRunDecorator < ApplicationDecorator
   def decorated_commit_timestamp
     l(commit_timestamp, format: :long)
   end
+
+  def commit_info_as_hash
+    { build_url: h.project_test_run_url(object.project, object),
+      message: commit_message,
+      author: commit_author,
+      time_ago: commit_time_ago,
+      timestamp: decorated_commit_timestamp,
+      commit_url: object.commit_url,
+      source_logo: commit_source_logo,
+      photo_url: photo_url }
+  end
+
+   def commit_source_logo
+     h.asset_path("#{object.project.repository_provider}-logo.png")
+   end
+
+   def photo_url
+     model.commit_committer_photo_url.present? ? model.commit_committer_photo_url : h.asset_path('anonymous-icon.png')
+   end
 end

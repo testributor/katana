@@ -11,6 +11,7 @@ FactoryGirl.define do
     commit_committer_name 'Donald Duck'
     commit_committer_email 'test@example.com'
     commit_committer_username 'donaldduck'
+    commit_committer_photo_url ""
     status TestStatus::SETUP
 
     before(:build, :create) do |run, evaluator|

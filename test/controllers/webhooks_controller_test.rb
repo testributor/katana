@@ -47,11 +47,15 @@ class WebhooksControllerTest < ActionController::TestCase
                 committer: {
                   name: 'Great Committer',
                   email: 'great@committer.com',
-                  date: Date.current.to_s
+                  date: Date.current.to_s,
+                  avatar_url: 'http://dummy.url'
                 }
               },
               author: { login: 'authorlogin' },
-              committer: { login: 'committerlogin' }
+              committer: {
+                login: 'committerlogin',
+                avatar_url: 'http://dummy.url'
+              }
             }
           )
         end
@@ -76,7 +80,8 @@ class WebhooksControllerTest < ActionController::TestCase
               committer: {
                 name: 'Great Committer',
                 email: 'great@committer.com',
-                username: 'committerusername'
+                username: 'committerusername',
+                avatar_url: 'http://dummy.url'
               }
             },
             repository: { id: project.repository_id },
@@ -155,7 +160,12 @@ class WebhooksControllerTest < ActionController::TestCase
               raw: "Dimitris Karakasilis <jimmykarily@gmail.com>",
               user: Hashie::Mash.new({
                 username: "jimmykarily",
-                display_name: "Jimmy Karily"
+                display_name: "Jimmy Karily",
+                links: {
+                  avatar: {
+                    href: "http://dummy.url"
+                  }
+                }
               })
             })
           })
@@ -187,7 +197,19 @@ class WebhooksControllerTest < ActionController::TestCase
                         html: {
                           href: "https://bitbucket.org/ispyropoulos/katana/commits/8559bdcb5969ae5b703c7c054c8126d64e6ebd76"
                         }
-                      }
+                      },
+                      author: Hashie::Mash.new({
+                        raw: "Dimitris Karakasilis <jimmykarily@gmail.com>",
+                        user: Hashie::Mash.new({
+                          username: "jimmykarily",
+                          display_name: "Jimmy Karily",
+                          links: {
+                            avatar: {
+                              href: "http://dummy.url"
+                            }
+                          }
+                        })
+                      })
                     }
                   }
                 }

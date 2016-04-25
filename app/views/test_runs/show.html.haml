@@ -9,11 +9,7 @@
 .panel.panel-default{ data: { test_run_id: @test_run.id, user_can_manage_run: can?(:manage, @test_run) }}
   .panel-heading.test-run-panel-heading
     .pull-left
-      .commit-info
-        .title
-          #{@test_run.commit_message(render_as_link: true)}
-        .author
-          #{@test_run.commit_info}
+      = react_component 'TestRunShowCommit', { commit: @test_run.decorate.commit_info_as_hash }
     .pull-right
       .show-all-area
         = label_tag :show_all, 'Toggle all logs', class: 'more-info',

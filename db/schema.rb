@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160421071551) do
+ActiveRecord::Schema.define(version: 20160424122651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "intarray"
   enable_extension "pg_stat_statements"
+  enable_extension "intarray"
 
   create_table "branch_notification_settings", force: :cascade do |t|
     t.integer  "project_participation_id",             null: false
@@ -175,7 +175,7 @@ ActiveRecord::Schema.define(version: 20160421071551) do
   create_table "test_runs", force: :cascade do |t|
     t.integer  "tracked_branch_id"
     t.string   "commit_sha"
-    t.integer  "status",                    default: 0,  null: false
+    t.integer  "status",                     default: 0,  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "commit_message"
@@ -187,10 +187,11 @@ ActiveRecord::Schema.define(version: 20160421071551) do
     t.string   "commit_committer_name"
     t.string   "commit_committer_email"
     t.string   "commit_committer_username"
-    t.text     "sha_history",               default: [], null: false, array: true
+    t.text     "sha_history",                default: [], null: false, array: true
     t.integer  "run_index"
-    t.integer  "project_id",                             null: false
-    t.string   "setup_error",               default: "", null: false
+    t.integer  "project_id",                              null: false
+    t.string   "setup_error",                default: "", null: false
+    t.string   "commit_committer_photo_url", default: "", null: false
   end
 
   add_index "test_runs", ["tracked_branch_id"], name: "index_test_runs_on_tracked_branch_id", using: :btree
