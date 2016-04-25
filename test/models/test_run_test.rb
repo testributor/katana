@@ -44,6 +44,44 @@ class TestRunTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#cancel_queued_runs_of_same_branch" do
+    let(:existing_run) do
+      FactoryGirl.create(:testributor_run, :queued)
+    end
+
+    describe "when a build exists and has status QUEUED and a new build is added" do
+      it "cancels the previous build" do
+        new_run = FactoryGirl.build(:testributor_run,
+          project: existing_run.project,
+          tracked_branch: existing_run.tracked_branch)
+        project = existing_run.project
+        project.test_runs.map(&:id).must_equal [existing_run.id]
+        new_run.save
+        project.test_runs.cancelled.reload.map(&:id).must_equal [existing_run.id]
+        project.test_runs.where(status: TestStatus::SETUP).map(&:id).
+          must_equal([new_run.id])
+      end
+    end
+
+    describe "when a build exists and has status SETUP" do
+      let(:existing_run) do
+        FactoryGirl.create(:testributor_run, :setup)
+      end
+
+      it "cancels the previous build" do
+        new_run = FactoryGirl.build(:testributor_run,
+          project: existing_run.project,
+          tracked_branch: existing_run.tracked_branch)
+        project = existing_run.project
+        project.test_runs.map(&:id).must_equal [existing_run.id]
+        new_run.save
+        project.test_runs.cancelled.reload.map(&:id).must_equal [existing_run.id]
+        project.test_runs.where(status: TestStatus::SETUP).map(&:id).
+          must_equal([new_run.id])
+      end
+    end
+  end
+
   describe "#cancel_test_jobs" do
     subject { FactoryGirl.create(:testributor_run, :passed) }
     before do

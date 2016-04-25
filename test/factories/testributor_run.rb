@@ -19,6 +19,10 @@ FactoryGirl.define do
       end
     end
 
+    trait :setup do
+      status TestStatus::SETUP
+    end
+
     trait :queued do
       status TestStatus::QUEUED
     end
