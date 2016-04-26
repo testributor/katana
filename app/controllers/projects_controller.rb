@@ -93,6 +93,9 @@ class ProjectsController < DashboardController
       Rails.root.join('app' , 'assets', 'images', 'build-status-unknown.svg')
     end
 
+    # Don't cache the badge
+    # https://github.com/github/markup/issues/224
+    expires_now
     send_file file, disposition: 'inline', format: :svg
   end
 
