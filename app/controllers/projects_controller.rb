@@ -96,7 +96,9 @@ class ProjectsController < DashboardController
     # Don't cache the badge
     # https://github.com/github/markup/issues/224
     expires_now
-    send_file file, disposition: 'inline', format: :svg
+    if stale?(Time.now) # Add a new Etag header on every request (always expired request)
+      send_file file, disposition: 'inline', format: :svg
+    end
   end
 
   private
