@@ -1,4 +1,8 @@
-== README
+# Katana
+
+[![Build Status](http://www.testributor.com/projects/34-katana/status?branch=master)][testributor]
+
+[testributor]: http://www.testributor.com/projects/34-katana
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
