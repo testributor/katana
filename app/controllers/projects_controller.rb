@@ -3,7 +3,7 @@ class ProjectsController < DashboardController
   include Controllers::EnsureProject
 
   # skip devise method
-  skip_before_filter :authenticate_user!, :only => [:show]
+  skip_before_filter :authenticate_user!, :only => [:show, :status]
   before_action :authorize_resource!
 
   def show
