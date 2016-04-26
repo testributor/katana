@@ -1,6 +1,6 @@
 # Katana
 
-[![Build Status](http://www.testributor.com/projects/34-katana/status?branch=master)][testributor]
+[![Build Status](http://www.testributor.com/projects/34-katana/status.svg?branch=master)][testributor]
 
 [testributor]: http://www.testributor.com/projects/34-katana
 
