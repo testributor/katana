@@ -99,6 +99,15 @@ class TrackedBranchesControllerTest < ActionController::TestCase
     end
   end
 
+  describe "GET#new" do
+    it "creates tracked branch" do
+      GithubRepositoryManager.any_instance.stubs(:fetch_branches).
+        returns([FactoryGirl.create(:tracked_branch, branch_name: branch_name)])
+      get :new, branch_params
+      TrackedBranch.last.branch_name.must_equal branch_name
+    end
+  end
+
   describe "DELETE#destroy" do
     let(:branch) { FactoryGirl.create(:tracked_branch) }
     let(:project) { branch.project }

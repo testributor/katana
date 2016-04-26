@@ -52,8 +52,8 @@ class TrackedBranchesController < DashboardController
   end
 
   def authorize_resource!
-    action_map = { create: :create, destroy: :destroy }
+    action_map = { new: :create, create: :create, destroy: :destroy }
 
-    authorize!(action_map[action_name.to_sym], @tracked_branch || TrackedBranch)
+    authorize!(action_map[action_name.to_sym], TrackedBranch)
   end
 end
