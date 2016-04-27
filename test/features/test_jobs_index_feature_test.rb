@@ -60,7 +60,6 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
       queued.all(".btn-danger").length.must_equal 0
       running.all(".btn-danger").length.must_equal 0
-      page.save_screenshot 'a.png', full: true
       failed.find(".btn-primary").must_have_content "Retry"
       error.find(".btn-primary").must_have_content "Retry"
       passed.find(".btn-primary").must_have_content "Retry"
