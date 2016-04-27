@@ -1,6 +1,9 @@
 class TestRunDecorator < ApplicationDecorator
   delegate_all
 
+  # https://github.com/drapergem/draper/issues/268#issuecomment-55512283
+  include Rails.application.routes.url_helpers
+
   def commit_message(options={})
     options.reverse_merge!(render_as_link: false)
 
@@ -55,7 +58,7 @@ class TestRunDecorator < ApplicationDecorator
   end
 
   def commit_info_as_hash
-    { build_url: h.project_test_run_url(object.project, object),
+    { build_url: project_test_run_url(object.project, object),
       message: commit_message,
       author: commit_author,
       time_ago: commit_time_ago,
