@@ -15,7 +15,7 @@ class SettingsController < DashboardController
 
   def authorize_resource!
     action_map = {
-      notification: :update_own_notification_settings,
+      notifications: :update_own_notification_settings,
       show: :read_general_settings,
       worker_setup: :update_worker_setup
     }

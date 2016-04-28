@@ -68,7 +68,7 @@ class Ability
       can :read_docker_compose, project
       can :read_general_settings, project
       can :read, project
-      can :manage_own_notification_settings, project
+      can :update_own_notification_settings, project
       can :update_worker_setup, project
     end
 
