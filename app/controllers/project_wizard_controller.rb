@@ -3,6 +3,11 @@ class ProjectWizardController < DashboardController
   steps :select_repository, :configure, :add_worker
   before_action :fetch_project
 
+  # https://github.com/schneems/wicked/issues/196
+  rescue_from Wicked::Wizard::InvalidStepError do
+    raise ActionController::RoutingError, "Invalid step"
+  end
+
   def show
     # Inform user that he has reached project limit
     if step == steps.first && !current_user.can_create_new_project?

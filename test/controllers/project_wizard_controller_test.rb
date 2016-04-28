@@ -25,6 +25,13 @@ class ProjectWizardControllerTest < ActionController::TestCase
       flash[:alert].must_equal "You need to select a repository first"
       assert_redirected_to project_wizard_path(:select_repository)
     end
+
+    describe "when the requested step does not exist" do
+      it "renders 404 Not Found" do
+        ->{ get :show, id: :some_non_existent_step }.must_raise(
+          ActionController::RoutingError)
+      end
+    end
   end
 
   describe "PUT#update" do
