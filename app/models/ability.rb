@@ -69,6 +69,7 @@ class Ability
       can :read_general_settings, project
       can :read, project
       can :update_own_notification_settings, project
+      can :update, project
       can :update_worker_setup, project
     end
 
