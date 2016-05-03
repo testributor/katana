@@ -13,7 +13,7 @@ class ProjectFilesController < DashboardController
 
   def new
     @project_files = sorted_project_files
-    @file = ProjectFile.new
+    @project_file = ProjectFile.new
     @docs = docs
 
     render :show
