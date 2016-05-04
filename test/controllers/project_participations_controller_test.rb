@@ -52,10 +52,9 @@ class ProjectParticipationsControllerTest < ActionController::TestCase
     it "not allows the owner to remove himself" do
       project.members.map(&:id).sort.
         must_equal [project.user_id, user.id].sort
-      -> {
-        delete :destroy, project_id: project.id,
-          id: project.project_participations.where(user_id: project.user.id).first.id
-      }.must_raise CanCan::AccessDenied
+      delete :destroy, project_id: project.id,
+        id: project.project_participations.where(user_id: project.user.id).first.id
+      assert_response 403
     end
 
     it "allows the non owner to remove himself" do
@@ -72,10 +71,9 @@ class ProjectParticipationsControllerTest < ActionController::TestCase
       sign_in :user, user
       project.members.map(&:id).sort.
         must_equal [project.user_id, user.id].sort
-      -> {
-        delete :destroy, project_id: project.id,
-          id: project.project_participations.where(user_id: project.user.id).first.id
-      }.must_raise CanCan::AccessDenied
+      delete :destroy, project_id: project.id,
+        id: project.project_participations.where(user_id: project.user.id).first.id
+      assert_response 403
     end
   end
 end

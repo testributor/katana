@@ -241,22 +241,22 @@ class TestRunsControllerTest < ActionController::TestCase
 
       describe "POST#create" do
         it "sets :notice when RepositoryManager#create_test_run! is true" do
-          -> { post :create, { project_id: public_project.to_param, branch_id: branch.id } }.
-            must_raise CanCan::AccessDenied
+          post :create, { project_id: public_project.to_param, branch_id: branch.id }
+          assert_response 403
         end
       end
 
       describe "POST#retry" do
         it 'does not allow the user to retry the test run' do
-          -> { post :retry, { project_id: public_project.to_param, id: _test_run.id } }.
-            must_raise CanCan::AccessDenied
+          post :retry, { project_id: public_project.to_param, id: _test_run.id }
+          assert_response 403
         end
       end
 
       describe "POST#destroy" do
         it 'does not allow the user to retry the test run' do
-          -> { post :destroy, { project_id: public_project.to_param, id: _test_run.id } }.
-            must_raise CanCan::AccessDenied
+          post :destroy, { project_id: public_project.to_param, id: _test_run.id }
+          assert_response 403
         end
       end
     end

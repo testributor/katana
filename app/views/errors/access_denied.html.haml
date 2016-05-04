@@ -1,0 +1,17 @@
+.col-md-8.col-sm-offset-2
+  .error-page
+    .col-md-6
+      .image
+        = image_tag asset_path('logo-sad.png')
+    .col-md-6
+      .text
+        %h1 403
+        %h2.font-light Access Denied.
+        %br
+          %p
+            You do not have permission to access this page.
+            Either request access from the owner or contact our
+            = mail_to('support@testributor.com', 'support.', encode: :javascript)
+          = link_to root_path, class: "btn btn-primary m-t-20" do
+            %i.fa.fa-angle-left
+            Back to Home

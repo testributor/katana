@@ -128,4 +128,9 @@ Rails.application.routes.draw do
     as: :live_updates_subscribe
 
   get '/sitemap.xml.gz', to: redirect("https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/sitemaps/sitemap.xml.gz"), as: :sitemap
+
+  #Using get ... :via => :all allows the error pages to be displayed for any type of request (GET, POST, PUT, etc.).
+  get "/403", :to => "errors#access_denied"
+  get "/404", :to => "errors#not_found"
+  get "/500", :to => "errors#internal_server_error"
 end

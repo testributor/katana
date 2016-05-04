@@ -77,8 +77,8 @@ class ProjectsControllerTest < ActionController::TestCase
           project.members << member
           sign_in :user, member
 
-          -> { delete :destroy, { id: project.id } }.
-            must_raise CanCan::AccessDenied
+          delete :destroy, { id: project.id }
+          assert_response 403
 
           Project.count.must_equal 1
         end
@@ -106,7 +106,8 @@ class ProjectsControllerTest < ActionController::TestCase
           end
 
           it 'does not allow that action' do
-            -> { post :toggle_private, id: project.id }.must_raise CanCan::AccessDenied
+            post :toggle_private, id: project.id
+            assert_response 403
             project.reload
             project.is_private.must_equal true
           end

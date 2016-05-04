@@ -323,3 +323,25 @@ section.features {
 .white-text {
   color: white !important;
 }
+
+.error-page {
+  min-height: 80%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 80vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+
+  img {
+    @media screen and (max-width: $screen-sm-max) {
+      display: none;
+    }
+    width: 100%;
+  }
+
+  .text{
+    vertical-align: middle;
+    h1 {
+      font-size: 160px;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+.col-md-8.col-sm-offset-2
+  .error-page
+    .col-md-6
+      .image
+        = image_tag asset_path('logo-sad.png')
+    .col-md-6
+      .text
+        %h1 500
+        %h2.font-light Internal Server Error.
+        %p
+          Something went terribly wrong. We will fix it ASAP.
+          If the problem persists, you can contact our
+          = mail_to 'support@testributor.com', 'support.', encode: :javascript
+        = link_to root_path, class: "btn btn-primary m-t-20" do
+          %i.fa.fa-angle-left
+          Back to Home

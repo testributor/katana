@@ -1,0 +1,15 @@
+.col-md-8.col-sm-offset-2
+  .error-page
+    .col-md-6
+      .image
+        = image_tag asset_path('logo-sad.png')
+    .col-md-6
+      .text
+        %h1 404
+        %h2.font-light Page Not Found.
+        %br
+          %p
+            We are really sorry but the page you requested cannot be found.
+          = link_to root_path, class: "btn btn-primary m-t-20" do
+            %i.fa.fa-angle-left
+            Back to Home

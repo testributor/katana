@@ -34,11 +34,10 @@ class ProjectFilesControllerTest < ActionController::TestCase
       assert_redirected_to project_file_path(project, testributor.id)
     end
 
-    it "prevents not logged users" do
+    it "prevents non members from visiting the page" do
       sign_out :user
       sign_in :user, registered_user
-      -> { get :index, project_id: project.id }.must_raise
-        CanCan::AccessDenied
+      -> { get :index, project_id: project.id }.must_raise ActiveRecord::RecordNotFound
     end
 
     it "redirects to testributor.yml" do

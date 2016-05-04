@@ -28,6 +28,10 @@ class ApplicationController < ActionController::Base
     @current_ability ||= Ability.new(current_user)
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    render 'errors/access_denied', status: 403, layout: 'application_layout'
+  end
+
   protected
 
   def set_redirect_url_in_cookie
