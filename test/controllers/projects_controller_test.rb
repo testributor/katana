@@ -40,6 +40,17 @@ class ProjectsControllerTest < ActionController::TestCase
           project.reload
           project.technology_ids.must_equal [technology.id]
         end
+
+        it "updates repository_url when Project#valid?" do
+          project_params = {
+            id: project.id,
+            project: { repository_url: "this_is_the_projects_new_home" }
+          }
+          patch :update, project_params
+
+          project.reload
+          project.repository_url.must_equal "this_is_the_projects_new_home"
+        end
       end
 
       describe 'when user is a member' do

@@ -113,8 +113,8 @@ class ProjectsController < DashboardController
   end
 
   def project_params
-    params.require(:project).
-      permit(:auto_track_branches, :docker_image_id, technology_ids: [])
+    params.require(:project).permit(:auto_track_branches, :docker_image_id,
+                                    :repository_url, technology_ids: [])
   end
 
   def api_client_params

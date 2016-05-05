@@ -3,6 +3,16 @@
 = render 'settings_common_header'
 
 .tab-content.col-xs-12
+  - if current_project.repository_provider == "bare_repo"
+    .row
+      .col-xs-12
+        = simple_form_for current_project do |f|
+          - #TODO: In the future we might be able to avoid restarting by sending
+          - # the new repository_url to the active workers
+          = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
+          = f.submit "Save", class: "btn btn-primary"
+
+    %hr
   - if can? :manage, current_project
     .row
       - if current_project.is_private?
