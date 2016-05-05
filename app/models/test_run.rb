@@ -136,6 +136,56 @@ class TestRun < ActiveRecord::Base
       order("created_at DESC").limit(1).pluck(:status).first
   end
 
+  # This method returns and Array of users which need to be notified based on
+  # the old_status, current_status of a TestRun and the Notification settings
+  # of each user.
+  # Users have 2 sets of settings, the branch-based and the initiator-based.
+  # For example they can define when to receive a notification for "master"
+  # branch. They can also define when to receive a notification for the
+  # other member's Builds. E.g.
+  # "master" -> "After every failure"
+  # "my builds" -> "When status changes"
+  # "other people builds" -> "Never"
+  # etc
+  def notifiable_users(old_status, new_status)
+    branch_based_notifiable_users =
+      if tracked_branch
+        previous_status = branch_previous_terminal_status
+        tracked_branch.notifiable_users(previous_status, new_status)
+      else
+        []
+      end
+
+    initiator_based_notifiable_users = []
+    if initiator
+      # We assume the initiator is also a member of the project
+      member_participations = project.project_participations.
+        includes(:user).each do |participation|
+
+        if participation.user == initiator
+          setting = participation.my_builds_notify_on
+        else
+          setting = participation.others_builds_notify_on
+        end
+
+        case BranchNotificationSetting::NOTIFY_ON_MAP[setting]
+        when :status_change
+          if old_status != new_status
+            initiator_based_notifiable_users << participation.user
+          end
+        when :always
+          initiator_based_notifiable_users << participation.user
+        when :every_failure
+          if [TestStatus::FAIL, TestStatus::ERROR].include?(new_status)
+            initiator_based_notifiable_users << participation.user
+          end
+        end
+      end
+    end
+
+    branch_based_notifiable_users | initiator_based_notifiable_users
+  end
+
   private
 
   def copy_errors(errors)

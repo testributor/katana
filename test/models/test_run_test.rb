@@ -325,4 +325,87 @@ class TestRunTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe "notifiable_users" do
+    let(:project) { FactoryGirl.create(:project) }
+    let(:master_branch) do
+      FactoryGirl.create(
+        :tracked_branch, branch_name: "master", project: project)
+    end
+
+    let(:user_matching_branch_setting) do
+      user = FactoryGirl.create(:user)
+      project.members << user
+      user.project_participations.first.branch_notification_settings.create!(
+        tracked_branch: master_branch,
+        notify_on: BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always]
+      )
+
+      user
+    end
+
+    let(:user_matching_own_build_notification_settings) do
+      user = FactoryGirl.create(:user)
+      project.members << user
+      participation = user.project_participations.first
+      participation.my_builds_notify_on =
+        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always] 
+      participation.save
+
+      user
+    end
+
+    let(:_test_run) do
+      FactoryGirl.create(:testributor_run, project: project,
+        tracked_branch: master_branch,
+        initiator: user_matching_own_build_notification_settings)
+    end
+
+    before do
+      user_matching_own_build_notification_settings
+      user_matching_branch_setting
+
+      # Disable branch notification for all other users
+      BranchNotificationSetting.where(
+        "project_participation_id != ?",
+        user_matching_branch_setting.project_participations.first.id).update_all(
+          notify_on: BranchNotificationSetting::NOTIFY_ON_MAP.invert[:never])
+    end
+
+    it "returns matching users based on BranchNotificationSettings and ProjectParticipation" do
+      _test_run.notifiable_users(TestStatus::FAILED, TestStatus::PASSED).
+        map(&:email).sort.must_equal(
+          [user_matching_own_build_notification_settings,
+           user_matching_branch_setting, project.user].map(&:email).sort
+        )
+
+
+      # Now verify that if works by changing the setting
+      user_matching_own_build_notification_settings.project_participations.first.
+        update_column(:my_builds_notify_on,
+          BranchNotificationSetting::NOTIFY_ON_MAP.invert[:never])
+
+      _test_run.notifiable_users(TestStatus::FAILED, TestStatus::PASSED).
+        map(&:email).sort.must_equal(
+          [user_matching_branch_setting, project.user].map(&:email).sort
+        )
+
+      # Now disable the rest of the users
+      never_setting = BranchNotificationSetting::NOTIFY_ON_MAP.invert[:never]
+      BranchNotificationSetting.update_all(notify_on: never_setting)
+      ProjectParticipation.update_all(my_builds_notify_on: never_setting,
+        others_builds_notify_on: never_setting)
+
+      _test_run.notifiable_users(TestStatus::FAILED, TestStatus::PASSED).
+        must_equal([])
+
+      # Now simply enable a notification based on other members
+      user = project.members.where("users.id != ?", _test_run.initiator_id).first
+      user.project_participations.first.update_column(:others_builds_notify_on,
+        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always])
+
+      _test_run.notifiable_users(TestStatus::FAILED, TestStatus::PASSED).
+        must_equal([user])
+    end
+  end
 end

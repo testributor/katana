@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160424122651) do
+ActiveRecord::Schema.define(version: 20160505135127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,7 +130,9 @@ ActiveRecord::Schema.define(version: 20160424122651) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "new_branch_notify_on", default: 0, null: false
+    t.integer  "new_branch_notify_on",    default: 0, null: false
+    t.integer  "my_builds_notify_on",     default: 0, null: false
+    t.integer  "others_builds_notify_on", default: 0, null: false
   end
 
   add_index "projects_users", ["project_id"], name: "index_projects_users_on_project_id", using: :btree
@@ -252,7 +254,6 @@ ActiveRecord::Schema.define(version: 20160424122651) do
     t.string   "encrypted_bitbucket_access_token_secret"
     t.string   "encrypted_bitbucket_access_token_secret_salt"
     t.string   "encrypted_bitbucket_access_token_secret_iv"
-    t.boolean  "notify_on_manual_builds",                      default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
