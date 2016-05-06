@@ -60,14 +60,8 @@ class WebhooksControllerTest < ActionController::TestCase
           )
         end
 
-        before do
-          request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
-          GithubRepositoryManager.any_instance.stubs(:sha_history).
-            returns([github_response])
-
-          GithubRepositoryManager.any_instance.stubs(:project_file_names).
-            returns([filename_1, filename_2])
-          post :github, {
+        let(:github_params) do
+          {
             head_commit: {
               id: commit_sha,
               message: 'Some commit messsage',
@@ -89,7 +83,44 @@ class WebhooksControllerTest < ActionController::TestCase
           }
         end
 
+        before do
+          request.headers['HTTP_X_GITHUB_EVENT'] = 'push'
+          GithubRepositoryManager.any_instance.stubs(:sha_history).
+            returns([github_response])
+
+          GithubRepositoryManager.any_instance.stubs(:project_file_names).
+            returns([filename_1, filename_2])
+        end
+
+        describe "auto-track branch" do
+          it "creates a branch when it doesn't exist and project.auto_track_branches_on_push == true" do
+            project.update_column(:auto_track_branches_on_push, true)
+            new_branch_name = "a_new_branch"
+            github_params[:ref] = "refs/head/ispyropoulos/#{new_branch_name}"
+            post :github, github_params
+
+            branch = TrackedBranch.last
+            branch.project.must_equal project
+            branch.branch_name.must_equal new_branch_name
+            project.tracked_branches.count.must_equal 2
+          end
+
+          it "doesn't create a branch when it doesn't exist and project.auto_track_branches_on_push == false" do
+            project.update_column(:auto_track_branches_on_push, false)
+            new_branch_name = "a_new_branch"
+            github_params[:ref] = "refs/head/ispyropoulos/#{new_branch_name}"
+            post :github, github_params
+
+            branch = TrackedBranch.last
+            branch.project.must_equal project
+            branch.branch_name.wont_equal new_branch_name
+            project.tracked_branches.count.must_equal 1
+          end
+        end
+
         it "creates a test run with correct attributes" do
+          post :github, github_params
+
           testrun = TestRun.last
           testrun.tracked_branch_id.must_equal tracked_branch.id
           testrun.commit_sha.must_equal commit_sha
@@ -97,6 +128,8 @@ class WebhooksControllerTest < ActionController::TestCase
         end
 
         it "responds with :ok" do
+          post :github, github_params
+
           assert_response :ok
         end
       end
@@ -172,17 +205,8 @@ class WebhooksControllerTest < ActionController::TestCase
         ]
       end
 
-      before do
-        request.headers['X-Event-Key'] = 'repo:push'
-        BitbucketRepositoryManager.any_instance.stubs(:sha_history).
-          returns(bitbucket_response)
-
-        BitbucketRepositoryManager.any_instance.stubs(:project_file_names).
-          returns([filename_1, filename_2])
-        post :bitbucket, {
-          repository: {
-            name: project.repository_slug
-          },
+      let(:bitbucket_params) do
+        {
           push: {
             changes:
               [
@@ -218,7 +242,57 @@ class WebhooksControllerTest < ActionController::TestCase
         }
       end
 
+      before do
+        request.headers['X-Event-Key'] = 'repo:push'
+        BitbucketRepositoryManager.any_instance.stubs(:sha_history).
+          returns(bitbucket_response)
+
+        BitbucketRepositoryManager.any_instance.stubs(:project_file_names).
+          returns([filename_1, filename_2])
+
+
+      end
+
+      describe "auto-track branch" do
+        it "creates a branch when it doesn't exist and project.auto_track_branches_on_push == true" do
+          project.update_column(:auto_track_branches_on_push, true)
+          new_branch_name = "a_new_branch"
+          bitbucket_params[:push][:changes].first[:new][:name] = new_branch_name
+          post :bitbucket, {
+            repository: {
+              name: project.repository_slug
+            }
+          }.merge(bitbucket_params)
+
+          branch = TrackedBranch.last
+          branch.project.must_equal project
+          branch.branch_name.must_equal new_branch_name
+          project.tracked_branches.count.must_equal 2
+        end
+
+        it "doesn't create a branch when it doesn't exist and project.auto_track_branches_on_push == false" do
+          project.update_column(:auto_track_branches_on_push, false)
+          new_branch_name = "a_new_branch"
+          bitbucket_params[:push][:changes].first[:new][:name] = new_branch_name
+          post :bitbucket, {
+            repository: {
+              name: project.repository_slug
+            }
+          }.merge(bitbucket_params)
+
+          branch = TrackedBranch.last
+          branch.project.must_equal project
+          branch.branch_name.wont_equal new_branch_name
+          project.tracked_branches.count.must_equal 1
+        end
+      end
+
       it "creates a test run with correct attributes" do
+        post :bitbucket, {
+          repository: {
+            name: project.repository_slug
+          }
+        }.merge(bitbucket_params)
         testrun = TestRun.last
         testrun.tracked_branch_id.must_equal tracked_branch.id
         testrun.commit_sha.must_equal commit_sha
@@ -226,6 +300,11 @@ class WebhooksControllerTest < ActionController::TestCase
       end
 
       it "responds with :ok" do
+        post :bitbucket, {
+          repository: {
+            name: project.repository_slug
+          }
+        }.merge(bitbucket_params)
         assert_response :ok
       end
     end
