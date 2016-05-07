@@ -162,7 +162,6 @@ module Api
       def setup_job_data
         return nil if current_project.repository_provider != "bare_repo"
 
-
         worker_condition_sql = ActiveRecord::Base.send(:sanitize_sql_array,
           ["setup_worker_uuid IS NULL OR setup_worker_uuid NOT IN (?)",
            active_workers])

@@ -86,9 +86,6 @@ class TestRunsController < DashboardController
   def destroy
     authorize! :destroy, @test_run
 
-    # TODO: This is probably needed. Check after rebase
-    #tracked_branch_id = @test_run.tracked_branch_id
-
     @test_run.destroy
 
     redirect_to :back, notice: 'Test run was successfully cancelled.'
