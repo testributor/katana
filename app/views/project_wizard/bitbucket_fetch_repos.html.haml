@@ -23,9 +23,19 @@
 
         = link_to url, { method: link_method,
           class: "list-group-item #{klass}" }.merge(tooltip_options) do
-          - if repo[:is_fork]
-            %span.badge
-              FORK
+          .badge-area
+            - if repo[:is_fork]
+              %span.badge
+                %i.fa.fa-code-fork.m-r-5
+                FORK
+            - if repo[:is_private] == false
+              %span.badge{title: 'Everyone can access your build pages. You can change this in your project settings page.'}
+                %i.fa.fa-unlock.m-r-5
+                PUBLIC
+            - else
+              %span.badge{title: 'Your project build pages will be visible ONLY to project members. You can change this in your project settings page.'}
+                %i.fa.fa-lock.m-r-5
+                PRIVATE
           .list-group-item-heading
             #{repo[:full_name]}
           .list-group-item-text

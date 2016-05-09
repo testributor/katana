@@ -64,4 +64,21 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     page.must_have_content("No branches found for project #{project.repository_owner}/#{project.name}")
     page.current_path.must_equal project_path(project)
   end
+
+  it 'displays the correct badges', js: true do
+    VCR.use_cassette 'repos' do
+      visit project_wizard_path(:select_repository)
+      page.must_have_content "GitHub"
+      find('label', text: "GitHub").click
+      page.must_have_content repo_name
+    end
+
+    repositories = all('.list-group-item')
+    repositories[1].all('div')[1].text.must_equal 'ispyropoulos/bitbucket'
+    repositories[1].all('span').first.text.must_equal 'FORK'
+    repositories[1].all('span')[1].text.must_equal 'PUBLIC'
+
+    repositories[7].all('div').first.text.must_equal 'PRIVATE'
+    repositories[7].all('div')[1].text.must_equal 'ispyropoulos/katana'
+  end
 end
