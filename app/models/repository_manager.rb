@@ -5,7 +5,7 @@ class RepositoryManager
 
   delegate :create_test_run!, :fetch_repos, :fetch_branches,
     :repository_data, :cleanup_for_removal, :post_add_repository_setup,
-    :set_deploy_key, :remove_deploy_key, :publish_status_notification,
+    :set_deploy_key, :remove_deploy_key, :publish_status_notification, :errors,
     to: :manager
 
   # Must be initialized with a Project

@@ -1,7 +1,7 @@
 # This class implements all GitHub integration related methods.
 # This is an adaptee class for RepositoryManager
 class BareRepositoryManager
-  attr_reader :project
+  attr_reader :project, :errors
 
   def initialize(project)
     @project = project
@@ -14,9 +14,13 @@ class BareRepositoryManager
   # Adds a new TestRun for the given commit in the current project
   def create_test_run!(params = {})
     test_run = @project.test_runs.new(params)
-    test_run.save!
+    if test_run.save
+      return test_run
+    else
+      @errors = test_run.errors.full_messages.to_a
 
-    test_run
+      return false
+    end
   end
 
   def cleanup_for_removal
