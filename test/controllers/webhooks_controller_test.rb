@@ -93,8 +93,8 @@ class WebhooksControllerTest < ActionController::TestCase
         end
 
         describe "auto-track branch" do
-          it "creates a branch when it doesn't exist and project.auto_track_branches_on_push == true" do
-            project.update_column(:auto_track_branches_on_push, true)
+          it "creates a branch when it doesn't exist and project.auto_track_branches == true" do
+            project.update_column(:auto_track_branches, true)
             new_branch_name = "a_new_branch"
             github_params[:ref] = "refs/head/ispyropoulos/#{new_branch_name}"
             post :github, github_params
@@ -105,8 +105,8 @@ class WebhooksControllerTest < ActionController::TestCase
             project.tracked_branches.count.must_equal 2
           end
 
-          it "doesn't create a branch when it doesn't exist and project.auto_track_branches_on_push == false" do
-            project.update_column(:auto_track_branches_on_push, false)
+          it "doesn't create a branch when it doesn't exist and project.auto_track_branches == false" do
+            project.update_column(:auto_track_branches, false)
             new_branch_name = "a_new_branch"
             github_params[:ref] = "refs/head/ispyropoulos/#{new_branch_name}"
             post :github, github_params
@@ -254,8 +254,8 @@ class WebhooksControllerTest < ActionController::TestCase
       end
 
       describe "auto-track branch" do
-        it "creates a branch when it doesn't exist and project.auto_track_branches_on_push == true" do
-          project.update_column(:auto_track_branches_on_push, true)
+        it "creates a branch when it doesn't exist and project.auto_track_branches == true" do
+          project.update_column(:auto_track_branches, true)
           new_branch_name = "a_new_branch"
           bitbucket_params[:push][:changes].first[:new][:name] = new_branch_name
           post :bitbucket, {
@@ -270,8 +270,8 @@ class WebhooksControllerTest < ActionController::TestCase
           project.tracked_branches.count.must_equal 2
         end
 
-        it "doesn't create a branch when it doesn't exist and project.auto_track_branches_on_push == false" do
-          project.update_column(:auto_track_branches_on_push, false)
+        it "doesn't create a branch when it doesn't exist and project.auto_track_branches == false" do
+          project.update_column(:auto_track_branches, false)
           new_branch_name = "a_new_branch"
           bitbucket_params[:push][:changes].first[:new][:name] = new_branch_name
           post :bitbucket, {
