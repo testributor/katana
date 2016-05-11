@@ -46,12 +46,11 @@ class WorkerGroupTest < ActiveSupport::TestCase
       subject.ssh_key_private.must_match /-----END RSA PRIVATE KEY-----$/
     end
 
-    it "does not generate a new pair if a private key is already set" do
-      new_pair = SSHKey.generate(bits: 4096)
-      subject.ssh_key_private = new_pair.private_key
+    it "does not generate a new pair on validations if a private key is already set" do
+      subject.send(:generate_ssh_keys)
+      existing_key = subject.ssh_key_private
       subject.valid?
-      subject.ssh_key_private.must_equal new_pair.private_key
-      subject.ssh_key_public.must_equal new_pair.ssh_public_key + " #{subject.oauth_application.owner.user.email}"
+      subject.ssh_key_private.must_equal existing_key
     end
 
     it "does not generate a new pair when repository_provider is bare_repo" do
@@ -67,7 +66,7 @@ class WorkerGroupTest < ActiveSupport::TestCase
     it "is invalid if the provided private key is not valid" do
       subject.ssh_key_private = '1234'
       subject.wont_be :valid?
-      subject.errors[:ssh_key_private].must_equal ["is invalid"]
+      subject.errors[:ssh_key_private].must_equal ["is invalid or passphrase protected"]
     end
   end
 
@@ -81,6 +80,21 @@ class WorkerGroupTest < ActiveSupport::TestCase
     it "creates the worker group when oauth application creation succeeds" do
       subject.save
       subject.must_be :persisted?
+    end
+  end
+
+  describe "#reset_ssh_key!" do
+    before do
+      subject.stubs(:remove_ssh_key_from_repo).returns(true)
+      subject.stubs(:set_ssh_key_in_repo).returns(true)
+    end
+
+    it "creates a new pair of ssh keys and sets it" do
+      old_private_key = subject.ssh_key_private
+      old_public_key = subject.ssh_key_private
+      subject.reset_ssh_key!
+      subject.ssh_key_private.wont_equal old_private_key
+      subject.ssh_key_public.wont_equal old_public_key
     end
   end
 end

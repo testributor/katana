@@ -109,7 +109,7 @@ class ProjectWizardControllerTest < ActionController::TestCase
                        repository_name: "My generic repo",
                        repository_url: "git://example.com/repo.git" }
 
-        flash[:alert].must_equal "You must provide a private SSH key"
+        flash[:alert].must_equal "Ssh key private can't be blank"
       end
 
       it "flashes an error if SSH key is invalid and it does not create a project" do
@@ -120,7 +120,7 @@ class ProjectWizardControllerTest < ActionController::TestCase
                        private_key: "invalid_key",
                        repository_url: "git://example.com/repo.git" }
 
-        flash[:alert].must_equal "The SSH key is invalid or passphrase protected"
+        flash[:alert].must_equal "Ssh key private is invalid or passphrase protected"
         Project.count.must_equal 0
       end
     end
