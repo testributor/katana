@@ -2,7 +2,10 @@
 # This is an adaptee class for RepositoryManager
 class GithubRepositoryManager
   HISTORY_COMMITS_LIMIT = 30
+
+  # https://developer.github.com/v3/#pagination
   REPOSITORIES_PER_PAGE = 10
+  BRANCHES_PER_PAGE     = 100 # Quick fix for lack of pagination on the view
 
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
@@ -176,7 +179,7 @@ class GithubRepositoryManager
   end
 
   def fetch_branches
-    github_client.branches(repository_id).map do |b|
+    github_client.branches(repository_id, per_page: BRANCHES_PER_PAGE).map do |b|
       TrackedBranch.new(branch_name: b.name)
     end
   end
