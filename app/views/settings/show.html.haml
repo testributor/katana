@@ -38,3 +38,20 @@
   - else
     - # Remove this when we add general settings which the non-owner users can change
     .alert.alert-danger Only the owner of this project can edit these settings
+
+.panel
+  .panel-heading
+    %h3.panel-title Auto-tracking
+  .panel-body
+    = form_for current_project do |f|
+      .row
+        .col-xs-12
+          .form-group
+            = f.label :auto_track_branches, class: 'cr-styled' do |label|
+              = f.check_box :auto_track_branches
+              %i.fa
+              = "Automatically track a branch when it is pushed to github/bitbucket"
+      .row
+        .col-xs-12
+          .form-group
+            = f.submit "Save", class: 'btn btn-primary'

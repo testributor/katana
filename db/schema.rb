@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160424122651) do
+ActiveRecord::Schema.define(version: 20160511095116) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20160424122651) do
     t.boolean  "in_demo_mode",        default: false, null: false
     t.string   "repository_slug"
     t.boolean  "is_private",          default: true,  null: false
+    t.boolean  "auto_track_branches", default: true,  null: false
   end
 
   add_index "projects", ["user_id", "repository_provider", "repository_id"], name: "index_projects_on_user_and_provider_and_repository_id", unique: true, using: :btree

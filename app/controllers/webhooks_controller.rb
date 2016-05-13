@@ -35,7 +35,7 @@ class WebhooksController < ApplicationController
       repository_id: repository_id).take
     branch_name = params[:ref].split('/').last
 
-    if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
+    if (tracked_branch = find_or_create_branch(project, branch_name))
       manager = RepositoryManager.new(project)
       head_commit = params[:head_commit]
 
@@ -62,7 +62,7 @@ class WebhooksController < ApplicationController
       repository_slug: repository_slug).take
     branch_name = params[:push][:changes].first[:new][:name]
 
-    if (tracked_branch = project.tracked_branches.find_by_branch_name(branch_name))
+    if (tracked_branch = find_or_create_branch(project, branch_name))
       manager = RepositoryManager.new(project)
       head_commit = params[:push][:changes].first[:new][:target]
 
@@ -98,6 +98,14 @@ class WebhooksController < ApplicationController
     )
     unless Rack::Utils.secure_compare(signature, request.headers['HTTP_X_HUB_SIGNATURE'])
       head :unauthorized
+    end
+  end
+
+  def find_or_create_branch(project, branch_name)
+    if project.auto_track_branches
+      project.tracked_branches.find_or_create_by(branch_name: branch_name)
+    else
+      project.tracked_branches.find_by(branch_name: branch_name)
     end
   end
 end
