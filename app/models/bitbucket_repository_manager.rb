@@ -25,10 +25,13 @@ class BitbucketRepositoryManager
     return nil unless test_run
 
     test_run.save!
-
-    BitbucketRepositoryManager::TestRunSetupJob.perform_later(test_run.id)
+    schedule_test_run_setup(test_run)
 
     test_run
+  end
+
+  def schedule_test_run_setup(test_run)
+    BitbucketRepositoryManager::TestRunSetupJob.perform_later(test_run.id)
   end
 
   # Creates TestJobs and assigns to chunks. Changes the status from SETUP

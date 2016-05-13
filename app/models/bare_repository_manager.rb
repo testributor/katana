@@ -23,6 +23,10 @@ class BareRepositoryManager
     end
   end
 
+  def schedule_test_run_setup(test_run)
+    # Nothing to do. As long as the status is SETUP, it is already scheduled.
+  end
+
   def cleanup_for_removal
     # Nothing to cleanup
   end

@@ -71,7 +71,9 @@ class TestRunsController < DashboardController
     @test_run.test_jobs.destroy_all
     @test_run.status = TestStatus::SETUP
     @test_run.save!
-    RepositoryManager::TestRunSetupJob.perform_later(@test_run.id)
+
+    RepositoryManager.new(current_project).schedule_test_run_setup(@test_run)
+
     Broadcaster.publish(
       @test_run.redis_live_update_resource_key,
       { retry: true,
