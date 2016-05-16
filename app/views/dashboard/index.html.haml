@@ -7,26 +7,29 @@
       class: 'btn btn-primary m-l-10'
 
 - @projects.each do |project|
+  - repo_provider = project.repository_provider
   .panel
-    %h4= link_to project.owner_and_name, project_path(project)
+    %h4= link_to project.owner_and_name, repo_provider == 'bare_repo' ?  project_test_runs_path(project) : project_path(project)
     .panel-body
       .row
         .col-md-12
           - if project.repository_provider == "bare_repo"
             - @current_user_test_runs_per_project[project.id].to_a.each do |test_run|
-              .row
-                .col-sm-3= link_to "##{test_run.commit_sha}",
-                    project_test_run_path(project, test_run)
-                .col-sm-6
-                  = test_run.decorate.commit_message
-                  %br
-                  %i= test_run.decorate.commit_info
-                .col-sm-2
-                  %span{class: test_run.status.try(:css_class)}
-                    = test_run.status.try(:text)
-                .col-md-1
-                  - if test_run.try(:completed_at)
-                    = time_ago_in_words(test_run.completed_at)
+              .col-md-12.branch
+                .row
+                  .col-sm-3
+                    %b= link_to "##{test_run.commit_sha[0...7]}",
+                      project_test_run_path(project, test_run)
+                  .col-sm-6
+                    = react_component 'TestRunCommit', { commit: test_run.decorate.commit_info_as_hash }
+                  .col-sm-2
+                    .status
+                      %span{class: test_run.status.try(:css_class)}
+                        = test_run.status.try(:text)
+                  .col-md-1
+                    .time
+                      - if test_run.try(:completed_at)
+                        = time_ago_in_words(test_run.completed_at)
           - else
             - if project.tracked_branches.empty?
               = render partial: "no_branches", locals: { project: project}
@@ -36,7 +39,7 @@
                   .row
                     .col-sm-3.name
                       = link_to branch.branch_name,
-                        project_branch_test_runs_path(branch.project, branch)
+                        project_test_runs_path(branch.project, branch: branch.branch_name)
                     .col-sm-6
                       - if branch.last_run
                         = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }

@@ -5,107 +5,43 @@
 
 - content_for :page_actions do
   - if can?(:create, TrackedBranch)
-    - if current_project.bare_repo?
-      %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
-        %i.fa.fa-plus-square
-        Add a Build
-    - else
-      = link_to new_project_branch_path(current_project),
-        class: 'btn btn-xs btn-success' do
-        %i.fa.fa-plus
-        %span= 'Track a branch'
+    = link_to new_project_branch_path(current_project),
+      class: 'btn btn-xs btn-success' do
+      %i.fa.fa-plus
+      %span= 'Track a branch'
 
 .panel.panel-default
-  - if current_project.bare_repo?
-    - if @test_runs.blank?
-      %i
-        No Builds found for this project
-        %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
-          %i.fa.fa-plus-square
-          Add a Build
-    - else
-      %h3 Your Builds
-      %table.table
-        %thead
-          %tr
-            %th= "Build"
-            %th= "Commit message (SHA)"
-            %th= "Status"
-            %th= "Results"
-            %th= "Duration"
-            %th= "Actions"
-        %tbody
-          - @test_runs.decorate.each do |test_run|
-            %tr{ id: "test-run-#{test_run.id}" }
-              %td.col-md-1= link_to "##{test_run.run_index}",
-                project_test_run_path(current_project, test_run)
-              %td.col-md-4
-                = test_run.commit_message
-                %br
-                %i= test_run.commit_info
-              %td.col-md-1
-                .test{class: test_run.status.css_class}
-                  %span
-                    = test_run.status.text
-              %td.col-md-3
-                = link_to project_test_run_path(current_project, test_run) do
-                  .progress.status{ data: test_run.status.text, id: test_run.id }
-              %td.col-md-1
-                - if test_run.total_running_time
-                  = "#{(test_run.total_running_time / 60).to_i} min #{(test_run.total_running_time % 60).round} sec"
-              %td.col-md-1
-                - if test_run == @test_runs[0] || test_run.status.code == TestStatus::RUNNING
-                  = render partial: 'test_run_actions', locals: { test_run: test_run }
+  - if @branches.empty?
+    .panel-heading
+      = render partial: "no_branches",
+        locals: { project: current_project}
   - else
-    - if @branches.empty?
-      .panel-heading
-        = render partial: "no_branches",
-          locals: { project: current_project}
-    - else
-      .panel-body
-        .row
-          .col-md-12.col-sm-12.col-xs-12
-            .table-responsive
-              %table.table
-                %thead
-                  %tr
-                    %th Branch
-                    %th Latest Run Commit
-                    %th Last run
-                    %th Status
-                %tbody
-                  - @branches.each do |branch|
-                    %tr.branch
-                      %td.col-md-3
-                        .name
-                          = link_to branch.branch_name,
-                            project_branch_test_runs_path(branch.project, branch)
-                      %td.col-md-5
-                        - if branch.last_run
-                          = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }
-                      %td.col-md-2
-                        .time
-                          - if branch.last_run.try(:completed_at)
-                            = "#{time_ago_in_words(branch.last_run.completed_at)} ago"
-                      %td.col-md-2
-                        .status
-                          %span{class: branch.status.try(:css_class)}
-                            = branch.status.try(:text)
-
-- if current_project.repository_provider == "bare_repo"
-  #newTestRunModal.modal.fade{ role: "dialog", tabindex: '-1' }
-    .modal-dialog
-      .modal-content
-        = simple_form_for [current_project, current_project.test_runs.new] do |f|
-          .modal-header
-            %button.close{ type: "button", "aria-label" => "Close",data: { dismiss: "modal" } }
-              %span{ "aria-hidden" => "true" }
-                &times;
-            %h4.modal-title
-              New Build
-          .modal-body
-            = f.input :commit_sha, label: "Commit SHA", placeholder: "The commit's hash (at least 6 digits)"
-          .modal-footer
-            %button.btn.btn-default{ data: { dismiss: "modal" } }
-              Close
-            = f.submit "Create", class: "btn btn-primary"
+    .panel-body
+      .row
+        .col-md-12.col-sm-12.col-xs-12
+          .table-responsive
+            %table.table
+              %thead
+                %tr
+                  %th Branch
+                  %th Latest Run Commit
+                  %th Last run
+                  %th Status
+              %tbody
+                - @branches.each do |branch|
+                  %tr.branch
+                    %td.col-md-3
+                      .name
+                        = link_to branch.branch_name,
+                          project_test_runs_path(branch.project, branch: branch.branch_name)
+                    %td.col-md-5
+                      - if branch.last_run
+                        = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }
+                    %td.col-md-2
+                      .time
+                        - if branch.last_run.try(:completed_at)
+                          = "#{time_ago_in_words(branch.last_run.completed_at)} ago"
+                    %td.col-md-2
+                      .status
+                        %span{class: branch.status.try(:css_class)}
+                          = branch.status.try(:text)

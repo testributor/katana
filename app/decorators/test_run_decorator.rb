@@ -54,15 +54,19 @@ class TestRunDecorator < ApplicationDecorator
   end
 
   def commit_time_ago
-     h.time_ago_in_words(commit_timestamp)
+    return nil unless timestamp = commit_timestamp
+
+    h.time_ago_in_words(timestamp)
   end
 
   def decorated_commit_timestamp
-    l(commit_timestamp, format: :long)
+    return nil unless timestamp = commit_timestamp
+
+    l(timestamp, format: :long)
   end
 
   def commit_info_as_hash
-    { build_url: project_test_run_url(object.project, object),
+    { build_url: project_test_run_url(object, project_id: object.project.id),
       message: commit_message,
       author: commit_author,
       time_ago: commit_time_ago,

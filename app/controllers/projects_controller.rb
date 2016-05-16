@@ -8,8 +8,7 @@ class ProjectsController < DashboardController
 
   def show
     if current_project.repository_provider == "bare_repo"
-      @test_runs = current_project.test_runs.where(initiator: current_user).
-        order("created_at DESC").limit(10)
+      redirect_to project_test_runs_path(current_project)
     else
       @branches = current_project.tracked_branches.
         includes(test_runs: :test_jobs)

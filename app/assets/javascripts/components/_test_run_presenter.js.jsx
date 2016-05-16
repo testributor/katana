@@ -11,7 +11,7 @@ var TestRunPresenter = React.createClass({
       })
 
       if (existedRun) {
-        testRuns.splice(testRuns.indexOf(existedRun),1, msg.test_run)
+        testRuns.splice(testRuns.indexOf(existedRun), 1, msg.test_run)
         this.setState({ testRuns: testRuns })
       } else {
         testRuns.unshift(msg.test_run)
@@ -20,18 +20,27 @@ var TestRunPresenter = React.createClass({
     }
   },
 
-  subscribe: function (branchId) {
-    var subscriptions = {
-      "TrackedBranch":  [branchId]
-    }
+  handleCreation: function (msg) {
+    var testRuns = this.state.testRuns;
+    testRuns.unshift(msg.test_run)
+    this.setState({ testRuns: testRuns })
+  },
+
+
+
+  subscribe: function (testRunIds) {
     var _this = this;
+    var subscriptions = { "TestRun":  testRunIds }
 
     Testributor.Widgets.LiveUpdates(subscriptions, _this.handleUpdate)
   },
 
   componentDidMount: function() {
     var _this = this;
-    _this.subscribe(this.props.branchId)
+    var testRunIds = _this.props.testRuns.map(function(testRun, index){
+      return testRun.id;
+    });
+    _this.subscribe(testRunIds)
   },
 
   render: function () {

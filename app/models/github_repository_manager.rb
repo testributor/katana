@@ -250,9 +250,15 @@ class GithubRepositoryManager
   # Since we always need the sha_history, we always make a call to GitHub
   # and complete any missing params.
   def complete_test_run_params(test_run)
+    # At least commit_sha or branch must be defined to setup a new test run
+    unless test_run.commit_sha || test_run.tracked_branch.try(:branch_name)
+      @errors ||= []
+      @errors << "You must define either a branch or a commit"
+      return nil
+    end
+
     test_run.project = project
 
-    # At least commit_sha or branch must be defines to setup a new test run
     begin
       history =
         sha_history(test_run.commit_sha || test_run.tracked_branch.branch_name)

@@ -17,6 +17,20 @@ class ProjectsControllerTest < ActionController::TestCase
       sign_in :user, owner
     end
 
+    describe "GET#show" do
+      before do
+        project.update_column(:repository_provider, :bare_repo)
+      end
+
+      describe 'when the project repository provider is bare_repo' do
+        it 'redirects to the test_runs/index page' do
+          get :show, id: project.id
+          assert_response 302
+          response.location.must_equal project_test_runs_url(project)
+        end
+      end
+    end
+
     describe "PATCH#update" do
       describe 'when user is the owner' do
         it "updates docker_image_id when Project#valid?" do

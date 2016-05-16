@@ -109,7 +109,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       within('.breadcrumb-left-side') do
         links = page.all('a')
         links.first.text.must_equal project.name
-        links[1].text.must_match(/tracked_branch/)
+        links[1].text.must_match(/Builds/)
       end
     end
   end

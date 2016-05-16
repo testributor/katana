@@ -3,7 +3,11 @@ crumb :root do
 end
 
 crumb :project do |project|
-  link project.name, project_path(project)
+  if project.repository_provider != 'bare_repo'
+    link project.name, project_path(project)
+  else
+    link project.name, nil
+  end
   parent :root
 end
 
@@ -32,18 +36,15 @@ crumb :project_participations do |project|
   parent :project, project
 end
 
-crumb :tracked_branch do |project, branch|
-  link branch.branch_name, project_branch_test_runs_path(project, branch)
+crumb :builds do |project|
+  link "Builds", project_test_runs_path(project)
   parent :project, project
 end
 
+
 crumb :test_run do |project, run|
   link "Build ##{run.run_index}", project_test_run_path(project, run)
-  if run.tracked_branch
-    parent :tracked_branch , project, run.tracked_branch
-  else
-    parent :project, project
-  end
+  parent :builds, project
 end
 
 # If you want to split your breadcrumbs configuration over multiple files, you

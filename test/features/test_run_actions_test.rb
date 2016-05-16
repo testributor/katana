@@ -53,65 +53,65 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
     describe 'when a user visits the test_runs index' do
       it 'displays the retry action when the run is passed', js: true do
         _test_run.update_column(:status, TestStatus::PASSED)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.must_have_content('Retry')
       end
 
       it 'displays the retry action when the run is errored', js: true do
         _test_run.update_column(:status, TestStatus::ERROR)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.must_have_content('Retry')
       end
 
       it 'displays the retry action when the run is failed', js: true do
         _test_run.update_column(:status, TestStatus::FAILED)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.must_have_content('Retry')
       end
 
       it 'does not display the retry action when the run is queued', js: true do
         _test_run.update_column(:status, TestStatus::QUEUED)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.wont_have_content('Retry')
       end
 
       it 'does not display the retry action when the run is running', js: true do
         _test_run.update_column(:status, TestStatus::RUNNING)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.wont_have_content('Retry')
       end
 
       it 'does not display the retry action when the run is cancelled', js: true do
         _test_run.update_column(:status, TestStatus::CANCELLED)
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.wont_have_content('Retry')
       end
 
       it 'displays the cancel action', js: true do
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
         page.must_have_content('Cancel')
       end
     end
 
     describe 'when a user clicks on delete button' do
       before do
-        visit project_branch_test_runs_path(
-          project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
       end
 
       it 'must delete all test_jobs', js: true do
@@ -125,8 +125,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
 
     describe 'when a user clicks add a new run button' do
       before do
-        visit project_branch_test_runs_path(project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(_test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
       end
 
       it 'turns all previous queued test_jobs to cancelled', js: true do
@@ -147,79 +147,79 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
     end
 
     it 'does not display breadcrumb actions' do
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.all('.breadcrumb_actions').size.must_equal 0
     end
 
     it 'does not have any breadcrumb links enabled' do
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       within('.breadcrumb-bar') do
-        page.all('a').size.must_equal 1
+        page.all('a').size.must_equal 0
       end
     end
 
     it 'displays the retry action when the run is passed', js: true do
       _test_run.update_column(:status, TestStatus::PASSED)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end
 
     it 'displays the retry action when the run is errored', js: true do
       _test_run.update_column(:status, TestStatus::ERROR)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end
 
     it 'displays the retry action when the run is failed', js: true do
       _test_run.update_column(:status, TestStatus::FAILED)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end
 
     it 'does not display the retry action when the run is queued', js: true do
       _test_run.update_column(:status, TestStatus::QUEUED)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end
 
     it 'does not display the retry action when the run is running', js: true do
       _test_run.update_column(:status, TestStatus::RUNNING)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end
 
     it 'does not display the retry action when the run is cancelled', js: true do
       _test_run.update_column(:status, TestStatus::CANCELLED)
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.all('td .btn.btn-danger', text: "Cancel").size.must_equal 0
     end
 
     it 'displays the cancel action', js: true do
-      visit project_branch_test_runs_path(
-        project_id: _test_run.project.id,
-        branch_id: _test_run.tracked_branch.id)
+      visit project_test_runs_path(
+        _test_run.project.id,
+        branch: _test_run.tracked_branch.branch_name)
       page.wont_have_content('Retry')
       page.wont_have_content('Cancel')
     end

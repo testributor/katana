@@ -35,7 +35,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_job.reload
     _test_run.update_column(:status, TestStatus::PASSED)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Passed"
     find(".btn-primary", text: "Retry").click
     page.must_have_content "Setup"
@@ -46,7 +46,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_job.reload
     _test_run.update_column(:status, TestStatus::FAILED)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Failed"
     find(".btn-primary").click
     page.must_have_content "Setup"
@@ -57,7 +57,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_job.reload
     _test_run.update_column(:status, TestStatus::ERROR)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Error"
     find(".btn-primary", text: "Retry").click
     page.must_have_content "Setup"
@@ -66,7 +66,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
   it "user won't be able to retry a cancelled test_run", js: true do
     _test_run.update_column(:status, TestStatus::CANCELLED)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Cancelled"
     page.must_have_content "Cancelled"
     page.wont_have_selector ".btn-primary", text: "Retry"
@@ -77,7 +77,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_job.reload
     _test_run.update_column(:status, TestStatus::QUEUED)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Queued"
     within "#test-run-#{_test_run.id}" do
       find(".btn-danger").click
@@ -90,7 +90,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_job.reload
     _test_run.update_column(:status, TestStatus::RUNNING)
     _test_run.reload
-    visit project_branch_test_runs_path(project, branch)
+    visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Running"
     within "#test-run-#{_test_run.id}" do
       find(".btn-danger").click

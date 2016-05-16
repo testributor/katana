@@ -21,7 +21,7 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
         _test_run.update_column(:status, TestStatus::PASSED)
         _test_run.reload
 
-        visit project_branch_test_runs_path(project, branch)
+        visit project_test_runs_path(project, branch: branch.branch_name)
       end
 
       it "creates a notification when user retries a test run", js: true do
@@ -80,8 +80,7 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
 
     describe 'when a user clicks add a new run button' do
       before do
-        visit project_branch_test_runs_path(project_id: _test_run.project.id,
-          branch_id: _test_run.tracked_branch.id)
+        visit project_test_runs_path(_test_run.project)
       end
 
       it 'turns all previous queued test_jobs to cancelled', js: true do

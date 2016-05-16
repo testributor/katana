@@ -7,12 +7,30 @@ class TestRunsController < DashboardController
   before_action :authorize_resource!
 
   def index
-    @tracked_branch = TrackedBranch.non_private.where(id: params[:branch_id]).try(:first)
-    if current_user
-      @tracked_branch ||= current_user.tracked_branches.find(params[:branch_id])
+    if params[:branch_id]
+      @tracked_branch = TrackedBranch.non_private.
+        where(id: params[:branch_id]).try(:first)
+      if current_user
+        @tracked_branch ||= current_user.tracked_branches.
+          where(id: params[:branch_id]).try(:first)
+      end
+    elsif params[:branch]
+      @tracked_branch ||= TrackedBranch.non_private.
+        where(branch_name: params[:branch], project: current_project).try(:first)
+      if current_user
+        @tracked_branch ||= current_user.tracked_branches.
+          where(branch_name: params[:branch], project: current_project).try(:first)
+      end
     end
-    @test_runs = @tracked_branch.test_runs.
-      limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+
+    if @tracked_branch
+      @test_runs = current_project.test_runs.
+        where(tracked_branch: @tracked_branch).
+        limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+    else
+      @test_runs = current_project.test_runs.
+        limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+    end
     @statuses = TestRun.test_job_statuses(@test_runs.select(&:id))
     @user_can_manage_runs = can?(:manage, @test_runs.first)
   end
