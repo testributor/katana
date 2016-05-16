@@ -153,12 +153,12 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       page.all('.breadcrumb_actions').size.must_equal 0
     end
 
-    it 'does not have any breadcrumb links enabled' do
+    it 'does not have the root link enabled on breadcrumb' do
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
       within('.breadcrumb-bar') do
-        page.all('a').size.must_equal 0
+        page.all('a').size.must_equal 1
       end
     end
 

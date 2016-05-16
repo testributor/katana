@@ -23,6 +23,13 @@ class BareRepositoryManager::TestRunSetupJobTest < ActiveJob::TestCase
       BareRepositoryManager::TestRunSetupJob.new
     end
 
+    before do
+      # Save before the tests to run any on-creation Broadcaster
+      # events now. We count how many time they run on update and we don't want
+      # our values to count the creation hooks.
+      _test_run
+    end
+
     describe "when the data is not valid JSON" do
       let(:data) { "this is some invalid json: " }
       it "assigns an error to the TestRun and updates the status to ERROR" do
