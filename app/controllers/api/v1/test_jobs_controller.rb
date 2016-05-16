@@ -12,10 +12,10 @@ module Api
       # in an atomic operation.
       # http://stackoverflow.com/questions/11532550/atomic-update-select-in-postgres
       def bind_next_batch
-        test_jobs = next_batch
+        test_jobs = next_batch # Always an array
 
         # If no job is pending, check if any TestRun needs setup.
-        if test_jobs.blank? && (setup_data = setup_job_data).present?
+        if test_jobs.empty? && (setup_data = setup_job_data).present?
           render json: setup_data
         else
           test_jobs.each do |job|
