@@ -7,6 +7,7 @@ class Testributor.Pages.ProjectWizard
     $(".multi-select").select2()
 
     $('.provider-box input[type="radio"]').on "change", (e)=>
+      $('.provider-list').addClass('hidden')
       $target = $(e.currentTarget)
       $target.closest('form').find('label').removeClass('selected')
       $target.closest('label').addClass('selected')

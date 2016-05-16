@@ -296,3 +296,15 @@
   float: right;
   margin-top: 4px;
 }
+
+.provider-list {
+  font-size: 18px;
+  ul {
+    padding: 10px;
+  }
+
+  i {
+    margin-right: 5px;
+    font-size: 10px;
+  }
+}
