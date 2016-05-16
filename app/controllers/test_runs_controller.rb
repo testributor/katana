@@ -86,7 +86,11 @@ class TestRunsController < DashboardController
       return redirect_to :back, alert: "Retrying ##{@test_run.id} test run is not allowed at this time"
     end
 
+    # TODO: Consider delete_all here or a custom retry method on TestRun
+    # TestJob#destroy trigger the after_commit hook for TestRun update status.
+    # This means we update the status N times just to destroy everything.
     @test_run.test_jobs.destroy_all
+    @test_run.setup_worker_uuid = nil
     @test_run.status = TestStatus::SETUP
     @test_run.save!
 
