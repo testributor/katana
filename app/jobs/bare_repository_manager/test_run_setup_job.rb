@@ -30,15 +30,9 @@ class BareRepositoryManager::TestRunSetupJob < ActiveJob::Base
       test_run.commit_committer_name = parsed_data["commiter_name"]
       test_run.commit_committer_email = parsed_data["commiter_email"]
       test_run.sha_history = parsed_data["sha_history"]
-      commit_timestamp =
-        begin
-          Time.at(parsed_data["committer_date_unix"]).utc
-        rescue TypeError
-          # This should not only happen if someone tampers with
-          # our worker. In this case, he had it coming.
-          Time.current.utc
-        end
-      test_run.commit_timestamp = commit_timestamp
+
+      test_run.commit_timestamp =
+        Time.at(parsed_data["committer_date_unix"].to_i).utc
 
       parsed_data["jobs"].each do |job_data|
         test_run.test_jobs.build(

@@ -9,7 +9,7 @@ class BareRepositoryManager::TestRunSetupJobTest < ActiveJob::TestCase
         commiter_name: "someone else",
         commiter_email: "someone_else@microsoft.com",
         sha_history: ["1234", "2345", "3456"],
-        committer_date_unix: Time.new(2016, 01, 01, 00, 00, 00).to_i,
+        committer_date_unix: Time.new(2016, 01, 01, 00, 00, 00).to_i.to_s,
         jobs: [
           { job_name: "First job", command: "bin/rake test first",
             before: "before command", after: "after command" },
