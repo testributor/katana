@@ -46,8 +46,6 @@ class BareRepositoryManager::TestRunSetupJob < ActiveJob::Base
 
       return nil if test_run.db_status_is_cancelled?
       test_run.save!
-      Broadcaster.publish(test_run.redis_live_update_resource_key,
-        { test_job: {}, test_run: test_run.reload.serialized_run })
     end
   end
 end

@@ -232,8 +232,10 @@ class TestRun < ActiveRecord::Base
       update_all(status: TestStatus::CANCELLED)
   end
 
+  # Send notifications either on creation or on status change.
   def send_notifications
-    Broadcaster.publish(redis_live_update_resource_key, { event: 'TestRunUpdate', test_run: serialized_run })
+    Broadcaster.publish(redis_live_update_resource_key,
+                        { event: 'TestRunUpdate', test_run: serialized_run })
     VcsStatusNotifier.perform_later(id)
 
     old_status = previous_changes[:status] || status.code

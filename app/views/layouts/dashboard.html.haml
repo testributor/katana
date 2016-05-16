@@ -53,8 +53,7 @@
                 = breadcrumbs(pretext: "You are here: ", style: :bootstrap,
                   display_single_fragment: true).tap do |links|
                   - links.each do |link|
-                    - if !user_signed_in?
-                      - link.url = nil if link.key == :root
+                    - link.url = nil if !user_signed_in? && link.key == :root
             - if content_for?(:page_actions)
               %div.breadcrumb-actions
                 = yield :page_actions

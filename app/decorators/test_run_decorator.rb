@@ -4,25 +4,16 @@ class TestRunDecorator < ApplicationDecorator
   # https://github.com/drapergem/draper/issues/268#issuecomment-55512283
   include Rails.application.routes.url_helpers
 
-  def commit_message(options={})
-    options.reverse_merge!(render_as_link: false)
-
+  def commit_message
     if model.commit_message.present?
       # http://stackoverflow.com/a/18134919/859387
       cm = h.truncate(model.commit_message.split("\n")[0], length: 80,
                       escape: false, separator: ' ')
       cm = "#{cm} (##{commit_sha[0...7]})"
 
-      # TODO: Fix this hardcoded "GitHub". On bare repos there should be no
-      # link.
-      if options[:render_as_link]
-        cm = h.link_to cm, commit_url, title: 'See this commit on GitHub',
-          target: '_blank'
-      end
-
       cm
     else
-      model.commit_sha
+      "##{model.commit_sha[0...7]}"
     end
   end
 

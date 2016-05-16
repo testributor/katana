@@ -8,7 +8,8 @@ class TestRunNotificationMailer < ApplicationMailer
     # TODO: status might have change if rerun
     mail(
       to: recipient,
-      subject: "[#{@test_run.project.name}/#{@test_run.tracked_branch.branch_name}] "\
-      "Build ##{@test_run.run_index} status is now \"#{@status}\"")
+      subject: "[#{@test_run.project.name}" +
+      (@test_run.tracked_branch ? "/#{@test_run.tracked_branch.branch_name}]" : "") +
+      " Build ##{@test_run.run_index} status is now \"#{@status}\"")
   end
 end

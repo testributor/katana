@@ -9,6 +9,11 @@
       .col-xs-12.doc-text{ style: "margin-bottom: 10px;" }
         What commands do you use to run your test suite?
         %br
+        Read the
+        %b
+          = link_to "documentation", "http://documentation.testributor.com/testributoryml/", target: "_blank"
+        for more details about the syntax and what you can do in this file.
+        %br
         Replace the commands below or add more commands:
       .col-md-12
         = form_tag project_wizard_path, method: :put, html: { class: "form-horizontal" } do
@@ -21,10 +26,6 @@
                     class: 'text form-control code'
           .pull-right.m-t-10
             = submit_tag "Next", class: 'btn btn-primary w-lg btn-lg'
-        %p
-          Read the
-          = link_to "documentation", "http://documentation.testributor.com/testributoryml/", target: "_blank"
-          for more details about the syntax and what you can do in this file.
 
 
     -# TODO : find a better way to disable external js requests in tests
