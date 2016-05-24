@@ -7,8 +7,12 @@ class ProjectsController < DashboardController
   before_action :authorize_resource!
 
   def show
-    @branches = current_project.tracked_branches.
-      includes(test_runs: :test_jobs)
+    if current_project.repository_provider == "bare_repo"
+      redirect_to project_test_runs_path(current_project)
+    else
+      @branches = current_project.tracked_branches.
+        includes(test_runs: :test_jobs)
+    end
   end
 
   def instructions
@@ -108,8 +112,8 @@ class ProjectsController < DashboardController
   end
 
   def project_params
-    params.require(:project).
-      permit(:auto_track_branches, :docker_image_id, technology_ids: [])
+    params.require(:project).permit(:auto_track_branches, :docker_image_id,
+                                    :repository_url, technology_ids: [])
   end
 
   def api_client_params

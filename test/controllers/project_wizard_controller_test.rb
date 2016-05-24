@@ -81,7 +81,47 @@ class ProjectWizardControllerTest < ActionController::TestCase
         put :update, first_step_params.except(:repository_name)
 
         flash[:alert].must_equal "Name can't be blank"
-        assert_redirected_to project_wizard_path(current_step)
+      end
+
+      it "creates a new project and an oauth application and a worker group" do
+        private_key = FactoryGirl.build(:worker_group).ssh_key_private
+        request.env["HTTP_REFERER"] = project_wizard_path(current_step)
+        put :update, { id: :select_repository,
+                       repository_provider: "bare_repo",
+                       repository_name: "My generic repo",
+                       private_key: private_key,
+                       repository_url: "git://example.com/repo.git" }
+
+        flash[:alert].must_equal nil
+        assert_redirected_to project_wizard_path(next_step)
+
+        project = Project.last
+        project.name.must_equal "My generic repo"
+        project.repository_provider.must_equal "bare_repo"
+        project.oauth_applications.last.name.must_equal "My generic repo"
+        project.worker_groups.last.ssh_key_private.must_equal private_key
+      end
+
+      it "flashes and error if bare_repo but no SSH key is provided" do
+        request.env["HTTP_REFERER"] = project_wizard_path(current_step)
+        put :update, { id: :select_repository,
+                       repository_provider: "bare_repo",
+                       repository_name: "My generic repo",
+                       repository_url: "git://example.com/repo.git" }
+
+        flash[:alert].must_equal "Ssh key private can't be blank"
+      end
+
+      it "flashes an error if SSH key is invalid and it does not create a project" do
+        request.env["HTTP_REFERER"] = project_wizard_path(current_step)
+        put :update, { id: :select_repository,
+                       repository_provider: "bare_repo",
+                       repository_name: "My generic repo",
+                       private_key: "invalid_key",
+                       repository_url: "git://example.com/repo.git" }
+
+        flash[:alert].must_equal "Ssh key private is invalid or passphrase protected"
+        Project.count.must_equal 0
       end
     end
 

@@ -3,10 +3,23 @@
 = render 'settings_common_header'
 
 .tab-content.col-xs-12
+  .col-md-6.m-b-10
+    = simple_form_for current_project do |f|
+      - repo_provider = current_project.repository_provider
+      - if repo_provider == 'bare_repo'
+        - #TODO: In the future we might be able to avoid restarting by sending
+        - # the new repository_url to the active workers
+        = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
+      - else
+        %label Auto-tracking branches
+        = f.input :auto_track_branches, as: :boolean,
+          label: "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
+      = f.submit "Save", class: "btn btn-primary"
+
   - if can? :manage, current_project
-    .row
+    .col-md-6
       - if current_project.is_private?
-        .well.col-xs-6
+        .well.col-xs-12
           .col-md-10
             %strong Make your project public: <br>
             Anyone will be able to access your public pages.
@@ -17,7 +30,7 @@
               data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
               class: 'btn btn-md btn-success'
       - else
-        .well.col-xs-6
+        .well.col-xs-12
           .col-md-10
             %strong Make your project private: <br>
             User which are not members of this project will <strong> NOT </strong> be able
@@ -26,8 +39,8 @@
             = button_to "Private", toggle_private_project_path(current_project), method: :post,
               data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
               class: 'btn btn-md btn-danger'
-    .row
-      .well.col-xs-6
+
+      .well.col-xs-12
         .col-md-10
           %strong Delete project from Testributor: <br>
           This action cannot be reverted. All your builds will be discarded.
@@ -35,23 +48,3 @@
           = button_to "Delete", project_path(current_project), method: :delete,
             data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
             class: 'btn btn-md btn-danger'
-  - else
-    - # Remove this when we add general settings which the non-owner users can change
-    .alert.alert-danger Only the owner of this project can edit these settings
-
-.panel
-  .panel-heading
-    %h3.panel-title Auto-tracking
-  .panel-body
-    = form_for current_project do |f|
-      .row
-        .col-xs-12
-          .form-group
-            = f.label :auto_track_branches, class: 'cr-styled' do |label|
-              = f.check_box :auto_track_branches
-              %i.fa
-              = "Automatically track a branch when it is pushed to github/bitbucket"
-      .row
-        .col-xs-12
-          .form-group
-            = f.submit "Save", class: 'btn btn-primary'

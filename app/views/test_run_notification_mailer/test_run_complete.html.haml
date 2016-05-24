@@ -1,8 +1,9 @@
 = link_to "Build ##{@test_run.run_index}", project_test_run_url(@test_run.project, @test_run)
 
-of branch
-= link_to @test_run.tracked_branch.branch_name,
-  project_branch_test_runs_url(@test_run.project, @test_run.tracked_branch)
+- if @test_run.tracked_branch.present?
+  of branch
+  = link_to @test_run.tracked_branch.branch_name,
+    project_test_runs_url(@test_run.project, branch: @test_run.tracked_branch.branch_name)
 
 completed with status
 = "\"#{@status}\""

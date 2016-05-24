@@ -1,16 +1,27 @@
-- breadcrumb :tracked_branch, current_project, @tracked_branch
+- breadcrumb :builds, current_project
 
 - content_for :page_title do
-  #{@tracked_branch.try(:branch_name)}
+  = @tracked_branch.try(:branch_name)
 
 - content_for :page_actions do
   -# TODO: Write tests about permissions
+  -# TODO: This permission look wrong. It is a TestRun we are creating.
   - if can? :create, TrackedBranch
-    = link_to project_branch_test_runs_path, method: :post, remote: true,
-      data: { disable_with: with_dots("Adding build") },
-      action: :create, class: 'btn btn-xs btn-success m-r-5 js-remote-submission' do
-      %i.fa.fa-plus
-      %span= 'Add a new build'
+    - if @tracked_branch
+      - form_path = project_test_runs_path(branch_id: @tracked_branch.id)
+    - else
+      - form_path = project_test_runs_path
+
+    - if current_project.bare_repo?
+      %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
+        %i.fa.fa-plus-square.m-r-5
+        Add a Build
+    - else
+      = link_to form_path, method: :post,
+        data: { disable_with: with_dots("Adding build") },
+        action: :create, class: 'btn btn-xs btn-success m-r-5 js-remote-submission' do
+        %i.fa.fa-plus
+        %span= 'Add a new build'
 
   - if can? :untrack_branch, @tracked_branch
     = link_to project_branch_path(current_project, @tracked_branch),
@@ -21,7 +32,30 @@
       %span= "Untrack branch"
 .panel
   .panel-body
-    = react_component 'TestRunPresenter',
-      { testRuns: @test_runs.map(&:serialized_run),
-        branchId: @tracked_branch.id,
-        userCanManageRun: @user_can_manage_runs }
+    - if @test_runs.blank?
+      %i.m-r-10 No Builds found for this project
+      %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
+        %i.fa.fa-plus-square.m-r-5
+        Add a Build
+    - else
+      = react_component 'TestRunPresenter',
+        { testRuns: @test_runs.map(&:serialized_run),
+          userCanManageRun: @user_can_manage_runs }
+
+- if current_project.repository_provider == "bare_repo"
+  #newTestRunModal.modal.fade{ role: "dialog", tabindex: '-1' }
+    .modal-dialog
+      .modal-content
+        = simple_form_for [current_project, current_project.test_runs.new] do |f|
+          .modal-header
+            %button.close{ type: "button", "aria-label" => "Close",data: { dismiss: "modal" } }
+              %span{ "aria-hidden" => "true" }
+                &times;
+            %h4.modal-title
+              New Build
+          .modal-body
+            = f.input :commit_sha, label: "Commit SHA", placeholder: "The commit's hash (at least 6 digits)"
+          .modal-footer
+            %button.btn.btn-default{ data: { dismiss: "modal" } }
+              Close
+            = f.submit "Create", class: "btn btn-primary"

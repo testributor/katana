@@ -13,7 +13,6 @@
 .panel.panel-default
   - if @branches.empty?
     .panel-heading
-
       = render partial: "no_branches",
         locals: { project: current_project}
   - else
@@ -34,7 +33,7 @@
                     %td.col-md-3
                       .name
                         = link_to branch.branch_name,
-                          project_branch_test_runs_path(branch.project, branch)
+                          project_test_runs_path(branch.project, branch: branch.branch_name)
                     %td.col-md-5
                       - if branch.last_run
                         = react_component 'TestRunCommit', { commit: branch.last_run.decorate.commit_info_as_hash }

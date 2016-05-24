@@ -3,10 +3,12 @@ class TestRun < ActiveRecord::Base
   include Models::RedisLiveUpdates
   belongs_to :tracked_branch
   belongs_to :project
+  belongs_to :initiator, class_name: "User"
   has_many :test_jobs, dependent: :delete_all, inverse_of: :test_run
 
   delegate :completed_at, to: :last_file_run, allow_nil: true
 
+  scope :setting_up, -> { where(status: TestStatus::SETUP) }
   scope :queued, -> { where(status: TestStatus::QUEUED) }
   scope :running, -> { where(status: TestStatus::RUNNING) }
   scope :passed, -> { where(status: TestStatus::PASSED) }
@@ -21,7 +23,7 @@ class TestRun < ActiveRecord::Base
   validates :commit_sha, presence: true
 
   before_validation :set_run_index,
-    if: ->{ run_index.nil? && tracked_branch.present? }
+    if: ->{ run_index.nil? && (tracked_branch.present? || project.present?) }
   before_create :cancel_queued_runs_of_same_branch, if: -> { tracked_branch }
   after_save :cancel_test_jobs,
     if: ->{ status_changed? && self[:status] == TestStatus::CANCELLED }
@@ -127,9 +129,61 @@ class TestRun < ActiveRecord::Base
   end
 
   def branch_previous_terminal_status
+    return nil unless tracked_branch.present?
+
     tracked_branch.test_runs.where("created_at < ?", self.created_at).
       where(status: [TestStatus::FAILED, TestStatus::PASSED, TestStatus::ERROR]).
       order("created_at DESC").limit(1).pluck(:status).first
+  end
+
+  # This method returns and Array of users which need to be notified based on
+  # the old_status, current_status of a TestRun and the Notification settings
+  # of each user.
+  # Users have 2 sets of settings, the branch-based and the initiator-based.
+  # For example they can define when to receive a notification for "master"
+  # branch. They can also define when to receive a notification for the
+  # other member's Builds. E.g.
+  # "master" -> "After every failure"
+  # "my builds" -> "When status changes"
+  # "other people builds" -> "Never"
+  # etc
+  def notifiable_users(old_status, new_status)
+    branch_based_notifiable_users =
+      if tracked_branch
+        previous_status = branch_previous_terminal_status
+        tracked_branch.notifiable_users(previous_status, new_status)
+      else
+        []
+      end
+
+    initiator_based_notifiable_users = []
+    if initiator
+      # We assume the initiator is also a member of the project
+      member_participations = project.project_participations.
+        includes(:user).each do |participation|
+
+        if participation.user == initiator
+          setting = participation.my_builds_notify_on
+        else
+          setting = participation.others_builds_notify_on
+        end
+
+        case BranchNotificationSetting::NOTIFY_ON_MAP[setting]
+        when :status_change
+          if old_status != new_status
+            initiator_based_notifiable_users << participation.user
+          end
+        when :always
+          initiator_based_notifiable_users << participation.user
+        when :every_failure
+          if [TestStatus::FAIL, TestStatus::ERROR].include?(new_status)
+            initiator_based_notifiable_users << participation.user
+          end
+        end
+      end
+    end
+
+    branch_based_notifiable_users | initiator_based_notifiable_users
   end
 
   private
@@ -151,9 +205,16 @@ class TestRun < ActiveRecord::Base
   end
 
   def set_run_index
-    return nil if run_index.present? || tracked_branch.blank?
+    return nil if run_index.present?
 
-    self.run_index = (tracked_branch.test_runs.maximum(:run_index) || 0) + 1
+    if tracked_branch.blank?
+      return nil if project.nil?
+
+      self.run_index = (project.test_runs.where(tracked_branch: nil).
+                        maximum(:run_index) || 0) + 1
+    else
+      self.run_index = (tracked_branch.test_runs.maximum(:run_index) || 0) + 1
+    end
   end
 
   def cancel_test_jobs
@@ -171,8 +232,10 @@ class TestRun < ActiveRecord::Base
       update_all(status: TestStatus::CANCELLED)
   end
 
+  # Send notifications either on creation or on status change.
   def send_notifications
-    Broadcaster.publish(tracked_branch.redis_live_update_resource_key, { event: 'TestRunUpdate', test_run: serialized_run })
+    Broadcaster.publish(redis_live_update_resource_key,
+                        { event: 'TestRunUpdate', test_run: serialized_run })
     VcsStatusNotifier.perform_later(id)
 
     old_status = previous_changes[:status] || status.code

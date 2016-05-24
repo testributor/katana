@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.integer  "docker_image_id"
     t.boolean  "in_demo_mode",        default: false, null: false
     t.string   "repository_slug"
+    t.string   "repository_url"
     t.boolean  "is_private",          default: true,  null: false
     t.boolean  "auto_track_branches", default: true,  null: false
   end
@@ -129,7 +130,9 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "new_branch_notify_on", default: 0, null: false
+    t.integer  "new_branch_notify_on",    default: 0, null: false
+    t.integer  "my_builds_notify_on",     default: 0, null: false
+    t.integer  "others_builds_notify_on", default: 0, null: false
   end
 
   add_index "projects_users", ["project_id"], name: "index_projects_users_on_project_id", using: :btree
@@ -192,6 +195,8 @@ ActiveRecord::Schema.define(version: 20160511095116) do
     t.integer  "run_index"
     t.integer  "project_id",                              null: false
     t.string   "setup_error",                default: "", null: false
+    t.integer  "initiator_id"
+    t.string   "setup_worker_uuid"
     t.string   "commit_committer_photo_url", default: "", null: false
   end
 

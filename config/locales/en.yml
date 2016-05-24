@@ -54,6 +54,10 @@ en:
           attributes:
             email:
               taken: "An invitation for this user already exists"
+        worker_group:
+          attributes:
+            ssh_key_private:
+              invalid: "is invalid or passphrase protected"
   select_repository: "Select repository"
   configure: "Configure"
   add_worker: "Add worker"

@@ -7,12 +7,30 @@ class TestRunsController < DashboardController
   before_action :authorize_resource!
 
   def index
-    @tracked_branch = TrackedBranch.non_private.where(id: params[:branch_id]).try(:first)
-    if current_user
-      @tracked_branch ||= current_user.tracked_branches.find(params[:branch_id])
+    if params[:branch_id]
+      @tracked_branch = TrackedBranch.non_private.
+        where(id: params[:branch_id]).try(:first)
+      if current_user
+        @tracked_branch ||= current_user.tracked_branches.
+          where(id: params[:branch_id]).try(:first)
+      end
+    elsif params[:branch]
+      @tracked_branch ||= TrackedBranch.non_private.
+        where(branch_name: params[:branch], project: current_project).try(:first)
+      if current_user
+        @tracked_branch ||= current_user.tracked_branches.
+          where(branch_name: params[:branch], project: current_project).try(:first)
+      end
     end
-    @test_runs = @tracked_branch.test_runs.
-      limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+
+    if @tracked_branch
+      @test_runs = current_project.test_runs.
+        where(tracked_branch: @tracked_branch).
+        limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+    else
+      @test_runs = current_project.test_runs.
+        limit(TrackedBranch::OLD_RUNS_LIMIT).order("created_at DESC")
+    end
     @statuses = TestRun.test_job_statuses(@test_runs.select(&:id))
     @user_can_manage_runs = can?(:manage, @test_runs.first)
   end
@@ -23,9 +41,19 @@ class TestRunsController < DashboardController
   end
 
   def create
-    branch = current_project.tracked_branches.find(params[:branch_id])
-    manager = RepositoryManager.new(branch.project)
-    test_run = manager.create_test_run!({ tracked_branch_id: branch.id })
+    # Specifying the branch means the user want the latest commit on that
+    # else she must specify the commit_sha
+    if params[:branch_id]
+      branch_id = current_project.tracked_branches.find(params[:branch_id]).id
+    else
+      commit_sha = params[:test_run].try(:[],:commit_sha)
+    end
+
+    manager = RepositoryManager.new(current_project)
+    test_run = manager.create_test_run!(
+      { tracked_branch_id: branch_id, initiator_id: current_user.id,
+        commit_sha: commit_sha })
+
     if test_run
       flash[:notice] = 'Your build is being setup'
       head :ok and return if request.xhr?
@@ -48,16 +76,20 @@ class TestRunsController < DashboardController
   end
 
   def retry
-    authorize! :update, @test_run
-
     unless @test_run.retry?
       return redirect_to :back, alert: "Retrying ##{@test_run.id} test run is not allowed at this time"
     end
 
+    # TODO: Consider delete_all here or a custom retry method on TestRun
+    # TestJob#destroy trigger the after_commit hook for TestRun update status.
+    # This means we update the status N times just to destroy everything.
     @test_run.test_jobs.destroy_all
+    @test_run.setup_worker_uuid = nil
     @test_run.status = TestStatus::SETUP
     @test_run.save!
-    RepositoryManager::TestRunSetupJob.perform_later(@test_run.id)
+
+    RepositoryManager.new(current_project).schedule_test_run_setup(@test_run)
+
     Broadcaster.publish(
       @test_run.redis_live_update_resource_key,
       { retry: true,
@@ -72,10 +104,9 @@ class TestRunsController < DashboardController
   def destroy
     authorize! :destroy, @test_run
 
-    tracked_branch_id = @test_run.tracked_branch_id
     @test_run.destroy
-    redirect_to project_branch_test_runs_url(current_project, tracked_branch_id),
-      notice: 'Test run was successfully cancelled.'
+
+    redirect_to :back, notice: 'Test run was successfully cancelled.'
   end
 
   private

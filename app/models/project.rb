@@ -30,6 +30,8 @@ class Project < ActiveRecord::Base
 
   validates :name, :user, presence: true
   validates :name, uniqueness: { scope: [:user, :repository_provider, :repository_owner] }
+  validates :repository_url, presence: true,
+    if: ->{ repository_provider == 'bare_repo' }
   validate :check_user_limit, if: :user_id_changed?
 
   before_create :set_secure_random
@@ -47,6 +49,7 @@ class Project < ActiveRecord::Base
   scope :bitbucket, ->{ where(repository_provider: 'bitbucket') }
   scope :github, ->{ where(repository_provider: 'github') }
   scope :non_private, ->{ where(is_private: false) }
+  scope :bare_repo, ->{ where(repository_provider: 'bare_repo') }
 
   def to_param
     "#{id}-#{name.gsub(/[^a-z0-9]+/i, '-').downcase}"
@@ -75,18 +78,48 @@ class Project < ActiveRecord::Base
   alias :active_workers :update_active_workers
 
   def owner_and_name
-    "#{repository_owner}/#{repository_name}"
+    result = ""
+    result << "#{repository_owner}/" if repository_owner.present?
+    result << repository_name
+
+    result
   end
 
-  def create_oauth_application!
+  def bare_repo?
+    repository_provider == "bare_repo"
+  end
+
+  # @param private_ssh_key [String] it is used as the private ssh key when it
+  # exists
+  # TODO: Remove the bang from method name
+  def create_oauth_application!(ssh_key_private=nil, friendly_name=nil)
+    errors = nil
     WorkerGroup.transaction do
-      oauth_application = oauth_applications.create!(
-        name: repository_id || repository_slug,
+      oauth_application = oauth_applications.new(
+        name: repository_id || repository_slug || repository_name,
         redirect_uri: Katana::Application::HEROKU_URL
       )
-      worker_groups.create!(oauth_application: oauth_application,
-        friendly_name: "#{name} Worker Group #{oauth_applications.count}")
+
+      unless oauth_application.save
+        errors = oauth_application.errors.full_messages.to_sentence
+        # Silently rollback
+        # http://api.rubyonrails.org/classes/ActiveRecord/Rollback.html
+        raise ActiveRecord::Rollback, "Validation errors!"
+      end
+
+      worker_group = worker_groups.new(oauth_application: oauth_application,
+        ssh_key_private: ssh_key_private,
+        friendly_name: friendly_name || "#{name} Worker Group #{oauth_applications.count}")
+
+      unless worker_group.save
+        errors = worker_group.errors.full_messages.to_sentence
+        # Silently rollback
+        # http://api.rubyonrails.org/classes/ActiveRecord/Rollback.html
+        raise ActiveRecord::Rollback, "Validation errors!"
+      end
     end
+
+    errors
   end
 
   def destroy_oauth_application!(oauth_application_id)
@@ -159,6 +192,10 @@ class Project < ActiveRecord::Base
 
   def is_public?
     !is_private
+  end
+
+  def testributor_yml_contents
+    project_files.where(path: ProjectFile::JOBS_YML_PATH).first.try(:contents)
   end
 
   private

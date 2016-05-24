@@ -25,6 +25,21 @@ class ProjectTest < ActiveSupport::TestCase
       end
     end
 
+    describe "repository_url presence validation" do
+      subject { Project.new }
+      it "is invalid when repository_provider is bare_repo and repository_url is nil" do
+        subject.repository_provider = "bare_repo"
+        subject.wont_be :valid?
+        subject.errors[:repository_url].must_equal ["can't be blank"]
+      end
+
+      it "has valid (nil) repository_url when repository_provider is not bare_repo" do
+        subject.repository_provider = "github"
+        subject.valid?
+        subject.errors[:repository_url].must_equal []
+      end
+    end
+
     describe "#check_user_limit" do
       it "doesn't get called when user id hasn't changed" do
         owner.update_column(:projects_limit, 2)

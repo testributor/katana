@@ -84,7 +84,7 @@ Rails.application.routes.draw do
       get :status
     end
 
-    resources :test_runs, only: [:show, :update, :destroy] do
+    resources :test_runs, path: 'builds' do
       member do
         post :retry
       end
@@ -95,9 +95,7 @@ Rails.application.routes.draw do
     end
 
     resources :tracked_branches, only: [:new, :create, :destroy],
-      path: :branches, as: :branches do
-        resources :test_runs, only: [:index, :create, :new]
-    end
+      path: :branches, as: :branches
 
     resources :project_files, as: :files, path: :files, except: [:edit]
     resources :project_participations, as: :participations, path: :users

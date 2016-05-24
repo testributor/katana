@@ -28,6 +28,10 @@ class DashboardController < ApplicationController
       includes(tracked_branches: { test_runs: :test_jobs }).
       order(:repository_owner, :name)
 
+    @current_user_test_runs_per_project =
+      TestRun.where(initiator: current_user, project_id: @projects.map(&:id)).order('created_at DESC').limit(5).
+      group_by(&:project_id)
+
     if @projects.empty?
       if current_user.can_create_new_project?
         redirect_to project_wizard_path(:select_repository)

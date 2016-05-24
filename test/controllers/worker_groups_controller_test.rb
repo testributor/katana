@@ -13,15 +13,27 @@ class WorkerGroupsControllerTest < ActionController::TestCase
     end
 
     describe 'POST#create' do
-      it 'allows if member of the project' do
+      it 'allows if member of the project and flashes success' do
         project.members << user
 
         post :create, { project_id: project.id }
         assert_response 302
+        flash[:alert].must_equal nil
+        flash[:notice].must_equal "A Worker Group has been created."
       end
 
       it 'does not allow if not member of the project' do
         -> { post :create, { project_id: project.id } }.must_raise ActiveRecord::RecordNotFound
+      end
+
+      it "flashes validation errors" do
+        project.members << user
+
+        post :create, { project_id: project.id,
+                        worker_group: { friendly_name: "" } }
+        assert_response 302
+        flash[:alert].must_equal "Friendly name can't be blank"
+        flash[:notice].must_equal nil
       end
     end
 
@@ -29,20 +41,31 @@ class WorkerGroupsControllerTest < ActionController::TestCase
       it 'allows if member of the project' do
         project.members << user
 
-        xhr :put, :update,
-          { project_id: project.id,
-            id: project.worker_groups.first.id,
-            worker_group: worker_group.attributes }
-        assert_response 200
+        put :update, { project_id: project.id,
+          id: project.worker_groups.first.id,
+          worker_group: worker_group.attributes }
+        assert_response 302
+        flash[:alert].must_equal nil
+        flash[:notice].must_equal "Successfully updated worker group"
       end
 
       it 'does not allow if not member of the project' do
         -> {
-          xhr :put, :update,
-            { project_id: project.id,
-              id: project.worker_groups.first.id,
-              worker_group: worker_group.attributes }
+          put :update, { project_id: project.id,
+            id: project.worker_groups.first.id,
+            worker_group: worker_group.attributes }
         }.must_raise ActiveRecord::RecordNotFound
+      end
+
+      it "flashes validation errors" do
+        project.members << user
+
+        put :update, { project_id: project.id,
+          id: project.worker_groups.first.id,
+          worker_group: { friendly_name: '' } }
+        assert_response 302
+        flash[:alert].must_equal "Friendly name can't be blank"
+        flash[:notice].must_equal nil
       end
     end
 

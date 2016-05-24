@@ -17,6 +17,20 @@ class ProjectsControllerTest < ActionController::TestCase
       sign_in :user, owner
     end
 
+    describe "GET#show" do
+      before do
+        project.update_column(:repository_provider, :bare_repo)
+      end
+
+      describe 'when the project repository provider is bare_repo' do
+        it 'redirects to the test_runs/index page' do
+          get :show, id: project.id
+          assert_response 302
+          response.location.must_equal project_test_runs_url(project)
+        end
+      end
+    end
+
     describe "PATCH#update" do
       describe 'when user is the owner' do
         it "updates docker_image_id when Project#valid?" do
@@ -39,6 +53,17 @@ class ProjectsControllerTest < ActionController::TestCase
 
           project.reload
           project.technology_ids.must_equal [technology.id]
+        end
+
+        it "updates repository_url when Project#valid?" do
+          project_params = {
+            id: project.id,
+            project: { repository_url: "this_is_the_projects_new_home" }
+          }
+          patch :update, project_params
+
+          project.reload
+          project.repository_url.must_equal "this_is_the_projects_new_home"
         end
       end
 

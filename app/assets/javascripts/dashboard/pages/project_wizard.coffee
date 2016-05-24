@@ -1,21 +1,24 @@
 Testributor.Pages ||= {}
 class Testributor.Pages.ProjectWizard
+  fetchReposXhr: null
   update: ->
-    $(".multi-select").select2()
+    @show()
   show: ()->
     $(".multi-select").select2()
 
-    if ($checkedRadio = $('.provider-box input[type="radio"]:checked')).length > 0
-      currentPath = $checkedRadio.data('current-path')
-      @performAjaxFor(currentPath, @attachFetchEvent)
-
     $('.provider-box input[type="radio"]').on "change", (e)=>
+      $('.provider-list').addClass('hidden')
       $target = $(e.currentTarget)
       $target.closest('form').find('label').removeClass('selected')
       $target.closest('label').addClass('selected')
 
       currentPath = $target.data('current-path')
-      @performAjaxFor(currentPath, @attachFetchEvent)
+      if currentPath
+        @performAjaxFor(currentPath, @attachFetchEvent)
+      else if $target.val() == "bare_repo"
+        @fetchReposXhr && @fetchReposXhr.abort() # quit any running
+        $('.fetching-repos,.js-fetch-repos').hide()
+        $('.bare-repo').show()
 
     $editor = $('#docker-compose-contents')
     if $editor.length > 0
@@ -51,9 +54,15 @@ class Testributor.Pages.ProjectWizard
           , 2000)
       )
 
+    if ($checkedRadio = $('.provider-box input[type="radio"]:checked')).length > 0
+      $checkedRadio.trigger("change")
+
   performAjaxFor: (url, callback) =>
     Pace.ignore =>
-      jqxhr = $.ajax(
+      @fetchReposXhr && @fetchReposXhr.abort() # quit the previous xhr
+      $('.bare-repo').hide()
+
+      @fetchReposXhr = $.ajax(
         url: url,
         beforeSend: ->
           $('.js-fetching-repos').show()

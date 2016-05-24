@@ -12,12 +12,13 @@ class TestRunStatusEmailNotificationService
 
   def schedule_notifications
     if @old_status != @new_status && new_status_terminal?
-      previous_status = test_run.branch_previous_terminal_status
-
-      test_run.tracked_branch.
-        notifiable_users(previous_status, @new_status).each do |user|
-
-        TestRunNotificationMailer.test_run_complete(test_run.id, user.email).deliver_later
+      notifiable_users = test_run.notifiable_users(@old_status, @new_status)
+      notifiable_users.each do |user|
+        # TODO: Cache the status because until the email is sent, someone might
+        # have retried a job. That might result in saying 'Build #3 completed with status "Running"'
+        # in the email.
+        TestRunNotificationMailer.test_run_complete(test_run.id, user.email).
+          deliver_later
       end
     end
   end

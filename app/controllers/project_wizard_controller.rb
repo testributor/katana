@@ -34,20 +34,34 @@ class ProjectWizardController < DashboardController
         project_params.merge(docker_image: DockerImage.first,
                              name: project_params[:repository_name]))
 
+      if params[:repository_provider] == 'bare_repo'
+        # We try the worker group creation here to avoid creating the
+        # project if the SSH key is not valid.
+        worker_group = project.worker_groups.new(
+          ssh_key_private: params[:private_key], friendly_name: '_')
+        if worker_group.invalid?
+          flash.now[:alert] = worker_group.errors.full_messages.to_sentence
+          render project_wizard_path(step) and return
+        end
+
+        # No longer needed so remove to avoid autosaving
+        project.worker_groups.delete(worker_group)
+      end
+
       if project.save
         repository_manager = RepositoryManager.new(project)
         project.webhook_id = repository_manager.post_add_repository_setup.try(:id)
         project.save!
 
         project.create_testributor_yml_file!
-        project.create_oauth_application!
+        project.create_oauth_application!(params[:private_key])
 
         cookies[:wizard_project_id] = project.id
         flash[:notice] = "Project was created!"
         redirect_to next_wizard_path
       else
-        flash[:alert] = project.errors.full_messages.to_sentence
-        redirect_to :back
+        flash.now[:alert] = project.errors.full_messages.to_sentence
+        render project_wizard_path(step)
       end
     when :configure
       unless @project.present?
@@ -96,6 +110,6 @@ class ProjectWizardController < DashboardController
 
   def project_params
     params.permit(:repository_provider, :repository_owner, :repository_name,
-      :repository_id, :repository_slug, :is_private)
+      :repository_id, :repository_slug, :repository_url, :is_private)
   end
 end

@@ -1,5 +1,5 @@
 body.project_wizard {
-  &.show {
+  &.show, &.update {
     .fetch-repos {
       min-height: 300px;
     }

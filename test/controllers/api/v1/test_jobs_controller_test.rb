@@ -124,6 +124,62 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
         result.map{|j| j["cost_prediction"].to_i}.must_equal [2,2,2,2]
       end
     end
+
+    describe "when there are no pending jobs and the provider is 'bare_repo'" do
+      let(:oldest_pending_setup_run) do
+        FactoryGirl.create(:testributor_run, project: project,
+                           status: TestStatus::SETUP, created_at: 3.minutes.ago)
+      end
+
+      let(:newest_pending_setup_run) do
+        FactoryGirl.create(:testributor_run, project: project,
+                           status: TestStatus::SETUP, created_at: 1.minutes.ago)
+      end
+
+      before do
+        TestJob.delete_all
+        project.update_column(:repository_provider, "bare_repo")
+        oldest_pending_setup_run
+        newest_pending_setup_run
+      end
+
+      it 'returns the oldest pending "Setup" job' do
+        result = nil
+        @controller.stub :doorkeeper_token, token do
+          request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
+          patch :bind_next_batch, default: { format: :json }
+          result = JSON.parse(response.body)
+        end
+
+        result["test_run"].must_equal({
+          "id" => oldest_pending_setup_run.id,
+           "commit_sha" => oldest_pending_setup_run.commit_sha
+        })
+        result["testributor_yml"].must_equal ''
+        result["type"].must_equal 'setup'
+
+        oldest_pending_setup_run.reload.
+          setup_worker_uuid.must_equal("alive_worker_uuid")
+      end
+
+      describe "when there is no Setup Job too" do
+        before do
+          TestRun.where(status: TestStatus::SETUP).
+            update_all(status: TestStatus::PASSED)
+        end
+
+        it "returns an empty array of TestJobs" do
+          result = nil
+          @controller.stub :doorkeeper_token, token do
+            request.env['HTTP_WORKER_UUID'] = 'alive_worker_uuid'
+            patch :bind_next_batch, default: { format: :json }
+            result = JSON.parse(response.body)
+          end
+
+          result.must_equal []
+        end
+      end
+    end
   end
 
   describe "PATCH#batch_update" do

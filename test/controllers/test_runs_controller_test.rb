@@ -151,6 +151,16 @@ class TestRunsControllerTest < ActionController::TestCase
           _test_run.test_jobs.pluck(:id).sort.must_equal job_ids
         end
 
+        it "resets the worker_uuid column to let the setup happen again" do
+          job_ids = _test_run.test_jobs.pluck(:id).sort
+          _test_run.update_columns(status: TestStatus::PASSED,
+                                   setup_worker_uuid: "some uuid")
+          post :retry, { project_id: project.to_param, id: _test_run.id }
+          flash[:notice].must_equal "The Build will soon be retried"
+
+          _test_run.reload.setup_worker_uuid.must_equal nil
+        end
+
         it "returns 404 when retrying a test_run of a different project" do
           different_project_run = FactoryGirl.create(:testributor_run)
           ->{
@@ -201,6 +211,17 @@ class TestRunsControllerTest < ActionController::TestCase
           -> { post :destroy, { project_id: project.id, id: _test_run.id } }.must_raise ActiveRecord::RecordNotFound
         end
       end
+    end
+
+    it "creates a TestRun with correct attributes when repo provider is bare_repo and branch is missing" do
+      project.update_column(:repository_provider, "bare_repo")
+      post :create, { project_id: project.to_param, test_run: { commit_sha: '1234' } }
+
+      TestRun.count.must_equal 2
+      _test_run = TestRun.last
+      _test_run.commit_sha.must_equal '1234'
+      _test_run.status.code.must_equal TestStatus::SETUP
+      _test_run.initiator.must_equal project.user
     end
   end
 

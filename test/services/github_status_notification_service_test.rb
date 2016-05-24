@@ -16,7 +16,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "pending",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=> "Build is going to be testributed soon."
             }
           })
@@ -35,7 +35,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "pending",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=> "Build is going to be testributed soon."
             }
           })
@@ -54,7 +54,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "pending",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=>"Build is being testributed."
             }
           })
@@ -73,7 +73,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "success",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=>"All checks have passed!"
             }
           })
@@ -92,7 +92,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "failure",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=>"Some specs are failing."
             }
           })
@@ -111,7 +111,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "error",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=>"There are some errors in your build."
             }
           })
@@ -130,7 +130,7 @@ class GithubStatusNotificationServiceTest < ActiveSupport::TestCase
             :status => "error",
             :extra_github_options => {
               :context=> "testributor.com",
-              :target_url=> "http://example.com/projects/#{_test_run.project.id}/test_runs/#{_test_run.id}",
+              :target_url=> "http://example.com/projects/#{_test_run.project.id}/builds/#{_test_run.id}",
               :description=>"Your build has been cancelled."
             }
           })

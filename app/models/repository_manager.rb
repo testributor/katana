@@ -5,8 +5,8 @@ class RepositoryManager
 
   delegate :create_test_run!, :fetch_repos, :fetch_branches,
     :repository_data, :cleanup_for_removal, :post_add_repository_setup,
-    :set_deploy_key, :remove_deploy_key, :publish_status_notification,
-    to: :manager
+    :set_deploy_key, :remove_deploy_key, :publish_status_notification, :errors,
+    :schedule_test_run_setup, to: :manager
 
   # Must be initialized with a Project
   # @project [Project]
@@ -16,6 +16,8 @@ class RepositoryManager
                  GithubRepositoryManager.new(project)
                when "bitbucket"
                  BitbucketRepositoryManager.new(project)
+               when "bare_repo"
+                 BareRepositoryManager.new(project)
                else
                  raise "Unknown repository provider"
                end
