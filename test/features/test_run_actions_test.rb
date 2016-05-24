@@ -105,6 +105,75 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
           branch: _test_run.tracked_branch.branch_name)
         page.must_have_content('Cancel')
       end
+
+      it 'does not display the Cancel action when the run is FAILED', js: true do
+        _test_run.update_column(:status, TestStatus::FAILED)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
+        page.wont_have_content('Cancel')
+      end
+
+      it 'does not display the Cancel action when the run is PASSED', js: true do
+        _test_run.update_column(:status, TestStatus::PASSED)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
+        page.wont_have_content('Cancel')
+      end
+
+      it 'does not display the Cancel action when the run is ERROR', js: true do
+        _test_run.update_column(:status, TestStatus::ERROR)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
+        page.wont_have_content('Cancel')
+      end
+
+      it 'does not display the Cancel action when the run is CANCELLED', js: true do
+        _test_run.update_column(:status, TestStatus::CANCELLED)
+        visit project_test_runs_path(
+          _test_run.project.id,
+          branch: _test_run.tracked_branch.branch_name)
+        page.wont_have_selector('.btn', text: "Cancel")
+      end
+
+      describe "on TestRun#show page" do
+        it 'does not display the Cancel action when the run is FAILED', js: true do
+          _test_run.update_column(:status, TestStatus::FAILED)
+          visit project_test_run_path(
+            _test_run.project.id,
+            _test_run.id,
+            branch: _test_run.tracked_branch.branch_name)
+          page.wont_have_content('Cancel')
+        end
+
+        it 'does not display the Cancel action when the run is PASSED', js: true do
+          _test_run.update_column(:status, TestStatus::PASSED)
+          visit project_test_run_path(
+            _test_run.project.id,
+            _test_run.id,
+            branch: _test_run.tracked_branch.branch_name)
+          page.wont_have_content('Cancel')
+        end
+
+        it 'does not display the Cancel action when the run is ERROR', js: true do
+          _test_run.update_column(:status, TestStatus::ERROR)
+          visit project_test_run_path(
+            _test_run.project.id,
+            _test_run.id,
+            branch: _test_run.tracked_branch.branch_name)
+          page.wont_have_content('Cancel')
+        end
+
+        it 'does not display the Cancel action when the run is CANCELLED', js: true do
+          _test_run.update_column(:status, TestStatus::CANCELLED)
+          visit project_test_run_path(
+            _test_run.project.id,
+            _test_run.id)
+          page.wont_have_selector('.btn', text: "Cancel")
+        end
+      end
     end
 
     describe 'when a user clicks on delete button' do
