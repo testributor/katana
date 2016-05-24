@@ -45,15 +45,11 @@ class TestRunDecorator < ApplicationDecorator
   end
 
   def commit_time_ago
-    return nil unless timestamp = commit_timestamp
-
-    h.time_ago_in_words(timestamp)
+    h.time_ago_in_words(commit_timestamp) if commit_timestamp
   end
 
   def decorated_commit_timestamp
-    return nil unless timestamp = commit_timestamp
-
-    l(timestamp, format: :long)
+    l(commit_timestamp, format: :long) if commit_timestamp
   end
 
   def commit_info_as_hash
