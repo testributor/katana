@@ -40,10 +40,6 @@ class TestRunsController < DashboardController
     @user_can_manage_run = can?(:manage, @test_run)
   end
 
-  def new
-    @test_run = current_project.test_runs.new(initiator: current_user)
-  end
-
   def create
     # Specifying the branch means the user want the latest commit on that
     # else she must specify the commit_sha
@@ -80,8 +76,6 @@ class TestRunsController < DashboardController
   end
 
   def retry
-    authorize! :update, @test_run
-
     unless @test_run.retry?
       return redirect_to :back, alert: "Retrying ##{@test_run.id} test run is not allowed at this time"
     end
