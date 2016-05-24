@@ -70,19 +70,6 @@ class WorkerGroupTest < ActiveSupport::TestCase
     end
   end
 
-  describe "#create_oauth_application [hook]" do
-    it "does not create a worker group when oauth application creation fails" do
-      subject.stubs(:create_oauth_application).raises(Exception)
-      ->{ subject.save }.must_raise(Exception)
-      subject.wont_be :persisted?
-    end
-
-    it "creates the worker group when oauth application creation succeeds" do
-      subject.save
-      subject.must_be :persisted?
-    end
-  end
-
   describe "#reset_ssh_key!" do
     before do
       subject.stubs(:remove_ssh_key_from_repo).returns(true)

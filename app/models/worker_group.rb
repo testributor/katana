@@ -23,7 +23,6 @@ class WorkerGroup < ActiveRecord::Base
   before_save :set_public_key,
     if: ->{ project.repository_provider == "bare_repo" && ssh_key_private.present? }
 
-  after_create :create_oauth_application
   before_update :rename_ssh_key_in_repo,
     if: ->{ friendly_name_changed? && !Rails.env.test? }
   after_destroy :remove_ssh_key_from_repo,
@@ -38,14 +37,6 @@ class WorkerGroup < ActiveRecord::Base
   end
 
   private
-
-  def create_oauth_application
-    oauth_application = project.oauth_applications.create!(
-      name: project.repository_id || project.repository_slug ||
-        project.repository_name,
-      redirect_uri: Katana::Application::HEROKU_URL)
-    save!
-  end
 
   def set_ssh_key_in_repo
     deploy_key = repository_manager.set_deploy_key(ssh_key_public,
