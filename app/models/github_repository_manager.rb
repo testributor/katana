@@ -286,7 +286,7 @@ class GithubRepositoryManager
       commit_url: latest_commit.html_url,
       commit_author_name: latest_commit.commit.author.name,
       commit_author_email: latest_commit.commit.author.email,
-      commit_author_username: latest_commit.author.login,
+      commit_author_username: latest_commit.author.try(:login),
       commit_committer_name: latest_commit.commit.committer.name,
       commit_committer_email: latest_commit.commit.committer.email,
       commit_committer_username: latest_commit.committer.login,
