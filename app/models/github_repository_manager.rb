@@ -228,10 +228,6 @@ class GithubRepositoryManager
 
   private
 
-  def avatar_or_gravatar_url(commit)
-    commit.committer.avatar_url.present? ? commit.committer.avatar_url : commit.committer.gravatar_id
-  end
-
   def repository_id
     project.try(:repository_id)
   end
@@ -290,7 +286,8 @@ class GithubRepositoryManager
       commit_committer_name: latest_commit.commit.committer.name,
       commit_committer_email: latest_commit.commit.committer.email,
       commit_committer_username: latest_commit.committer.try(:login),
-      commit_committer_photo_url: avatar_or_gravatar_url(latest_commit),
+      commit_committer_photo_url: latest_commit.committer.try(:avatar_url) ||
+        latest_commit.committer.try(:gravatar_id),
       sha_history: history.map(&:sha)
     })
 
