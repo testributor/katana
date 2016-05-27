@@ -289,7 +289,7 @@ class GithubRepositoryManager
       commit_author_username: latest_commit.author.try(:login),
       commit_committer_name: latest_commit.commit.committer.name,
       commit_committer_email: latest_commit.commit.committer.email,
-      commit_committer_username: latest_commit.committer.login,
+      commit_committer_username: latest_commit.committer.try(:login),
       commit_committer_photo_url: avatar_or_gravatar_url(latest_commit),
       sha_history: history.map(&:sha)
     })
