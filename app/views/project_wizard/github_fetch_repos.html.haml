@@ -43,7 +43,7 @@
             #{repo[:description]}
 
 
-      - page_manager = GithubRepoPageManager.new(@response_data[:last_response])
+      - page_manager = GithubPageManager.new(@response_data[:last_response])
       - if page_manager.all_pages_number > 1
         %ul.pagination.m-b-5
           - if previous_page = page_manager.previous_page_number

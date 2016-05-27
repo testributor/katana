@@ -95,7 +95,9 @@ Rails.application.routes.draw do
     end
 
     resources :tracked_branches, only: [:new, :create, :destroy],
-      path: :branches, as: :branches
+      path: :branches, as: :branches do
+      get :fetch_branches, on: :collection
+    end
 
     resources :project_files, as: :files, path: :files, except: [:edit]
     resources :project_participations, as: :participations, path: :users

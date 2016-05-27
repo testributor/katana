@@ -1,0 +1,25 @@
+body.tracked_branches {
+  &.new {
+    .panel-title {
+      h3 {
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+    .panel-body {
+      a#fetch_more {
+        margin-top: 10px;
+      }
+
+      a#fetch_more, a.list-group-item {
+        text-decoration: none;
+
+        .list-group-item-heading {
+          font-size: 18px; // Reset to Bootstrap default
+          font-weight: normal; // Reset to Bootstrap default
+        }
+      }
+    }
+  }
+}

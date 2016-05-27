@@ -80,6 +80,7 @@ class Ability
 
   def tracked_branch_permissions
     if user && project.members.include?(user)
+      can :read, TrackedBranch, project_id: project.id
       can :create, TrackedBranch, project_id: project.id
       can :destroy, TrackedBranch, project_id: project.id
       can :untrack_branch, TrackedBranch, project_id: project.id
