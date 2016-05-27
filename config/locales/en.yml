@@ -37,6 +37,8 @@ en:
               taken: "Branch already exists"
         project:
           attributes:
+            custom_docker_compose_yml:
+              syntax_error: "syntax error"
             base:
               project_limit_reached: >
                 You cannot add other projects as you have reached your <strong>project limit</strong>.
