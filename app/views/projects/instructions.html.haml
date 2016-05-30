@@ -1,66 +1,62 @@
-- breadcrumb :project_instructions, current_project
+.row.panelized.m-t-10
+  .col-md-12
+    %h2 Instructions
 
-- content_for :page_title do
-  Instructions
-
-.panel.panel-default
-  .panel-heading
-    %h3 Create any needed non tracked files
-  .panel-body
-    %p
-      In many projects there are files which are not tracked by the version control
-      system to let developers use different versions in their machines.
-      %br
-      Still some of them are needed for a successfull test suite run.
-    %p
-      An example is the
-      %strong "config/database.yml"
-      file in a Rails application which holds the information
-      on how to connect to the database.
-      %br
-        = "You can create or override any project files #{link_to "here", project_files_path(current_project)}.".html_safe
-
-      %br
-      %strong= ProjectFile::JOBS_YML_PATH
-      file is the one that describes the jobs that constitute
-      each test run and for this reason it cannot be deleted.
-
-.panel.panel-default
-  .panel-heading
-    %h3 Create a worker on your machine
-
-  .panel-body
-    %ol
-      %li
-        Install docker and docker-compose.
-        You can find instructions on how to do that on the
-        #{link_to ' official Docker site', 'https://docs.docker.com/'}.
-
-      %li
-        Download a docker-compose.yml file for this project.
+    %hr
+      %h3 Create any needed non tracked files
+      %p
+        In many projects there are files which are not tracked by the version control
+        system to let developers use different versions in their machines.
         %br
-        You can create groups of workers in the relevant
-        = link_to "Settings", worker_setup_project_settings_path(current_project)
-        page.
-        Each group will have its own docker-compose.yml file with different
-        set of credentials on Testributor and different ssh key to access the
-        code.
-        This way, if you want to revoke access to some
-        workers, you don't have to setup the rest of the workers too.
+        Still some of them are needed for a successfull test suite run.
+      %p
+        An example is the
+        %strong "config/database.yml"
+        file in a Rails application which holds the information
+        on how to connect to the database.
+        %br
+          = "You can create or override any project files #{link_to "here", project_files_path(current_project)}.".html_safe
 
-        - if worker_group = current_project.worker_groups.first
+        %br
+        %strong= ProjectFile::JOBS_YML_PATH
+        file is the one that describes the jobs that constitute
+        each test run and for this reason it cannot be deleted.
+
+    %hr
+
+      %h3 Create a worker on your machine
+
+      %ol
+        %li
+          Install docker and docker-compose.
+          You can find instructions on how to do that on the
+          #{link_to ' official Docker site', 'https://docs.docker.com/'}.
+
+        %li
+          Download a docker-compose.yml file for this project.
           %br
-          This is the docker-compose.yml file for your first worker group:
-          %p
-            = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
-              class: "btn btn-default" do
-              Download
-              %i.fa.fa-download
+          You can create groups of workers in the relevant
+          = link_to "Settings", worker_setup_project_settings_path(current_project)
+          page.
+          Each group will have its own docker-compose.yml file with different
+          set of credentials on Testributor and different ssh key to access the
+          code.
+          This way, if you want to revoke access to some
+          workers, you don't have to setup the rest of the workers too.
 
-      %li
-        Create a worker by running the following command in the same directory where
-        you saved the docker-compose.yml file:
-        %p
-          %code docker-compose up
-        For more options and documentation on docker-compose visit the
-        #{link_to 'official Docker site', 'https://docs.docker.com/compose/'}.
+          - if worker_group = current_project.worker_groups.first
+            %br
+            This is the docker-compose.yml file for your first worker group:
+            %p
+              = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
+                class: "btn btn-default" do
+                Download
+                %i.fa.fa-download
+
+        %li
+          Create a worker by running the following command in the same directory where
+          you saved the docker-compose.yml file:
+          %p
+            %code docker-compose up
+          For more options and documentation on docker-compose visit the
+          #{link_to 'official Docker site', 'https://docs.docker.com/compose/'}.

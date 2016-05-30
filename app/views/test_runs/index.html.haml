@@ -1,45 +1,41 @@
-- breadcrumb :builds, current_project
-
-- content_for :page_title do
-  = @tracked_branch.try(:branch_name)
-
-- content_for :page_actions do
-  -# TODO: Write tests about permissions
-  -# TODO: This permission look wrong. It is a TestRun we are creating.
-  - if can? :create, TrackedBranch
-    - if @tracked_branch
-      - form_path = project_test_runs_path(branch_id: @tracked_branch.id)
-    - else
-      - form_path = project_test_runs_path
-
-    - if current_project.bare_repo?
-      %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
-        %i.fa.fa-plus-square.m-r-5
-        Add a Build
-    - else
-      = link_to form_path, method: :post,
-        data: { disable_with: with_dots("Adding build") },
-        action: :create, class: 'btn btn-xs btn-success m-r-5 js-remote-submission' do
-        %i.fa.fa-plus
-        %span= 'Add a new build'
-
-  - if can? :untrack_branch, @tracked_branch
-    = link_to project_branch_path(current_project, @tracked_branch),
-      method: :delete, class: 'btn btn-xs btn-danger',
-      data: { disable_with: with_dots('Untracking branch'),
-              confirm: "Branch will be removed from this project. Are you sure?" } do
-      %i.fa.fa-times
-      %span= "Untrack branch"
-.panel
-  .panel-body
-    - if @test_runs.blank?
-      %i.m-r-10 No Builds found for this project
-      %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
-        %i.fa.fa-plus-square.m-r-5
-        Add a Build
-    - else
+.row.m-t-10
+  - if !current_project.bare_repo?
+    .col-sm-3.text-left
+      - current_project.tracked_branches.each do |branch|
+        = link_to project_test_runs_path(branch.project, branch: branch.try(:branch_name)),
+          class: "row btn btn-default branch #{('active' if branch.branch_name == @tracked_branch.try(:branch_name)) }" do
+          .col-xs-11.name
+            = branch.branch_name
+          - if can? :untrack_branch, @tracked_branch
+            = button_to project_branch_path(current_project, @tracked_branch),
+              method: :delete, style: "background-color: #fff; border: none; width: 0px; padding: 0px; z-index: 1;",
+              data: { confirm: "Branch will be removed from this project. Are you sure?" } do
+              %i.fa.fa-times-circle
+      = link_to new_project_branch_path(current_project), class: 'track-a-branch' do
+        - if can?(:create, TrackedBranch)
+          %i.fa.fa-plus
+          %span= 'Track a branch'
+  %div{ class: "#{current_project.bare_repo? ? 'col-sm-12' : 'col-sm-9' }" }
+    .row.panelized.search-bar
+      .col-sm-6.m-t-5
+        %strong Builds
+      .col-sm-6.text-right
+        - if can? :create, TrackedBranch
+          - if current_project.bare_repo?
+            %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
+              %i.fa.fa-plus-square
+              Add a Build
+          - else
+            - if @tracked_branch
+              = link_to project_test_runs_path(branch_id: @tracked_branch.id), method: :post, remote: true,
+                data: { disable_with: with_dots("Adding build") },
+                action: :create, class: 'btn btn-md btn-success js-remote-submission' do
+                %i.fa.fa-plus-square.m-r-5
+                Add a Build
+    .m-t-10
       = react_component 'TestRunPresenter',
         { testRuns: @test_runs.map(&:serialized_run),
+          projectId: current_project.id,
           userCanManageRun: @user_can_manage_runs }
 
 - if current_project.repository_provider == "bare_repo"

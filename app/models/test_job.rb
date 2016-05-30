@@ -151,11 +151,8 @@ class TestJob < ActiveRecord::Base
 
   def update_test_run_status
     test_run.update_status && test_run.save!
-
-    if test_run.tracked_branch.present?
-      Broadcaster.publish(test_run.tracked_branch.redis_live_update_resource_key,
-        { test_run: test_run.serialized_run, test_job: serialized_job })
-    end
+    Broadcaster.publish(test_run.redis_live_update_resource_key,
+      { test_run: test_run.serialized_run, test_job: serialized_job })
 
     true # don't break callback chain
   end

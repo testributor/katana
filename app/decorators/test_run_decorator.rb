@@ -58,8 +58,6 @@ class TestRunDecorator < ApplicationDecorator
       author: commit_author,
       time_ago: commit_time_ago,
       timestamp: decorated_commit_timestamp,
-      commit_url: object.commit_url,
-      source_logo: commit_source_logo,
       photo_url: photo_url }
   end
 
@@ -69,5 +67,9 @@ class TestRunDecorator < ApplicationDecorator
 
    def photo_url
      model.commit_committer_photo_url.present? ? model.commit_committer_photo_url : h.asset_path('anonymous-icon.png')
+   end
+
+   def created_at
+     "#{h.time_ago_in_words(object.created_at)} ago" if object.created_at
    end
 end

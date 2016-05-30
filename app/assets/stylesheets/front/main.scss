@@ -96,18 +96,27 @@ section.features {
   color: white;
 }
 
-.logo {
+.logo-front {
   img {
+    width: 55px;
     margin-top: 1px;
     float: left;
-    width: 50px;
+    background: -moz-radial-gradient(center, 65% 55%, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.3) 42%, transparent 78%, transparent 90%, transparent 91%, transparent 96%);
+    background: -webkit-radial-gradient(65% 55%, ellipse cover, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.3) 42%, transparent 78%, transparent 90%, transparent 91%, transparent 96%);
+    background: radial-gradient(65% 55%, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.3) 42%, transparent 78%, transparent 90%, transparent 91%, transparent 96%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 );
   }
 
   .logo-text {
     color: white;
-    font-size: 20px;
+    font-weight: 800;
+    font-size: 24px;
     text-transform: uppercase;
-    margin: 16px 5px 10px 4px;
+    margin: 14px 5px 10px 4px;
+    display: inline-block;
+  }
+
+  h2 {
     display: inline-block;
   }
 }

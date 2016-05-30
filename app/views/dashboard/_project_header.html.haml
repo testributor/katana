@@ -1,0 +1,6 @@
+.row.panelized.project-title
+  .col-md-4.project-title-bar
+    = image_tag "#{project.repository_provider}-logo.png", width: 40, height: 40
+    %h4= link_to project.owner_and_name, project_path(project)
+  .col-md-8
+    = render 'project_title_links', project: project

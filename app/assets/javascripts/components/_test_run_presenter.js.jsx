@@ -16,21 +16,21 @@ var TestRunPresenter = React.createClass({
       } else {
         testRuns.unshift(msg.test_run)
         this.setState({ testRuns: testRuns })
+        Testributor.Widgets.LiveUpdates(
+          { "TestRun": { "ids": [msg.test_run.id] } }, this.handleUpdate)
       }
     }
   },
 
-  handleCreation: function (msg) {
-    var testRuns = this.state.testRuns;
-    testRuns.unshift(msg.test_run)
-    this.setState({ testRuns: testRuns })
-  },
-
-
-
   subscribe: function (testRunIds) {
     var _this = this;
-    var subscriptions = { "TestRun":  testRunIds }
+    var subscriptions = {
+      "TestRun": {
+        'ids': testRunIds,
+        'actions': ['read'],
+        'project_id': this.props.projectId
+      }
+    }
 
     Testributor.Widgets.LiveUpdates(subscriptions, _this.handleUpdate)
   },

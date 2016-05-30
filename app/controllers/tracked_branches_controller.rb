@@ -29,7 +29,7 @@ class TrackedBranchesController < DashboardController
       flash[:alert] = tracked_branch.errors.full_messages.join(', ')
     end
 
-    redirect_to project_path(current_project)
+    redirect_to project_test_runs_path(current_project, branch: tracked_branch.try(:branch_name))
   end
 
   def destroy

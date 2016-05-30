@@ -228,14 +228,20 @@ class TestRun < ActiveRecord::Base
         tracked_branch_id: tracked_branch.id
     }).update_all(status: TestStatus::CANCELLED)
     TestRun.where(status: [TestStatus::QUEUED, TestStatus::SETUP]).
-      where(tracked_branch_id: tracked_branch.id).
-      update_all(status: TestStatus::CANCELLED)
+      where(tracked_branch_id: tracked_branch.id).each do |tr|
+        tr.update_attribute(:status, TestStatus::CANCELLED)
+      end
   end
 
   # Send notifications either on creation or on status change.
   def send_notifications
-    Broadcaster.publish(redis_live_update_resource_key,
-                        { event: 'TestRunUpdate', test_run: serialized_run })
+    if previous_changes.has_key?('created_at')
+      Broadcaster.publish('TestRun#read',
+        { event: 'TestRunCreate', test_run: serialized_run })
+    else
+      Broadcaster.publish(redis_live_update_resource_key,
+        { event: 'TestRunUpdate', test_run: serialized_run })
+    end
     VcsStatusNotifier.perform_later(id)
 
     old_status = previous_changes[:status] || status.code

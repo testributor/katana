@@ -1,10 +1,15 @@
 %header.top-head.container-fluid
-  %button.navbar-toggle.pull-left{type: "button"}
-    %span.sr-only Toggle navigation
-    %span.icon-bar
-    %span.icon-bar
-    %span.icon-bar
-  / Right navbar
+  .pull-left
+    .logo.m-t-5
+      = link_to root_url, class: "logo-expanded" do
+        %i.ion-social-buffer
+        %img{alt: "logo", src: image_path("logo-sm.png"), width: '45'}
+        %div.text Testributor
+  = link_to project_wizard_path(:select_repository), class: "btn btn-default m-t-10" do
+    %i.fa.fa-plus-square-o
+    Add a project
+
+  %button.navbar-toggle.pull-left
   - if user_signed_in?
     %ul.list-inline.navbar-right.top-menu.top-right-menu
       / user login dropdown start
@@ -34,4 +39,3 @@
     = link_to 'Send us feedback', '#',
       class: "btn btn-default pull-right m-t-10 m-r-15",
       data: { toggle: 'modal', target: '#feedback-modal' }
-

@@ -11,33 +11,49 @@ var TestRun = React.createClass({
       }
     }
 
-    return (
-      <tr id={ 'test-run-' + this.props.testRun.id } className='test-run-tr'>
-        <td className="col-md-1">
-          <a href={ this.props.testRun.test_run_link }>#{ this.props.testRun.run_index }</a>
-        </td>
-        <td className="col-md-4">
-          <TestRunCommit commit={ this.props.testRun.commit_info } key={5} />
-        </td>
-        <td className="col-md-1 status">
-          <div className='status-label'>
-            <span className={ this.props.testRun.status_css_class }>{ this.props.testRun.status_text }</span>
+    var totalRunningTime = function() {
+      if ( this.props.testRun.total_running_time ) {
+        return (
+          <div className="col-lg-12 time-div">
+            <i className="fa fa-clock-o" aria-hidden="true"></i>
+            <span> { this.props.testRun.total_running_time } </span>
           </div>
-        </td>
-        <td className="col-md-3">
+        )
+      }
+    }.bind(this);
+
+    return (
+      <div id={ 'test-run-' + this.props.testRun.id } className='panelized row'>
+        <div className="col-lg-8">
           <a href={ this.props.testRun.test_run_link }>
             <ProgressBars statuses={ this.props.testRun.statuses } total={ this.props.testRun.statuses.total } key={3} />
           </a>
-        </td>
-        <td className="col-md-1 running_time">
-          { this.props.testRun.total_running_time }
-        </td>
-        <td className="col-md-2" >
-          <div className="m-t-5">
-            { testRunCtas }
+          <TestRunCommit commit={ this.props.testRun.commit_info } key={5} />
+        </div>
+
+        <div className="col-lg-2 col-xs-6">
+          <div className='row'>
+            <div className="col-lg-12">
+              <a href={ this.props.testRun.test_run_link}>
+                <div className={ this.props.testRun.status_css_class }>
+                  <span className='m-r-5'>#{ this.props.testRun.id }</span>
+                  <span className='m-r-5'> | </span>
+                  <span>{this.props.testRun.status_text }</span>
+                </div>
+              </a>
+            </div>
+
+            { totalRunningTime() }
+            <div className="col-lg-12 time-div">
+              <i className="fa fa-calendar" aria-hidden="true"></i>
+              <span> { this.props.testRun.created_at } </span>
+            </div>
           </div>
-        </td>
-      </tr>
+        </div>
+        <div className="col-lg-2 col-xs-6 text-right">
+          { testRunCtas }
+        </div>
+      </div>
     )
   }
 });

@@ -24,8 +24,7 @@
     = stylesheet_link_tag    'dashboard', media: 'all'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
-    = render partial: 'layouts/sidebar'
-    %section.content
+    %section
       = render partial: 'layouts/header'
       :ruby
         show_zero_workers_warning =
@@ -43,21 +42,19 @@
           .alert.alert-info= flash[:notice]
         - if flash[:alert].present?
           .alert.alert-danger= flash[:alert].html_safe
-        - if content_for?(:page_title)
-          .page-title
-            %h3= yield :page_title
-        - if breadcrumbs.any? || content_for?(:page_actions)
-          %div.breadcrumb-bar
-            - if breadcrumbs.any?
-              %div.breadcrumb-left-side
-                = breadcrumbs(pretext: "You are here: ", style: :bootstrap,
-                  display_single_fragment: true).tap do |links|
-                  - links.each do |link|
-                    - link.url = nil if !user_signed_in? && link.key == :root
-            - if content_for?(:page_actions)
-              %div.breadcrumb-actions
-                = yield :page_actions
-        = yield
+        - if current_project
+          .col-sm-9
+            = render 'project_header', project: current_project
+            .row
+              .col-sm-12
+                = yield
+          .col-sm-3
+            - if content_for(:help)
+              = content_for(:help)
+            - else
+              = render 'right_help_bar'
+        - else
+          = yield
 
     = javascript_include_tag 'dashboard'
     = yield(:in_page_js) if content_for?(:in_page_js)

@@ -171,7 +171,8 @@ class ProjectsControllerTest < ActionController::TestCase
       describe "GET#show" do
         it "returns ok" do
           get :show, id: project.id
-          assert_response :ok
+          assert_response 302
+          response.location.must_equal "http://test.host/projects/#{project.to_param}/builds"
         end
       end
     end

@@ -80,13 +80,14 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
 
     describe 'when a user clicks add a new run button' do
       before do
-        visit project_test_runs_path(_test_run.project)
+        visit project_test_runs_path(project, branch: branch.branch_name)
       end
 
       it 'turns all previous queued test_jobs to cancelled', js: true do
         perform_enqueued_jobs do
           VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
             page.find('a[action="create"]').click
+            wait_for_requests_to_finish
           end
         end
       end

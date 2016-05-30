@@ -7,12 +7,17 @@ class Testributor.Pages.TestRuns
     jobTemplate = HandlebarsTemplates["test_jobs/test_job"]
     errorTemplate = HandlebarsTemplates["test_jobs/error"]
     testRunId = $('[data-test-run-id]').data('test-run-id')
+    projectId = $('[data-test-run-id]').data('project-id')
     userIsAdmin = $('[data-admin-user]').data('admin-user')
     userCanManageRun = $('[data-user-can-manage-run]').data('user-can-manage-run')
 
     progressBar = new Testributor.Widgets.ProgressBar(display_stats: true)
     subscriptions = {
-      "TestRun": [testRunId]
+      "TestRun": {
+        "ids": [testRunId],
+        'actions': ['read'],
+        "project_id": projectId
+      }
     }
     Testributor.Widgets.LiveUpdates(subscriptions, (msg) ->
       if msg.retry

@@ -8,8 +8,8 @@ class LiveUpdatesController < ApplicationController
   # Pub/Sub system.
   # @param params[:uid] -> the socket id
   # @param params[:subscriptions] -> A hash which contains the requested resources to subscribe. E.g.
-  # params[:subscriptions] = 
-  # { 
+  # params[:subscriptions] =
+  # {
   #   "TrackedBranch" => [1,2,3],
   #   "Project" => [1,2],
   #   "TestRun" => [34],

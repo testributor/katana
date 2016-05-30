@@ -75,9 +75,9 @@ module ApplicationHelper
     end
   end
 
-  def conditions_for_active_project
+  def conditions_for_active_project(project)
     [
-      current_page?(project_path(current_project)),
+      current_page?(project_path(project)),
       controller_name == 'test_runs'
     ]
   end

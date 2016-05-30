@@ -185,7 +185,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
 
       it 'must delete all test_jobs', js: true do
         _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
-        page.find('td .btn.btn-danger', text: "Cancel").click
+        page.find("#test-run-#{_test_run.id} .btn.btn-danger", text: "Cancel").click
         wait_for_requests_to_finish
         page.must_have_selector("#test-run-#{_test_run.id}", text: "Cancelled")
         TestRun.cancelled.count.must_equal 1
@@ -213,22 +213,6 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       _test_run.project.update_column(:is_private, false)
       _test_job
       TrackedBranch.any_instance.stubs(:from_github).returns(branch_github_response)
-    end
-
-    it 'does not display breadcrumb actions' do
-      visit project_test_runs_path(
-        _test_run.project.id,
-        branch: _test_run.tracked_branch.branch_name)
-      page.all('.breadcrumb_actions').size.must_equal 0
-    end
-
-    it 'does not have the root link enabled on breadcrumb' do
-      visit project_test_runs_path(
-        _test_run.project.id,
-        branch: _test_run.tracked_branch.branch_name)
-      within('.breadcrumb-bar') do
-        page.all('a').size.must_equal 1
-      end
     end
 
     it 'displays the retry action when the run is passed', js: true do

@@ -61,8 +61,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     Broadcaster.publish(
       project.redis_live_update_resource_key, { event: "worker_added" })
     click_on "Done!"
-    page.must_have_content("No branches found for project #{project.repository_owner}/#{project.name}")
-    page.current_path.must_equal project_path(project)
+    page.must_have_content("Track a branch")
+    page.current_path.must_equal project_test_runs_path(project)
   end
 
   it 'displays the correct badges', js: true do

@@ -1,7 +1,3 @@
-.logo {
-  margin-top: 20px;
-}
-
 .left-panel {
   .fa {
     line-height: inherit;
@@ -48,8 +44,9 @@
 
 
 .progress {
-  margin-top: 17px;
-
+  height: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
   .status {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -72,18 +69,10 @@
 .panel {
   min-width: 800px;
 }
-.commit-info {
-  white-space: nowrap;
-  float: left;
-  margin-top: 2px;
-  height: 43px;
 
+.commit-info {
+  height: 45px;
   .message {
-    display:inline-block;
-    max-width: 325px;
-    white-space: nowrap;
-    overflow:hidden !important;
-    text-overflow: ellipsis;
   }
 
   .build-link {
@@ -95,8 +84,7 @@
 
   .text {
     line-height: 16px;
-    font-size: 14px;
-    display: inline-block;
+    font-size: 13px;
 
     i {
       color: grey;
@@ -115,10 +103,7 @@
 
 .source-button {
   margin-top: -3px;
-  width: 100px;
   height: 34px;
-  float: right;
-  margin-left: 10px;
 
   .source-link {
     text-decoration: none;
@@ -220,9 +205,20 @@
 }
 
 .branch {
-  border-top: solid 1px #CCC;
+  margin: 0px -10px 0px 0px;
+  display: block;
   padding: 10px;
   vertical-align: middle;
+  text-align: left;
+
+  &.btn {
+    border: none;
+    border-bottom: 1px solid #e9e9e9;
+  }
+
+  &.btn-default {
+    border-color: #e9e9e9;
+  }
 
   .status {
     margin-top: 10px;
@@ -233,25 +229,20 @@
   }
 
   .name {
-    margin: 10px 0px 10px 0px;
-    font-weight: bold;
-
+    text-overflow: ellipsis;
+    overflow: hidden;
     a {
       text-decoration: none;
     }
 
-    ::before {
-      opacity: 0.65;
-      background-color: #CCC;
-      margin-top: 2px;
-      margin-right: 2px;
-      float: left;
+    &::before {
+      vertical-align: middle;
       content: '';
-      display: block;
-      width: 20px;
-      height: 20px;
+      display: inline-block;
+      width: 18px;
+      height: 18px;
       background: image-url("branch_icon")  no-repeat center center;
-      background-size: 20px 20px;
+      background-size: 18px 18px;
     }
   }
 }
@@ -265,16 +256,6 @@
   width: 100%;
   height: 100%;
   right: 0px;
-}
-
-.test-run-tr {
-  td {
-    vertical-align: middle !important;
-  }
-}
-
-.status-lable {
-  margin-top: -2px;
 }
 
 .sign-up-cta-header {
@@ -308,3 +289,133 @@
     font-size: 10px;
   }
 }
+
+.test-run-row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.panelized {
+  border: 1px solid #e9e9e9;
+  margin: 0px -20px 0px 0px;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 10px;
+
+  h3 {
+    margin-top: px;
+  }
+}
+
+.border-right {
+  border-right: 1px solid #ccc;
+}
+
+.active-hr {
+  position: absolute;
+  margin-right: 10px;
+  z-index: -1;
+  width: 100px;
+  margin-left: 130px;
+  margin-top: 22px;
+}
+
+.project-title {
+  h4 {
+    display: inline-block;
+  }
+
+  img {
+    vertical-align: bottom;
+  }
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.current-branch {
+  border: 1px solid #ddd;
+  background-color: #eee;
+}
+
+.track-a-branch {
+  display: block;
+  padding: 10px 30px;
+  text-decoration: underline;
+
+}
+
+.project-links {
+  ul{
+    @media screen and (min-width: $screen-md-max) {
+      float: right;
+    }
+
+  }
+
+  margin: 4px;
+
+  li {
+    display: inline-block;
+  }
+
+  ul {
+    border-radius: 4px;
+    padding-left: 0px;
+  }
+
+  a {
+    border-radius: 4px;
+    display: inline-block;
+    color: #929292;
+    padding: 6px;
+    margin: 0px;
+    display: inline-block;
+
+    &:hover {
+      color: black;
+    }
+
+    &.active {
+      color: black;
+      background-color: #e7e7e7;
+    }
+  }
+
+}
+
+.project-title-bar {
+  border-radius: 4px;
+}
+
+.fa {
+  margin-right: 5px;
+}
+
+.time-div {
+  .fa {
+    margin-right: 2px;
+  }
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.test-run-action {
+  @media screen and (min-width: $screen-md-max) {
+    margin-top: 16px;
+  }
+}
+
+.right-side {
+  @media screen and (min-width: $screen-md-max) {
+    float: right;
+  }
+}
+
+.left-side {
+  @media screen and (min-width: $screen-md-max) {
+    float: left;
+  }
+}
+

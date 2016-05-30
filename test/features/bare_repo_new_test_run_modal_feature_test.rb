@@ -14,7 +14,7 @@ class BareRepoNewTestRunModalFeatureTest < Capybara::Rails::TestCase
 
   describe 'new build modal' do
     it 'creates a new build with the modal', js: true do
-      page.find(".breadcrumb-actions button", text: "Add a Build").click
+      page.find(".search-bar button", text: "Add a Build").click
       page.must_have_selector("#newTestRunModal", visible: true)
       fill_in "Commit SHA", with: "352413"
       click_on "Create"
@@ -23,7 +23,7 @@ class BareRepoNewTestRunModalFeatureTest < Capybara::Rails::TestCase
     end
 
     it "flashes validation errors", js: true do
-      page.find(".breadcrumb-actions button", text: "Add a Build").click
+      page.find(".search-bar button", text: "Add a Build").click
       page.must_have_selector("#newTestRunModal", visible: true)
       fill_in "Commit SHA", with: ""
       click_on "Create"
@@ -32,7 +32,7 @@ class BareRepoNewTestRunModalFeatureTest < Capybara::Rails::TestCase
     end
 
     it "opens the modal with the 'No builds found' button too", js: true do
-      page.find(".panel button", text: "Add a Build").click
+      page.find(".search-bar button", text: "Add a Build").click
       page.must_have_selector("#newTestRunModal", visible: true)
       fill_in "Commit SHA", with: "884455"
       click_on "Create"

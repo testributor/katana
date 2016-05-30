@@ -44,7 +44,7 @@ class Testributor.Pages.ProjectWizard
       [resource, id] = $waiting_for_worker
         .data('live-update-resource-id').split("#")
       subscriptions = {}
-      subscriptions[resource] = [id]
+      subscriptions[resource] = { ids: [id] }
       Testributor.Widgets.LiveUpdates(subscriptions, (msg) ->
         if msg.event == 'worker_added'
           $waiting_for_worker.remove()

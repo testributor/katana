@@ -3,16 +3,17 @@ require 'test_helper'
 class LiveUpdatesControllerTest < ActionController::TestCase
   describe "POST #subscribe" do
     let(:tracked_branch) { FactoryGirl.create(:tracked_branch) }
-    let(:tracked_branch_from_another_user) do 
+    let(:tracked_branch_from_another_user) do
       FactoryGirl.create(:tracked_branch)
     end
     let(:subscription_params) do
       {
         uid: 'ArandomUID',
         subscriptions: {
-          "Project" => tracked_branch.project.id,
-          "TrackedBranch" => [tracked_branch.id, 
-                              tracked_branch_from_another_user.id]
+          "Project" => { "ids": tracked_branch.project.id },
+          "TrackedBranch" => {"ids": [tracked_branch.id,
+                                      tracked_branch_from_another_user.id]
+                             }
         }
       }
     end

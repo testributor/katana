@@ -1,84 +1,90 @@
-- breadcrumb :test_run, current_project, @test_run
-
-- content_for :page_title do
-  Build ##{@test_run.run_index}
-- content_for :page_actions do
-  - if can?(:manage, @test_run)
-    = render partial: 'test_run_actions', locals: { test_run: @test_run }
-
-.panel.panel-default{ data: { test_run_id: @test_run.id, user_can_manage_run: can?(:manage, @test_run) }}
-  - if @test_run.setup_error.present?
-    .alert.alert-danger
-      An error occured on setup step:
-      %br
-      = @test_run.setup_error
-  .panel-heading.test-run-panel-heading
-    .pull-left
-      = react_component 'TestRunShowCommit',
-        { commit: @test_run.decorate.commit_info_as_hash, provider: @test_run.project.repository_provider }
-    .pull-right
-      .show-all-area
-        = label_tag :show_all, 'Toggle all logs', class: 'more-info',
-          title: 'Show or hide logs with error messages.'
-        = check_box_tag :show_all
-  .row
-    .col-md-12
-      .progress{ data: @test_run.class.test_job_statuses[@test_run.id], id: @test_run.id }
-  .panel-body
+.row.panelized{ data: { test_run_id: @test_run.id, user_can_manage_run: can?(:manage, @test_run) }}
+  .col-sm-12
+    - if @test_run.setup_error.present?
+      .alert.alert-danger
+        An error occured on setup step:
+        %br
+        = @test_run.setup_error
     .row
-      .col-xs-12
-        .table-responsive
-          %table.table
-            %thead
-              %tr
-                %th='Job name'
-                %th='Status'
-                %th='Sent at (UTC)'
-                %th='Worker UUID'
-                - if current_user && current_user.admin?
-                  %th='Chunk index'
-                  %th='Cost prediction'
-                  %th='Worker command seconds'
-                %th='Duration'
-                %th='Actions'
-            %tbody
-              - @test_jobs.each do |test_job|
-                - test_job = test_job.decorate
-                %tr{id: "test-job-#{test_job.id}"}
-                  %td= @test_run.project.in_demo_mode? ? test_job.demo_job_name : test_job.job_name
-                  %td
-                    %span{class: test_job.status.css_class}= test_job.status.text
-                    - if test_job.status.unsuccessful?
-                      = link_to "#error-#{test_job.id}",
-                        data: { toggle: :collapse },
-                        class: "more-info", area_expanded: false do
-                        = 'Toggle logs'
-                  %td= l(test_job.sent_at, format: :short) if test_job.sent_at
-                  %td= test_job.worker_uuid_short
+      .col-md-6.left-side
+        = link_to project_test_runs_path(branch: @test_run.try(:tracked_branch).try(:branch_name)), class: 'small' do
+          %i.fa.fa-arrow-left
+          Back to builds
+        %div
+          %h3
+            .left-side.m-r-10{ style: 'margin-top: 2px;'}
+              Build ##{@test_run.id}
+            = react_component 'ViewCommit',
+             provider: @test_run.project.repository_provider, source_logo: @test_run.commit_source_logo
+        = react_component 'TestRunShowCommit',
+          { commit: @test_run.decorate.commit_info_as_hash, provider: @test_run.project.repository_provider }
+      .col-sm-6.right-side
+        .show-all-area
+          .col-sm-12
+            - if can?(:manage, @test_run)
+              = render partial: 'test_run_actions', locals: { test_run: @test_run }
+          .col-sm-12
+            = label_tag :show_all, 'Toggle all logs', class: 'more-info',
+              title: 'Show or hide logs with error messages.'
+            = check_box_tag :show_all
+    .row
+      .col-md-12
+        .progress{ data: @test_run.class.test_job_statuses[@test_run.id], id: @test_run.id }
+    .panel-body
+      .row
+        .col-xs-12
+          .table-responsive
+            %table.table
+              %thead
+                %tr
+                  %th='Job name'
+                  %th='Status'
+                  %th='Sent at (UTC)'
+                  %th='Worker UUID'
                   - if current_user && current_user.admin?
-                    %td= test_job.chunk_index
+                    %th='Chunk index'
+                    %th='Cost prediction'
+                    %th='Worker command seconds'
+                  %th='Duration'
+                  %th='Actions'
+              %tbody
+                - @test_jobs.each do |test_job|
+                  - test_job = test_job.decorate
+                  %tr{id: "test-job-#{test_job.id}"}
+                    %td= @test_run.project.in_demo_mode? ? test_job.demo_job_name : test_job.job_name
                     %td
-                      = test_job.avg_worker_command_run_seconds
+                      %span{class: test_job.status.css_class}= test_job.status.text
+                      - if test_job.status.unsuccessful?
+                        = link_to "#error-#{test_job.id}",
+                          data: { toggle: :collapse },
+                          class: "more-info", area_expanded: false do
+                          = 'Toggle logs'
+                    %td= l(test_job.sent_at, format: :short) if test_job.sent_at
+                    %td= test_job.worker_uuid_short
+                    - if current_user && current_user.admin?
+                      %td= test_job.chunk_index
+                      %td
+                        = test_job.avg_worker_command_run_seconds
+                      %td
+                        = test_job.worker_command_run_seconds
                     %td
-                      = test_job.worker_command_run_seconds
-                  %td
-                    = test_job.total_running_time
-                  %td
-                    - if test_job.status.terminal? && can?(:manage, @test_run)
-                      = link_to project_test_job_retry_path(current_project,
-                        test_job),
-                        class: "btn btn-primary btn-xs m-b-5", method: :put do
-                        %i.fa.fa-refresh
-                        %span= "Retry"
-                      - if test_job.rerun?
-                        .btn.btn-xs{ data: { toggle: "tooltip",
-                          title: "This job has been retried. The times shown are those of the first execution" } }
-                          %i.fa.fa-info
+                      = test_job.total_running_time
+                    %td
+                      - if test_job.status.terminal? && can?(:manage, @test_run)
+                        = link_to project_test_job_retry_path(current_project,
+                          test_job),
+                          class: "btn btn-primary btn-xs m-b-5", method: :put do
+                          %i.fa.fa-refresh
+                          %span= "Retry"
+                        - if test_job.rerun?
+                          .btn.btn-xs{ data: { toggle: "tooltip",
+                            title: "This job has been retried. The times shown are those of the first execution" } }
+                            %i.fa.fa-info
 
-                - if test_job.status.unsuccessful?
-                  %tr
-                    %td{colspan: 10, class: 'display-error'}
-                      %div{id: "error-#{test_job.id}", class: "well console collapse"}
-                        :preserve
-                          #{'\n'}
-                          #{test_job.result.html_safe}
+                  - if test_job.status.unsuccessful?
+                    %tr
+                      %td{colspan: 10, class: 'display-error'}
+                        %div{id: "error-#{test_job.id}", class: "well console collapse"}
+                          :preserve
+                            #{'\n'}
+                            #{test_job.result.html_safe}

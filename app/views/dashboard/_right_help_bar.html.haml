@@ -1,0 +1,33 @@
+.row.panelized
+  .col-md-12
+    %h4
+      %i.fa.fa-cogs
+      Workers Running
+
+    .m-t-10
+      - current_project.active_workers.each do |w|
+        %i.fa.fa-cog.fa-spin.fa-1x{style: 'color: green;'}
+        = w[0...26]
+    %p
+      You can
+      = link_to worker_setup_project_settings_path(current_project) do
+        %b configure
+      your workers here.
+    %hr
+  .col-md-12
+    %h4
+      %i.fa.fa-book
+      = link_to 'Documentation', 'http://documentation.testributor.com', target: '_blank'
+
+    Documentation is under continuous improvement.
+    %br
+    We do our best to keep it up to date and complete but don’t hesitate to contact us if you find something missing or wrong.
+    %hr
+  .col-md-12
+    %h4
+      %i.fa.fa-life-ring
+      Help
+
+    We are always available to answer every question.
+    Send us an e-mail at
+    = mail_to 'info@testributor.com', 'info@testributor.com'

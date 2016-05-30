@@ -1,7 +1,7 @@
 = link_to retry_project_test_run_path(id: test_run.id,
   project_id: current_project),
   id: "test_run_retry_button",
-  class: 'btn btn-primary btn-xs m-b-5 m-r-5',
+  class: 'btn btn-primary btn-xs m-b-5 m-r-5 right-side',
   style: test_run.retry? ? '' : 'display: none',
   method: :post do
 
@@ -9,6 +9,6 @@
   %span Retry
 - if test_run.status.can_be_cancelled?
   = link_to project_test_run_path(current_project, test_run,
-    status: TestStatus::CANCELLED), class: 'btn btn-xs btn-danger m-b-5', method: :put do
+    status: TestStatus::CANCELLED), class: 'btn btn-xs btn-danger m-b-5 right-side', method: :put do
     .fa.fa-times
     %span Cancel

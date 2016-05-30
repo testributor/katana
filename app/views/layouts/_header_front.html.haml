@@ -6,11 +6,11 @@
           .container-fluid
             .navbar-header
               = link_to root_path do
-                %div.navbar-brand.logo
+                %div.logo-front
                   %img{ alt: "logo", src: image_path("logo.png")}
                   %span.logo-text Testributor
             %nav{ id: "navigation"}
-              %ul.nav.navbar-nav.navbar-left.collapse.navbar-collapse
+              %ul.nav.navbar-nav.navbar-left.collapse.navbar-collapse.m-t-5
                 %li
                   = link_to root_path(anchor: 'features'), class: 'btn-custom' do
                     Features
@@ -30,7 +30,7 @@
                   = link_to pages_path("about_us"), class: 'btn-custom' do
                     About
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
-              %ul.nav.navbar-nav.navbar-right
+              %ul.nav.navbar-nav.navbar-right.m-t-5
                 %li
                   = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
                 %li

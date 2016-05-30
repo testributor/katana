@@ -8,20 +8,21 @@ class TestRunsController < DashboardController
 
   def index
     if params[:branch_id]
-      @tracked_branch = TrackedBranch.non_private.
-        where(id: params[:branch_id]).try(:first)
+      @tracked_branch = TrackedBranch.non_private.find_by(id: params[:branch_id].to_i)
       if current_user
-        @tracked_branch ||= current_user.tracked_branches.
-          where(id: params[:branch_id]).try(:first)
+        @tracked_branch ||= current_user.tracked_branches.find_by(id: params[:branch_id])
       end
     elsif params[:branch]
       @tracked_branch ||= TrackedBranch.non_private.
-        where(branch_name: params[:branch], project: current_project).try(:first)
+        find_by(branch_name: params[:branch], project: current_project)
       if current_user
-        @tracked_branch ||= current_user.tracked_branches.
-          where(branch_name: params[:branch], project: current_project).try(:first)
+        @tracked_branch ||= current_project.tracked_branches.
+          find_by(branch_name: params[:branch], project: current_project)
       end
+    else
+      @tracked_branch ||= current_project.tracked_branches.find_by(branch_name: 'master')
     end
+
 
     if @tracked_branch
       @test_runs = current_project.test_runs.
@@ -55,12 +56,12 @@ class TestRunsController < DashboardController
         commit_sha: commit_sha })
 
     if test_run
-      flash[:notice] = 'Your build is being setup'
       head :ok and return if request.xhr?
+      flash[:notice] = 'Your build is being setup'
       redirect_to :back
     else
-      flash[:alert] =  manager.errors.join(', ')
       head :ok and return if request.xhr?
+      flash[:alert] =  manager.errors.join(', ')
       redirect_to :back
     end
   end

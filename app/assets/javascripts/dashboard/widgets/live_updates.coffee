@@ -37,9 +37,14 @@ class Testributor.Widgets.LiveUpdates
       subscribe(socket["id"], @subscriptions)
     )
 
-    _.each(subscriptions, (ids, resource) =>
-      _.each(ids, (id) =>
+    _.each(subscriptions, (entities, resource) =>
+      _.each(entities.ids, (id) =>
         socket.on("#{resource}##{id}", (msg)=>
+          @callback(msg)
+        )
+      )
+      _.each(entities.actions, (action) =>
+        socket.on("#{resource}##{action}", (msg)=>
           @callback(msg)
         )
       )

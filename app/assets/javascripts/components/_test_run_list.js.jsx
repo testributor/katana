@@ -6,21 +6,9 @@ var TestRunList = React.createClass({
   }.bind(this));
 
     return (
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>Build</th>
-            <th>Commit message (SHA)</th>
-            <th>Status</th>
-            <th>Results</th>
-            <th>Duration</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          { testRunNodes }
-        </tbody>
-      </table>
+      <div>
+        { testRunNodes }
+      </div>
     )
   }
 });

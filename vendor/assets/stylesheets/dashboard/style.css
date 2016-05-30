@@ -169,24 +169,6 @@ aside.left-panel.lg {
 aside.left-panel.lg + .content {
   margin-left: 250px;
 }
-
-/***** 2.1 LOGO *****/
-.logo {
-  padding-top: 8px;
-}
-
-.logo-expanded {
-  font-size: 14px;
-  letter-spacing: .05em;
-  color: #fff !important;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.logo-expanded span {
-  vertical-align: middle;
-}
-
 /******** 2.2 Navigation *******/
 
 .navigation {

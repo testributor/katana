@@ -103,14 +103,5 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
       error.all(".btn-primary").length.must_equal 0
       passed.all(".btn-primary").length.must_equal 0
     end
-
-    it 'displays one enabled link to master', js: true do
-      page.all('.breadcrumb-actions').size.must_equal 0
-      within('.breadcrumb-left-side') do
-        links = page.all('a')
-        links.first.text.must_equal project.name
-        links[1].text.must_match(/Builds/)
-      end
-    end
   end
 end

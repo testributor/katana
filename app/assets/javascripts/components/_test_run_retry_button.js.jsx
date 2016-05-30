@@ -6,7 +6,7 @@ var TestRunRetryButton = React.createClass({
     }
 
     return (
-      <a className="btn btn-xs btn-primary m-b-5 m-r-5 js-remote-submission" rel="nofollow" data-disable-with={ withDots('Retrying') } data-method="post" data-remote="true" href={ this.props.retryUrl }>
+      <a className="btn btn-md test-run-action btn-primary js-remote-submission" rel="nofollow" data-disable-with={ withDots('Retrying') } data-method="post" data-remote="true" href={ this.props.retryUrl }>
         <i className="fa fa-refresh" />
         <span> Retry</span>
       </a>

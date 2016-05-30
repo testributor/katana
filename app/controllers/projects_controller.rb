@@ -7,12 +7,7 @@ class ProjectsController < DashboardController
   before_action :authorize_resource!
 
   def show
-    if current_project.repository_provider == "bare_repo"
-      redirect_to project_test_runs_path(current_project)
-    else
-      @branches = current_project.tracked_branches.
-        includes(test_runs: :test_jobs)
-    end
+    redirect_to project_test_runs_path(current_project)
   end
 
   def instructions
