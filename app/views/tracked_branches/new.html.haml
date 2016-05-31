@@ -35,7 +35,9 @@
           - page_manager = GithubPageManager.new(@response_data[:last_response])
           - if page_manager.all_pages_number > 1 && (next_page = page_manager.next_page_number)
             = link_to "Fetch more...", fetch_branches_project_branches_path(page: next_page),
-            remote: true, id: 'fetch_more', class: 'btn btn-default btn-lg btn-block'
+              id: 'fetch_more', class: 'btn btn-default btn-lg btn-block',
+              data: { disable_with: with_dots('Fetching branches'), remote: true }
+
     - else
       %h2 No branches found! None. Zero. Zilch. Nada.
       We were unable to find any branches in the '#{current_project.repository_name}'. That's weird...
