@@ -6,9 +6,7 @@ class TrackedBranchesController < DashboardController
   def new
     manager = RepositoryManager.new(current_project)
 
-    @branches = manager.fetch_branches.reject do |branch|
-      branch.branch_name.in?(current_project.tracked_branches.map(&:branch_name))
-    end
+    @response_data = manager.fetch_branches
   end
 
   def create
@@ -45,6 +43,15 @@ class TrackedBranchesController < DashboardController
     end
   end
 
+  def fetch_branches
+    head :bad_request and return unless request.xhr?
+
+    manager = RepositoryManager.new(current_project)
+    @response_data = manager.fetch_branches(params[:page])
+
+    render :new, layout: false
+  end
+
   private
 
   def branch_params
@@ -52,7 +59,12 @@ class TrackedBranchesController < DashboardController
   end
 
   def authorize_resource!
-    action_map = { new: :create, create: :create, destroy: :destroy }
+    action_map = {
+      new: :read,
+      fetch_branches: :read,
+      create: :create,
+      destroy: :destroy
+    }
 
     authorize!(action_map[action_name.to_sym], TrackedBranch)
   end

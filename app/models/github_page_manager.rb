@@ -1,4 +1,4 @@
-class GithubRepoPageManager
+class GithubPageManager
   #https://developer.github.com/guides/traversing-with-pagination/
 
   def initialize(last_response)

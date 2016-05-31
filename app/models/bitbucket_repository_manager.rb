@@ -195,9 +195,22 @@ class BitbucketRepositoryManager
   end
 
   def fetch_branches
-    bitbucket_client.repos.branches(repository_owner, repository_slug).map do |name, _|
-      TrackedBranch.new(branch_name: name)
+    branches = bitbucket_client.repos.branches(repository_owner, repository_slug)
+    already_tracked_branch_names = project.tracked_branches.map(&:branch_name)
+
+    branches = branches.map do |name, _|
+      cannot_import_message =
+        if name.in?(already_tracked_branch_names)
+          "You are already tracking this branch"
+        end
+
+      {
+        name: name,
+        cannot_import_message: cannot_import_message
+      }
     end
+
+    { branches: branches }
   end
 
   def cleanup_for_removal

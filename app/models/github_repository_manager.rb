@@ -5,7 +5,7 @@ class GithubRepositoryManager
 
   # https://developer.github.com/v3/#pagination
   REPOSITORIES_PER_PAGE = 10
-  BRANCHES_PER_PAGE     = 100 # Quick fix for lack of pagination on the view
+  BRANCHES_PER_PAGE     = 10
 
   # We want this for github_webhook_url
   include Rails.application.routes.url_helpers
@@ -182,10 +182,25 @@ class GithubRepositoryManager
     { repos: repos, last_response: github_client.last_response }
   end
 
-  def fetch_branches
-    github_client.branches(repository_id, per_page: BRANCHES_PER_PAGE).map do |b|
-      TrackedBranch.new(branch_name: b.name)
+  def fetch_branches(page=0)
+    page = page.to_i
+    branches = github_client.branches(repository_id, { per_page: BRANCHES_PER_PAGE }.
+      merge(page > 0 ? { page: page } : {}))
+    already_tracked_branch_names = project.tracked_branches.map(&:branch_name)
+
+    branches = branches.map do |branch|
+      cannot_import_message =
+       if branch.name.in?(already_tracked_branch_names)
+         "You are already tracking this branch"
+       end
+
+      {
+        name: branch.name,
+        cannot_import_message: cannot_import_message
+      }
     end
+
+    { branches: branches, last_response: github_client.last_response }
   end
 
   def cleanup_for_removal
