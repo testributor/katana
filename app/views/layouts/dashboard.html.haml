@@ -62,6 +62,7 @@
 
     = javascript_include_tag 'dashboard'
     = yield(:in_page_js) if content_for?(:in_page_js)
+    = render 'layouts/olark'
 
   .modal.fade#feedback-modal
     .modal-dialog
