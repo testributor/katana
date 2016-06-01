@@ -14,10 +14,15 @@ var TestRunPresenter = React.createClass({
         testRuns.splice(testRuns.indexOf(existedRun), 1, msg.test_run)
         this.setState({ testRuns: testRuns })
       } else {
-        testRuns.unshift(msg.test_run)
-        this.setState({ testRuns: testRuns })
-        Testributor.Widgets.LiveUpdates(
-          { "TestRun": { "ids": [msg.test_run.id] } }, this.handleUpdate)
+        if (msg.test_run.branch_id == this.props.currentBranchId ||
+          (this.props.currentBranchId == null)) {
+          testRuns.unshift(msg.test_run)
+          this.setState({ testRuns: testRuns })
+          Testributor.Widgets.LiveUpdates(
+            { "TestRun": { "ids": [msg.test_run.id] } }, this.handleUpdate)
+        } else {
+          null
+        };
       }
     }
   },
@@ -27,7 +32,7 @@ var TestRunPresenter = React.createClass({
     var subscriptions = {
       "TestRun": {
         'ids': testRunIds,
-        'actions': ['read'],
+        'actions': ['create'],
         'project_id': this.props.projectId
       }
     }

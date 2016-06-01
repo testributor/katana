@@ -1,6 +1,6 @@
 # This widget should be used in any page that need live updates on provided resources
 # subscriptions is an object which contains all requested subscriptions in the following format:
-# subscripttions = 
+# subscripttions =
 # {
 #   "TrackedBranch": [1,2],
 #   "Project": [1],
@@ -44,7 +44,7 @@ class Testributor.Widgets.LiveUpdates
         )
       )
       _.each(entities.actions, (action) =>
-        socket.on("#{resource}##{action}", (msg)=>
+        socket.on("Project##{entities.project_id}##{resource}##{action}", (msg)=>
           @callback(msg)
         )
       )

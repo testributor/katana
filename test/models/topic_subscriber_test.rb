@@ -27,7 +27,7 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       topic_subscriber = TopicSubscriber.new(first_project.user, socket_id)
       successful_subscriptions = topic_subscriber.subscribe(subscriptions)
       successful_subscriptions.
-        must_equal({ "Project" => [first_project.id, last_project.id] })
+        must_equal({ "Project" => ["Project##{first_project.id}", "Project##{last_project.id}"] })
     end
 
     it "calls Broadcaster.subscribe with correct arguments on non nil socket_id" do
@@ -57,7 +57,7 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       {
         "TestRun" => { "ids" => [ _test_run.id ],
                         "project_id" => _test_run.project.id,
-                        "actions" => ["read"]
+                        "actions" => ["create"]
                      },
       }
     end
@@ -65,7 +65,7 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       {
         "TestRun" => { "ids" => [ _test_run.id ],
                         "project_id" => 0,
-                        "actions" => ["read"]
+                        "actions" => ["create"]
                      },
       }
     end
@@ -74,7 +74,8 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       socket_id = "1adf334a55s"
       topic_subscriber = TopicSubscriber.new(_test_run.project.user, socket_id)
       successful_subscriptions = topic_subscriber.subscribe(_test_run_subscriptions)
-      successful_subscriptions.must_equal({ "TestRun"=> [_test_run.id, "read"] })
+      successful_subscriptions.must_equal({ "TestRun"=> ["TestRun##{_test_run.id}",
+                                            "Project##{_test_run.project_id}#TestRun#create"] })
     end
 
     it 'does not subscribe the user to the requested action if user not in project' do
@@ -88,7 +89,7 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       socket_id = "1adf334a55s"
       topic_subscriber = TopicSubscriber.new(_test_run.project.user, socket_id)
       successful_subscriptions = topic_subscriber.subscribe(wrong_test_run_subscriptions)
-      successful_subscriptions.must_equal({ "TestRun"=> [_test_run.id] })
+      successful_subscriptions.must_equal({ "TestRun"=> ["TestRun##{_test_run.id}"] })
     end
   end
 end

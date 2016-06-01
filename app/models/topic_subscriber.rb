@@ -23,36 +23,29 @@ class TopicSubscriber
       authorized_ids = authorized_ids_to_subscribe(klass, ids)
       authorized_actions = authorized_actions_to_subscribe(klass, actions, project_id)
 
-      authorizations = authorized_ids + Array(authorized_actions)
+      authorizations = authorized_ids + authorized_actions.to_a
       subscriptions[klass] = authorizations if authorizations.any?
     end
-    request_subscriptions(subscriptions)
+
+    subscriptions.each do |klass, value|
+      Broadcaster.subscribe(@socket_id, value)
+    end
 
     subscriptions
   end
 
   private
 
-  def request_subscriptions(subscriptions)
-    subscriptions_array = subscriptions.map do |klass, entities|
-      entities.map { |entity| "#{klass}##{entity}" }
-    end.flatten
-
-    Broadcaster.subscribe(@socket_id, subscriptions_array)
-  end
-
   def authorized_ids_to_subscribe(klass, ids)
-    subscribed_resources = []
+    return [] unless whitelisted_classes.include?(klass)
 
-    Array(ids).each do
-      next unless whitelisted_classes.include?(klass)
-      resources = klass.constantize.where(id: ids)
-      subscribed_resources = resources.select do |resource|
-        @ability.can?(:read_live_updates, resource)
-      end.map(&:id)
+    klass.constantize.where(id: ids).inject([]) do |result, resource|
+      if @ability.can?(:read_live_updates, resource)
+        result << "#{klass}##{resource.id}"
+      end
+
+      result
     end
-
-    subscribed_resources
   end
 
   def authorized_actions_to_subscribe(klass, actions, project_id)
@@ -61,12 +54,24 @@ class TopicSubscriber
     project = Project.find_by(id: project_id)
     ability = Ability.new(@subscriber, project)
 
-    actions.select do |action|
-      ability.can?(action, klass.constantize)
+    actions.inject([]) do |result, action|
+      if whitelisted_actions.include?(action) &&
+        whitelisted_classes.include?(klass) &&
+        ability.can?(:read_live_updates, project)
+
+        # project exists or the ability above won't pass
+        result << "Project##{project.id}##{klass}##{action}"
+      end
+
+      result
     end
   end
 
   def whitelisted_classes
     [User, Project, TrackedBranch, TestRun, TestJob].map(&:to_s)
+  end
+
+  def whitelisted_actions
+    ['create']
   end
 end

@@ -236,7 +236,7 @@ class TestRun < ActiveRecord::Base
   # Send notifications either on creation or on status change.
   def send_notifications
     if previous_changes.has_key?('created_at')
-      Broadcaster.publish('TestRun#read',
+      Broadcaster.publish("Project##{project_id}#TestRun#create",
         { event: 'TestRunCreate', test_run: serialized_run })
     else
       Broadcaster.publish(redis_live_update_resource_key,

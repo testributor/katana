@@ -26,8 +26,8 @@ class LiveUpdatesControllerTest < ActionController::TestCase
       successful_subscriptions = JSON.
         parse(response.body)["successful_subscriptions"]
       successful_subscriptions["Project"].
-        must_equal [tracked_branch.project.id]
-      successful_subscriptions["TrackedBranch"].must_equal [tracked_branch.id]
+        must_equal ["Project##{tracked_branch.project.id}"]
+      successful_subscriptions["TrackedBranch"].must_equal ["TrackedBranch##{tracked_branch.id}"]
     end
   end
 end

@@ -6,8 +6,8 @@
           class: "row btn btn-default branch #{('active' if branch.branch_name == @tracked_branch.try(:branch_name)) }" do
           .col-xs-11.name
             = branch.branch_name
-          - if can? :untrack_branch, @tracked_branch
-            = button_to project_branch_path(current_project, @tracked_branch),
+          - if can? :untrack_branch, branch
+            = button_to project_branch_path(current_project, branch),
               method: :delete, style: "background-color: #fff; border: none; width: 0px; padding: 0px; z-index: 1;",
               data: { confirm: "Branch will be removed from this project. Are you sure?" } do
               %i.fa.fa-times-circle
@@ -36,6 +36,7 @@
       = react_component 'TestRunPresenter',
         { testRuns: @test_runs.map(&:serialized_run),
           projectId: current_project.id,
+          currentBranchId: @tracked_branch.try(:id),
           userCanManageRun: @user_can_manage_runs }
 
 - if current_project.repository_provider == "bare_repo"

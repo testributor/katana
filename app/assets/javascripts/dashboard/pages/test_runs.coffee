@@ -15,7 +15,7 @@ class Testributor.Pages.TestRuns
     subscriptions = {
       "TestRun": {
         "ids": [testRunId],
-        'actions': ['read'],
+        'actions': ['create'],
         "project_id": projectId
       }
     }
