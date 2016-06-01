@@ -2,12 +2,14 @@
   .col-md-12
     %h4
       %i.fa.fa-cogs
-      Workers Running
+      Workers Running (UUID)
 
     .m-t-10
       - current_project.active_workers.each do |w|
-        %i.fa.fa-cog.fa-spin.fa-1x{style: 'color: green;'}
-        = w[0...26]
+        %div
+          %i.fa.fa-cog.fa-spin.fa-1x{style: 'color: green;'}
+          = w.split("_").last[0..7]
+    %br
     %p
       You can
       = link_to worker_setup_project_settings_path(current_project) do
