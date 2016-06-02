@@ -1,41 +1,34 @@
-%header.top-head.container-fluid
-  .pull-left
-    .logo.m-t-5
-      = link_to root_url, class: "logo-expanded" do
+%nav.navbar.navbar-default
+  .container-fluid
+    / Brand and toggle get grouped for better mobile display
+    .navbar-header
+      %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to root_url, class: "logo-expanded navbar-brand logo" do
         %i.ion-social-buffer
         %img{alt: "logo", src: image_path("logo-sm.png"), width: '45'}
         %div.text Testributor
-  = link_to project_wizard_path(:select_repository), class: "btn btn-default m-t-10" do
-    %i.fa.fa-plus-square-o
-    Add a project
-
-  %button.navbar-toggle.pull-left
-  - if user_signed_in?
-    %ul.list-inline.navbar-right.top-menu.top-right-menu
-      / user login dropdown start
-      %li.dropdown.text-center
-        %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
-          %span.username.m-r-5= current_user.email
-          %i.fa.fa-caret-down{ style: 'vertical-align: middle;'}
-        %ul.dropdown-menu.extended.pro-menu.fadeInUp.animated{style: "overflow: hidden; outline: none;", tabindex: "5003"}
+    - if user_signed_in?
+      #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        %ul.nav.navbar-nav
           %li
-            = link_to(destroy_user_session_path, method: :delete) do
-              %i.fa.fa-sign-out
-              Sign out
-  - else
-    .sign-up-cta-header.top-menu.top-right-menu.navbar-right.m-t-5
-      .col-xs-12
-        .col-xs-10.no-padding
-          .sign-up-text.text-right
-            Join our Open Source community and build your projects faster!
-        .col-xs-2
-          .sign-up-btn
-            = button_to(new_user_session_path, class: 'btn btn-primary') do
-              %span.m-r-5 Sign in
-              %i.fa.fa-sign-in
-
-
-  - if user_signed_in?
-    = link_to 'Send us feedback', '#',
-      class: "btn btn-default pull-right m-t-10 m-r-15",
-      data: { toggle: 'modal', target: '#feedback-modal' }
+            = link_to project_wizard_path(:select_repository), class: '' do
+              %i.fa.fa-plus
+              Add a project
+        %ul.nav.navbar-nav.navbar-right
+          %li
+            = link_to '#', data: { toggle: 'modal', target: '#feedback-modal' } do
+              %i.fa.fa-envelope-o
+              Send feedback
+          %li.dropdown
+            %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+              = current_user.email
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                = link_to(destroy_user_session_path, method: :delete) do
+                  %i.fa.fa-sign-out
+                  Sign out

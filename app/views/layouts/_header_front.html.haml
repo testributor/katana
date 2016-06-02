@@ -3,34 +3,38 @@
     .container
       .row.nav-wrapper
         %nav.navbar.navbar-custom
+          %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
           .container-fluid
             .navbar-header
               = link_to root_path do
                 %div.logo-front
                   %img{ alt: "logo", src: image_path("logo.png")}
                   %span.logo-text Testributor
-            %nav{ id: "navigation"}
-              %ul.nav.navbar-nav.navbar-left.collapse.navbar-collapse.m-t-5
-                %li
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse.m-t-5
+              %ul.nav.navbar-nav.navbar-left.text-center
+                %li.text-center
                   = link_to root_path(anchor: 'features'), class: 'btn-custom' do
                     Features
-                %li
-                  = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
-                    Documentation
-                %li
-                  = link_to 'http://blog.testributor.com', class: 'btn-custom' do
-                    Blog
-                %li
-                  = link_to pages_path("pricing"), class: 'btn-custom' do
-                    Pricing
-                %li
-                  = link_to pages_path("faqs"), class: 'btn-custom' do
-                    FAQs
-                %li
-                  = link_to pages_path("about_us"), class: 'btn-custom' do
-                    About
-            #bs-example-navbar-collapse-1.collapse.navbar-collapse
-              %ul.nav.navbar-nav.navbar-right.m-t-5
+                  %li
+                    = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
+                      Documentation
+                  %li
+                    = link_to 'http://blog.testributor.com', class: 'btn-custom' do
+                      Blog
+                  %li
+                    = link_to pages_path("pricing"), class: 'btn-custom' do
+                      Pricing
+                  %li
+                    = link_to pages_path("faqs"), class: 'btn-custom' do
+                      FAQs
+                  %li
+                    = link_to pages_path("about_us"), class: 'btn-custom' do
+                      About
+              %ul.nav.navbar-nav.navbar-right
                 %li
                   = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
                 %li

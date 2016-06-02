@@ -24,8 +24,8 @@
     = stylesheet_link_tag    'dashboard', media: 'all'
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
+    = render partial: 'layouts/header'
     %section
-      = render partial: 'layouts/header'
       :ruby
         show_zero_workers_warning =
           current_project && current_project.active_workers == 0 &&
