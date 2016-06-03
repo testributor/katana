@@ -33,14 +33,14 @@ class Testributor.Pages.TestRuns
           )
 
           $error = $(errorTemplate(testJob))
+          $testJob = $(("#test-job-#{testJob.id}"))
           if testJob.unsuccessful
-            $error.insertAfter($(jobTemplate(testJob)))
+            $error.insertAfter($testJob)
           progressBar.update(testJob.test_run_id, testJob.html_class)
 
         requiredUpdates(msg.test_run, $.extend(msg.test_job, admin: userIsAdmin, userCanManageRun: userCanManageRun))
     )
     $('[data-toggle="popover"]').popover()
-
 
     _.each($("div[id^='error']"), (value, key, list)->
       $(value).html(ansi_up.ansi_to_html($(value).text()))
