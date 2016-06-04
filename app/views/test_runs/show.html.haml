@@ -13,7 +13,7 @@
         %div
           %h3
             .left-side.m-r-10{ style: 'margin-top: 2px;'}
-              Build ##{@test_run.id}
+              Build ##{@test_run.run_index}
             = react_component 'ViewCommit',
              provider: @test_run.project.repository_provider, source_logo: @test_run.commit_source_logo, commit_url: @test_run.commit_url
         = react_component 'TestRunShowCommit',

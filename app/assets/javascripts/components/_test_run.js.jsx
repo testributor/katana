@@ -36,7 +36,7 @@ var TestRun = React.createClass({
             <div className="col-lg-12">
               <a href={ this.props.testRun.test_run_link}>
                 <div className={ this.props.testRun.status_css_class }>
-                  <span className='m-r-5'>#{ this.props.testRun.id }</span>
+                  <span className='m-r-5'>#{ this.props.testRun.run_index }</span>
                   <span className='m-r-5'> | </span>
                   <span>{this.props.testRun.status_text }</span>
                 </div>
