@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://bitbucket.org/api/1.0/user/privileges
+    uri: https://api.bitbucket.org/1.0/user/repositories
     body:
       encoding: US-ASCII
       string: ''
@@ -10,70 +10,9 @@ http_interactions:
       User-Agent:
       - BitBucket Ruby Gem 0.1.7
       Authorization:
-      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="619c02cf9b69f968110a05f7f149fb8f",
-        oauth_signature="qzKYG62npwuTEHBOK%2BkgkEY3Bm0%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1461240990", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx/1.6.2
-      Vary:
-      - Authorization, Cookie
-      Content-Type:
-      - application/json; charset=utf-8
-      X-Oauth-Scopes:
-      - webhook, repository:admin, repository, account
-      Strict-Transport-Security:
-      - max-age=31536000
-      Date:
-      - Thu, 21 Apr 2016 12:16:31 GMT
-      X-Served-By:
-      - app-112
-      X-Static-Version:
-      - f42899d589f9
-      Etag:
-      - '"a6e0c24c3bbc6b5a00497cb4d74e8c41"'
-      X-Content-Type-Options:
-      - nosniff
-      X-Render-Time:
-      - '0.0321719646454'
-      X-Accepted-Oauth-Scopes:
-      - account
-      Connection:
-      - keep-alive
-      X-Version:
-      - f42899d589f9
-      X-Request-Count:
-      - '90'
-      X-Frame-Options:
-      - SAMEORIGIN
-      Content-Length:
-      - '13'
-    body:
-      encoding: UTF-8
-      string: '{"teams": {}}'
-    http_version: 
-  recorded_at: Thu, 21 Apr 2016 12:16:31 GMT
-- request:
-    method: get
-    uri: https://bitbucket.org/api/1.0/user/repositories
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - BitBucket Ruby Gem 0.1.7
-      Authorization:
-      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="6395f2c532f74c281893be5b1593a754",
-        oauth_signature="%2Fbv5iDxk4q2jo344X9ePRUoj68A%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1461241016", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="8f1c269f58217d02f46e4075ee3978a9",
+        oauth_signature="lncRUXPWzS%2BwzhUuZknw%2FenfrCE%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1465227836", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -95,27 +34,27 @@ http_interactions:
       Strict-Transport-Security:
       - max-age=31536000
       Date:
-      - Thu, 21 Apr 2016 12:16:57 GMT
+      - Mon, 06 Jun 2016 15:43:57 GMT
       X-Served-By:
-      - app-109
+      - app-111
       Transfer-Encoding:
       - chunked
       X-Static-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       Etag:
-      - '"89ec30133de7802e59e2b81a6ddd6392"'
+      - '"8fda04c92873f028d99c6ec579bc1809"'
       X-Content-Type-Options:
       - nosniff
       X-Render-Time:
-      - '0.0415320396423'
+      - '0.0357780456543'
       X-Accepted-Oauth-Scopes:
       - repository
       Connection:
       - keep-alive
       X-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       X-Request-Count:
-      - '404'
+      - '97'
       X-Frame-Options:
       - SAMEORIGIN
     body:
@@ -129,14 +68,14 @@ http_interactions:
         false, "slug": "testributor_gem", "is_private": true, "name": "testributor_gem",
         "language": "", "utc_last_updated": "2015-10-01 13:52:41+00:00", "no_public_forks":
         true, "creator": null, "resource_uri": "/1.0/repositories/jimmykarily_testributor/testributor_gem"},
-        {"scm": "git", "has_wiki": false, "last_updated": "2016-04-19T14:33:41.063",
+        {"scm": "git", "has_wiki": false, "last_updated": "2016-04-24T16:53:51.089",
         "no_forks": false, "created_on": "2016-04-19T14:33:41.006", "owner": "spyros_brilis",
-        "logo": "https://bitbucket.org/spyros_brilis/testing_repository/avatar/32/?ts=1461069221",
-        "email_mailinglist": "", "is_mq": false, "size": 33348, "read_only": false,
+        "logo": "https://bitbucket.org/spyros_brilis/testing_repository/avatar/32/?ts=1461509631",
+        "email_mailinglist": "", "is_mq": false, "size": 3771906, "read_only": false,
         "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2016-04-19
         12:33:41+00:00", "website": "", "description": "", "has_issues": false, "is_fork":
         false, "slug": "testing_repository", "is_private": false, "name": "testing_repository",
-        "language": "", "utc_last_updated": "2016-04-19 12:33:41+00:00", "no_public_forks":
+        "language": "", "utc_last_updated": "2016-04-24 14:53:51+00:00", "no_public_forks":
         false, "creator": null, "resource_uri": "/1.0/repositories/spyros_brilis/testing_repository"},
         {"scm": "git", "has_wiki": true, "last_updated": "2015-09-19T16:05:44.651",
         "no_forks": false, "created_on": "2015-09-19T16:05:44.632", "owner": "spyros_brilis",
@@ -151,10 +90,10 @@ http_interactions:
         14:05:44+00:00", "no_public_forks": true, "creator": null, "resource_uri":
         "/1.0/repositories/spyros_brilis/testributor"}]'
     http_version: 
-  recorded_at: Thu, 21 Apr 2016 12:16:57 GMT
+  recorded_at: Mon, 06 Jun 2016 15:43:57 GMT
 - request:
     method: get
-    uri: https://bitbucket.org/api/1.0/user
+    uri: https://api.bitbucket.org/1.0/user/privileges
     body:
       encoding: US-ASCII
       string: ''
@@ -162,9 +101,70 @@ http_interactions:
       User-Agent:
       - BitBucket Ruby Gem 0.1.7
       Authorization:
-      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="f8ae276f433569ae50fde78b4b95e637",
-        oauth_signature="QhsSp8qCeylw9oDoAM%2Fhbw%2F0MVU%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1461241017", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="1419a756cfeec4b37ee0ae9c13a50882",
+        oauth_signature="epsqULOYM3NjOQ7uAeMaBX7cv2Y%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1465227837", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - webhook, repository:admin, repository, account
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Mon, 06 Jun 2016 15:43:58 GMT
+      X-Served-By:
+      - app-109
+      X-Static-Version:
+      - fb2f3cf8e102
+      Etag:
+      - '"a6e0c24c3bbc6b5a00497cb4d74e8c41"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0256910324097'
+      X-Accepted-Oauth-Scopes:
+      - account
+      Connection:
+      - keep-alive
+      X-Version:
+      - fb2f3cf8e102
+      X-Request-Count:
+      - '484'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '13'
+    body:
+      encoding: UTF-8
+      string: '{"teams": {}}'
+    http_version: 
+  recorded_at: Mon, 06 Jun 2016 15:43:58 GMT
+- request:
+    method: get
+    uri: https://api.bitbucket.org/1.0/user
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      Authorization:
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="3fd254c5a8de938442870bd3c2e6ff63",
+        oauth_signature="VBpzrsRrF1wgUjgdJlDTeNUNVl0%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1465227838", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -186,39 +186,39 @@ http_interactions:
       Strict-Transport-Security:
       - max-age=31536000
       Date:
-      - Thu, 21 Apr 2016 12:16:57 GMT
+      - Mon, 06 Jun 2016 15:43:58 GMT
       X-Served-By:
-      - app-113
+      - app-109
       Transfer-Encoding:
       - chunked
       X-Static-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       Etag:
-      - '"affd54494316f3e2f731fb8d3d514a46"'
+      - '"6941b94c52e5f0df9ebda782e45963a8"'
       X-Content-Type-Options:
       - nosniff
       X-Render-Time:
-      - '0.0243599414825'
+      - '0.0326299667358'
       X-Accepted-Oauth-Scopes:
       - repository
       Connection:
       - keep-alive
       X-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       X-Request-Count:
-      - '304'
+      - '291'
       X-Frame-Options:
       - SAMEORIGIN
     body:
       encoding: ASCII-8BIT
       string: '{"repositories": [{"scm": "git", "has_wiki": false, "last_updated":
-        "2016-04-19T14:33:41.063", "no_forks": false, "created_on": "2016-04-19T14:33:41.006",
-        "owner": "spyros_brilis", "logo": "https://bitbucket.org/spyros_brilis/testing_repository/avatar/32/?ts=1461069221",
-        "email_mailinglist": "", "is_mq": false, "size": 33348, "read_only": false,
+        "2016-04-24T16:53:51.089", "no_forks": false, "created_on": "2016-04-19T14:33:41.006",
+        "owner": "spyros_brilis", "logo": "https://bitbucket.org/spyros_brilis/testing_repository/avatar/32/?ts=1461509631",
+        "email_mailinglist": "", "is_mq": false, "size": 3771906, "read_only": false,
         "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2016-04-19
         12:33:41+00:00", "website": "", "description": "", "has_issues": false, "is_fork":
         false, "slug": "testing_repository", "is_private": false, "name": "testing_repository",
-        "language": "", "utc_last_updated": "2016-04-19 12:33:41+00:00", "no_public_forks":
+        "language": "", "utc_last_updated": "2016-04-24 14:53:51+00:00", "no_public_forks":
         false, "creator": null, "resource_uri": "/1.0/repositories/spyros_brilis/testing_repository"},
         {"scm": "git", "has_wiki": true, "last_updated": "2015-09-19T16:05:44.651",
         "no_forks": false, "created_on": "2015-09-19T16:05:44.632", "owner": "spyros_brilis",
@@ -233,13 +233,13 @@ http_interactions:
         14:05:44+00:00", "no_public_forks": true, "creator": null, "resource_uri":
         "/1.0/repositories/spyros_brilis/testributor"}], "user": {"username": "spyros_brilis",
         "first_name": "spyros", "last_name": "brilis", "display_name": "spyros brilis",
-        "is_staff": false, "avatar": "https://bitbucket.org/account/spyros_brilis/avatar/32/?ts=1461238928",
+        "is_staff": false, "avatar": "https://bitbucket.org/account/spyros_brilis/avatar/32/?ts=1465226880",
         "resource_uri": "/1.0/users/spyros_brilis", "is_team": false}}'
     http_version: 
-  recorded_at: Thu, 21 Apr 2016 12:16:57 GMT
+  recorded_at: Mon, 06 Jun 2016 15:43:58 GMT
 - request:
     method: get
-    uri: https://bitbucket.org/api/1.0/privileges/jimmykarily_testributor/testributor_gem/?filter=admin
+    uri: https://api.bitbucket.org/1.0/privileges/jimmykarily_testributor/testributor_gem/?filter=admin
     body:
       encoding: US-ASCII
       string: ''
@@ -247,9 +247,9 @@ http_interactions:
       User-Agent:
       - BitBucket Ruby Gem 0.1.7
       Authorization:
-      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="5c054b97b3f48a583a68fa2711a24f30",
-        oauth_signature="5tRmp5AZbqtEUYaPUdyjG4tqnLw%3D", oauth_signature_method="HMAC-SHA1",
-        oauth_timestamp="1461241044", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="09b5984949065255a1b793426aa31d01",
+        oauth_signature="%2FIFWFib8kTxn7zaY7o7efBzsHPc%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1465227838", oauth_token="zX4dt9nfH5QVkKvnXH", oauth_version="1.0"
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -271,52 +271,52 @@ http_interactions:
       Strict-Transport-Security:
       - max-age=31536000
       Date:
-      - Thu, 21 Apr 2016 12:17:25 GMT
+      - Mon, 06 Jun 2016 15:43:59 GMT
       X-Served-By:
-      - app-109
+      - app-112
       Transfer-Encoding:
       - chunked
       X-Static-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       Etag:
-      - '"89ca258c576801c7a6ff8d1f6d5176cb"'
+      - '"8cd76c039c1547b36e333cd946a96a90"'
       X-Content-Type-Options:
       - nosniff
       X-Render-Time:
-      - '0.0869688987732'
+      - '0.0815229415894'
       X-Accepted-Oauth-Scopes:
       - repository:admin
       Connection:
       - keep-alive
       X-Version:
-      - f42899d589f9
+      - fb2f3cf8e102
       X-Request-Count:
-      - '115'
+      - '148'
       X-Frame-Options:
       - SAMEORIGIN
     body:
       encoding: ASCII-8BIT
       string: '[{"repo": "jimmykarily_testributor/testributor_gem", "privilege": "admin",
         "user": {"username": "pakallis", "first_name": "", "last_name": "", "display_name":
-        "pakallis", "is_team": false, "avatar": "https://bitbucket.org/account/pakallis/avatar/32/?ts=1443726789"},
+        "pakallis", "is_team": false, "avatar": "https://bitbucket.org/account/pakallis/avatar/32/?ts=1463129608"},
         "repository": {"owner": {"username": "jimmykarily_testributor", "first_name":
         "Dimitris", "last_name": "Karakasilis", "display_name": "Dimitris Karakasilis",
-        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1461136480"},
+        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1465217255"},
         "name": "testributor_gem", "slug": "testributor_gem"}}, {"repo": "jimmykarily_testributor/testributor_gem",
         "privilege": "admin", "user": {"username": "spyros_brilis", "first_name":
         "spyros", "last_name": "brilis", "display_name": "spyros brilis", "is_team":
-        false, "avatar": "https://bitbucket.org/account/spyros_brilis/avatar/32/?ts=1461238928"},
+        false, "avatar": "https://bitbucket.org/account/spyros_brilis/avatar/32/?ts=1465226880"},
         "repository": {"owner": {"username": "jimmykarily_testributor", "first_name":
         "Dimitris", "last_name": "Karakasilis", "display_name": "Dimitris Karakasilis",
-        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1461136480"},
+        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1465217255"},
         "name": "testributor_gem", "slug": "testributor_gem"}}, {"repo": "jimmykarily_testributor/testributor_gem",
         "privilege": "admin", "user": {"username": "ispyropoulos", "first_name": "Ilias",
         "last_name": "Spyropoulos", "display_name": "Ilias Spyropoulos", "is_team":
-        false, "avatar": "https://bitbucket.org/account/ispyropoulos/avatar/32/?ts=1461138916"},
+        false, "avatar": "https://bitbucket.org/account/ispyropoulos/avatar/32/?ts=1465224052"},
         "repository": {"owner": {"username": "jimmykarily_testributor", "first_name":
         "Dimitris", "last_name": "Karakasilis", "display_name": "Dimitris Karakasilis",
-        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1461136480"},
+        "is_team": false, "avatar": "https://bitbucket.org/account/jimmykarily_testributor/avatar/32/?ts=1465217255"},
         "name": "testributor_gem", "slug": "testributor_gem"}}]'
     http_version: 
-  recorded_at: Thu, 21 Apr 2016 12:17:25 GMT
+  recorded_at: Mon, 06 Jun 2016 15:43:59 GMT
 recorded_with: VCR 2.9.3

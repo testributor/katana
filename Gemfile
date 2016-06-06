@@ -55,7 +55,7 @@ gem 'sitemap_generator'
 gem 'fog-aws'
 # TODO Switch to the official gem as soon as this branch is merged.
 # We implemented some missing BitBucket API support ourselves and fixed a few problems.
-gem 'bitbucket_rest_api', github: 'ispyropoulos/bitbucket', branch: 'webhooks-api'
+gem 'bitbucket_rest_api', github: 'ispyropoulos/bitbucket', branch: 'testributor-extra'
 gem 'oauth'
 
 group :production do

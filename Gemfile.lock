@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/ispyropoulos/bitbucket.git
-  revision: 411567973a2e4105bb3a70cb093bc7ed7511c730
-  branch: webhooks-api
+  revision: 6a014af50a957c4266bdb5a0b996f1094e90b90c
+  branch: testributor-extra
   specs:
     bitbucket_rest_api (0.1.7)
       faraday (~> 0.9.0)
