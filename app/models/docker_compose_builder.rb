@@ -14,6 +14,8 @@ class DockerComposeBuilder
   # Return the docker-compose.yml contents for a given Doorkeeper::Application
   # (which should belong to @project)
   def docker_compose_yml(oauth_app_id)
+    return nil unless oauth_app_id
+
     return false if project.docker_image.blank?
 
     attributes_hash = {}
@@ -46,7 +48,7 @@ class DockerComposeBuilder
           image_attributes["environment"].merge!(custom_environment_image_data)
         end
       end
-      image_attributes.merge(custom_image_data) if custom_image_data.present? # Merge what's left
+      image_attributes.merge!(custom_image_data) if custom_image_data.present? # Merge what's left
 
       result[technology.standardized_name] = image_attributes
     end

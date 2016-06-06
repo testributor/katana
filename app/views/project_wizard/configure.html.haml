@@ -26,12 +26,3 @@
                     class: 'text form-control code'
           .pull-right.m-t-10
             = submit_tag "Next", class: 'btn btn-primary w-lg btn-lg'
-
-
-    -# TODO : find a better way to disable external js requests in tests
-    - unless Rails.env.test?
-      - content_for :in_page_js do
-        = javascript_include_tag asset_path 'codemirror.js'
-        = javascript_include_tag asset_path 'formatting.js'
-        = javascript_include_tag asset_path 'yaml.js'
-        = javascript_include_tag asset_path 'custom.codemirror.js'

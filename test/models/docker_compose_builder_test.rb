@@ -42,6 +42,8 @@ class DockerComposeBuilderTest < ActiveSupport::TestCase
         my_second_service:
           environment:
             MY_VAR: 'my value'
+
+          some_random_key: 313
       YAML
     end
 
@@ -58,6 +60,7 @@ my_second_service:
   environment:
     MICKEY: MOUSE
     MY_VAR: my value
+  some_random_key: 313
 my_base_image:
   image: testributor/base_image_1
   command: "/bin/bash -l get_and_run_testributor.sh"

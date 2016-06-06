@@ -31,7 +31,10 @@
 //= require react_ujs
 //= require react_bootstrap
 //= require components
-//
+//= require codemirror
+//= require formatting
+//= require shell
+//= require yaml
 //
 //= require init
 //= require_tree ./dashboard

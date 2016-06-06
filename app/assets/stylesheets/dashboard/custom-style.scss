@@ -412,3 +412,35 @@
   }
 }
 
+.docker-compose-preview .CodeMirror {
+  background-color: #EEE;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  min-height: 470px;
+}
+
+.CodeMirror {
+  border: 1px solid #CCC;
+}
+
+.loading-overlay {
+  display: none;
+  position: absolute;
+  opacity: 0.8;
+  color: black;
+  background-color: #FFF;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+
+  .loading-content {
+    font-size: 120%;
+    z-index: 100;
+    position: absolute;
+    margin-left: -30px;
+    left: 50%;
+    top: 50%;
+  }
+}
