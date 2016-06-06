@@ -23,6 +23,10 @@ class Testributor.Pages.TestRuns
       if msg.retry
         progressBar.reset(msg.test_run_id)
       else
+        # Dirty Fix TODO: Make this insert the test jobs automatically
+        if $('[id^="test-job"]').length == 0
+          location.reload()
+
         requiredUpdates = (testRun, testJob) ->
           if testRun.terminal_status
             $("#test_run_retry_button").show()

@@ -222,6 +222,20 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
       _test_jobs.last.reload.worker_in_queue_seconds.must_equal 10
     end
 
+    it 'does not send the TestJobUpdate event twice' do
+      # Test job count + 1 for the TestRun
+      Broadcaster.expects(:publish).with(
+        _test_jobs.last.test_run.redis_live_update_resource_key,
+        instance_of(Hash)
+      ).times(5)
+
+      @controller.stub :doorkeeper_token, token do
+        patch :batch_update, default: { format: :json },
+          jobs: Hash[_test_jobs.map{|j| [j.id, _test_job_json]}]
+      end
+    end
+
+
     it "does not update worker_command_run_seconds if already set" do
       @controller.stub :doorkeeper_token, token do
         patch :batch_update, default: { format: :json },
