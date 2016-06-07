@@ -23,6 +23,7 @@ var ProgressBars = React.createClass({
           data-toggle="popover"
           data-placement="top"
           data-trigger="hover"
+          data-container="body"
           data-content={
             popoverContent("<i class='fa fa-check' style='color: green;'></i><span> Passed: </span><span class='success'>",
               this.props.statuses.success) }
@@ -36,6 +37,7 @@ var ProgressBars = React.createClass({
           data-toggle="popover"
           data-placement="top"
           data-trigger="hover"
+          data-container="body"
           data-content={
             popoverContent("<i class='fa fa-times' style='color: crimson;'></i><span> Failed: </span><span class='danger'>",
               this.props.statuses.danger) }
@@ -49,6 +51,7 @@ var ProgressBars = React.createClass({
         <ProgressBar
           data-toggle="popover"
           data-placement="top"
+          data-container="body"
           data-trigger="hover"
           data-content={
             popoverContent("<i class='fa fa-warning' style='color: pink;'></i><span> Errors: </span><span class='pink'>",
