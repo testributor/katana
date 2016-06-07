@@ -1,3 +1,5 @@
+require 'test_helper'
+
 class BareRepositoryManager::TestRunSetupJobTest < ActiveJob::TestCase
   describe "perform" do
     let(:project) { FactoryGirl.create(:project) }
@@ -67,7 +69,7 @@ class BareRepositoryManager::TestRunSetupJobTest < ActiveJob::TestCase
     it "broadcasts an update on TestRun" do
       Broadcaster.expects(:publish).with(
         _test_run.redis_live_update_resource_key, instance_of(Hash)).once
-      subject.perform(_test_run.id, data)
+      subject.perform(_test_run.id, { event: "TestRunUpdate", test_run: data })
     end
   end
 end
