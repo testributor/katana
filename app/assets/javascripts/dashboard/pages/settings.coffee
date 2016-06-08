@@ -34,5 +34,3 @@ class Testributor.Pages.Settings
     ).on("ajax:complete", (e, elements)=>
       $('.js-ajax-loader').fadeOut(600)
     )
-
-    $('[data-toggle="tooltip"]').tooltip()
