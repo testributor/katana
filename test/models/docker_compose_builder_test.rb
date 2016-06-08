@@ -71,7 +71,6 @@ my_base_image:
   environment:
     APP_ID: #{oauth_app.uid}
     APP_SECRET: #{oauth_app.secret}
-    API_URL: http://www.testributor.com/api/v1/
     GEM_URL: some_url
     SOME_CUSTOM_VARIABLE: 1234
 some_other_image:
@@ -106,7 +105,6 @@ my_base_image:
   environment:
     APP_ID: #{oauth_app.uid}
     APP_SECRET: #{oauth_app.secret}
-    API_URL: http://www.testributor.com/api/v1/
     GEM_URL: some_url
 YAML
       )
@@ -137,7 +135,6 @@ my_base_image:
   environment:
     APP_ID: #{oauth_app.uid}
     APP_SECRET: #{oauth_app.secret}
-    API_URL: http://www.testributor.com/api/v1/
     GEM_URL: some_url
 YAML
       )

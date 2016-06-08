@@ -110,9 +110,27 @@ class DockerComposeBuilder
     oauth_application = project.oauth_applications.find(oauth_app_id)
     result = {
       'APP_ID' => oauth_application.uid,
-      'APP_SECRET' => oauth_application.secret,
-      'API_URL' => "http://www.testributor.com/api/v1/"
+      'APP_SECRET' => oauth_application.secret
     }
+
+    # This key is used on the worker to override the API url which by default is
+    # https://testributor.herokuapp.com/api/v1/
+    # when no API_URL environment variable is set.
+    # We don't want to add the https url on production because it is a herokuapp
+    # url (for the time being we don't have an SSL option on our domain) and we
+    # don't want our users to see this on their docker-compose.yml files.
+    #
+    # So the concept until we get and SSL certificate is:
+    # - Hardcode the https url in the worker but let the user override with an
+    #   env var.
+    # - Don't set the env var on production (since it is not needed).
+    # - Always set the env var on development so we can see this key and remember
+    #   we need to change it in order to make it work with the local server.
+    #   We can define the WORKER_API_URL on our local server to let it work
+    #   automagically.
+    if Rails.env.development?
+      result['API_URL'] = ENV["WORKER_API_URL"] || "http://localhost:3000/api/v1/"
+    end
 
     # Merge any additional base image variables
     custom_environment = custom_base_image_data.try(:delete, "environment")
