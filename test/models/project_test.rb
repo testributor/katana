@@ -167,16 +167,16 @@ class ProjectTest < ActiveSupport::TestCase
       })
     end
 
-    it "returns an empty Hash when custom_docker_compose_yml is empty string" do
+    it "returns false when custom_docker_compose_yml is empty string" do
       project.custom_docker_compose_yml = ""
 
-      project.custom_docker_compose_yml_as_hash.must_equal({})
+      project.custom_docker_compose_yml_as_hash.must_equal false
     end
 
-    it "returns an empty Hash when custom_docker_compose_yml is nil" do
+    it "returns false when custom_docker_compose_yml is nil" do
       project.custom_docker_compose_yml = nil
 
-      project.custom_docker_compose_yml_as_hash.must_equal({})
+      project.custom_docker_compose_yml_as_hash.must_equal false
     end
 
     it "raises error when the custom_docker_compose_yml is invalid YAML" do

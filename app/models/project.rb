@@ -159,9 +159,9 @@ class Project < ActiveRecord::Base
   end
 
   def custom_docker_compose_yml_as_hash
-    return {} unless custom_docker_compose_yml.present?
+    result = SafeYAML.load(custom_docker_compose_yml.to_s)
 
-    YAML.load(custom_docker_compose_yml)
+    result.is_a?(Hash) ? result : false
   end
 
   private
@@ -198,10 +198,13 @@ class Project < ActiveRecord::Base
 
   def valid_custom_docker_compose_yml
     begin
-      custom_docker_compose_yml_as_hash
+      result = custom_docker_compose_yml_as_hash
+
+      unless result
+        errors.add(:custom_docker_compose_yml, :not_compatible_format)
+      end
     rescue Psych::SyntaxError
       errors.add(:custom_docker_compose_yml, :syntax_error)
-      return
     end
   end
 end

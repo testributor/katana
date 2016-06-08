@@ -39,6 +39,7 @@ en:
           attributes:
             custom_docker_compose_yml:
               syntax_error: "syntax error"
+              not_compatible_format: "format not compatible"
             base:
               project_limit_reached: >
                 You cannot add other projects as you have reached your <strong>project limit</strong>.

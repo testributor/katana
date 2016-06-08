@@ -8,7 +8,7 @@ class DockerComposeBuilder
 
   def initialize(project)
     @project = project
-    @custom_data = project.custom_docker_compose_yml_as_hash
+    @custom_data = project.custom_docker_compose_yml_as_hash || {}
   end
 
   # Return the docker-compose.yml contents for a given Doorkeeper::Application

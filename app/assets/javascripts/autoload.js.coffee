@@ -11,6 +11,6 @@ $(document).on 'ready', ->
   # Execute the corresponding method
   klass = module[0]
   if namespace && namespace.hasOwnProperty(klass)
-    page = new namespace[klass]
-  if page && _.isFunction(page[method])
-    page[method]()
+    window.current_page = new namespace[klass]
+  if window.current_page && _.isFunction(window.current_page[method])
+    window.current_page[method]()
