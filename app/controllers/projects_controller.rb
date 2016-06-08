@@ -24,7 +24,7 @@ class ProjectsController < DashboardController
     if current_project.save
       notice = "Project successfully updated"
     else
-      alert = current_project.errors.full_messages.to_sentence
+      alert = current_project.errors.full_messages.join(', ')
     end
 
     respond_to do |fmt|

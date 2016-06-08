@@ -66,7 +66,7 @@ class BitbucketRepositoryManager
       return
     end
 
-    jobs_description = YAML.load(yml_contents)
+    jobs_description = SafeYAML.load(yml_contents)
 
     if each_description = jobs_description.delete("each")
       pattern = each_description["pattern"]
