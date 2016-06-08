@@ -16,23 +16,31 @@ class ProjectsController < DashboardController
   def update
     notice = nil
     alert = nil
-    begin
-      current_project.assign_attributes(project_params)
-      current_project.technologies = DockerImage.technologies.
-        where(id: project_params[:technology_ids])
-      current_project.save
+
+    current_project.assign_attributes(project_params)
+    current_project.technologies = DockerImage.technologies.
+      where(id: project_params[:technology_ids])
+
+    if current_project.save
       notice = "Project successfully updated"
-    rescue ActiveRecord::RecordInvalid => invalid
-      alert = invalid.record.errors.messages.values.join(', ')
+    else
+      alert = current_project.errors.full_messages.join(', ')
     end
 
     respond_to do |fmt|
       fmt.json do
-        yml_contents = current_project.generate_docker_compose_yaml(
-          current_project.worker_groups.first.oauth_application_id)
+        if alert
+          render json: { notice: notice, alert: alert, docker_compose_yml_contents: '' }
+        else
+          yml_contents = current_project.generate_docker_compose_yaml(
+            current_project.worker_groups.first.try(:oauth_application_id))
 
-        render json: { notice: notice, alert: alert,
-                       docker_compose_yml_contents: yml_contents }
+          if yml_contents.blank?
+            yml_contents = "No worker group found. Please add a worker group first."
+          end
+
+          render json: { notice: notice, docker_compose_yml_contents: yml_contents }
+        end
       end
 
       fmt.html do
@@ -108,7 +116,8 @@ class ProjectsController < DashboardController
 
   def project_params
     params.require(:project).permit(:auto_track_branches, :docker_image_id,
-                                    :repository_url, technology_ids: [])
+                                    :repository_url, :custom_docker_compose_yml,
+                                    technology_ids: [])
   end
 
   def api_client_params

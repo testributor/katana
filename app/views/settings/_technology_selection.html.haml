@@ -1,0 +1,50 @@
+.technology-selections
+  .col-lg-6
+    = form_for project, remote: true, html: { class: "form-horizontal",
+      id: "project_edit" } do |f|
+
+      %h4 Choose images
+      .form-group.m-t-20
+        %label.control-label.col-sm-2 Base image
+        .col-sm-10
+          = f.select :docker_image_id,
+            grouped_options_for_select(grouped_languages_options,
+            f.object.docker_image_id), class: "form-control"
+      .form-group
+        %label.control-label.col-sm-2 Linked images
+        .col-sm-10
+          = f.select :technology_ids,
+            options_for_select(technologies_options, f.object.technology_ids),
+            {}, multiple: true, class: 'multi-select form-control', style: "width: 100%"
+      .form-group
+        %label.control-label.col-sm-2
+          Custom yml data
+          %a{ href: "#", data: { toggle: "popover", container: 'body', html: 'true',
+            role: "button", trigger: "focus",
+            title: "Custom yml data",
+            content: "Add custom yml keys to be merged to the final file. Read more #{link_to("here", "http://documentation.testributor.com/worker_setup", target: "_blank").html_safe}." } }
+            %i.fa.fa-question-circle
+        .col-sm-10
+          = f.text_area :custom_docker_compose_yml
+      .form-group
+        .col-sm-offset-2.col-sm-10.text-right
+          = f.submit "Save", class: "btn btn-primary", disable_with: "Saving"
+
+  .col-lg-6.docker-compose-preview
+    %h4 Preview final docker-compose.yml
+
+    .js-ajax-loader.loading-overlay
+      .loading-content
+        .fa.fa-refresh.fa-spin
+        Updating file...
+
+    :ruby
+      contents = project.generate_docker_compose_yaml(
+        project.worker_groups.first.try(:oauth_application_id))
+
+      if contents.blank?
+        contents = "No worker group found. Please add a worker group first."
+      end
+
+    = text_area_tag :contents, contents, id: 'docker-compose-contents',
+      class: 'text form-control'

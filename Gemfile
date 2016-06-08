@@ -17,6 +17,9 @@ gem 'jquery-ui-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
+# Use SafeYAML for user defined yml parsing
+gem "safe_yaml", require: false
+
 gem 'pg'
 gem 'redis'
 gem 'connection_pool'

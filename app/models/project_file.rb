@@ -36,7 +36,7 @@ class ProjectFile < ActiveRecord::Base
   def valid_contents
     return if contents.blank?
     begin
-      jobs_description = YAML.load(contents)
+      jobs_description = SafeYAML.load(contents)
     rescue Psych::SyntaxError
       errors.add(:contents, :syntax_error)
       return

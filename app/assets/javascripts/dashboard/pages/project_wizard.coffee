@@ -4,8 +4,6 @@ class Testributor.Pages.ProjectWizard
   update: ->
     @show()
   show: ()->
-    $(".multi-select").select2()
-
     $('.provider-box input[type="radio"]').on "change", (e)=>
       $('.provider-list').addClass('hidden')
       $target = $(e.currentTarget)
@@ -20,24 +18,8 @@ class Testributor.Pages.ProjectWizard
         $('.fetching-repos,.js-fetch-repos').hide()
         $('.bare-repo').show()
 
-    $editor = $('#docker-compose-contents')
-    if $editor.length > 0
-      @editor = CodeMirror.fromTextArea($editor[0], {
-        mode: {name: 'yaml'},
-        lineNumbers: true,
-        theme: 'neat',
-        readOnly: true
-      })
-
-    $('#edit_project').on('change', 'select', (e)->
-      $(e.currentTarget).submit()
-    ).on("ajax:before", (e)=>
-      $('.js-ajax-loader').show(100)
-    ).on("ajax:success", (e, data, status, xhr)=>
-      @editor.getDoc().setValue(data.docker_compose_yml_contents)
-    ).on("ajax:complete", (e, elements)=>
-      $('.js-ajax-loader').hide(100)
-    )
+    settings = new Testributor.Pages.Settings
+    settings.technologySelectionInit($(".technology-selections"))
 
     $waiting_for_worker = $('#waiting_for_worker')
     if $waiting_for_worker.length > 0

@@ -9,7 +9,7 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
     let(:owner) { project.user }
 
     before do
-      FactoryGirl.create(:worker_group, project: project)
+      FactoryGirl.create(:doorkeeper_application, owner: project)
       login_as owner, scope: :user
       visit worker_setup_project_settings_path(project)
     end
@@ -75,14 +75,14 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
     let(:owner) { project.user }
 
     before do
-      FactoryGirl.create(:worker_group, project: project)
+      FactoryGirl.create(:doorkeeper_application, owner: project)
       login_as owner, scope: :user
       visit worker_setup_project_settings_path(project)
     end
 
     it "shows 'Reset SSH key' CTA" do
       page.must_have_text project.worker_groups.first.friendly_name
-      page.must_have_selector(".worker-group-actions a", text: "Reset SSH key")
+      page.must_have_selector(".worker-group-info a", text: "Reset SSH key")
     end
 
     it "doesn't show the SSH key field on the edit modal", js: true do

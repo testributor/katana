@@ -128,6 +128,62 @@ class ProjectTest < ActiveSupport::TestCase
         end
       end
     end
+
+    describe "#custom_docker_compose_yml" do
+      it "is valid when the custom_docker_compose_yml contents are valid YAML" do
+        project.custom_docker_compose_yml = "test: 4"
+        project.must_be :valid?
+      end
+
+      it "is valid when the custom_docker_compose_yml contents are valid empty" do
+        project.custom_docker_compose_yml = ""
+        project.must_be :valid?
+      end
+
+      it "is invalid when the custom_docker_compose_yml contents are not valid YAML" do
+        project.custom_docker_compose_yml = "test: 34, other_test: 234"
+        project.wont_be :valid?
+        project.errors[:custom_docker_compose_yml].must_equal ["syntax error"]
+      end
+    end
+  end
+
+  describe "custom_docker_compose_yml_as_hash" do
+    it "returns the YAML as a Hash" do
+      project.custom_docker_compose_yml = <<-YML
+        first_key: 3
+        second_key:
+          third_key: 4
+          other_key:
+            other_key_deep_nested: 4
+      YML
+
+      project.custom_docker_compose_yml_as_hash.must_equal({
+        "first_key" => 3,
+        "second_key" => {
+          "third_key" => 4,
+          "other_key" => { "other_key_deep_nested" => 4 }
+        }
+      })
+    end
+
+    it "returns false when custom_docker_compose_yml is empty string" do
+      project.custom_docker_compose_yml = ""
+
+      project.custom_docker_compose_yml_as_hash.must_equal false
+    end
+
+    it "returns false when custom_docker_compose_yml is nil" do
+      project.custom_docker_compose_yml = nil
+
+      project.custom_docker_compose_yml_as_hash.must_equal false
+    end
+
+    it "raises error when the custom_docker_compose_yml is invalid YAML" do
+      project.custom_docker_compose_yml = "this: 'is', invalid: 'yaml'"
+
+      ->{ project.custom_docker_compose_yml_as_hash }.must_raise Psych::SyntaxError
+    end
   end
 
   describe "invited_users association" do

@@ -33,6 +33,9 @@ class Project < ActiveRecord::Base
   validates :repository_url, presence: true,
     if: ->{ repository_provider == 'bare_repo' }
   validate :check_user_limit, if: :user_id_changed?
+  validate :valid_custom_docker_compose_yml, if: ->{
+    custom_docker_compose_yml.present?
+  }
 
   before_create :set_secure_random
   # Set this flag to true in order to destroy testributor.yml and
@@ -132,50 +135,7 @@ class Project < ActiveRecord::Base
   end
 
   def generate_docker_compose_yaml(oauth_app_id)
-    return false if docker_image.blank?
-
-    oauth_application = oauth_applications.find(oauth_app_id)
-    attributes_hash = {}
-
-    # Add linked images
-    technologies.each do |technology|
-      data = technology.docker_compose_data
-      image_attributes = {}
-      image_attributes["image"] = technology.hub_image
-      if data["environment"].present?
-        image_attributes["environment"] = data["environment"]
-      end
-      attributes_hash[technology.standardized_name] = image_attributes
-    end
-
-    # Now add the base image
-    base_image_attributes = {}
-    base_image_attributes["image"] = docker_image.hub_image
-    base_image_attributes["command"] = "/bin/bash -l get_and_run_testributor.sh"
-    if technologies.any?
-      base_image_attributes["links"] = technologies.map do |tech|
-        link = tech.standardized_name
-        if tech.docker_compose_data["alias"]
-          link += ":#{tech.docker_compose_data["alias"]}"
-        end
-
-        link
-      end
-    end
-    base_image_attributes["environment"] = {
-      'APP_ID' => oauth_application.uid,
-      'APP_SECRET' => oauth_application.secret,
-      'API_URL' => "http://www.testributor.com/api/v1/"
-    }
-
-    # Merge any additional base image variables
-    if docker_image.docker_compose_data["environment"]
-      base_image_attributes["environment"].merge!(
-        docker_image.docker_compose_data["environment"])
-    end
-    attributes_hash[docker_image.standardized_name] = base_image_attributes
-
-    attributes_hash.to_yaml
+    DockerComposeBuilder.new(self).docker_compose_yml(oauth_app_id)
   end
 
   # For now we simply create the file based on a template. In the future
@@ -196,6 +156,12 @@ class Project < ActiveRecord::Base
 
   def testributor_yml_contents
     project_files.where(path: ProjectFile::JOBS_YML_PATH).first.try(:contents)
+  end
+
+  def custom_docker_compose_yml_as_hash
+    result = SafeYAML.load(custom_docker_compose_yml.to_s)
+
+    result.is_a?(Hash) ? result : false
   end
 
   private
@@ -227,6 +193,18 @@ class Project < ActiveRecord::Base
     #in case a secure random exists
     while Project.find_by_secure_random(self.secure_random)
       self.secure_random = SecureRandom.hex
+    end
+  end
+
+  def valid_custom_docker_compose_yml
+    begin
+      result = custom_docker_compose_yml_as_hash
+
+      unless result
+        errors.add(:custom_docker_compose_yml, :not_compatible_format)
+      end
+    rescue Psych::SyntaxError
+      errors.add(:custom_docker_compose_yml, :syntax_error)
     end
   end
 end
