@@ -50,7 +50,7 @@ var TestRun = React.createClass({
             </div>
           </div>
         </div>
-        <div className="col-lg-2 col-xs-6 text-right">
+        <div className="col-lg-2 col-xs-6 text-right m-t-5">
           { testRunCtas }
         </div>
       </div>

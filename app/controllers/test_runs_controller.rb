@@ -39,6 +39,15 @@ class TestRunsController < DashboardController
   def show
     @test_jobs = @test_run.test_jobs.order('status DESC, sent_at ASC, chunk_index ASC, created_at ASC, id ASC')
     @user_can_manage_run = can?(:manage, @test_run)
+    render component: 'TestJobPresenter',
+      props: {
+        test_jobs: @test_jobs.map(&:serialized_job),
+        test_run: @test_run.serialized_run,
+        project_id: current_project.id,
+        user_can_manage_run: can?(:manage, @test_run),
+        admin_user: (current_user && current_user.admin?),
+        test_runs_link: project_test_runs_path(branch: @test_run.try(:tracked_branch).try(:branch_name))
+      }, tag: 'div'
   end
 
   def create
@@ -93,8 +102,7 @@ class TestRunsController < DashboardController
 
     Broadcaster.publish(
       @test_run.redis_live_update_resource_key,
-      { retry: true,
-        test_run_id: @test_run.id,
+      { test_run_id: @test_run.id,
         event: 'TestRunRetry'
     })
 

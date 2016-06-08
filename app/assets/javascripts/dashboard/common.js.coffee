@@ -1,7 +1,4 @@
 $(document).on 'ready', ->
-  # Register Handlebars Helpers
-  new Testributor.Helpers.Helper
-
   # Disable all links that have 'disabled' class
   $('body').on 'click', 'a.disabled', (e) ->
     e.preventDefault()

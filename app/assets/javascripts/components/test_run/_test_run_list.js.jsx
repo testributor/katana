@@ -7,7 +7,14 @@ var TestRunList = React.createClass({
 
     return (
       <div>
-        { testRunNodes }
+        <ReactCSSTransitionGroup
+          transitionName="build-react-style"
+          transitionAppear={true}
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}>
+          { testRunNodes }
+        </ReactCSSTransitionGroup>
       </div>
     )
   }

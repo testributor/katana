@@ -33,6 +33,11 @@ module Katana
 
     config.active_job.queue_adapter = :sidekiq
     config.exceptions_app = self.routes
+    config.react.addons = true
+     config.react.server_renderer_options = {
+      files: ["react-server.js","components.js","react_bootstrap.js"],
+      replay_console: true,
+     }
 
     config.filter_parameters << :private_key
 

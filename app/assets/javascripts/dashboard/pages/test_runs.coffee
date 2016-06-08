@@ -4,54 +4,23 @@ class Testributor.Pages.TestRuns
     $('[data-toggle="popover"]').popover()
 
   show: ->
-    jobTemplate = HandlebarsTemplates["test_jobs/test_job"]
-    errorTemplate = HandlebarsTemplates["test_jobs/error"]
-    testRunId = $('[data-test-run-id]').data('test-run-id')
-    projectId = $('[data-test-run-id]').data('project-id')
-    userIsAdmin = $('[data-admin-user]').data('admin-user')
-    userCanManageRun = $('[data-user-can-manage-run]').data('user-can-manage-run')
-
-    progressBar = new Testributor.Widgets.ProgressBar(display_stats: true)
-    subscriptions = {
-      "TestRun": {
-        "ids": [testRunId],
-        'actions': ['create'],
-        "project_id": projectId
-      }
-    }
-    Testributor.Widgets.LiveUpdates(subscriptions, (msg) ->
-      if msg.retry
-        progressBar.reset(msg.test_run_id)
-      else
-        # Dirty Fix TODO: Make this insert the test jobs automatically
-        if $('[id^="test-job"]').length == 0
-          location.reload()
-
-        requiredUpdates = (testRun, testJob) ->
-          if testRun.terminal_status
-            $("#test_run_retry_button").show()
-
-          $("#test-job-#{testJob.id}").fadeOut('slow', () ->
-             $("#test-job-#{testJob.id}").replaceWith $(jobTemplate(testJob))
-             $(jobTemplate(testJob)).fadeIn('slow')
-          )
-
-          $error = $(errorTemplate(testJob))
-          $testJob = $(("#test-job-#{testJob.id}"))
-          if testJob.unsuccessful
-            $error.insertAfter($testJob)
-          progressBar.update(testJob.test_run_id, testJob.html_class)
-
-        requiredUpdates(msg.test_run, $.extend(msg.test_job, admin: userIsAdmin, userCanManageRun: userCanManageRun))
-    )
-    $('[data-toggle="popover"]').popover()
-
     _.each($("div[id^='error']"), (value, key, list)->
       $(value).html(ansi_up.ansi_to_html($(value).text()))
     )
-    #show all button
     $('.show-all-area').on 'click', (e) ->
       if $('#show_all').is(':checked')
         $("div[id^='error']").collapse('show')
+        $('.rotate').toggleClass("down")
       else
         $("div[id^='error']").collapse('hide')
+        $('.rotate').toggleClass("down")
+
+    $('body').on('click', 'a.disabled', (event) ->
+      return false
+    )
+
+    $(".js-toggle-collapse").on 'click', (e) ->
+      $el = $(e.currentTarget)
+
+      if !$el.hasClass('disabled')
+        $el.find('i').toggleClass("down")

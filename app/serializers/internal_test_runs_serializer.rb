@@ -6,7 +6,8 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
   attributes :id, :run_index, :status_text, :status_css_class, :unsuccessful,
     :retry_url, :total_running_time, :html_class, :cancel_url, :can_be_cancelled,
     :statuses, :test_run_link,  :branch_id, :terminal_status, :can_be_retried,
-    :is_running, :commit_info, :created_at
+    :is_running, :commit_info, :created_at, :setup_error, :repository_provider,
+    :commit_url, :commit_source_logo
 
   def retry_url
     retry_project_test_run_path(object.project_id, object)
@@ -58,5 +59,13 @@ class InternalTestRunsSerializer < ActiveModel::Serializer
 
   def created_at
     decorated_object.created_at
+  end
+
+  def repository_provider
+    object.project.repository_provider
+  end
+
+  def commit_source_logo
+    decorated_object.commit_source_logo
   end
 end

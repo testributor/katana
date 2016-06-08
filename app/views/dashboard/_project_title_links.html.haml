@@ -16,7 +16,7 @@
             %span.nav-label Users
         = link_to project_settings_path(project), class: (controller_name == 'settings' ? 'active' : nil) do
           %li
-            %i.fa.fa-cog
+            %i.fa.fa-wrench
             %span.nav-label= "Settings"
         = link_to instructions_project_path(project), class: (current_page?(instructions_project_path(project)) ? 'active' : nil ) do
           %li

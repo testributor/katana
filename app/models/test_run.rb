@@ -218,7 +218,9 @@ class TestRun < ActiveRecord::Base
   end
 
   def cancel_test_jobs
-    test_jobs.update_all(status: TestStatus::CANCELLED)
+    test_jobs.each do |tj|
+      tj.update_attribute(:status, TestStatus::CANCELLED)
+    end
   end
 
   def cancel_queued_runs_of_same_branch

@@ -45,7 +45,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
     it "displays test jobs with correct statuses and ctas", js: true do
       page.driver.resize_window(1600, 1200)
-      job_trs = all("tr[id^='test-job']")
+      job_trs = all("div[id^='test-job']")
       error = job_trs[0]
       failed = job_trs[1]
       passed = job_trs[2]
@@ -84,7 +84,7 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
     it "displays test jobs with correct statuses and ctas", js: true do
       page.driver.resize_window(1600, 1200)
-      job_trs = all("tr[id^='test-job']")
+      job_trs = all("div[id^='test-job']")
       error = job_trs[0]
       failed = job_trs[1]
       passed = job_trs[2]

@@ -1,0 +1,27 @@
+.build-react-style-enter {
+  opacity: 0.01;
+}
+
+.build-react-style-enter.build-react-style-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.build-react-style-leave {
+  opacity: 1;
+}
+
+.build-react-style-leave.build-react-style-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+
+.build-react-style-appear {
+  opacity: 0.01;
+}
+
+.build-react-style-appear.build-react-style-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
