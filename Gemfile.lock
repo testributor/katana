@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/ispyropoulos/bitbucket.git
-  revision: 5a408a31c82541c40c0db97184eeefc5a29bee15
+  revision: d83641bc8c7ec088288d4200f4857fb893112397
   branch: testributor-extra
   specs:
     bitbucket_rest_api (0.1.7)
