@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/ispyropoulos/bitbucket.git
-  revision: 6a014af50a957c4266bdb5a0b996f1094e90b90c
+  revision: 5a408a31c82541c40c0db97184eeefc5a29bee15
   branch: testributor-extra
   specs:
     bitbucket_rest_api (0.1.7)
@@ -215,7 +215,7 @@ GEM
       multi_json (~> 1.0)
       sprockets (>= 2.0.0)
       tilt (>= 1.2)
-    hashie (3.4.3)
+    hashie (3.4.4)
     hitimes (1.2.2)
     html2haml (2.0.0)
       erubis (~> 2.7.0)
@@ -242,7 +242,7 @@ GEM
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (2.99.1)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.8.4)
     minitest-capybara (0.7.2)
       capybara (~> 2.2)
@@ -268,13 +268,14 @@ GEM
       rails (>= 4.1)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    multi_json (1.11.2)
+    multi_json (1.12.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.2.0)
     newrelic_rpm (3.14.0.305)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     oauth (0.5.1)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
@@ -295,6 +296,7 @@ GEM
       omniauth (~> 1.2)
     orm_adapter (0.5.0)
     pg (0.18.4)
+    pkg-config (1.1.7)
     poltergeist (1.9.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
