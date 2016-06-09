@@ -203,28 +203,32 @@ class GithubRepositoryManager
     { branches: branches, last_response: github_client.last_response }
   end
 
+  # Removes a webhook from GitHub
   def cleanup_for_removal
-    github_client.remove_hook(repository_id, project.webhook_id)
+    github_client.remove_hook(repository_id, project.webhook_id) if project.webhook_id
   end
 
-  # Creates webhooks on GitHub
+  # Creates a webhook on GitHub
   def post_add_repository_setup
-    begin
-      github_client.create_hook(repository_id, 'web',
-        {
-          secret: ENV['GITHUB_WEBHOOK_SECRET'],
-          url: webhook_url, content_type: 'json'
-        }, events: %w(push delete))
-    rescue Octokit::UnprocessableEntity => e
-      if e.message =~ /hook already exists/i
-        hooks = github_client.hooks(repository_id)
-        hooks.select do |h|
-          h.config.url == webhook_url && h.events.to_set == %w(push delete).to_set
-        end.first
-      else
-        raise e
+    webhook_id =
+      begin
+        github_client.create_hook(repository_id, 'web',
+          {
+            secret: ENV['GITHUB_WEBHOOK_SECRET'],
+            url: webhook_url, content_type: 'json'
+          }, events: %w(push delete)).id
+      rescue Octokit::UnprocessableEntity => e
+        if e.message =~ /hook already exists/i
+          hooks = github_client.hooks(repository_id)
+          hooks.select do |h|
+            h.config.url == webhook_url && h.events.to_set == %w(push delete).to_set
+          end.first.id
+        else
+          raise e
+        end
       end
-    end
+
+    { webhook_id: webhook_id }
   end
 
   def set_deploy_key(key, options={})

@@ -50,7 +50,7 @@ class ProjectWizardController < DashboardController
 
       if project.save
         repository_manager = RepositoryManager.new(project)
-        project.webhook_id = repository_manager.post_add_repository_setup.try(:id)
+        project.webhook_id = repository_manager.post_add_repository_setup[:webhook_id]
         project.save!
 
         project.create_testributor_yml_file!

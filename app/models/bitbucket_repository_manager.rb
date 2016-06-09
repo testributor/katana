@@ -6,6 +6,9 @@ class BitbucketRepositoryManager
   PROJECT_FILES_DIRECTORY_DEPTH =
     ENV["BITBUCKET_PROJECT_FILES_DIRECTORY_DEPTH"] || 3
 
+  # We want this for bitbucket_webhook_url
+  include Rails.application.routes.url_helpers
+
   attr_reader :project, :bitbucket_client, :errors
 
   def initialize(project)
@@ -213,12 +216,30 @@ class BitbucketRepositoryManager
     { branches: branches }
   end
 
+  # Removes a webhook from Bitbucket
   def cleanup_for_removal
-    # TODO: Remove webhooks etc. Implement when we actually add webhooks.
+    bitbucket_client.repos.webhooks.delete(repository_owner, repository_slug,
+      project.webhook_id) if project.webhook_id
   end
 
+  # Creates a webhook on Bitbucket
   def post_add_repository_setup
-    # TODO We need to implement this and submit a PR to the BitBucketAPI gem
+    webhook_id =
+      bitbucket_client.repos.webhooks.create(repository_owner, repository_slug,
+        description: "Testributor Webhook#{" (local)" if Rails.env.development?}",
+        url: webhook_url,
+        active: true,
+        events: ['repo:push'],
+        skip_cert_verification: false # TODO Remove when we install SSL cert
+      ).uuid
+
+    # Thw :webhook_id contains the raw value as returned by the Bitbucket API,
+    # e.g. {4e30dc03-4b53-441e-921e-dd27a4b3ff25}
+    #
+    # Therefore, it is recommended to use it only for storage purposes. The
+    # correct way to retrieve a consumption-ready UUID would be to call the
+    # Project#webhook_id method.
+    { webhook_id: webhook_id }
   end
 
   def set_deploy_key(key, options={})
@@ -239,6 +260,12 @@ class BitbucketRepositoryManager
 
   def repository_slug
     project.try(:repository_slug)
+  end
+
+  def webhook_url
+    # Bitbucket will not accept URLs with "localhost" as the host, so we override
+    # the default host in order to have a working fallback for development.
+    ENV['BITBUCKET_WEBHOOK_URL'] || bitbucket_webhook_url(host: "www.testributor.com")
   end
 
   # Fetches the requested branch HEAD with the last 30 commits in history

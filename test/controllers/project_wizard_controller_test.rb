@@ -52,7 +52,7 @@ class ProjectWizardControllerTest < ActionController::TestCase
     before do
       sign_in :user, user
       RepositoryManager.any_instance.stubs(:post_add_repository_setup).
-        returns(nil)
+        returns({ })
     end
 
     describe ":select_repository" do

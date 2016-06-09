@@ -14,10 +14,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   before do
     GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
     GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
-    webhook = Sawyer::Resource.new(
-      Sawyer::Agent.new('api.example.com'), { id: 1 }
-    )
-    RepositoryManager.any_instance.stubs(:post_add_repository_setup).returns(webhook)
+    RepositoryManager.any_instance.stubs(:post_add_repository_setup).
+      returns({ webhook_id: 1 })
     language
     language2
     technology

@@ -74,7 +74,7 @@ class BareRepositoryManager
   end
 
   def post_add_repository_setup
-    # Nothing to do here
+    { } # Nothing to do here
   end
 
   def set_deploy_key(key, options={})

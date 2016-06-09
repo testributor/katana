@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160604141115) do
+ActiveRecord::Schema.define(version: 20160609113208) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20160604141115) do
     t.string   "repository_provider"
     t.integer  "repository_id"
     t.string   "repository_name"
-    t.integer  "webhook_id"
+    t.string   "webhook_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "secure_random"

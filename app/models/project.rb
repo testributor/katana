@@ -62,6 +62,20 @@ class Project < ActiveRecord::Base
     "project_#{id}_workers"
   end
 
+  # We override the default attribute reader when the provider is Bitbucket,
+  # because we store the Webhook UUID intact as received in the API payload,
+  # e.g. {4e30dc03-4b53-441e-921e-dd27a4b3ff25}
+  # but in the rest of the Bitbucket API calls we use it without the curly
+  # brackets. It looks like an inconsistency on the Bitbucket side, but it is
+  # safe to keep the original value in case they make a change in the future (so
+  # that we know how to migrate it).
+  def webhook_id
+    attr = read_attribute(:webhook_id)
+    return nil if attr.nil?
+
+    repository_provider == 'bitbucket' ? attr[1..-2] : attr
+  end
+
   # Updates the project's set of workers with only the active
   # and returns the list of active worker uuids
   # Only this method should be called to find the active workers since directly
