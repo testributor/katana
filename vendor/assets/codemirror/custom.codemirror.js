@@ -20,11 +20,11 @@
         // TODO: Fix this to work with any kind of file (as long as the
         // related js is imported)
         if($el.length > 0) {
-          CodeMirror.fromTextArea($el[0], {
-              mode: {name: $el.hasClass("code-shell") ? 'shell' : 'yaml'},
-              lineNumbers: true,
-              theme: 'neat',
-              readOnly: $el.hasClass("code-readonly")
+          window.code_editor = CodeMirror.fromTextArea($el[0], {
+            mode: {name: $el.hasClass("code-shell") ? 'shell' : 'yaml'},
+            lineNumbers: true,
+            theme: 'neat',
+            readOnly: $el.hasClass("code-readonly")
           });
         };
 

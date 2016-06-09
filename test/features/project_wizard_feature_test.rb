@@ -48,7 +48,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
         pattern: 'test/models/*_test.rb'
     YAML
 
-    fill_in 'testributor_yml', with: yaml
+    page.driver.execute_script(
+      "window.code_editor.setValue(#{yaml.inspect});")
     click_on 'Next'
     wait_for_requests_to_finish
     testributor_file = project.project_files.

@@ -43,14 +43,6 @@
           = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
           for more details about the syntax and what you can do in this file.
 
-    - if @project_file.testributor_yml? || @project_file.build_commands?
-      - content_for :in_page_js do
-        = javascript_include_tag asset_path 'codemirror.js'
-        = javascript_include_tag asset_path 'formatting.js'
-        = javascript_include_tag asset_path 'shell.js'
-        = javascript_include_tag asset_path 'yaml.js'
-        = javascript_include_tag asset_path 'custom.codemirror.js'
-
   - if @docs.present?
     - content_for(:help) do
       .panelized
