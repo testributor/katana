@@ -35,6 +35,7 @@
 //= require formatting
 //= require shell
 //= require yaml
+//= require custom.codemirror
 //
 //= require init
 //= require_tree ./dashboard
