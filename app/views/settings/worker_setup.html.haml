@@ -28,30 +28,29 @@
         .col-xs-12.m-b-10.worker-group-info
           .col-sm-6= worker_group.friendly_name
           .col-sm-6
-            %button.btn.btn-success.btn-xs{ data: { toggle: "modal",
-              target: "#workerGroupModal#{worker_group.id}" } }
-
-              %i.fa.fa-edit
-              Edit
-
-            = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
-            class: 'btn btn-info btn-xs',
-            title: 'Download the docker-compose.yml file that is needed for creating a worker.' do
-              %i.fa.fa-download
-              docker-compose.yml
-            - unless current_project.repository_provider == "bare_repo"
-              = link_to reset_ssh_key_project_worker_group_path(current_project, worker_group),
-              method: :post, class: 'btn btn-danger btn-xs',
-              data: { confirm: 'Workers of this group will need to be restarted after resetting the key. Reset?' },
-              title: 'Reset the SSH key that the workers of this group use in order to access the repository linked with this project.' do
-                %i.fa.fa-refresh
-                Reset SSH key
-            = link_to project_worker_group_path(current_project, worker_group),
-            method: :delete, class: 'btn btn-danger btn-xs',
-            data: { confirm: "Workers of this group will not be able to access project '#{current_project.name}' anymore. Delete?" },
-            title: 'Delete the group and disable its workers from accessing this project.' do
-              %i.fa.fa-trash
-              Delete group
+            .btn-toolbar
+              %button.btn.btn-success.btn-xs{ data: { toggle: "modal",
+                target: "#workerGroupModal#{worker_group.id}" } }
+                %i.fa.fa-edit
+                Edit
+              = link_to docker_compose_project_path(current_project, client_id: worker_group.oauth_application_id),
+              class: 'btn btn-info btn-xs',
+              title: 'Download the docker-compose.yml file that is needed for creating a worker.' do
+                %i.fa.fa-download
+                docker-compose.yml
+              - unless current_project.repository_provider == "bare_repo"
+                = link_to reset_ssh_key_project_worker_group_path(current_project, worker_group),
+                method: :post, class: 'btn btn-danger btn-xs',
+                data: { confirm: 'Workers of this group will need to be restarted after resetting the key. Reset?' },
+                title: 'Reset the SSH key that the workers of this group use in order to access the repository linked with this project.' do
+                  %i.fa.fa-refresh
+                  Reset SSH key
+              = link_to project_worker_group_path(current_project, worker_group),
+              method: :delete, class: 'btn btn-danger btn-xs',
+              data: { confirm: "Workers of this group will not be able to access project '#{current_project.name}' anymore. Delete?" },
+              title: 'Delete the group and disable its workers from accessing this project.' do
+                %i.fa.fa-trash
+                Delete group
 
 - # Now build the form modals for each worker group
 - current_project.worker_groups.each do |worker_group|
