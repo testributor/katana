@@ -1,0 +1,7 @@
+= react_component 'TestJobPresenter',
+  test_jobs: @test_jobs.map(&:serialized_job),
+  test_run: @test_run.serialized_run,
+  project_id: current_project.id,
+  user_can_manage_run: can?(:manage, @test_run),
+  admin_user: (current_user && current_user.admin?),
+  test_runs_link: project_test_runs_path(branch: @test_run.try(:tracked_branch).try(:branch_name))
