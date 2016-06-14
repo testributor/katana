@@ -64,7 +64,6 @@ class Ability
     end
 
     if project.members.include?(user)
-      can :read_instructions, project
       can :read_docker_compose, project
       can :read_general_settings, project
       can :read, project

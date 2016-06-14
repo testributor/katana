@@ -10,9 +10,6 @@ class ProjectsController < DashboardController
     redirect_to project_test_runs_path(current_project)
   end
 
-  def instructions
-  end
-
   def update
     notice = nil
     alert = nil
@@ -132,7 +129,6 @@ class ProjectsController < DashboardController
       destroy: :destroy,
       show: :read,
       status: :read,
-      instructions: :read_instructions,
       docker_compose: :read_docker_compose,
       toggle_private: :manage # we are being deliberately strict
     }

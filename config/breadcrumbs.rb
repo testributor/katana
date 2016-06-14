@@ -21,11 +21,6 @@ crumb :settings do |project|
   parent :project, project
 end
 
-crumb :project_instructions do |project|
-  link "Instructions", instructions_project_path(project)
-  parent :project, project
-end
-
 crumb :project_files do |project|
   link "Files", project_files_path(project)
   parent :project, project

@@ -78,7 +78,6 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :instructions
       get :docker_compose
       post :toggle_private
       get :status

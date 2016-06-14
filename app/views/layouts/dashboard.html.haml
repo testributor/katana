@@ -27,15 +27,13 @@
     = render partial: 'layouts/header'
     %section
       :ruby
-        show_zero_workers_warning =
-          current_project && current_project.active_workers == 0 &&
-          !current_page?(instructions_project_path(current_project))
+        show_zero_workers_warning = current_project && current_project.active_workers == 0
 
       - if show_zero_workers_warning
         .alert.alert-danger
           There are no active workers for this project.
           No jobs are being run. Check
-          = link_to("the instructions", instructions_project_path(current_project))
+          = link_to("the instructions", "http://documentation.testributor.com/worker_setup/")
           on how to add one.
       .wraper.container-fluid
         - if flash[:notice].present?
