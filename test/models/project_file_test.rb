@@ -38,12 +38,12 @@ class ProjectFileTest < ActiveSupport::TestCase
         file.errors.added?(:contents, :syntax_error).must_equal true
       end
 
-      it "does not allow contents without a key" do
+      it "does not allow contents with an invalid format" do
         contents = "#"
         file = ProjectFile.new(path: file_path, contents: contents)
 
         file.valid?.must_equal false
-        file.errors.added?(:contents, :no_key_provided).must_equal true
+        file.errors.added?(:contents, :not_compatible_format).must_equal true
       end
 
       it "does not allow an 'each' key without a 'pattern'" do
@@ -51,7 +51,6 @@ class ProjectFileTest < ActiveSupport::TestCase
           each:
             command: 'blah'
         YAML
-        contents = ({'each' => { 'command' => 'blah' }}).to_yaml
         file = ProjectFile.new(path: file_path, contents: contents)
 
         file.valid?.must_equal false

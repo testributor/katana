@@ -26,7 +26,7 @@ en:
         project_file:
           attributes:
             contents:
-              no_key_provided: "no 'each:' key or custom command key provided"
+              not_compatible_format: "format not compatible"
               syntax_error: "syntax error"
               each_without_pattern: "'each:' key without 'pattern:' key provided"
               each_without_command: "'each:' key without 'command:' key provided"

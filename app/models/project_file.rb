@@ -8,7 +8,8 @@ class ProjectFile < ActiveRecord::Base
   validates :contents, :path, presence: true,
     unless: ->{ path == BUILD_COMMANDS_PATH }
   validates :path, uniqueness: { scope: :project_id }
-  validate :valid_contents, if: :testributor_yml?
+  validate :valid_testributor_yml_contents,
+    if: ->{ testributor_yml? && contents.present? }
   validate :prevent_path_change,
     if: ->{ path_changed? && (path_was == JOBS_YML_PATH || path_was == BUILD_COMMANDS_PATH) }
 
@@ -32,23 +33,21 @@ class ProjectFile < ActiveRecord::Base
   end
 
   private
-
-  def valid_contents
-    return if contents.blank?
+  def valid_testributor_yml_contents
     begin
-      jobs_description = SafeYAML.load(contents)
+      contents_as_hash = testributor_yml_as_hash
+
+      unless contents_as_hash
+        errors.add(:contents, :not_compatible_format)
+        return
+      end
     rescue Psych::SyntaxError
       errors.add(:contents, :syntax_error)
       return
     end
 
-    unless jobs_description.is_a?(Hash)
-      errors.add(:contents, :no_key_provided)
-      return
-    end
-
-    if jobs_description.has_key?("each")
-      each_description = jobs_description.delete("each")
+    if contents_as_hash.has_key?("each")
+      each_description = contents_as_hash.delete("each")
 
       unless each_description
         errors.add(:contents, :each_without_pattern)
@@ -67,7 +66,7 @@ class ProjectFile < ActiveRecord::Base
       end
     end
 
-    jobs_description.each do |job_name, description|
+    contents_as_hash.each do |job_name, description|
       unless description.try(:[],"command")
         errors.add(:contents, "#{job_name} is missing \"command\" key")
         return
@@ -81,5 +80,11 @@ class ProjectFile < ActiveRecord::Base
 
   def remove_carriege_returns_from_file
     contents.gsub!(/\r/,'')
+  end
+
+  def testributor_yml_as_hash
+    result = SafeYAML.load(contents.to_s)
+
+    result.is_a?(Hash) ? result : false
   end
 end
