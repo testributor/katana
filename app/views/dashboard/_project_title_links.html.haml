@@ -6,15 +6,12 @@
           %li
             %i.fa.fa-bars
             %span.nav-label Builds
-        = link_to project_files_path(project), class: (controller_name == 'project_files' ? 'active' : nil ) do
-          %li
-            %i.fa.fa-folder-open
-            %span.nav-label Files
         = link_to project_participations_path(project), class: (current_page?(project_participations_path(project)) ? 'active' : nil ) do
           %li
             %i.fa.fa-users
             %span.nav-label Users
-        = link_to project_settings_path(project), class: (controller_name == 'settings' ? 'active' : nil) do
+        = link_to project_settings_path(project),
+          class: (['settings', 'project_files'].include?(controller_name) ? 'active' : nil) do
           %li
             %i.fa.fa-wrench
             %span.nav-label= "Settings"

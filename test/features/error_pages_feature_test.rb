@@ -31,7 +31,7 @@ class ErrorPagesFeatureTest < Capybara::Rails::TestCase
 
     describe 'when user visits a page that does not have access' do
       it 'displays a 403 page' do
-        visit project_files_path(project_id: project.id)
+        visit project_settings_files_path(project_id: project.id)
         page.must_have_content '403'
       end
     end

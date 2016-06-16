@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resource :settings, only: [:show] do
       get :worker_setup
       get :notifications
+      resources :project_files, as: :files, path: :files, except: [:edit]
     end
 
     resources :worker_groups, only: [:create, :update, :destroy] do
@@ -98,7 +99,6 @@ Rails.application.routes.draw do
       get :fetch_branches, on: :collection
     end
 
-    resources :project_files, as: :files, path: :files, except: [:edit]
     resources :project_participations, as: :participations, path: :users
     resources :user_invitations, path: :invitations,
       except: [:index, :show, :update, :edit] do

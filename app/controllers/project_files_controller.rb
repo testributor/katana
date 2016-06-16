@@ -7,7 +7,7 @@ class ProjectFilesController < DashboardController
   def index
     testributor_yml = current_project.
       project_files.find_by_path(ProjectFile::JOBS_YML_PATH)
-    redirect_to project_file_path(
+    redirect_to project_settings_file_path(
       current_project, testributor_yml) and return
   end
 
@@ -43,7 +43,7 @@ class ProjectFilesController < DashboardController
       flash[:alert] = @project_file.errors.messages.values.join(', ')
     end
 
-    redirect_to project_files_path(current_project)
+    redirect_to project_settings_files_path(current_project)
   end
 
   def update
