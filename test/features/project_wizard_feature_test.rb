@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'timeout'
 
 class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   let(:user) { FactoryGirl.create(:user, projects_limit: 10) }
@@ -49,14 +50,22 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     page.driver.execute_script(
       "window.code_editor.setValue(#{yaml.inspect});")
     click_on 'Next'
-    wait_for_requests_to_finish
     testributor_file = project.project_files.
       where(path: ProjectFile::JOBS_YML_PATH).first
     testributor_file.wont_equal nil
     page.wont_have_content "Please upgrade your plan"
-
     page.must_have_selector("#waiting_for_worker", visible: true)
-    wait_for_requests_to_finish # Let socketio connection be initialized
+    Timeout::timeout(3) {
+      loop do # wait for connection with socketio
+        break if evaluate_script("window.liveUpdates.socket.id")
+        sleep 0.01
+      end
+      loop do # wait for subscribe requrest to be made
+        break if page.driver.network_traffic.detect {|r| r.url.match(/\/subscribe/) }
+        sleep 0.01
+      end
+    }
+    wait_for_requests_to_finish
     Broadcaster.publish(
       project.redis_live_update_resource_key, { event: "worker_added" })
     click_on "Done!"

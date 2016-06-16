@@ -39,6 +39,7 @@ $(document).on 'ready', ->
       $('.wraper').prepend(flash)
       setTimeout (->
         $('.wraper').find('.alert').remove()), 10000
+  document.renderFlash = renderFlash
 
   $(".js-remote-submission").on("ajax:complete", (data, status, xhr) ->
     if status.status == 200

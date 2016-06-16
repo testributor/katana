@@ -18,8 +18,7 @@ var TestRunPresenter = React.createClass({
           (this.props.currentBranchId == null)) {
           testRuns.unshift(msg.test_run)
           this.setState({ testRuns: testRuns })
-          Testributor.Widgets.LiveUpdates(
-            { "TestRun": { "ids": [msg.test_run.id] } }, this.handleUpdate)
+          window.liveUpdates.subscribe({ "TestRun": { "ids": [msg.test_run.id] } }, this.handleUpdate)
         } else {
           null
         };
@@ -37,10 +36,10 @@ var TestRunPresenter = React.createClass({
       }
     }
 
-    Testributor.Widgets.LiveUpdates(subscriptions, _this.handleUpdate)
+    window.liveUpdates.subscribe(subscriptions, _this.handleUpdate)
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
     var _this = this;
     var testRunIds = _this.props.testRuns.map(function(testRun, index){
       return testRun.id;

@@ -29,7 +29,7 @@
             - if @tracked_branch
               = link_to project_test_runs_path(branch_id: @tracked_branch.id), method: :post, remote: true,
                 data: { disable_with: with_dots("Adding build") },
-                action: :create, class: 'btn btn-md btn-success js-remote-submission' do
+                action: :create, class: 'disabled btn btn-md btn-success js-remote-submission' do
                 %i.fa.fa-plus-square.m-r-5
                 Add a Build
     .m-t-10

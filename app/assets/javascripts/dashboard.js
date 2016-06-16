@@ -10,6 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require init
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/effect
@@ -17,6 +18,7 @@
 //= require bootstrap
 //= require underscore
 //= require socket.io
+//= require live_updates
 //= require select2
 //= require sweet-alert.min
 //= require dashboard/modernizr.min
@@ -36,6 +38,5 @@
 //= require yaml
 //= require custom.codemirror
 //
-//= require init
 //= require_tree ./dashboard
 //= require autoload

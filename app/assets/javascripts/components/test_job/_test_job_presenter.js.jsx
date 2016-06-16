@@ -11,17 +11,10 @@ var TestJobPresenter = React.createClass({
   },
 
   handleUpdate: function (msg) {
-    if (msg.event == 'TestRunRetry') {
-      this.setState({ testJobs: [] })
-    }
-
     var testJobs = this.state.testJobs;
-
     var updateTestJobs = function(testJobs, msg) {
-      if (msg.test_run) {
-        this.setState({ testRun: msg.test_run })
-      }
-
+      if (msg.event == 'TestRunRetry') { this.setState({ testJobs: [] }) }
+      if (msg.test_run) { this.setState({ testRun: msg.test_run }) }
       if (msg.test_job) {
         existedJob =  _.find(this.state.testJobs, function(testJob) {
           return testJob.id == msg.test_job.id;
@@ -34,7 +27,6 @@ var TestJobPresenter = React.createClass({
           if (msg.test_job.id) {
             testJobs.push(msg.test_job)
             this.setState({ testJobs: testJobs})
-            Testributor.Widgets.LiveUpdates( { "TestJob": { "ids": [msg.test_job.id] } }, this.handleUpdate)
           } else {
             null
           };
@@ -55,11 +47,8 @@ var TestJobPresenter = React.createClass({
       }
     }
 
-    if (testJobIds.legnth > 0) {
-      subscriptions["TestJob"] = { "ids": testJobIds }
-    }
-
-    Testributor.Widgets.LiveUpdates(subscriptions, _this.handleUpdate)
+    window.liveUpdates.initConnection()
+    window.liveUpdates.subscribe(subscriptions, _this.handleUpdate)
   },
 
   componentDidMount: function() {

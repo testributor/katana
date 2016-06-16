@@ -27,7 +27,7 @@ class Testributor.Pages.ProjectWizard
         .data('live-update-resource-id').split("#")
       subscriptions = {}
       subscriptions[resource] = { ids: [id] }
-      Testributor.Widgets.LiveUpdates(subscriptions, (msg) ->
+      window.liveUpdates.subscribe(subscriptions, (msg) ->
         if msg.event == 'worker_added'
           $waiting_for_worker.remove()
           $("#done_button").show()
