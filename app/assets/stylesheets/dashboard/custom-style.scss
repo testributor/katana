@@ -511,3 +511,8 @@
     margin-top: -20px;
   }
 }
+
+.btn-primary.disabled {
+  background-color: #3bc0c3;
+  border: 1px solid #3bc0c3;
+}
