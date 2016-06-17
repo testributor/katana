@@ -8,4 +8,9 @@ class PagesController < ApplicationController
         new("Page #{page.inspect} was not found")
     end
   end
+
+  def letsencrypt
+    # use your code here, not mine
+    render text: ENV['LETS_ENCRYPT_RESPONSE']
+  end
 end

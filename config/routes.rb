@@ -132,4 +132,7 @@ Rails.application.routes.draw do
   get "/403", :to => "errors#access_denied"
   get "/404", :to => "errors#not_found"
   get "/500", :to => "errors#internal_server_error"
+
+  # http://collectiveidea.com/blog/archives/2016/01/12/lets-encrypt-with-a-rails-app-on-heroku/
+  get '/.well-known/acme-challenge/:id' => 'pages#letsencrypt'
 end
