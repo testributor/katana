@@ -6,6 +6,7 @@ class Testributor.LiveUpdates
     setTimeout(=>
       @timeoutReached = true
     , @maxWaitTimeForId)
+    $('.js-remote-submission').addClass('disabled')
 
   socketId: () =>
     return @socket['id'] if @socket && @socket['id']

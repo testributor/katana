@@ -37,6 +37,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Passed"
+    page.wont_have_selector(".disabled.js-remote-submission")
     find(".btn-primary", text: "Retry").click
     page.must_have_content "Setup"
   end
@@ -48,6 +49,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Failed"
+    page.wont_have_selector(".disabled.js-remote-submission")
     find(".btn-primary").click
     page.must_have_content "Setup"
   end
@@ -58,6 +60,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.update_column(:status, TestStatus::ERROR)
     _test_run.reload
     visit project_test_runs_path(project, branch: branch.branch_name)
+    page.wont_have_selector(".disabled.js-remote-submission")
     page.must_have_content "Error"
     find(".btn-primary", text: "Retry").click
     page.must_have_content "Setup"
@@ -79,6 +82,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Queued"
+    page.wont_have_selector(".disabled.js-remote-submission")
     within "#test-run-#{_test_run.id}" do
       find(".btn-danger").click
     end
@@ -92,6 +96,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     _test_run.reload
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Running"
+    page.wont_have_selector(".disabled.js-remote-submission")
     within "#test-run-#{_test_run.id}" do
       find(".btn-danger").click
     end
