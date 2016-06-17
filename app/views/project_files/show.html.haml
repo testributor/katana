@@ -1,57 +1,62 @@
-.row.m-t-10.panelized
-  .col-xs-12
-    %p
-      You can create any files needed for your test suite here. You can also
-      override existing files. Specify the path relative to the project's root
-      directory.
-    %hr
-    %div
-      %ul.nav.nav-pills.m-b-15
-        - @project_files.each do |file|
-          %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}
-            = link_to file.path, project_file_path(current_project, file)
-        %li{ class: params[:id].blank? ? 'active' : ''}
-          = link_to new_project_file_path(current_project) do
-            %i.fa.fa-plus-circle
-            = 'Add file'
-      .panel.body
-        - form_path = @project_file.persisted? ? project_file_path(current_project, @project_file) : project_files_path(current_project)
-        = form_for [current_project, @project_file], url: form_path do |f|
-          .row
-            .col-xs-12
-              = f.text_field :path, class: 'text form-control m-b-10',
-                placeholder: "Enter file name.",
-                readonly: @project_file.testributor_yml? || @project_file.build_commands?
-            .col-xs-12
-              .code-edit-wrap.m-b-10
-                = f.text_area :contents, class: 'text form-control code code-shell',
-                  placeholder: "Enter file contents"
-          = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
-          - if @project_file.persisted? && !@project_file.testributor_yml? && !@project_file.build_commands?
-            = link_to 'Destroy',
-              project_file_path(current_project, @project_file),
-              method: :delete, class: 'btn btn-danger m-l-15',
-              data: { confirm: "File will be deleted. Are your sure?" }
+.row.m-t-10
+  .col-md-12
+    = render 'settings/settings_common_header'
+    .row.panelized
+      .col-xs-12
+        %h3 Project files
 
-        - if @project_file.path == ProjectFile::BUILD_COMMANDS_PATH
-          %hr
-          = render 'build_commands_documentation'
+      .col-xs-12
+        %p
+          You can create any files needed for your test suite here. You can also
+          override existing files. Specify the path relative to the project's root
+          directory.
+        %div
+          %ul.nav.nav-pills.m-b-15
+            - @project_files.each do |file|
+              %li{class: file.try(:id).to_s == params[:id] ? 'active': ''}
+                = link_to file.path, project_settings_file_path(current_project, file)
+            %li{ class: params[:id].blank? ? 'active' : ''}
+              = link_to new_project_settings_file_path(current_project) do
+                %i.fa.fa-plus-circle
+                = 'Add file'
+          .col-xs-12
+            - form_path = @project_file.persisted? ? project_settings_file_path(current_project, @project_file) : project_settings_files_path(current_project)
+            = form_for [current_project, @project_file], url: form_path do |f|
+              .row
+                .col-xs-12
+                  = f.text_field :path, class: 'text form-control m-b-10',
+                    placeholder: "Enter file name.",
+                    readonly: @project_file.testributor_yml? || @project_file.build_commands?
+                .col-xs-12
+                  .code-edit-wrap.m-b-10
+                    = f.text_area :contents, class: 'text form-control code code-shell',
+                      placeholder: "Enter file contents"
+              = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
+              - if @project_file.persisted? && !@project_file.testributor_yml? && !@project_file.build_commands?
+                = link_to 'Destroy',
+                  project_settings_file_path(current_project, @project_file),
+                  method: :delete, class: 'btn btn-danger m-l-15',
+                  data: { confirm: "File will be deleted. Are your sure?" }
 
-        -elsif @project_file.path == ProjectFile::JOBS_YML_PATH
-          %br
-          Read the
-          = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
-          for more details about the syntax and what you can do in this file.
+            - if @project_file.path == ProjectFile::BUILD_COMMANDS_PATH
+              %hr
+              = render 'build_commands_documentation'
 
-  - if @docs.present?
-    - content_for(:help) do
-      .panelized
-        %h3
-          %i.fa.fa-life-saver
-          Help
-        The technologies you selected provide the following infomation which you might find useful.
-        %hr
-        - @docs.each do |name, doc|
-          %h5= name
-          = doc.html_safe
-          %hr
+            -elsif @project_file.path == ProjectFile::JOBS_YML_PATH
+              %br
+              Read the
+              = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
+              for more details about the syntax and what you can do in this file.
+
+      - if @docs.present?
+        - content_for(:help) do
+          .panelized
+            %h3
+              %i.fa.fa-life-saver
+              Help
+            The technologies you selected provide the following infomation which you might find useful.
+            %hr
+            - @docs.each do |name, doc|
+              %h5= name
+              = doc.html_safe
+              %hr

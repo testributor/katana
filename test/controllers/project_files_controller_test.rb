@@ -31,7 +31,7 @@ class ProjectFilesControllerTest < ActionController::TestCase
 
       get :index, project_id: project.id
 
-      assert_redirected_to project_file_path(project, testributor.id)
+      assert_redirected_to project_settings_file_path(project, testributor.id)
     end
 
     it "prevents non members from visiting the page" do
@@ -52,7 +52,7 @@ class ProjectFilesControllerTest < ActionController::TestCase
 
       get :index, project_id: project.id
 
-      assert_redirected_to project_file_path(project, testributor.id)
+      assert_redirected_to project_settings_file_path(project, testributor.id)
     end
   end
 
@@ -103,9 +103,9 @@ class ProjectFilesControllerTest < ActionController::TestCase
         must_equal other_project_file
     end
 
-    it "redirects to project_files_path(project)" do
+    it "redirects to project_settings_files_path(project)" do
       delete :destroy, project_id: project.id, id: subject.id
-      assert_redirected_to project_files_path(project)
+      assert_redirected_to project_settings_files_path(project)
     end
   end
 
