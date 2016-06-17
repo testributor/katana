@@ -41,7 +41,7 @@ var TestRunShowHeader = React.createClass({
           <div className='col-sm-6'>
             <a href={ this.props.test_runs_link }>
               <i className="fa fa-arrow-left" />
-              <span> Back To Builds </span>
+              <span> Back to builds </span>
             </a>
           </div>
           <div className='col-sm-6 text-right'>
