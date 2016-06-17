@@ -42,7 +42,7 @@ class EmailNotificationsSettingsFeatureTest < Capybara::Rails::TestCase
     it "allows the user to change the setting for 'My builds'", js: true do
       participation = owner.project_participations.last
       participation.my_builds_notify_on.must_equal(
-        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:status_change])
+        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always])
       select "Never", from: "My builds"
       click_on "Save"
       participation.reload.my_builds_notify_on.must_equal(
@@ -57,7 +57,7 @@ class EmailNotificationsSettingsFeatureTest < Capybara::Rails::TestCase
     it "allows the user to change the setting for 'Other member builds'" do
       participation = owner.project_participations.last
       participation.others_builds_notify_on.must_equal(
-        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:status_change])
+        BranchNotificationSetting::NOTIFY_ON_MAP.invert[:always])
       select "Never", from: "Other members builds"
       click_on "Save"
       participation.reload.others_builds_notify_on.must_equal(

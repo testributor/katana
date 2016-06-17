@@ -169,10 +169,6 @@ class TestRun < ActiveRecord::Base
         end
 
         case BranchNotificationSetting::NOTIFY_ON_MAP[setting]
-        when :status_change
-          if old_status != new_status
-            initiator_based_notifiable_users << participation.user
-          end
         when :always
           initiator_based_notifiable_users << participation.user
         when :every_failure

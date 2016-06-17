@@ -44,6 +44,12 @@ en:
               project_limit_reached: >
                 You cannot add other projects as you have reached your <strong>project limit</strong>.
                 Please upgrade your plan.
+        project_participation:
+          attributes:
+            my_builds_notify_on:
+              invalid_option: "option not valid"
+            others_builds_notify_on:
+              invalid_option: "option not valid"
         email_submission:
           attributes:
             email:
