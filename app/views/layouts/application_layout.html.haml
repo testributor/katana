@@ -16,32 +16,32 @@
     %script{ type: 'application/ld+json' }
       :plain
         {
-          "@context" : "http://schema.org",
+          "@context" : "https://schema.org",
           "@type" : "WebSite",
           "name" : "Testributor",
           "alternateName" : "Testributor - Parallel testing on your hardware",
           "url" : "http://www.testributor.com",
           "image" : "#{ asset_url('logo.png') }",
           "sameAs" : [
-            "http://www.facebook.com/testributor",
-            "http://www.twitter.com/testributor",
-            "http://www.linkedin.com/company/testributor",
-            "http://angel.co/testributor"
+            "https://www.facebook.com/testributor",
+            "https://www.twitter.com/testributor",
+            "https://www.linkedin.com/company/testributor",
+            "https://angel.co/testributor"
           ]
         }
     - if content_for(:schema_title) && content_for(:schema_description)
       %script{ type: 'application/ld+json' }
         :plain
           {
-            "@context" : "http://schema.org",
+            "@context" : "https://schema.org",
             "@type" : "WebPage",
             "name" : "#{content_for(:schema_title)}",
             "description" : "#{content_for(:schema_description)}"
           }
     = render "layouts/favicon"
     = stylesheet_link_tag 'front', media: 'all'
-    %link{href: "http://fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
-    %link{href: "http://fonts.googleapis.com/css?family=Cuprum:400,700", rel: "stylesheet", type: "text/css"}
+    %link{href: "//fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
+    %link{href: "//fonts.googleapis.com/css?family=Cuprum:400,700", rel: "stylesheet", type: "text/css"}
 
     = csrf_meta_tags
   %body{class: controller_and_action, data: page_data_attrs}
