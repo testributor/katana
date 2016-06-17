@@ -29,7 +29,7 @@ var TestJob = React.createClass({
       if (this.props.user_can_manage_run && this.props.test_job.status_is_terminal) {
         return (
           <a href={ this.props.test_job.retry_url }
-            className="disabled btn btn-primary btn-sm js-remote-submission"
+            className="btn btn-primary btn-sm js-remote-submission"
             data-remote='true'
             style={{ marginTop: '-4px' }}
             data-disable-with={ withDots('Retrying') }
@@ -100,7 +100,7 @@ var TestJob = React.createClass({
             href={ errorElement }
             data-toggle="collapse"
             aria-expanded="false"
-            className='js-toggle-collapse disabled'
+            className='js-toggle-collapse'
             disabled='true'>
             <i className="m-l-5 m-r-5 fa fa-chevron-right rotate js-toggle-collapse"></i>
             { this.props.test_job.job_name }
