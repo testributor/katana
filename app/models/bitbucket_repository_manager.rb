@@ -229,8 +229,7 @@ class BitbucketRepositoryManager
         description: "Testributor Webhook#{" (local)" if Rails.env.development?}",
         url: webhook_url,
         active: true,
-        events: ['repo:push'],
-        skip_cert_verification: false # TODO Remove when we install SSL cert
+        events: ['repo:push']
       ).uuid
 
     # Thw :webhook_id contains the raw value as returned by the Bitbucket API,
