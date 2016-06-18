@@ -4,4 +4,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: http://s3-us-west-2.amazonaws.com/testributor/sitemaps/sitemap.xml.gz
+Sitemap: https://s3-us-west-2.amazonaws.com/testributor/sitemaps/sitemap.xml.gz

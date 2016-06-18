@@ -69,7 +69,7 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
   #
-  config.action_mailer.asset_host = "http://www.testributor.com"
+  config.action_mailer.asset_host = "https://www.testributor.com"
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -89,7 +89,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { host: 'testributor.com', port: 80 }
-  routes.default_url_options[:host] = 'http://testributor.com'
+  routes.default_url_options[:host] = 'https://testributor.com'
 
   ActionMailer::Base.smtp_settings = {
     :address        => 'smtp.sendgrid.net',

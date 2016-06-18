@@ -1,5 +1,5 @@
 host = ENV['CANONICAL_HOST'] || 'www.example.com'
-SitemapGenerator::Sitemap.default_host = "http://#{host}"
+SitemapGenerator::Sitemap.default_host = "https://#{host}"
 SitemapGenerator::Sitemap.public_path = 'public/'
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
@@ -12,7 +12,7 @@ if ENV['S3_BUCKET_NAME']
     aws_secret_access_key: ENV['S3_SECRET_ACCESS_KEY_ID'],
     fog_region: ENV['FOG_REGION']
   })
-  SitemapGenerator::Sitemap.sitemaps_host = "http://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/"
+  SitemapGenerator::Sitemap.sitemaps_host = "https://#{ENV['S3_BUCKET_NAME']}.s3.amazonaws.com/"
 end
 
 SitemapGenerator::Sitemap.create do
