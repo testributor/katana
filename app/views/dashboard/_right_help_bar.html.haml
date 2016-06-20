@@ -30,6 +30,14 @@
       %i.fa.fa-life-ring
       Help
 
-    We are always available to answer every question.
-    Send us an e-mail at
-    = mail_to 'info@testributor.com', 'info@testributor.com'
+    %p
+      We are always available to answer any question.
+
+    %p
+      = link_to gitter_share_link, class: 'margin-top: 2px;', target: "_blank" do
+        %span.m-r-5
+          Ask us anything or send us some feedback!
+        = image_tag("https://badges.gitter.im/owner/repo.png", style: "vertical-align: text-top;")
+    %p
+      Or send us an e-mail at
+      = mail_to 'support@testributor.com', 'support@testributor.com'

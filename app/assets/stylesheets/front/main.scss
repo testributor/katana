@@ -357,3 +357,15 @@ section.features {
     }
   }
 }
+.mobile-top-buffer {
+  @media screen and (max-width: $screen-sm-max) {
+    margin-top: 10px;
+  }
+}
+
+.footer-logo-text {
+  font-size: 21px;
+  text-transform: uppercase;
+  font-weight: 800;
+  vertical-align: middle;
+}

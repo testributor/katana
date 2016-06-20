@@ -1,43 +1,45 @@
 %footer.footer
   .container
     .row
-      .col-xs-12.col-sm-4
-        %div
-          .logo.text-center
-            %img{alt: "logo", src: image_path("logo.png"), style: 'float: left; margin-left: 60px;'}
-            %span.logo-text.white-text Testributor
-            %h4.white-text Faster testing on your hardware
+      .col-xs-12.col-sm-4.mobile-top-buffer.text-center
+        .col-xs-12
+          %img{alt: "logo", src: image_path("logo.png"), width: 50, height: 50}
+          %span.white-text.footer-logo-text Testributor
+        .col-xs-12.text-center{style: 'margin-top: -10px;'}
+          %h3.white-text Faster testing on your hardware
 
-      .col-xs-12.col-sm-4
-        .col-xs-6
-          %ul{style: "list-style-type: none;"}
-            %li
-              = link_to root_path(anchor: 'features'), class: 'btn-custom' do
-                Features
-            %li
-              = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
-                Documentation
-            %li
-              = link_to 'http://blog.testributor.com', class: 'btn-custom' do
-                Blog
-            %li
-              = link_to pages_path("pricing"), class: 'btn-custom' do
-                Pricing
-            %li
-              = link_to pages_path("faqs"), class: 'btn-custom' do
-                FAQs
-            %li
-              = link_to pages_path("about_us"), class: 'btn-custom' do
-                About
+      .col-xs-12.col-sm-4.mobile-top-buffer
+        .row
+          .col-md-6
+            %ul{style: "list-style-type: none; padding: 0px;"}
+              %li
+                = link_to root_path(anchor: 'features'), class: 'btn-custom' do
+                  Features
+              %li
+                = link_to 'http://documentation.testributor.com', class: 'btn-custom' do
+                  Documentation
+              %li
+                = link_to 'http://blog.testributor.com', class: 'btn-custom' do
+                  Blog
+              %li
+                = link_to pages_path("pricing"), class: 'btn-custom' do
+                  Pricing
+              %li
+                = link_to pages_path("faqs"), class: 'btn-custom' do
+                  FAQs
+              %li
+                = link_to pages_path("about_us"), class: 'btn-custom' do
+                  About
 
-        .col-xs-6
-          %ul{style: "list-style-type: none;"}
-            %li
-              = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
-            %li
-              = link_to 'Sign up', new_user_registration_path, class: 'btn btn-primary'
-      .col-xs-12.col-sm-4
-        %span.social
+          .col-md-6
+            %ul{style: "list-style-type: none; padding: 0px;"}
+              %li
+                = link_to 'Log in', new_user_session_path, class: 'btn btn-custom'
+              %li
+                = link_to 'Sign up', new_user_registration_path, class: 'btn btn-primary'
+
+      .col-xs-12.col-sm-4.mobile-top-buffer
+        .col-xs-12.social
           = link_to "https://www.twitter.com/testributor", class: 'btn-custom',
             target: "_blank" do
             %i.fa.fa-twitter
@@ -50,3 +52,11 @@
           = link_to "https://www.linkedin.com/company/testributor", class: 'btn-custom',
             target: "_blank" do
             %i.fa.fa-linkedin
+        .col-xs-12
+          = link_to gitter_share_link, class: '', target: "_blank" do
+            .row
+              .col-xs-12.white-text
+                Ask us anything or send us some feedback!
+            .row
+              .col-xs-12
+                = image_tag("https://badges.gitter.im/owner/repo.png", style: "vertical-align: text-top;")

@@ -115,4 +115,8 @@ module ApplicationHelper
   def with_dots(text)
     "#{text}<span class='dot'></span><span class='dot'></span><span class='dot'></span>".html_safe
   end
+
+  def gitter_share_link
+    "https://gitter.im/testributor/testributor?utm_source=help-section-link&utm_medium=link&utm_campaign=share-link"
+  end
 end
