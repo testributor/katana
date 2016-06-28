@@ -13,21 +13,26 @@
         %div.text Testributor
     - if user_signed_in?
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
-        %ul.nav.navbar-nav
-          %li
+        %ul.nav.navbar-nav.navbar-right
+          %li.dropdown
             = link_to project_wizard_path(:select_repository), class: '' do
               %i.fa.fa-plus
               Add a project
-        %ul.nav.navbar-nav.navbar-right
-          %li
-            = link_to '#', data: { toggle: 'modal', target: '#feedback-modal' } do
-              %i.fa.fa-envelope-o
-              Send feedback
           %li.dropdown
             %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
               = current_user.email
               %span.caret
             %ul.dropdown-menu
+              %li
+                = link_to documentation_url, class: 'margin-top: 2px;', target: "_blank" do
+                  Documentation
+              %li
+                = link_to gitter_share_link, class: 'margin-top: 2px;', target: "_blank" do
+                  Gitter chat
+              %li
+                = link_to '#', data: { toggle: 'modal', target: '#feedback-modal' } do
+                  Send feedback
+              %li.divider{ role: "separator" }
               %li
                 = link_to(destroy_user_session_path, method: :delete) do
                   %i.fa.fa-sign-out

@@ -119,4 +119,8 @@ module ApplicationHelper
   def gitter_share_link
     "https://gitter.im/testributor/testributor?utm_source=help-section-link&utm_medium=link&utm_campaign=share-link"
   end
+
+  def documentation_url
+    'http://documentation.testributor.com'
+  end
 end
