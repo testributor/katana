@@ -36,15 +36,18 @@
 
           .col-xs-12
             %h4 Initiator based settings
+            :ruby
+              # On status change does not make sense for initator settings
+              options = BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.except(
+                BranchNotificationSetting::NOTIFY_ON_MAP.invert[:status_change]).invert
             .col-xs-12.form-row
               = f.input :my_builds_notify_on, as: :select,
-                collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
-                include_blank: false, label: "My builds"
+                collection: options, include_blank: false, label: "My builds"
 
             .col-xs-12.form-row
               = f.input :others_builds_notify_on, as: :select,
-                collection: BranchNotificationSetting::NOTIFY_ON_MAP_HUMAN.invert,
-                include_blank: false, label: "Other members builds"
+                collection: options, include_blank: false,
+                label: "Other members builds"
 
           .col-xs-12
             = f.submit "Save", class: 'btn btn-primary'

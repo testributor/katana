@@ -17,6 +17,32 @@ class ProjectParticipationTest < ActiveSupport::TestCase
     ->{ user_invitation.reload }.must_raise ActiveRecord::RecordNotFound
   end
 
+
+  describe "#initiator_settings_valid" do
+    subject { ProjectParticipation.new }
+    describe "when my_builds_notify_on is :status_changed" do
+      before do
+        subject.my_builds_notify_on =
+          BranchNotificationSetting::NOTIFY_ON_MAP.invert[:status_change]
+      end
+      it "is invalid" do
+        subject.wont_be :valid?
+        subject.errors[:my_builds_notify_on].must_equal ["option not valid"]
+      end
+    end
+
+    describe "when others_builds_notify_on is :status_changed" do
+      before do
+        subject.others_builds_notify_on =
+          BranchNotificationSetting::NOTIFY_ON_MAP.invert[:status_change]
+      end
+      it "is invalid" do
+        subject.wont_be :valid?
+        subject.errors[:others_builds_notify_on].must_equal ["option not valid"]
+      end
+    end
+  end
+
   describe "when a new participation is created" do
     let(:tracked_branches) do
       FactoryGirl.create_list(:tracked_branch, 3, project: project)
