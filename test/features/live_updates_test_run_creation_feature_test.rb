@@ -58,5 +58,16 @@ class LiveUpdatesTestRunCreationFeatureTest < Capybara::Rails::TestCase
       FactoryGirl.create(:testributor_run)
       page.all('[id^="test-run"]').size.must_equal 1
     end
+
+    it 'does not change the status of other testRuns', js: true do
+      _test_run.update_column(:status, TestStatus::PASSED)
+      visit project_test_run_path(_test_run.project.id, _test_run.id)
+
+      FactoryGirl.create(:testributor_run, project_id: _test_run.project_id)
+      within '.test-run-header' do
+        label = page.find('.label-success')
+        label.must_have_content 'Build #1 | Passed'
+      end
+    end
   end
 end

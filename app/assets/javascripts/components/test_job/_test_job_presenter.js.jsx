@@ -41,9 +41,7 @@ var TestJobPresenter = React.createClass({
     var _this = this;
     var subscriptions = {
       "TestRun": {
-        'ids': [this.props.test_run.id],
-        'actions': ['create'],
-        'project_id': this.props.project_id
+        'ids': [this.props.test_run.id]
       }
     }
 
