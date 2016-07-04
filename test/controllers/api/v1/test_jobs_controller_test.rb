@@ -223,11 +223,11 @@ class Api::V1::TestJobsControllerTest < ActionController::TestCase
     end
 
     it 'does not send the TestJobUpdate event twice' do
-      # Test job count + 1 for the TestRun
+      # ((Test job count) x2 + 1) for the TestRun
       Broadcaster.expects(:publish).with(
         _test_jobs.last.test_run.redis_live_update_resource_key,
         instance_of(Hash)
-      ).times(5)
+      ).times(9)
 
       @controller.stub :doorkeeper_token, token do
         patch :batch_update, default: { format: :json },

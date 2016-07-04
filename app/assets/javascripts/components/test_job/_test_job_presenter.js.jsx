@@ -12,14 +12,16 @@ var TestJobPresenter = React.createClass({
 
   handleUpdate: function (msg) {
     var testJobs = this.state.testJobs;
+
     var updateTestJobs = function(testJobs, msg) {
-      if (msg.event == 'TestRunRetry') { this.setState({ testJobs: [] }) }
-      if (msg.test_run) { this.setState({ testRun: msg.test_run }) }
-      if (msg.test_job) {
+      if (msg.event == 'TestRunRetry') {
+        this.setState({ testJobs: [] })
+      } else if (msg.event == 'TestRunUpdate' && msg.test_run) {
+        this.setState({ testRun: msg.test_run })
+      } else if (msg.event == 'TestJobUpdate' && msg.test_job) {
         existedJob =  _.find(this.state.testJobs, function(testJob) {
           return testJob.id == msg.test_job.id;
         })
-
         if (existedJob) {
           testJobs.splice(testJobs.indexOf(existedJob), 1, msg.test_job)
           this.setState({ testJobs: testJobs })
