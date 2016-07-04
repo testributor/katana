@@ -172,7 +172,7 @@ class TestRun < ActiveRecord::Base
         when :always
           initiator_based_notifiable_users << participation.user
         when :every_failure
-          if [TestStatus::FAIL, TestStatus::ERROR].include?(new_status)
+          if [TestStatus::FAILED, TestStatus::ERROR].include?(new_status)
             initiator_based_notifiable_users << participation.user
           end
         end
