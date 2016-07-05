@@ -8,3 +8,32 @@
 completed with status
 = "\"#{@status}\""
 
+- failed_statuses = [TestStatus::FAILED, TestStatus::ERROR]
+- if failed_statuses.include?(@test_run.status.code)
+  %br
+  :ruby
+    jobs_to_show = 2
+    all_jobs =
+      @test_run.test_jobs.select{|j| failed_statuses.include?(j.status.code)}
+
+    if all_jobs.count > jobs_to_show
+      jobs = all_jobs.first(jobs_to_show)
+      limited = true
+    else
+      jobs = all_jobs
+      limited = false
+    end
+
+  #results
+    Below are the failed jobs
+    - if limited
+      %strong
+        = "(only the first #{jobs_to_show} out of a total of #{all_jobs.count} failed)"
+    \:
+
+    - jobs.each do |job|
+      .result{ style: "border: 1px solid #999; border-radius: 5px; margin-top: 20px;" }
+        .job-command{ style: "padding: 10px; font-weight: bold; background-color: #AAA;" }
+          = job.command
+        .job-result{ style: "background-color: #444; padding: 10px; color: #CCC;" }
+          = simple_format(job.result, style: "color: #CCC")
