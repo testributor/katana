@@ -13,9 +13,11 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       # of fetched projects because we already have 11
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
       GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 6)
-      VCR.use_cassette 'repos_with_4_pages' do
+      VCR.use_cassette 'github_private_repo_user' do
         visit project_wizard_path(id: :select_repository)
-        find(".fa-github").click
+        VCR.use_cassette 'repos_with_4_pages' do
+          find(".fa-github").click
+        end
         wait_for_requests_to_finish
       end
     end
@@ -27,7 +29,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
 
     it 'displays pagination according to the number of projects', js: true do
       # 1 - 2 - 3 - 4 - next
-      page.find_all('.pagination li').size.must_equal 5
+      page.find_all('.pagination li').size.must_equal 6
       page.must_have_content 'ispyropoulos/aroma-kouzinas'
       page.must_have_content 'ispyropoulos/bitbucket'
       page.must_have_content 'ispyropoulos/dockerfiles'
@@ -42,7 +44,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
           page.must_have_content 'ispyropoulos/intl-tel-input-rails'
           page.must_have_content 'ispyropoulos/katana'
           page.must_have_content 'ispyropoulos/legendary-broccoli'
-          page.all('.pagination li').size.must_equal 6
+          page.all('.pagination li').size.must_equal 7
           page.find('.pagination li.active').text.must_equal '2'
         end
       end
@@ -54,7 +56,7 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
           click_on '4'
           wait_for_requests_to_finish
           page.find('.pagination li.active').text.must_equal '4'
-          page.all('.pagination li').size.must_equal 5
+          page.all('.pagination li').size.must_equal 7
         end
       end
     end
@@ -64,9 +66,11 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     before do
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
       GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 30)
-      VCR.use_cassette 'repos_without_page' do
+      VCR.use_cassette 'github_private_repo_user' do
         visit project_wizard_path(id: :select_repository)
-        find(".fa-github").click
+        VCR.use_cassette 'repos_without_page' do
+          find(".fa-github").click
+        end
         wait_for_requests_to_finish
       end
     end

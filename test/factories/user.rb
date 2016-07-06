@@ -22,4 +22,19 @@ FactoryGirl.define do
     bitbucket_access_token "zX4dt9nfH5QVkKvnXH"
     bitbucket_access_token_secret "sDXvhTxed8npRZEejazuxxTPSUFr7Y6D"
   end
+
+  trait :with_github_public_repo_access do
+    # For these keys to work, the key in attr_encrypted_options should match
+    # the one that created them. For this reason we have a hardcoded key
+    # when in test environment in app/models/user.rb
+    encrypted_github_access_token "n6wjCe2t4tfLcwPLjo+CMHHn7Ccsw7AAmgtGasqvQFHrl7zz72S0DeGXualP\n0NWH\n"
+    encrypted_github_access_token_salt "5ead901e880f80a4"
+    encrypted_github_access_token_iv "NFepX7Bug0gwJXmX9ALnow==\n"
+  end
+
+  trait :without_svc_access do
+    encrypted_github_access_token nil
+    encrypted_github_access_token_salt nil
+    encrypted_github_access_token_iv nil
+  end
 end

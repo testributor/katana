@@ -24,9 +24,11 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   end
 
   it "creates a project with correct attributes after successful completion", js: true do
-    VCR.use_cassette 'repos'  do
+    VCR.use_cassette 'github_private_repo_user'  do
       visit project_wizard_path(:select_repository)
-      page.must_have_content "GitHub"
+    end
+    page.must_have_content "GitHub"
+    VCR.use_cassette 'github_private_repo_user' do
       find('label', text: "GitHub").click
       page.must_have_content repo_name
       click_on repo_name
@@ -74,7 +76,7 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   end
 
   it 'displays the correct badges', js: true do
-    VCR.use_cassette 'repos' do
+    VCR.use_cassette 'github_private_repo_user'  do
       visit project_wizard_path(:select_repository)
       page.must_have_content "GitHub"
       find('label', text: "GitHub").click
@@ -82,11 +84,11 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     end
 
     repositories = all('.list-group-item')
-    repositories[1].all('div')[1].text.must_equal 'ispyropoulos/bitbucket'
-    repositories[1].all('span').first.text.must_equal 'FORK'
-    repositories[1].all('span')[1].text.must_equal 'PUBLIC'
+    repositories[2].all('div')[1].text.must_equal 'ispyropoulos/bitbucket'
+    repositories[2].all('span').first.text.must_equal 'FORK'
+    repositories[2].all('span')[1].text.must_equal 'PUBLIC'
 
-    repositories[7].all('div').first.text.must_equal 'PRIVATE'
-    repositories[7].all('div')[1].text.must_equal 'ispyropoulos/katana'
+    repositories[8].all('div').first.text.must_equal 'PRIVATE'
+    repositories[8].all('div')[1].text.must_equal 'ispyropoulos/katana'
   end
 end

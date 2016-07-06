@@ -28,9 +28,15 @@ module ApplicationHelper
     }
   end
 
-  def github_oauth_authorize_url
+  def github_private_repo_oauth_authorize_url
     Octokit.authorize_url(Octokit.client_id,
-      scope: User::GITHUB_REQUIRED_SCOPES.join(","),
+      scope: User::GITHUB_PRIVATE_REPO_SCOPES.join(","),
+      redirect_uri: github_callback_url)
+  end
+
+  def github_public_repo_oauth_authorize_url
+    Octokit.authorize_url(Octokit.client_id,
+      scope: User::GITHUB_PUBLIC_REPO_SCOPES.join(","),
       redirect_uri: github_callback_url)
   end
 

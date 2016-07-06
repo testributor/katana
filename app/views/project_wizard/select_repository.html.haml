@@ -11,7 +11,7 @@
             .row
               .col-sm-12
                 - if current_user.github_access_token
-                  .radio
+                  .radio.m-t-0
                     %label.provider-box.btn.btn-default
                       = radio_button_tag "repository_provider", "github",
                         params[:repository_provider] == "github",
@@ -20,14 +20,22 @@
 
                       %i.fa.fa-github
                       GitHub
+                    %i.help-block
+                      %i.fa.fa-check{style: 'color: green;'}
+                      - if current_user.github_client && current_user.github_client.scopes.include?('repo')
+                        Access to public & private repositories granted
+                      - else
+                        Access to public repositories granted
                 - else
-                  = link_to github_oauth_authorize_url do
+                  = link_to github_public_repo_oauth_authorize_url do
                     .provider-box.btn.btn-default
                       %i.fa.fa-github
                       GitHub
-                      %br
-                      %small
-                        (You will be redirected to authorize)
+                  %i.help-block
+                    %i.fa.fa-info{style: 'color: orange;'}
+                    You will be redirected to authorize public repository access
+                    %br
+                    Note: You can upgrade access to private repositories later
             .row
               .col-sm-12.provider-list
                 %ul.list-unstyled
@@ -47,7 +55,7 @@
             .row
               .col-sm-12
                 - if current_user.bitbucket_access_token
-                  .radio
+                  .radio.m-t-0
                     %label.provider-box.btn.btn-default
                       = radio_button_tag "repository_provider", "bitbucket",
                         params[:repository_provider] == "bitbucket",
@@ -55,14 +63,20 @@
                                 repository_provider: "bitbucket") }
                       %i.fa.fa-bitbucket
                       Bitbucket
+                  %i.help-block
+                    %i.fa.fa-check{style: 'color: green;'}
+                    Access to public & private repositories granted
                 - else
                   = link_to authorize_bitbucket_access_path do
                     .provider-box.btn.btn-default
                       %i.fa.fa-bitbucket
                       Bitbucket
-                      %br
-                      %small
-                        (You will be redirected to authorize)
+                  %i.help-block
+                    %i.fa.fa-info{style: 'color: orange;'}
+                    You will be redirected to authorize public & private repository access
+                    %br
+                    Note: Bitbucket authorises access to both public and private repositories without distinction.
+                    This is not a Testributor limitation.
             .row
               .col-sm-12.provider-list
                 %ul.list-unstyled
@@ -78,12 +92,15 @@
           .col-sm-4
             .row
               .col-sm-12
-                .radio
+                .radio.m-t-0
                   %label.provider-box.btn.btn-default
                     = radio_button_tag "repository_provider", "bare_repo",
                       params[:repository_provider] == "bare_repo"
                     %i.fa.fa-git-square
                     Bare repo
+                  %i.help-block
+                    %i.fa.fa-info{style: 'color: orange;'}
+                    Access only to the provided repository url
             .row
               .col-sm-12.provider-list
                 %ul.list-unstyled

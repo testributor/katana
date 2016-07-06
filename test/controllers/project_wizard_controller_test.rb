@@ -12,7 +12,9 @@ class ProjectWizardControllerTest < ActionController::TestCase
     it "redirects to root_path if projects limit has been reached" do
       user.update_column(:projects_limit, 0)
       # id doesn't matter here. It could be anything
-      get :show, { id: :select_repository }
+      VCR.use_cassette 'github_user' do
+        get :show, { id: :select_repository }
+      end
 
       flash[:alert].must_equal("You cannot add other projects as you have "\
         "reached your <strong>project limit</strong>. Please upgrade your plan.\n")
@@ -78,7 +80,9 @@ class ProjectWizardControllerTest < ActionController::TestCase
 
       it "redirects to previous step and flashes if Project#invalid?" do
         request.env["HTTP_REFERER"] = project_wizard_path(current_step)
-        put :update, first_step_params.except(:repository_name)
+        VCR.use_cassette('github_user') do
+          put :update, first_step_params.except(:repository_name)
+        end
 
         flash[:alert].must_equal "Name can't be blank"
       end
@@ -104,21 +108,25 @@ class ProjectWizardControllerTest < ActionController::TestCase
 
       it "flashes and error if bare_repo but no SSH key is provided" do
         request.env["HTTP_REFERER"] = project_wizard_path(current_step)
-        put :update, { id: :select_repository,
-                       repository_provider: "bare_repo",
-                       repository_name: "My generic repo",
-                       repository_url: "git://example.com/repo.git" }
+        VCR.use_cassette('github_user') do
+          put :update, { id: :select_repository,
+                         repository_provider: "bare_repo",
+                         repository_name: "My generic repo",
+                         repository_url: "git://example.com/repo.git" }
+        end
 
         flash[:alert].must_equal "Ssh key private can't be blank"
       end
 
       it "flashes an error if SSH key is invalid and it does not create a project" do
         request.env["HTTP_REFERER"] = project_wizard_path(current_step)
-        put :update, { id: :select_repository,
-                       repository_provider: "bare_repo",
-                       repository_name: "My generic repo",
-                       private_key: "invalid_key",
-                       repository_url: "git://example.com/repo.git" }
+        VCR.use_cassette 'github_user' do
+          put :update, { id: :select_repository,
+                         repository_provider: "bare_repo",
+                         repository_name: "My generic repo",
+                         private_key: "invalid_key",
+                         repository_url: "git://example.com/repo.git" }
+        end
 
         flash[:alert].must_equal "Ssh key private is invalid or passphrase protected"
         Project.count.must_equal 0
