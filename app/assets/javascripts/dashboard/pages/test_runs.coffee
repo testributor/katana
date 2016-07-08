@@ -4,7 +4,7 @@ class Testributor.Pages.TestRuns
     $('[data-toggle="popover"]').popover()
 
   show: ->
-    _.each($("div[id^='error']"), (value, key, list)->
+    _.each($(".js-html-to-ansi"), (value, key, list)->
       $(value).html(ansi_up.ansi_to_html($(value).text()))
     )
     $('.show-all-area').on 'click', (e) ->

@@ -134,7 +134,7 @@ var TestJob = React.createClass({
         </div>
         { displayAdminAttrs() }
         <div className='col-xs-12'>
-          <TestJobError errorId={ errorId } result={ this.props.test_job.result } testJobId={testJobId} />
+          <TestJobError errorId={ errorId } result={ this.props.test_job.result } command={ this.props.test_job.command } testJobId={testJobId} />
         </div>
       </div>
     )
