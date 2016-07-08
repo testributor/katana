@@ -6,10 +6,16 @@
         %h3 Project files
 
       .col-xs-12
-        %p
-          You can create any files needed for your test suite here. You can also
-          override existing files. Specify the path relative to the project's root
-          directory.
+        .well
+          %div Create or override any files needed for your test suite here.
+          %div Specify the path relative to the project's root directory.
+          - if @project_file.path == ProjectFile::JOBS_YML_PATH
+            Read the
+            = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
+            for more details about the syntax and what you can do in the
+            %code testributor.yml
+            file.
+
         %div
           %ul.nav.nav-pills.m-b-15
             - @project_files.each do |file|
@@ -25,7 +31,7 @@
               .row
                 .col-xs-12
                   = f.text_field :path, class: 'text form-control m-b-10',
-                    placeholder: "Enter file name.",
+                    placeholder: "Enter file name with path relative to the project root directory here...",
                     readonly: @project_file.testributor_yml? || @project_file.build_commands?
                 .col-xs-12
                   .code-edit-wrap.m-b-10
@@ -41,12 +47,6 @@
             - if @project_file.path == ProjectFile::BUILD_COMMANDS_PATH
               %hr
               = render 'build_commands_documentation'
-
-            -elsif @project_file.path == ProjectFile::JOBS_YML_PATH
-              %br
-              Read the
-              = link_to "documentation", "http://documentation.testributor.com/testributoryml/"
-              for more details about the syntax and what you can do in this file.
 
       - if @docs.present?
         - content_for(:help) do
