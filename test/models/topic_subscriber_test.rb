@@ -26,8 +26,7 @@ class TopicSubscriberTest < ActiveSupport::TestCase
       socket_id = "1adf334a55s"
       topic_subscriber = TopicSubscriber.new(first_project.user, socket_id)
       successful_subscriptions = topic_subscriber.subscribe(subscriptions)
-      successful_subscriptions.
-        must_equal({ "Project" => ["Project##{first_project.id}", "Project##{last_project.id}"] })
+      (successful_subscriptions["Project"] == ["Project##{first_project.id}", "Project##{last_project.id}"]).must_equal true
     end
 
     it "calls Broadcaster.subscribe with correct arguments on non nil socket_id" do
