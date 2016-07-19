@@ -11,7 +11,7 @@
         %br
         %strong When do you want to receive email notifications?
         = simple_form_for current_user.participation_for_project(current_project),
-          url: project_participation_path(current_project, current_user.participation_for_project(current_project)),
+          url: project_settings_participation_path(current_project, current_user.participation_for_project(current_project)),
           wrapper: "horizontal_form" do |f|
 
           - if current_project.repository_provider != "bare_repo"

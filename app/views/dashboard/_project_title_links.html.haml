@@ -6,12 +6,8 @@
           %li
             %i.fa.fa-bars
             %span.nav-label Builds
-        = link_to project_participations_path(project), class: (current_page?(project_participations_path(project)) ? 'active' : nil ) do
-          %li
-            %i.fa.fa-users
-            %span.nav-label Users
         = link_to project_settings_path(project),
-          class: (['settings', 'project_files'].include?(controller_name) ? 'active' : nil) do
+          class: (['settings', 'project_files', 'project_participations'].include?(controller_name) ? 'active' : nil) do
           %li
             %i.fa.fa-wrench
             %span.nav-label= "Settings"
