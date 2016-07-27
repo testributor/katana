@@ -61,13 +61,19 @@ class User < ActiveRecord::Base
 
       user
     else
-      where(provider: auth.provider, uid: auth.uid).first_or_create! do |auth_user|
+      user = where(provider: auth.provider, uid: auth.uid).first_or_create! do |auth_user|
         auth_user.provider = auth.provider
         auth_user.uid = auth.uid
         auth_user.email = auth.info.email
         auth_user.confirmed_at = Date.current
         auth_user.password = Devise.friendly_token[0,20]
       end
+      # A new user has an id equal to nil which changes on save
+      if user.previous_changes[:id] && user.previous_changes[:id][0].nil?
+        AdminNotificationMailer.user_sign_up_notification(user).deliver_later
+      end
+
+      user
     end
   end
 

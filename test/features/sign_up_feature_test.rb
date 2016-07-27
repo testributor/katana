@@ -52,3 +52,23 @@ require 'test_helper'
 #     end
 #   end
 # end
+class SignUpFeatureTest < Capybara::Rails::TestCase
+  let(:user) { FactoryGirl.build(:user) }
+
+   describe "when entering valid data" do
+     before do
+       visit new_user_registration_path
+       fill_in 'user[email]', :with => user.email
+       fill_in 'user[password]', :with => '12345678'
+       fill_in 'user[password_confirmation]', :with => '12345678'
+     end
+
+     it 'sends an email to admins', js: true do
+       perform_enqueued_jobs do
+         click_button 'Sign Up'
+         ActionMailer::Base.deliveries.detect { |m| m.subject.match(/\[ADMIN\] New User Signup: #{user.email}/) }.
+           wont_be :nil?
+       end
+     end
+   end
+end
