@@ -222,5 +222,21 @@ class ProjectsControllerTest < ActionController::TestCase
         end
       end
     end
+
+    describe 'GET#status' do
+      describe 'when there is a branch without a run with terminal_status' do
+        before do
+          project.update_column(:is_private, false)
+          project.tracked_branches << FactoryGirl.create(:tracked_branch, branch_name: 'master')
+        end
+
+        it 'returns the uknown status image' do
+          get :status, id: project.id, branch: 'master'
+          response.content_type.must_equal 'image/svg+xml'
+          response.header["Content-Disposition"].must_equal(
+            "inline; filename=\"build-status-unknown.svg\"")
+        end
+      end
+    end
   end
 end

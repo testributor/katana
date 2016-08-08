@@ -87,7 +87,11 @@ class ProjectsController < DashboardController
 
       if branch
         # NOTE: We only show terminal statuses on badges.
-        status = branch.test_runs.terminal_status.order(:created_at).last.status.text.downcase
+        last_run_with_terminal_status = branch.test_runs.
+          terminal_status.order(:created_at).last
+        if last_run_with_terminal_status
+          last_run_with_terminal_status.status.text.downcase
+        end
       end
     end
 
