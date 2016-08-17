@@ -1,0 +1,82 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/user
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 4.1.0
+      Content-Type:
+      - application/json
+      Authorization:
+      - token d903e23e744fc5eb78666137fe1afdd604ffc859
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Wed, 17 Aug 2016 12:49:40 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Status:
+      - 200 OK
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4999'
+      X-Ratelimit-Reset:
+      - '1471441780'
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding
+      Etag:
+      - W/"6cce4bea376f2bb630e1a86dbe76136c"
+      Last-Modified:
+      - Wed, 17 Aug 2016 10:28:48 GMT
+      X-Oauth-Scopes:
+      - public_repo, user:email
+      X-Accepted-Oauth-Scopes:
+      - ''
+      X-Oauth-Client-Id:
+      - 513c5c767340cfe2667f
+      X-Github-Media-Type:
+      - github.v3; format=json
+      Access-Control-Expose-Headers:
+      - ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset,
+        X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Security-Policy:
+      - default-src 'none'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - deny
+      X-Xss-Protection:
+      - 1; mode=block
+      X-Served-By:
+      - 7f48e2f7761567e923121f17538d7a6d
+      X-Github-Request-Id:
+      - 4F819CA7:623F:154F691:57B45D63
+    body:
+      encoding: ASCII-8BIT
+      string: '{"login":"testributor-github-api-test-user-public","id":21079335,"avatar_url":"https://avatars.githubusercontent.com/u/21079335?v=3","gravatar_id":"","url":"https://api.github.com/users/testributor-github-api-test-user-public","html_url":"https://github.com/testributor-github-api-test-user-public","followers_url":"https://api.github.com/users/testributor-github-api-test-user-public/followers","following_url":"https://api.github.com/users/testributor-github-api-test-user-public/following{/other_user}","gists_url":"https://api.github.com/users/testributor-github-api-test-user-public/gists{/gist_id}","starred_url":"https://api.github.com/users/testributor-github-api-test-user-public/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/testributor-github-api-test-user-public/subscriptions","organizations_url":"https://api.github.com/users/testributor-github-api-test-user-public/orgs","repos_url":"https://api.github.com/users/testributor-github-api-test-user-public/repos","events_url":"https://api.github.com/users/testributor-github-api-test-user-public/events{/privacy}","received_events_url":"https://api.github.com/users/testributor-github-api-test-user-public/received_events","type":"User","site_admin":false,"name":null,"company":null,"blog":null,"location":null,"email":"testributor-github-api-test-user+public-access@testributor.com","hireable":null,"bio":null,"public_repos":1,"public_gists":0,"followers":0,"following":0,"created_at":"2016-08-17T10:27:41Z","updated_at":"2016-08-17T10:28:48Z"}'
+    http_version: 
+  recorded_at: Wed, 17 Aug 2016 12:50:51 GMT
+recorded_with: VCR 2.9.3

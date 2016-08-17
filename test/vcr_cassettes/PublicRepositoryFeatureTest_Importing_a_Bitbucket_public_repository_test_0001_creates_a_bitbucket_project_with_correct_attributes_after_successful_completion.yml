@@ -1,0 +1,206 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/user/repositories
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      Authorization:
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="b1a8a03d32eacfd6faeb5640e183c3eb",
+        oauth_signature="Q8X%2FrW3tFXJaoZtPteILFI4Dc2I%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1471440452", oauth_token="J6B4ZrAufuFc4LNzju", oauth_version="1.0"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - webhook, repository:admin, repository, account
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Wed, 17 Aug 2016 13:26:22 GMT
+      X-Served-By:
+      - app-111
+      X-Static-Version:
+      - c044cbc4c637
+      Etag:
+      - '"c1bb35852a6786ca7a389840d96debec"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0318219661713'
+      X-Accepted-Oauth-Scopes:
+      - repository
+      Connection:
+      - keep-alive
+      X-Version:
+      - c044cbc4c637
+      X-Request-Count:
+      - '163'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '772'
+    body:
+      encoding: UTF-8
+      string: '[{"scm": "git", "has_wiki": false, "last_updated": "2016-08-17T14:11:06.142",
+        "no_forks": false, "created_on": "2016-08-17T11:44:39.360", "owner": "testributor-api-test-user",
+        "logo": "https://bitbucket.org/testributor-api-test-user/test-repo-1/avatar/32/?ts=1471435866",
+        "email_mailinglist": "", "is_mq": false, "size": 33348, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2016-08-17
+        09:44:39+00:00", "website": "", "description": "", "has_issues": false, "is_fork":
+        false, "slug": "test-repo-1", "is_private": false, "name": "test-repo-1",
+        "language": "", "utc_last_updated": "2016-08-17 12:11:06+00:00", "no_public_forks":
+        false, "creator": null, "resource_uri": "/1.0/repositories/testributor-api-test-user/test-repo-1"}]'
+    http_version: 
+  recorded_at: Wed, 17 Aug 2016 13:27:34 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/user/privileges
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      Authorization:
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="79d7eb506d26371c59ffc80b23ee99b1",
+        oauth_signature="r14roJg8IP7fV%2Ba6KYvA0muMzMU%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1471440454", oauth_token="J6B4ZrAufuFc4LNzju", oauth_version="1.0"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - webhook, repository:admin, repository, account
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Wed, 17 Aug 2016 13:26:23 GMT
+      X-Served-By:
+      - app-109
+      X-Static-Version:
+      - c044cbc4c637
+      Etag:
+      - '"a6e0c24c3bbc6b5a00497cb4d74e8c41"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0179619789124'
+      X-Accepted-Oauth-Scopes:
+      - account
+      Connection:
+      - keep-alive
+      X-Version:
+      - c044cbc4c637
+      X-Request-Count:
+      - '318'
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '13'
+    body:
+      encoding: UTF-8
+      string: '{"teams": {}}'
+    http_version: 
+  recorded_at: Wed, 17 Aug 2016 13:27:34 GMT
+- request:
+    method: get
+    uri: https://bitbucket.org/api/1.0/user
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - BitBucket Ruby Gem 0.1.7
+      Authorization:
+      - OAuth oauth_consumer_key="7CjsrYVQ9SCdTVSU3v", oauth_nonce="f60daca3f4b982edfbdf451846203e3f",
+        oauth_signature="qjkD1VX6wumXAvBGSaDtmoHS8vA%3D", oauth_signature_method="HMAC-SHA1",
+        oauth_timestamp="1471440454", oauth_token="J6B4ZrAufuFc4LNzju", oauth_version="1.0"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.6.2
+      Vary:
+      - Accept-Encoding
+      - Authorization, Cookie
+      Content-Type:
+      - application/json; charset=utf-8
+      X-Oauth-Scopes:
+      - webhook, repository:admin, repository, account
+      Strict-Transport-Security:
+      - max-age=31536000
+      Date:
+      - Wed, 17 Aug 2016 13:26:24 GMT
+      X-Served-By:
+      - app-113
+      Transfer-Encoding:
+      - chunked
+      X-Static-Version:
+      - c044cbc4c637
+      Etag:
+      - '"b35895889f0b551da9bf7aa82f63239e"'
+      X-Content-Type-Options:
+      - nosniff
+      X-Render-Time:
+      - '0.0331900119781'
+      X-Accepted-Oauth-Scopes:
+      - repository
+      Connection:
+      - keep-alive
+      X-Version:
+      - c044cbc4c637
+      X-Request-Count:
+      - '440'
+      X-Frame-Options:
+      - SAMEORIGIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"repositories": [{"scm": "git", "has_wiki": false, "last_updated":
+        "2016-08-17T14:11:06.142", "no_forks": false, "created_on": "2016-08-17T11:44:39.360",
+        "owner": "testributor-api-test-user", "logo": "https://bitbucket.org/testributor-api-test-user/test-repo-1/avatar/32/?ts=1471435866",
+        "email_mailinglist": "", "is_mq": false, "size": 33348, "read_only": false,
+        "fork_of": null, "mq_of": null, "state": "available", "utc_created_on": "2016-08-17
+        09:44:39+00:00", "website": "", "description": "", "has_issues": false, "is_fork":
+        false, "slug": "test-repo-1", "is_private": false, "name": "test-repo-1",
+        "language": "", "utc_last_updated": "2016-08-17 12:11:06+00:00", "no_public_forks":
+        false, "creator": null, "resource_uri": "/1.0/repositories/testributor-api-test-user/test-repo-1"}],
+        "user": {"username": "testributor-api-test-user", "first_name": "t", "last_name":
+        "", "display_name": "t", "is_staff": false, "avatar": "https://bitbucket.org/account/testributor-api-test-user/avatar/32/?ts=1471427061",
+        "resource_uri": "/1.0/users/testributor-api-test-user", "is_team": false}}'
+    http_version: 
+  recorded_at: Wed, 17 Aug 2016 13:27:36 GMT
+recorded_with: VCR 2.9.3

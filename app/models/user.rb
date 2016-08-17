@@ -5,17 +5,12 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :omniauthable, omniauth_providers: %w(github)
 
-  # TODO: remove this hardcoded key and change all the VCR cassettes
-  if Rails.env.test?
-    attr_encrypted_options.merge!(
-      key: 'cruns-iaj-taV-Eyg-uN-rOwz-aG',
-      mode: :per_attribute_iv_and_salt)
-  else
+  unless Rails.env.test?
     attr_encrypted_options.merge!(
       key: ENV['ENCRYPTED_TOKEN_SECRET'], mode: :per_attribute_iv_and_salt)
   end
 
-  attr_encryptor :github_access_token
+  attr_encryptor :github_access_token, unless: Rails.env.test?
   attr_encryptor :bitbucket_access_token, :bitbucket_access_token_secret, unless: Rails.env.test?
 
   has_many :user_invitations, dependent: :destroy

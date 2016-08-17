@@ -3,7 +3,7 @@ require 'timeout'
 
 class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   let(:user) { FactoryGirl.create(:user, projects_limit: 10) }
-  let(:repo_name) { 'ispyropoulos/katana' }
+  let(:repo_name) { 'testributor-github-api-test-user/agent' }
   let(:language) do
     FactoryGirl.create(:docker_image, :language, public_name: 'Ruby 2.0')
   end
@@ -23,24 +23,27 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     login_as user, scope: :user
   end
 
+  after do
+    GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
+    GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 10)
+  end
+
   it "creates a project with correct attributes after successful completion", js: true do
-    VCR.use_cassette 'github_private_repo_user'  do
+    VCR.use_cassette (self.class.name + "::" + self.__name__) do
       visit project_wizard_path(:select_repository)
-    end
-    page.must_have_content "GitHub"
-    VCR.use_cassette 'github_private_repo_user' do
+      page.must_have_content "GitHub"
       find('label', text: "GitHub").click
       page.must_have_content repo_name
       click_on repo_name
+      wait_for_requests_to_finish
     end
 
-    wait_for_requests_to_finish
     project = Project.last
     project.docker_image_id.must_equal DockerImage.first.id
     project.repository_provider.must_equal 'github'
-    project.repository_name.must_equal 'katana'
-    project.repository_owner.must_equal 'ispyropoulos'
-    project.is_private.must_equal true
+    project.repository_name.must_equal 'agent'
+    project.repository_owner.must_equal 'testributor-github-api-test-user'
+    project.is_private.must_equal false
 
     # 'Configure Testributor' page
     yaml = <<-YAML
@@ -76,7 +79,7 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   end
 
   it 'displays the correct badges', js: true do
-    VCR.use_cassette 'github_private_repo_user'  do
+    VCR.use_cassette (self.class.name + "::" + self.__name__) do
       visit project_wizard_path(:select_repository)
       page.must_have_content "GitHub"
       find('label', text: "GitHub").click
@@ -84,11 +87,11 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
     end
 
     repositories = all('.list-group-item')
-    repositories[2].all('div')[1].text.must_equal 'ispyropoulos/bitbucket'
-    repositories[2].all('span').first.text.must_equal 'FORK'
-    repositories[2].all('span')[1].text.must_equal 'PUBLIC'
+    repositories[1].all('div')[1].text.must_equal 'testributor-github-api-test-user/agent'
+    repositories[1].all('span').first.text.must_equal 'FORK'
+    repositories[1].all('span')[1].text.must_equal 'PUBLIC'
 
-    repositories[8].all('div').first.text.must_equal 'PRIVATE'
-    repositories[8].all('div')[1].text.must_equal 'ispyropoulos/katana'
+    repositories[0].all('div').first.text.must_equal 'PRIVATE'
+    repositories[0].all('div')[1].text.must_equal 'ispyropoulos/aroma-kouzinas'
   end
 end

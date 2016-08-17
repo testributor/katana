@@ -289,7 +289,7 @@ class TestRunTest < ActiveSupport::TestCase
           branch.expects(:notifiable_users).never
           _test_run.update_status
           perform_enqueued_jobs do
-            VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+            VCR.use_cassette (self.class.name + "::" + self.method_name), match_requests_on: [:host, :method] do
               _test_run.save
             end
           end
@@ -311,7 +311,7 @@ class TestRunTest < ActiveSupport::TestCase
 
           _test_run.send(:update_status)
           perform_enqueued_jobs do
-            VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+            VCR.use_cassette (self.class.name + "::" + self.method_name), match_requests_on: [:host, :method] do
                _test_run.save
             end
           end

@@ -5,12 +5,7 @@ FactoryGirl.define do
     password_confirmation '12345678'
     confirmed_at Date.current
     projects_limit 1
-    # For these keys to work, the key in attr_encrypted_options should match
-    # the one that created them. For this reason we have a hardcoded key
-    # when in test environment in app/models/user.rb
-    encrypted_github_access_token "Mw77WrzI2zywus5kPmpt+abo9UPMgIY6zCowzAFrf3kxDCyWVk8LMH7vLyUh\ngKr1\n"
-    encrypted_github_access_token_salt "c5301a0e89a217ab"
-    encrypted_github_access_token_iv "7Q6SiUycJvz+S6/6mXhGQg==\n"
+    github_access_token "6958771a03001a069b7d1952cb2404485f4ef35d"
   end
 
   factory :bitbucket_user, class: User do
@@ -19,22 +14,15 @@ FactoryGirl.define do
     password_confirmation '12345678'
     confirmed_at Date.current
     projects_limit 1
-    bitbucket_access_token "zX4dt9nfH5QVkKvnXH"
-    bitbucket_access_token_secret "sDXvhTxed8npRZEejazuxxTPSUFr7Y6D"
+    bitbucket_access_token "J6B4ZrAufuFc4LNzju"
+    bitbucket_access_token_secret "hq2NZbvXVC23TSxDCJBXB4yr8Yfu9cvP"
   end
 
   trait :with_github_public_repo_access do
-    # For these keys to work, the key in attr_encrypted_options should match
-    # the one that created them. For this reason we have a hardcoded key
-    # when in test environment in app/models/user.rb
-    encrypted_github_access_token "n6wjCe2t4tfLcwPLjo+CMHHn7Ccsw7AAmgtGasqvQFHrl7zz72S0DeGXualP\n0NWH\n"
-    encrypted_github_access_token_salt "5ead901e880f80a4"
-    encrypted_github_access_token_iv "NFepX7Bug0gwJXmX9ALnow==\n"
+    github_access_token "d903e23e744fc5eb78666137fe1afdd604ffc859"
   end
 
   trait :without_svc_access do
-    encrypted_github_access_token nil
-    encrypted_github_access_token_salt nil
-    encrypted_github_access_token_iv nil
+    github_access_token nil
   end
 end

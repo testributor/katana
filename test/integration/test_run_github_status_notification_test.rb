@@ -6,7 +6,7 @@ class GithubStatusNotificationServiceIntegrationTest < ActiveSupport::TestCase
   describe 'when a test_run is created' do
     it 'it sends a POST request to github' do
       perform_enqueued_jobs do
-        VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+        VCR.use_cassette (self.class.name + "::" + self.method_name), match_requests_on: [:host, :method] do
           -> { _test_run }.must_raise Octokit::NotFound
         end
       end
@@ -16,7 +16,7 @@ class GithubStatusNotificationServiceIntegrationTest < ActiveSupport::TestCase
   describe 'when a test_run changes status' do
     it 'sends a POST request to github' do
       perform_enqueued_jobs do
-        VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+        VCR.use_cassette (self.class.name + "::" + self.method_name), match_requests_on: [:host, :method] do
           -> { _test_run.update_attribute(:status, 2) }.must_raise Octokit::NotFound
         end
       end
@@ -37,7 +37,7 @@ class GithubStatusNotificationServiceIntegrationTest < ActiveSupport::TestCase
 
     it 'sends a POST request to github' do
       perform_enqueued_jobs do
-        VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+        VCR.use_cassette (self.class.name + "::" + self.method_name), match_requests_on: [:host, :method] do
           -> { @failed_job.update(status: TestStatus::QUEUED) }.must_raise Octokit::NotFound
         end
       end

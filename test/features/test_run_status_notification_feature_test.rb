@@ -85,7 +85,7 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
 
       it 'turns all previous queued test_jobs to cancelled', js: true do
         perform_enqueued_jobs do
-          VCR.use_cassette 'github_status_notification', match_requests_on: [:host, :method] do
+          VCR.use_cassette (self.class.name + "::" + self.__name__), match_requests_on: [:host, :method] do
             page.find('a[action="create"]').click
             wait_for_requests_to_finish
           end

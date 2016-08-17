@@ -12,39 +12,35 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
       # instead of creating 60 projects we change the number
       # of fetched projects because we already have 11
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
-      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 6)
-      VCR.use_cassette 'github_private_repo_user' do
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 2)
+      VCR.use_cassette (self.class.name + "::" + self.__name__), allow_playback_repeats: true, record: :new_episodes do
         visit project_wizard_path(id: :select_repository)
-        VCR.use_cassette 'repos_with_4_pages' do
-          find(".fa-github").click
-        end
+        find(".fa-github").click
         wait_for_requests_to_finish
       end
     end
 
     after do
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
-      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 10)
     end
 
     it 'displays pagination according to the number of projects', js: true do
-      # 1 - 2 - 3 - 4 - next
-      page.find_all('.pagination li').size.must_equal 6
+      # 1 - 2 -  next
+      page.find_all('.pagination li').size.must_equal 4
       page.must_have_content 'ispyropoulos/aroma-kouzinas'
-      page.must_have_content 'ispyropoulos/bitbucket'
-      page.must_have_content 'ispyropoulos/dockerfiles'
+      page.must_have_content 'testributor-github-api-test-user/agent'
       page.find('.pagination li.active').text.must_equal '1'
     end
 
     describe 'when he is at the second page' do
       it 'displays the correct page options', js: true do
-        VCR.use_cassette 'repos_second_page' do
+        VCR.use_cassette (self.class.name + "::" + self.__name__), allow_playback_repeats: true,
+          record: :new_episodes do
           click_on '2'
           wait_for_requests_to_finish
-          page.must_have_content 'ispyropoulos/intl-tel-input-rails'
-          page.must_have_content 'ispyropoulos/katana'
-          page.must_have_content 'ispyropoulos/legendary-broccoli'
-          page.all('.pagination li').size.must_equal 7
+          page.must_have_content 'testributor-github-api-test-user/test-project-2'
+          page.all('.pagination li').size.must_equal 5
           page.find('.pagination li.active').text.must_equal '2'
         end
       end
@@ -52,11 +48,12 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
 
     describe 'when he is at the last page' do
       it 'displays the correct page options', js: true do
-        VCR.use_cassette 'repos_last_page' do
-          click_on '4'
+        VCR.use_cassette (self.class.name + "::" + self.__name__), allow_playback_repeats: true,
+          record: :new_episodes do
+          click_on '3'
           wait_for_requests_to_finish
-          page.find('.pagination li.active').text.must_equal '4'
-          page.all('.pagination li').size.must_equal 7
+          page.find('.pagination li.active').text.must_equal '3'
+          page.all('.pagination li').size.must_equal 4
         end
       end
     end
@@ -66,18 +63,16 @@ class AddProjectPaginationFeatureTest < Capybara::Rails::TestCase
     before do
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
       GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 30)
-      VCR.use_cassette 'github_private_repo_user' do
+      VCR.use_cassette (self.class.name + "::" + self.__name__) do
         visit project_wizard_path(id: :select_repository)
-        VCR.use_cassette 'repos_without_page' do
-          find(".fa-github").click
-        end
+        find(".fa-github").click
         wait_for_requests_to_finish
       end
     end
 
     after do
       GithubRepositoryManager.send(:remove_const, :REPOSITORIES_PER_PAGE)
-      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 20)
+      GithubRepositoryManager.const_set(:REPOSITORIES_PER_PAGE, 10)
     end
 
     it 'does not display any pagination', js: true do
