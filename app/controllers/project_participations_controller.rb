@@ -14,7 +14,7 @@ class ProjectParticipationsController < DashboardController
       if @participation.user == current_user
         flash[:notice] =
           "You are no longer a member of #{@participation.project.name} project"
-        redirect_to authenticated_root_path
+        redirect_to root_path
       else
         flash[:notice] = "User is no longer a member of this project"
         redirect_to :back
