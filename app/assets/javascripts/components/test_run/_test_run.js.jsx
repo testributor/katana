@@ -14,7 +14,7 @@ var TestRun = React.createClass({
     var totalRunningTime = function() {
       if ( this.props.testRun.total_running_time ) {
         return (
-          <div className="col-lg-12 time-div">
+          <div className="time-div m-t-10">
             <i className="fa fa-clock-o" aria-hidden="true"></i>
             <span> { this.props.testRun.total_running_time } </span>
           </div>
