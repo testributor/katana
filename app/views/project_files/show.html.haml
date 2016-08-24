@@ -37,7 +37,7 @@
                   .code-edit-wrap.m-b-10
                     = f.text_area :contents, class: 'text form-control code code-shell',
                       placeholder: "Enter file contents"
-              = f.submit "Save", class: 'btn btn-primary w-lg btn-lg'
+              = f.submit "Save", class: 'btn btn-raised btn-primary w-lg btn-lg'
               - if @project_file.persisted? && !@project_file.testributor_yml? && !@project_file.build_commands?
                 = link_to 'Destroy',
                   project_settings_file_path(current_project, @project_file),

@@ -1,7 +1,7 @@
 = link_to retry_project_test_run_path(id: test_run.id,
   project_id: current_project),
   id: "test_run_retry_button",
-  class: 'btn btn-primary btn-xs m-b-5 m-r-5 right-side',
+  class: 'btn btn-raised btn-primary btn-xs m-b-5 m-r-5 right-side',
   style: test_run.retry? ? '' : 'display: none',
   method: :post do
 

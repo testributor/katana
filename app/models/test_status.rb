@@ -111,7 +111,7 @@ class TestStatus
     when @code.in?([CANCELLED, FAILED, ERROR])
       'btn btn-success'
     when @code.in?([SETUP, QUEUED, RUNNING])
-      'btn btn-primary'
+      'btn btn-raised btn-primary'
     end
   end
 

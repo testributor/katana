@@ -15,7 +15,7 @@
             %h4 Auto-tracking branches
             = f.input :auto_track_branches, as: :boolean,
               label: "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
-          = f.submit "Save", class: "btn btn-primary"
+          = f.submit "Save", class: "btn btn-raised btn-primary"
 
       - if can? :manage, current_project
         .col-md-6
