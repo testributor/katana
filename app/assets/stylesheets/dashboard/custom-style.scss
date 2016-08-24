@@ -516,6 +516,15 @@
 
 /* Bootstrap overrides */
 
+.modal-footer {
+  input {
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: auto;
+  }
+}
+
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
