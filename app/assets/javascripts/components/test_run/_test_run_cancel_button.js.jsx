@@ -6,7 +6,7 @@ var TestRunCancelButton = React.createClass({
     }
 
     return (
-      <a className="btn btn-raised btn-danger test-run-action btn-md js-remote-submission" rel="nofollow" data-method="put" data-disable-with={ withDots('Canceling')} data-remote="true" href={ this.props.cancelUrl }>
+      <a className="btn btn-raised btn-danger test-run-action  js-remote-submission" rel="nofollow" data-method="put" data-disable-with={ withDots('Canceling')} data-remote="true" href={ this.props.cancelUrl }>
         <i className="fa fa-times" />
         <span> Cancel</span>
       </a>
