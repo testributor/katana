@@ -2,23 +2,10 @@
 .row.panelized
   .col-xs-12
     %h3 General Settings
-  .col-md-6.m-b-10
-    = simple_form_for current_project do |f|
-      - repo_provider = current_project.repository_provider
-      - if repo_provider == 'bare_repo'
-        - #TODO: In the future we might be able to avoid restarting by sending
-        - # the new repository_url to the active workers
-        = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
-      - else
-        %h4 Auto-tracking branches
-        = f.input :auto_track_branches, as: :boolean,
-          label: "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
-      = f.submit "Save", class: "btn btn-raised btn-primary"
-
-  - if can? :manage, current_project
-    .col-md-6
+  .project-settings-cards.col-xs-12
+    - if can? :manage, current_project
       - if current_project.is_private?
-        .well.col-xs-12
+        .well
           %strong Make your project public: <br>
           Anyone will be able to access your public pages.
           Users who do not participate will not have access to project configuration,
@@ -27,7 +14,7 @@
             data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
             class: 'btn  btn-raised btn-success'
       - else
-        .well.col-xs-12
+        .well
           %strong Make your project private: <br>
           User which are not members of this project will <strong> NOT </strong> be able
           to access your pages.
@@ -35,9 +22,22 @@
             data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
             class: 'btn  btn-raised btn-danger'
 
-      .well.col-xs-12
+      .well
         %strong Delete project from Testributor: <br>
         This action cannot be reverted. All your builds will be discarded.
         = button_to "Delete", project_path(current_project), method: :delete,
           data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
           class: 'btn  btn-raised btn-danger'
+    .well
+      = simple_form_for current_project do |f|
+        - repo_provider = current_project.repository_provider
+        - if repo_provider == 'bare_repo'
+          - #TODO: In the future we might be able to avoid restarting by sending
+          - # the new repository_url to the active workers
+          = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
+        - else
+          %h4 Auto-tracking branches
+          = f.input :auto_track_branches, as: :boolean,
+            label: "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
+        = f.submit "Save", class: "btn btn-raised btn-primary"
+
