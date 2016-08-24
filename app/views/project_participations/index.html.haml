@@ -31,7 +31,7 @@
                       end
 
                     = link_to(project_settings_participation_path(current_project, participation),
-                      method: :delete, class: 'btn btn-danger',
+                      method: :delete, class: 'btn btn-raised btn-danger',
                       data: { confirm: message }) do
                       %i.fa.fa-remove
                       Revoke access
@@ -60,7 +60,7 @@
                       %i.fa.fa-envelope-o
                       Resend invitation
                     = link_to(project_user_invitation_path(current_project, invitation),
-                      method: :delete, class: 'btn btn-danger',
+                      method: :delete, class: 'btn btn-raised btn-danger',
                       data: { confirm: "Are you sure?" }) do
                       %i.fa.fa-remove
                       Cancel invitation

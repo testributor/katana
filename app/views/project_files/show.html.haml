@@ -41,7 +41,7 @@
               - if @project_file.persisted? && !@project_file.testributor_yml? && !@project_file.build_commands?
                 = link_to 'Destroy',
                   project_settings_file_path(current_project, @project_file),
-                  method: :delete, class: 'btn btn-danger m-l-15',
+                  method: :delete, class: 'btn btn-raised btn-danger m-l-15',
                   data: { confirm: "File will be deleted. Are your sure?" }
 
             - if @project_file.path == ProjectFile::BUILD_COMMANDS_PATH

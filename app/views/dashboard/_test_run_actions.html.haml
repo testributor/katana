@@ -9,6 +9,6 @@
   %span Retry
 - if test_run.status.can_be_cancelled?
   = link_to project_test_run_path(current_project, test_run,
-    status: TestStatus::CANCELLED), class: 'btn btn-xs btn-danger m-b-5 right-side', method: :put do
+    status: TestStatus::CANCELLED), class: 'btn btn-xs btn-raised btn-danger m-b-5 right-side', method: :put do
     .fa.fa-times
     %span Cancel
