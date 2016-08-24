@@ -4,7 +4,7 @@
     %h3
       Users
       - if can? :manage, current_project
-        = link_to new_project_user_invitation_path(current_project), class: 'm-l-10 btn btn-raised btn-default' do
+        = link_to new_project_user_invitation_path(current_project), class: 'm-l-10 btn btn-default' do
           %i.fa.fa-users
           %span.nav-label= t('invite_users')
   - if @participations.any?
