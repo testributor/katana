@@ -1,19 +1,20 @@
 - content_for :page_title do
   Project settings
 
-%ul.nav.nav-tabs
-  - link = project_settings_path(current_project)
-  %li{ class: current_page?(link) ? 'active' : nil }
-    = link_to "General", link
-  - link = worker_setup_project_settings_path(current_project)
-  %li{ class: current_page?(link) ? 'active' : nil }
-    = link_to "Worker setup", link
-  - link = project_settings_files_path(current_project)
-  %li{ class: controller_name == "project_files" ? 'active' : nil }
-    = link_to "Files", link
-  - link = notifications_project_settings_path(current_project)
-  %li{ class: current_page?(link) ? 'active' : nil }
-    = link_to "Notifications", link
-  - link = project_settings_participations_path(current_project)
-  %li{ class: current_page?(link) ? 'active' : nil}
-    = link_to "Users", link
+.project-settings-header
+  %ul.nav.nav-tabs
+    - link = project_settings_path(current_project)
+    %li{ class: current_page?(link) ? 'active' : nil }
+      = link_to "General", link
+    - link = worker_setup_project_settings_path(current_project)
+    %li{ class: current_page?(link) ? 'active' : nil }
+      = link_to "Worker setup", link
+    - link = project_settings_files_path(current_project)
+    %li{ class: controller_name == "project_files" ? 'active' : nil }
+      = link_to "Files", link
+    - link = notifications_project_settings_path(current_project)
+    %li{ class: current_page?(link) ? 'active' : nil }
+      = link_to "Notifications", link
+    - link = project_settings_participations_path(current_project)
+    %li{ class: current_page?(link) ? 'active' : nil}
+      = link_to "Users", link

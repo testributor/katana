@@ -45,9 +45,7 @@
         - if current_project
           .col-sm-9
             = render 'project_header', project: current_project
-            .row
-              .col-sm-12
-                = yield
+            = yield
           .col-sm-3
             - if content_for(:help)
               = content_for(:help)
