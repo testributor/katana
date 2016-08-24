@@ -531,6 +531,12 @@
 }
 
 /* Bootstrap overrides */
+
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+}
+
 .alert {
   margin-left: 15px;
 }
