@@ -22,6 +22,8 @@
 //= require select2
 //= require sweet-alert.min
 //= require dashboard/modernizr.min
+//= require dashboard/material.js
+//= require dashboard/ripples.js
 //= require dashboard/pace.min
 //= require dashboard/wow.min
 //= require dashboard/jquery.scrollTo.min.js
