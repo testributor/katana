@@ -3,7 +3,7 @@
     .col-sm-3.text-left
       - current_project.tracked_branches.each do |branch|
         = link_to project_test_runs_path(branch.project, branch: branch.try(:branch_name)),
-          class: "row btn btn-default branch #{('active' if branch.branch_name == @tracked_branch.try(:branch_name)) }" do
+          class: "row btn btn-raised btn-default branch #{('active' if branch.branch_name == @tracked_branch.try(:branch_name)) }" do
           .col-xs-11.name
             = branch.branch_name
           - if can? :untrack_branch, branch
@@ -53,6 +53,6 @@
           .modal-body
             = f.input :commit_sha, label: "Commit SHA", placeholder: "The commit's hash (at least 6 digits)"
           .modal-footer
-            %button.btn.btn-default{ data: { dismiss: "modal" } }
+            %button.btn.btn-raised.btn-default{ data: { dismiss: "modal" } }
               Close
             = f.submit "Create", class: "btn btn-raised btn-primary"

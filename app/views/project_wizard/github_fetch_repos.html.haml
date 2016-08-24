@@ -4,7 +4,7 @@
       %h3 Select a GitHub repository:
     .pull-right.private-repo-access
       - if current_user.github_client && !current_user.github_client.scopes.include?('repo')
-        = link_to github_private_repo_oauth_authorize_url, class: 'btn btn-default' do
+        = link_to github_private_repo_oauth_authorize_url, class: 'btn btn-raised btn-default' do
           %i.fa.fa-unlock-alt
           Grant private repository access
   .panel-body.clear-floats
