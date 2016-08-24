@@ -529,3 +529,8 @@
 .clear-floats {
   clear: both;
 }
+
+/* Bootstrap overrides */
+.alert {
+  margin-left: 15px;
+}
