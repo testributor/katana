@@ -23,7 +23,7 @@
           = link_to new_project_settings_file_path(current_project) do
             %i.fa.fa-plus-circle
             = 'Add file'
-      .col-xs-12
+      .col-xs-12.well
         - form_path = @project_file.persisted? ? project_settings_file_path(current_project, @project_file) : project_settings_files_path(current_project)
         = form_for [current_project, @project_file], url: form_path do |f|
           .row
