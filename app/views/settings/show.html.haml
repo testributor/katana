@@ -21,31 +21,25 @@
         .col-md-6
           - if current_project.is_private?
             .well.col-xs-12
-              .col-md-10
-                %strong Make your project public: <br>
-                Anyone will be able to access your public pages.
-                Users who do not participate will not have access to project configuration,
-                credentials or be able to add/remove builds.
-              .col-md-2
-                = button_to "Public", toggle_private_project_path(current_project), method: :post,
-                  data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
-                  class: 'btn  btn-raised btn-success'
+              %strong Make your project public: <br>
+              Anyone will be able to access your public pages.
+              Users who do not participate will not have access to project configuration,
+              credentials or be able to add/remove builds.
+              = button_to "Public", toggle_private_project_path(current_project), method: :post,
+                data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
+                class: 'btn  btn-raised btn-success'
           - else
             .well.col-xs-12
-              .col-md-10
-                %strong Make your project private: <br>
-                User which are not members of this project will <strong> NOT </strong> be able
-                to access your pages.
-              .col-md-2
-                = button_to "Private", toggle_private_project_path(current_project), method: :post,
-                  data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
-                  class: 'btn  btn-raised btn-danger'
+              %strong Make your project private: <br>
+              User which are not members of this project will <strong> NOT </strong> be able
+              to access your pages.
+              = button_to "Private", toggle_private_project_path(current_project), method: :post,
+                data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
+                class: 'btn  btn-raised btn-danger'
 
           .well.col-xs-12
-            .col-md-10
-              %strong Delete project from Testributor: <br>
-              This action cannot be reverted. All your builds will be discarded.
-            .col-md-2
-              = button_to "Delete", project_path(current_project), method: :delete,
-                data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
-                class: 'btn  btn-raised btn-danger'
+            %strong Delete project from Testributor: <br>
+            This action cannot be reverted. All your builds will be discarded.
+            = button_to "Delete", project_path(current_project), method: :delete,
+              data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
+              class: 'btn  btn-raised btn-danger'
