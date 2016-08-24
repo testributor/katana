@@ -22,14 +22,14 @@
       .col-sm-6.text-right
         - if can? :create, TrackedBranch
           - if current_project.bare_repo?
-            %button.btn.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
+            %button.btn.btn-raised.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
               %i.fa.fa-plus-square
               Add a Build
           - else
             - if @tracked_branch
               = link_to project_test_runs_path(branch_id: @tracked_branch.id), method: :post, remote: true,
                 data: { disable_with: with_dots("Adding build") },
-                action: :create, class: 'disabled btn btn-md btn-success js-remote-submission' do
+                action: :create, class: 'disabled btn btn-md btn-raised btn-success js-remote-submission' do
                 %i.fa.fa-plus-square.m-r-5
                 Add a Build
     .m-t-10

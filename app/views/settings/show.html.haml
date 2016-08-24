@@ -29,7 +29,7 @@
               .col-md-2
                 = button_to "Public", toggle_private_project_path(current_project), method: :post,
                   data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
-                  class: 'btn btn-md btn-success'
+                  class: 'btn btn-md btn-raised btn-success'
           - else
             .well.col-xs-12
               .col-md-10
