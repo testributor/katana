@@ -4,6 +4,12 @@
   }
 }
 
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
 .project-settings-header {
   margin: 10px -20px 0px 0px;
 }

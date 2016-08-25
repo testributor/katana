@@ -11,7 +11,7 @@
             .row
               .col-sm-12
                 - if current_user.github_access_token
-                  .radio.m-t-0
+                  .m-t-0
                     %label.provider-box.btn.btn-default
                       = radio_button_tag "repository_provider", "github",
                         params[:repository_provider] == "github",
@@ -55,7 +55,7 @@
             .row
               .col-sm-12
                 - if current_user.bitbucket_access_token
-                  .radio.m-t-0
+                  .m-t-0
                     %label.provider-box.btn.btn-default
                       = radio_button_tag "repository_provider", "bitbucket",
                         params[:repository_provider] == "bitbucket",
@@ -92,7 +92,7 @@
           .col-sm-4
             .row
               .col-sm-12
-                .radio.m-t-0
+                .m-t-0
                   %label.provider-box.btn.btn-default
                     = radio_button_tag "repository_provider", "bare_repo",
                       params[:repository_provider] == "bare_repo"
@@ -133,7 +133,7 @@
               %h3 Git bare repository
               .form-group
                 = label_tag :repository_name, "Name"
-                = text_field_tag :repository_name, params[:repository_name], class: "form-control"
+                = text_field_tag :repository_name, params[:repository_name], class: "form-control", placeholder: "Enter the desired name of your project"
               .form-group
                 = label_tag :repository_url
                 = text_field_tag :repository_url, params[:repository_url],
