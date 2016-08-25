@@ -1,6 +1,6 @@
 .row.m-t-10.panelized
-  .row
-    .col-sm-12.track-branch-title
+  .col-xs-12.well
+    .col-xs-12.track-branch-title
       %h4
         Select a branch to track from the
         %strong
@@ -9,7 +9,7 @@
         %span{ data: { toggle: "tooltip",
           title: "Change the project's settings if you want to track all new branches and avoid tracking them manually." } }
           %i.fa.fa-info-circle
-  .row
+  .col-xs-12.well
     .col-sm-12
       %br
       - if @response_data[:branches].any?
