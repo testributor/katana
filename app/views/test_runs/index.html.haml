@@ -54,6 +54,6 @@
           .modal-body
             = f.input :commit_sha, label: "Commit SHA", placeholder: "The commit's hash (at least 6 digits)"
           .modal-footer
-            %button.btn.btn-raised.btn-default{ data: { dismiss: "modal" } }
+            %button.btn.btn-default{ data: { dismiss: "modal" } }
               Close
-            = f.submit "Create", class: "btn btn-raised btn-primary"
+            = f.submit "Create", class: "btn btn-primary"
