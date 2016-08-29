@@ -529,6 +529,10 @@
 
 /* Bootstrap overrides */
 
+.list-group .list-group-separator:before {
+  width: 100%;
+}
+
 .form-group select {
   -webkit-appearance: menulist;
   appearance: menulist;

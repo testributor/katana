@@ -1,5 +1,5 @@
 .row.m-t-10.panelized
-  .col-xs-12.well
+  .col-xs-12
     .col-xs-12.track-branch-title
       %h4
         Select a branch to track from the
@@ -9,7 +9,7 @@
         %span{ data: { toggle: "tooltip",
           title: "Change the project's settings if you want to track all new branches and avoid tracking them manually." } }
           %i.fa.fa-info-circle
-  .col-xs-12.well
+  .col-xs-12
     .col-sm-12
       %br
       - if @response_data[:branches].any?
@@ -33,11 +33,12 @@
               class: "list-group-item #{klass}" }.merge(tooltip_options) do
               .list-group-item-heading
                 #{branch[:name]}
+            .list-group-separator
           - if current_project.repository_provider == 'github'
             - page_manager = GithubPageManager.new(@response_data[:last_response])
             - if page_manager.all_pages_number > 1 && (next_page = page_manager.next_page_number)
               = link_to "Fetch more...", fetch_branches_project_branches_path(page: next_page),
-                id: 'fetch_more', class: 'btn btn-raised btn-default btn-lg btn-block',
+                id: 'fetch_more', class: 'btn btn-default btn-lg btn-block',
                 data: { disable_with: with_dots('Fetching branches'), remote: true }
 
       - else
