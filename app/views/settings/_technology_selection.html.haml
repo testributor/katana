@@ -4,26 +4,27 @@
       id: "project_edit" } do |f|
 
       %h4 Choose images
-      .form-group.m-t-20
-        %label.control-label.col-sm-2 Base image
-        .col-sm-10
-          = f.select :docker_image_id,
-            grouped_options_for_select(grouped_languages_options,
-            f.object.docker_image_id), class: "form-control"
+      .well
+        .form-group
+          %label.control-label.col-md-2 Base image
+          .col-md-10
+            = f.select :docker_image_id,
+              grouped_options_for_select(grouped_languages_options,
+              f.object.docker_image_id), {}, class: "form-control"
+        .form-group
+          %label.control-label.col-md-2 Linked images
+          .col-md-10
+            = f.select :technology_ids,
+              options_for_select(technologies_options, f.object.technology_ids),
+              {}, multiple: true, class: 'multi-select form-control', style: "width: 100%"
       .form-group
-        %label.control-label.col-sm-2 Linked images
-        .col-sm-10
-          = f.select :technology_ids,
-            options_for_select(technologies_options, f.object.technology_ids),
-            {}, multiple: true, class: 'multi-select form-control', style: "width: 100%"
-      .form-group
-        %label.control-label.col-sm-2
-          Custom yml data
+        %label.control-label.col-md-2
           %a{ href: "#", data: { toggle: "popover", container: 'body', html: 'true',
             role: "button", trigger: "focus",
             content: "Add custom yml keys to be merged to the final file. Read more #{link_to("here", "http://documentation.testributor.com/worker_setup", target: "_blank").html_safe}." } }
             %i.fa.fa-question-circle
-        .col-sm-10
+          Custom yml data
+        .col-md-10
           = f.text_area :custom_docker_compose_yml
       .form-group
         .col-sm-offset-2.col-sm-10.text-right
