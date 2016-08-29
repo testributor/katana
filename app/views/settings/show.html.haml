@@ -28,7 +28,7 @@
         = button_to "Delete", project_path(current_project), method: :delete,
           data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
           class: 'btn  btn-raised btn-danger'
-    .well
+    .well.col-xs-12
       = simple_form_for current_project do |f|
         - repo_provider = current_project.repository_provider
         - if repo_provider == 'bare_repo'
@@ -40,4 +40,3 @@
           = f.input :auto_track_branches, as: :boolean,
             label: "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
         = f.submit "Save", class: "btn btn-raised btn-primary"
-
