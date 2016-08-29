@@ -529,6 +529,12 @@
 
 /* Bootstrap overrides */
 
+.form-group select {
+  -webkit-appearance: menulist;
+  appearance: menulist;
+  -moz-appearance: menulist;
+}
+
 .btn-group-vertical {
   width: 100%;
 }
