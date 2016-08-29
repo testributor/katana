@@ -13,7 +13,7 @@ class OauthController < ApplicationController
     # TODO: Store login attribute in user to avoid fetching from github each time user.login is called
     current_user.update_attributes!(github_access_token: response.access_token)
 
-    redirect_to cookies[:redirect_to_url],
+    redirect_to cookies[:redirect_to_url] || root_path,
       notice: 'We can now access your GitHub repositories.'
   end
 
@@ -37,7 +37,7 @@ class OauthController < ApplicationController
       bitbucket_access_token: access_token.token,
       bitbucket_access_token_secret: access_token.secret)
 
-    redirect_to cookies[:redirect_to_url],
+    redirect_to cookies[:redirect_to_url] || root_path,
       notice: 'We can now access your Bitbucket repositories.'
   end
 

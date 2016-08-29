@@ -91,6 +91,19 @@ class WorkerGroupsControllerTest < ActionController::TestCase
           worker_group: worker_group.attributes
         }.must_raise ActiveRecord::RecordNotFound
       end
+
+      it "does not store 'POST' urls in redirect_to_url" do
+        cookies[:redirect_to_url] = "some_url"
+
+        project.members << user
+        post :destroy, {
+          project_id: project.id,
+          id: project.worker_groups.first.id,
+          worker_group: worker_group.attributes }
+
+        assert_response 302
+        cookies[:redirect_to_url].must_equal "some_url"
+      end
     end
 
     describe 'POST#reset_keys' do

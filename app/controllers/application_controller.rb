@@ -36,7 +36,9 @@ class ApplicationController < ActionController::Base
   protected
 
   def set_redirect_url_in_cookie
-    cookies[:redirect_to_url] = request.url
+    # We cannot redirect to "POST" urls so we only set this when the request is
+    # "GET".
+    cookies[:redirect_to_url] = request.url if request.method == "GET"
   end
 
   def exception_notification_additional_data
