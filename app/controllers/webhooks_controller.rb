@@ -35,6 +35,8 @@ class WebhooksController < ApplicationController
       repository_id: repository_id).take
     branch_name = params[:ref].split('/').last
 
+    return unless  project
+
     if (tracked_branch = find_or_create_branch(project, branch_name))
       manager = RepositoryManager.new(project)
       head_commit = params[:head_commit]
@@ -60,6 +62,9 @@ class WebhooksController < ApplicationController
     repository_slug = params[:repository][:name].downcase
     project = Project.where(repository_provider: 'bitbucket',
       repository_slug: repository_slug).take
+
+    return unless  project
+
     branch_name = params[:push][:changes].first[:new][:name]
 
     if (tracked_branch = find_or_create_branch(project, branch_name))
