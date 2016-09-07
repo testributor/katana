@@ -59,10 +59,11 @@ gem 'fog-aws'
 # We implemented some missing BitBucket API support ourselves and fixed a few problems.
 gem 'bitbucket_rest_api', github: 'ispyropoulos/bitbucket', branch: 'testributor-extra'
 gem 'oauth'
+gem 'puma'
+gem 'puma-heroku'
 
 group :production do
   gem 'rails_12factor'
-  gem 'puma'
   gem 'newrelic_rpm'
 end
 

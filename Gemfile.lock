@@ -307,7 +307,9 @@ GEM
       pry (>= 0.9.10, < 0.11.0)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
-    puma (2.12.3)
+    puma (3.6.0)
+    puma-heroku (1.0.0)
+      puma (~> 3.0)
     rack (1.6.4)
     rack-attack (4.3.0)
       rack
@@ -488,6 +490,7 @@ DEPENDENCIES
   pry-nav
   pry-rails
   puma
+  puma-heroku
   rack-attack
   rack-timeout
   rails (~> 4.2)
