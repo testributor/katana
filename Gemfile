@@ -53,7 +53,6 @@ gem 'omniauth-github'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', ref: '1f0886' # 0.10 rc version
 gem 'simple_form'
 gem 'actionview-encoded_mail_to'
-gem 'sitemap_generator'
 gem 'fog-aws'
 # TODO Switch to the official gem as soon as this branch is merged.
 # We implemented some missing BitBucket API support ourselves and fixed a few problems.
