@@ -115,8 +115,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'pages/:id' => 'pages#show', as: :pages
-
   post 'live_updates/subscribe' => "live_updates#subscribe",
     as: :live_updates_subscribe
 
