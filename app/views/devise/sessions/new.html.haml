@@ -1,8 +1,8 @@
+= content_for :title do
+  Testributor: Log in to your account
+= content_for :header_title do
+  Log in to Testributor
 = render layout: 'layouts/devise' do
-  = content_for :title do
-    Testributor: Log in to your account
-  = content_for :header_title do
-    Log in to Testributor
   .col-xs-12
     = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }) do |f|
       = flash_messages

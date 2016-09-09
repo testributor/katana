@@ -1,9 +1,9 @@
-= render layout: 'layouts/devise' do
-  = content_for :title do
-    Testributor: Sign up for a new account
+= content_for :title do
+  Testributor: Sign up for a new account
 
-  = content_for :header_title do
-    Sign up for Testributor
+= content_for :header_title do
+  Sign up for Testributor
+= render layout: 'layouts/devise' do
   .col-xs-12
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!

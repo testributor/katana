@@ -1,6 +1,8 @@
+= content_for :title do
+  Testributor: Change password
+= content_for :header_title do
+  Change password
 = render layout: 'layouts/devise' do
-  = content_for :header_title do
-    Change password
   .col-xs-12
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
       = devise_error_messages!

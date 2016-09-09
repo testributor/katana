@@ -1,9 +1,8 @@
+= content_for :title do
+  Testributor: Confirm your e-mail
+= content_for :header_title do
+  E-mail confirmation
 = render layout: 'layouts/devise' do
-  = content_for :title do
-    Testributor: Confirm your e-mail
-  = content_for :header_title do
-    Confirmation e-mail
-
   .col-xs-12
     = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!

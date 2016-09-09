@@ -1,9 +1,8 @@
+= content_for :title do
+  Testributor: Reset your account password
+= content_for :header_title do
+  Reset password
 = render layout: 'layouts/devise' do
-  = content_for :title do
-    Testributor: Reset your account password
-  = content_for :header_title do
-    Reset password
-
   .col-xs-12
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!

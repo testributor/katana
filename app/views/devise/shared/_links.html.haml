@@ -2,7 +2,7 @@
   - resource_class.omniauth_providers.each do |provider|
     .devise-link
       = link_to  omniauth_authorize_path(resource_name, provider),
-        class: "btn btn-block btn-social btn-#{provider}" do
+        class: "btn btn-raised btn-block btn-social btn-#{provider}" do
         ="Sign in with #{provider.to_s.titleize}"
         %i{class: "fa fa-#{provider}"}
 
