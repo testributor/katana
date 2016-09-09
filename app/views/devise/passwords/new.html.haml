@@ -1,21 +1,15 @@
-= content_for :title do
-  Testributor: Reset your account password
+= render layout: 'layouts/devise' do
+  = content_for :title do
+    Testributor: Reset your account password
+  = content_for :header_title do
+    Reset password
 
-.wrapper-page.animated.fadeInDown
-  .panel.panel-color.panel-primary
-    .panel-heading
-      %h3.text-center.m-t-10
-        = link_to root_path do
-          %div.logo-front
-            %img{alt: "logo", src: image_path("logo.png")}
-            %h2 Log in to Testributor
+  .col-xs-12
     = form_for(resource, as: resource_name, url: password_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!
       .form-group
-        .col-xs-12
-          = f.email_field :email, autofocus: true, class: "form-control",
-            type: "text", placeholder: 'E-mail', required: true
-      .form-group.text-right
-        .col-xs-12
-          = f.submit "Send me reset password instructions", class: "btn btn-raised btn-primary w-md"
+        = f.email_field :email, autofocus: true, class: "form-control",
+          type: "text", placeholder: 'E-mail', required: true
+      .form-group
+        = f.submit "Reset password", class: "btn btn-block btn-raised btn-primary"
       = render "devise/shared/links"

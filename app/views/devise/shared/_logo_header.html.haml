@@ -1,0 +1,11 @@
+= content_for :title do
+  Testributor: Reset your account password
+
+.wrapper-page.animated.fadeInDown
+  .devise-form
+    .panel.panel-color.panel-primary
+      .panel-heading
+        .text-center.m-t-10
+          %img{alt: "logo", src: image_path("logo.png")}
+          %h2 Reset password
+      = yield

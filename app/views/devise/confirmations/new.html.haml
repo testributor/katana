@@ -1,22 +1,16 @@
-= content_for :title do
-  Testributor: Confirm your e-mail
+= render layout: 'layouts/devise' do
+  = content_for :title do
+    Testributor: Confirm your e-mail
+  = content_for :header_title do
+    Confirmation e-mail
 
-.wrapper-page.animated.fadeInDown
-  .panel.panel-color.panel-primary
-    .panel-heading
-      %h3.text-center.m-t-10
-        = link_to root_path do
-          .logo
-            %img{alt: "logo", src: image_path("logo.png")}
-            %h2 Log in to Testributor
+  .col-xs-12
     = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!
       .form-group
-        .col-xs-12
-          = f.email_field :email, autofocus: true, class: "form-control",
-            type: "text", placeholder: 'E-mail', required: true,
-            value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
-      .form-group.text-right
-        .col-xs-12
-          = f.submit "Resend confirmation instructions", class: "btn btn-raised btn-primary w-md"
+        = f.email_field :email, autofocus: true, class: "form-control",
+          type: "text", placeholder: 'E-mail', required: true,
+          value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
+      .form-group
+        = f.submit "Resend confirmation e-mail", class: "btn btn-block btn-raised btn-primary"
       = render "devise/shared/links"

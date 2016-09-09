@@ -77,10 +77,59 @@
 .breadcrumb {
   margin-bottom: 10px;
 }
+
 .panel {
   min-width: 800px;
 }
 
+/* Devise */
+
+
+.devise-form {
+  width: 380px;
+  margin: 30px auto 140px;
+}
+
+.devise-form {
+
+  .panel {
+    min-width: initial;
+  }
+
+  .alert {
+    margin: 0;
+  }
+
+  .form-group {
+    margin: 14px 0 0 0;
+  }
+
+  .btn-social {
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .control-label.label-static {
+    top: -40px;
+  }
+
+  .btn-github {
+    color: #fff;
+    background-color: #2b2b2b;
+    border-color: rgba(0,0,0,0.2);
+
+    &:hover {
+      color: #fff;
+          background-color: #2b2b2b;
+          border-color: rgba(0,0,0,0.2);
+      }
+    }
+}
+
+/* Devise - end */
 .commit-info {
   clear: both;
   height: 45px;
@@ -552,11 +601,6 @@
   }
 }
 
-body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-weight: 400;
-}
-
 .alert {
   margin-left: 15px;
 }
@@ -659,3 +703,16 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4 {
 .m-b-20 {
   margin-bottom: 20px;
 }
+
+/* Error pages */
+.error-page {
+  min-height: 80%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 100%;
+  }
+}
+/* Error pages - End */

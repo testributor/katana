@@ -1,0 +1,15 @@
+%html
+  %head
+    %title= title
+    %meta{name: :description, content: meta_description }
+    %meta{name: "viewport", content: "width=device-width"}
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    = render "layouts/favicon"
+    = stylesheet_link_tag 'dashboard', media: 'all'
+    %link{rel:"stylesheet", type:"text/css", href:"//fonts.googleapis.com/css?family:Roboto:300,400,500,700"}
+    %link{rel:"stylesheet", type:"text/css", href:"//fonts.googleapis.com/icon?family:Material+Icons"}
+
+    = csrf_meta_tags
+  %body{class: controller_and_action, data: page_data_attrs}
+    = yield
+    = javascript_include_tag 'dashboard'

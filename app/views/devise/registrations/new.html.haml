@@ -1,36 +1,29 @@
-= content_for :title do
-  Testributor: Sign up for a new account
+= render layout: 'layouts/devise' do
+  = content_for :title do
+    Testributor: Sign up for a new account
 
-.wrapper-page.animated.fadeInDown
-  .panel.panel-color.panel-primary
-    .panel-heading.text-center
-      %h3.text-center.m-t-10
-        = link_to root_path do
-          %div.logo-front
-            %img{alt: "logo", src: image_path("logo.png")}
-            %h2 Sign up for Testributor
+  = content_for :header_title do
+    Sign up for Testributor
+  .col-xs-12
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
       = devise_error_messages!
       = flash_messages
       .form-group
-        .col-xs-12
-          = f.email_field :email, autofocus: true, class: "form-control",
-            type: "text", placeholder: 'E-mail', required: true
+        = f.email_field :email, autofocus: true, class: "form-control",
+          type: "text", placeholder: 'E-mail', required: true
       .form-group
-        .col-xs-12
-          = f.password_field :password, autocomplete: "off", class: 'form-control',
-            placeholder: "Password (#{@minimum_password_length} characters minimum)", type: "password", required: true
+        = f.password_field :password, autocomplete: "off", class: 'form-control', 
+          placeholder: "Password (#{@minimum_password_length} characters minimum)", type: "password", required: true
       .form-group
-        .col-xs-12
-          = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control',
-          placeholder: "Repeat password", type: "password", required: true
+        = f.password_field :password_confirmation, autocomplete: "off", class: 'form-control',
+        placeholder: "Repeat password", type: "password", required: true
 
       - if devise_mapping.rememberable?
         .form-group
-          .col-xs-12
-            = f.check_box :remember_me
-            = f.label :remember_me, class: 'cr-styled'
-      .form-group.text-right
-        .col-xs-12
-          = f.submit "Sign Up", class: "btn btn-raised btn-primary w-md"
+          .checkbox
+            = f.label :remember_me do
+              = f.check_box :remember_me
+              = "Remember me"
+      .form-group
+        = f.submit "Sign Up", class: "btn btn-block btn-raised btn-primary"
       = render "devise/shared/links"

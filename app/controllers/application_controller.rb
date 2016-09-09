@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_redirect_url_in_cookie
   before_filter :exception_notification_additional_data
 
-  layout 'application_layout'
+  layout :choose_layout
 
   helper_method :current_project
 
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    render 'errors/access_denied', status: 403, layout: 'application_layout'
+    render 'errors/access_denied', status: 403, layout: 'bare'
   end
 
   protected
@@ -50,4 +50,11 @@ class ApplicationController < ActionController::Base
       :params => params
     }
   end
+
+  private
+
+  def choose_layout
+    user_signed_in? ? 'dashboard' : 'bare'
+  end
+
 end
