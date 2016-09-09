@@ -54,13 +54,7 @@ Rails.application.routes.draw do
   post 'webhooks/github' => 'webhooks#github', as: :github_webhook
   post 'webhooks/bitbucket' => 'webhooks#bitbucket', as: :bitbucket_webhook
 
-  authenticated :user do
-    root to: "dashboard#index", as: :authenticated_root
-  end
-
-  unauthenticated do
-    root to: "home#index"
-  end
+  root to: "dashboard#index"
 
   get 'invitation/accept' => "user_invitations#accept", as: :accept_user_invitation
   # If you put this in the defaults(project: nil) block above it will erase
@@ -120,8 +114,6 @@ Rails.application.routes.draw do
       get :bitbucket_authorization_required
     end
   end
-
-  get 'pages/:id' => 'pages#show', as: :pages
 
   post 'live_updates/subscribe' => "live_updates#subscribe",
     as: :live_updates_subscribe
