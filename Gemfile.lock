@@ -380,6 +380,7 @@ GEM
     sawyer (0.6.0)
       addressable (~> 2.3.5)
       faraday (~> 0.8, < 0.10)
+    scout_apm (2.1.8)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
@@ -499,6 +500,7 @@ DEPENDENCIES
   redis
   safe_yaml
   sass-rails (~> 5.0)
+  scout_apm
   sdoc (~> 0.4.0)
   select2-rails
   sidekiq
