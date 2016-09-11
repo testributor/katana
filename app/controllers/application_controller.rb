@@ -18,11 +18,12 @@ class ApplicationController < ActionController::Base
     return nil unless params[param_name]
 
     if current_user
-      @current_project = current_user.participating_projects.
+      @current_project = current_user.participating_projects.includes(:members).
         find_by(id: params[param_name])
     end
     # If no project is found yet, try the public projects
-    @current_project ||= Project.non_private.find_by(id: params[param_name])
+    @current_project ||= Project.non_private.includes(:members).
+      find_by(id: params[param_name])
   end
 
   def current_ability

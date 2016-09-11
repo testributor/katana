@@ -87,12 +87,12 @@ class Ability
   end
 
   def test_run_permissions
-    can :read, TestRun if project && project.is_public?
-    can :manage, TestRun if project && project.members.include?(user)
+    can :read, TestRun if project.is_public?
+    can :manage, TestRun if project.members.include?(user)
   end
 
   def test_job_permissions
-    can :manage, TestJob if project && project.members.include?(user)
+    can :manage, TestJob if project.members.include?(user)
   end
 
   def live_updates_permissions
