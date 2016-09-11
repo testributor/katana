@@ -36,5 +36,14 @@ body.settings {
       margin: 0;
     }
   }
+
+  .technology-selections {
+    .form-group {
+      margin: 14px 0 0 0;
+    }
+    .multi-select {
+      width: 100%;
+    }
+  }
 }
 
