@@ -24,13 +24,7 @@ class DashboardController < ApplicationController
   end
 
   def index
-    @projects = current_user.participating_projects.
-      includes(tracked_branches: { test_runs: :test_jobs }).
-      order(:repository_owner, :name)
-
-    @current_user_test_runs_per_project =
-      TestRun.where(initiator: current_user, project_id: @projects.map(&:id)).order('created_at DESC').limit(5).
-      group_by(&:project_id)
+    @projects = current_user.participating_projects.order(:repository_owner, :name)
 
     if @projects.empty?
       if current_user.can_create_new_project?
