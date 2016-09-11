@@ -25,12 +25,6 @@ body.settings {
     }
   }
 
-  .project-settings-cards {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-
   .notification-settings-cards {
     .form-group {
       margin: 0;
@@ -43,6 +37,12 @@ body.settings {
     }
     .multi-select {
       width: 100%;
+    }
+  }
+
+  .project-settings {
+    .form-group {
+      margin: 14px 0 0 0;
     }
   }
 }
