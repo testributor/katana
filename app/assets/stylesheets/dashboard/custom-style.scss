@@ -261,7 +261,8 @@
 .branch {
 
   display: block;
-  padding: 10px;
+  margin: 0;
+  text-align: left;
 
   .name {
     text-overflow: ellipsis;
@@ -577,6 +578,12 @@
 }
 
 /* Bootstrap overrides */
+
+body.settings, body.project_files {
+  .form-group {
+    margin: 14px 0 0 0;
+  }
+}
 
 .list-group .list-group-separator:before {
   width: 100%;

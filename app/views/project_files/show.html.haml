@@ -24,7 +24,7 @@
             = 'Add file'
       - form_path = @project_file.persisted? ? project_settings_file_path(current_project, @project_file) : project_settings_files_path(current_project)
       = form_for [current_project, @project_file], url: form_path do |f|
-        = f.text_field :path, class: 'text form-control m-b-10',
+        = f.text_field :path, class: 'text form-control',
           placeholder: "Enter file name with path relative to the project root directory here...",
           readonly: @project_file.testributor_yml? || @project_file.build_commands?
         .code-edit-wrap.m-b-10
