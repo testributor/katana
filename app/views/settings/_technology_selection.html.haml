@@ -4,19 +4,18 @@
       id: "project_edit" } do |f|
 
       %h4 Choose images
-      .well
-        .form-group
-          %label.control-label.col-md-2 Base image
-          .col-md-10
-            = f.select :docker_image_id,
-              grouped_options_for_select(grouped_languages_options,
-              f.object.docker_image_id), {}, class: "form-control"
-        .form-group
-          %label.control-label.col-md-2 Linked images
-          .col-md-10
-            = f.select :technology_ids,
-              options_for_select(technologies_options, f.object.technology_ids),
-              {}, multiple: true, class: 'multi-select form-control', style: "width: 100%"
+      .form-group
+        %label.control-label.col-md-2 Base image
+        .col-md-10
+          = f.select :docker_image_id,
+            grouped_options_for_select(grouped_languages_options,
+            f.object.docker_image_id), {}, class: "form-control"
+      .form-group
+        %label.control-label.col-md-2 Linked images
+        .col-md-10
+          = f.select :technology_ids,
+            options_for_select(technologies_options, f.object.technology_ids),
+            {}, multiple: true, class: 'multi-select form-control', style: "width: 100%"
       .form-group
         %label.control-label.col-md-2
           %a{ href: "#", data: { toggle: "popover", container: 'body', html: 'true',
