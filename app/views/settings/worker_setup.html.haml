@@ -7,20 +7,19 @@
   = render "technology_selection", project: current_project
 
 .row.panelized.m-t-10
-  .col-xs-12
-    .col-xs-6
-      %h3 Worker Groups
-    .col-xs-6
-      - if current_project.repository_provider == "bare_repo"
-        %button.m-t-20.btn.btn-raised.btn-success.btn-xs{ data: { toggle: "modal", target: "#newWorkerGroupModal" } }
-          %i.fa.fa-plus-square
-          New worker group
-      - else
-        = link_to project_worker_groups_path(current_project), method: :post,
-        class: 'btn btn-raised btn-success btn-xs m-t-20',
-        title: 'Create a new group of workers.' do
-          %i.fa.fa-plus-square
-          Add a new group
+  .col-xs-6
+    %h3 Worker Groups
+  .col-xs-6
+    - if current_project.repository_provider == "bare_repo"
+      %button.m-t-20.btn.btn-raised.btn-success.btn-xs{ data: { toggle: "modal", target: "#newWorkerGroupModal" } }
+        %i.fa.fa-plus-square
+        New worker group
+    - else
+      = link_to project_worker_groups_path(current_project), method: :post,
+      class: 'btn btn-raised btn-success btn-xs m-t-20',
+      title: 'Create a new group of workers.' do
+        %i.fa.fa-plus-square
+        Add a new group
 
   - current_project.worker_groups.each do |worker_group|
     .col-xs-12.m-b-10.worker-group-info
