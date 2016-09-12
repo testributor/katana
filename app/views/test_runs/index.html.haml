@@ -1,6 +1,6 @@
 .row.m-t-10
   - if !current_project.bare_repo?
-    .col-sm-3
+    .col-sm-3.text-left
       - current_project.tracked_branches.each do |branch|
         = link_to project_test_runs_path(branch.project, branch: branch.try(:branch_name)),
           class: "row btn btn-default branch #{('active' if branch.branch_name == @tracked_branch.try(:branch_name)) }" do
@@ -15,7 +15,7 @@
         - if can?(:create, TrackedBranch)
           %i.fa.fa-plus
           %span= 'Track a branch'
-  %div{ class: "#{current_project.bare_repo? ? 'col-sm-12' : 'col-sm-9' }" }
+  .col-no-pad{ class: "#{current_project.bare_repo? ? 'col-sm-12' : 'col-sm-9' }" }
     .row.panelized.search-bar
       .col-sm-6.m-t-5
         %strong Builds

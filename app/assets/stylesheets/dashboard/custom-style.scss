@@ -259,7 +259,7 @@
 
 
 .branch {
-
+  padding: 8px 10px;
   display: block;
   margin: 0;
   text-align: left;
@@ -611,7 +611,6 @@ body.settings, body.project_files {
 .alert {
   margin-left: 15px;
 }
-
 .label {
   display: inline;
   padding: .2em .6em .3em;
@@ -630,6 +629,10 @@ body.settings, body.project_files {
 }
 
 /* Our custom classes */
+
+.col-no-pad {
+  padding-left: 0;
+}
 .m-r-0 {
   margin-right: 0px;
 }
