@@ -45,7 +45,7 @@ var TestRunShowHeader = React.createClass({
             </a>
           </div>
           <div className='col-sm-6 text-right'>
-            <div className="checkbox show-all-area" style={{ marginTop: '0px' }}>
+            <div className="togglebutton show-all-area" style={{ marginTop: '0px' }}>
               <label>
                 <input type="checkbox" name="show_all" id="show_all" value="1"/>
                 Toggle all logs

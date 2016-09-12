@@ -61,7 +61,7 @@ var TestJobPresenter = React.createClass({
   render: function () {
     return (
       <div>
-        <div className='row panelized'>
+        <div className='row panelized m-t-10'>
           <ReactCSSTransitionGroup
             transitionName="build-react-style"
             transitionAppear={true}
