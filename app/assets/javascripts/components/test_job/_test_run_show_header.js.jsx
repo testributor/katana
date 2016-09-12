@@ -59,7 +59,7 @@ var TestRunShowHeader = React.createClass({
             <div className="row">
               <div className="col-xs-12">
                 <h3 className='test-run-header'>
-                  <div className={ this.props.test_run.status_css_class }>
+                  <div className={ "test-run-header-lbl " + this.props.test_run.status_css_class }>
                     <span className='m-r-5'>Build #{ this.props.test_run.run_index }</span>
                     <span className='m-r-5'> | </span>
                     <span>{this.props.test_run.status_text }</span>
