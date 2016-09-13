@@ -60,9 +60,9 @@ class TestJobsIndexFeatureTest < Capybara::Rails::TestCase
 
       queued.all(".btn-danger").length.must_equal 0
       running.all(".btn-danger").length.must_equal 0
-      failed.find(".btn-primary").must_have_content "Retry"
-      error.find(".btn-primary").must_have_content "Retry"
-      passed.find(".btn-primary").must_have_content "Retry"
+      failed.find(".btn-primary").must_have_content "RETRY"
+      error.find(".btn-primary").must_have_content "RETRY"
+      passed.find(".btn-primary").must_have_content "RETRY"
     end
 
     it 'displays the test run commit message truncated and escaped (fixed bug)', js:true do

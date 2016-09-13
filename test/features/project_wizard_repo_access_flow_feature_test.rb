@@ -43,7 +43,7 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
     it 'displays a button to upgrade access to private repos', js: true do
       VCR.use_cassette (self.class.name + "::" + self.__name__) do
         visit project_wizard_path(:select_repository)
-        find('label', text: "GitHub").click
+        find('label', text: "GITHUB").click
         page.must_have_selector('.private-repo-access .btn')
       end
     end
@@ -51,7 +51,7 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
     it 'does not display private repositories', js: true do
       VCR.use_cassette (self.class.name + "::" + self.__name__) do
         visit project_wizard_path(:select_repository)
-        find('label', text: "GitHub").click
+        find('label', text: "GITHUB").click
         page.must_have_selector('.private-repo-access .btn')
         panel_body = page.all('.panel-body')[1]
         within panel_body do
@@ -69,7 +69,7 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
     it 'does not display any button to upgrade access', js: true do
       VCR.use_cassette (self.class.name + "::" + self.__name__), allow_playback_repeats: true do
         visit project_wizard_path(:select_repository)
-        find('label', text: "GitHub").click
+        find('label', text: "GITHUB").click
         page.must_have_content('Select a GitHub repository:')
         page.wont_have_selector('.private-repo-access .btn')
         page.must_have_content 'ispyropoulos/aroma-kouzinas'
@@ -79,7 +79,7 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
     it 'displays private repositories', js: true do
       VCR.use_cassette (self.class.name + "::" + self.__name__) do
         visit project_wizard_path(:select_repository)
-          find('label', text: "GitHub").click
+          find('label', text: "GITHUB").click
           page.must_have_content 'ispyropoulos/aroma-kouzinas'
         panel_body = page.all('.panel-body')[1]
         within panel_body do

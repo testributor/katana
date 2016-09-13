@@ -56,7 +56,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.must_have_content('Retry')
+        page.must_have_content('RETRY')
       end
 
       it 'displays the retry action when the run is errored', js: true do
@@ -64,7 +64,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.must_have_content('Retry')
+        page.must_have_content('RETRY')
       end
 
       it 'displays the retry action when the run is failed', js: true do
@@ -72,7 +72,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.must_have_content('Retry')
+        page.must_have_content('RETRY')
       end
 
       it 'does not display the retry action when the run is queued', js: true do
@@ -80,7 +80,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Retry')
+        page.wont_have_content('RETRY')
       end
 
       it 'does not display the retry action when the run is running', js: true do
@@ -88,7 +88,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Retry')
+        page.wont_have_content('RETRY')
       end
 
       it 'does not display the retry action when the run is cancelled', js: true do
@@ -96,14 +96,14 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Retry')
+        page.wont_have_content('RETRY')
       end
 
       it 'displays the cancel action', js: true do
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.must_have_content('Cancel')
+        page.must_have_content('CANCEL')
       end
 
       it 'does not display the Cancel action when the run is FAILED', js: true do
@@ -111,7 +111,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Cancel')
+        page.wont_have_content('CANCEL')
       end
 
       it 'does not display the Cancel action when the run is PASSED', js: true do
@@ -119,7 +119,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Cancel')
+        page.wont_have_content('CANCEL')
       end
 
       it 'does not display the Cancel action when the run is ERROR', js: true do
@@ -127,7 +127,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_content('Cancel')
+        page.wont_have_content('CANCEL')
       end
 
       it 'does not display the Cancel action when the run is CANCELLED', js: true do
@@ -135,7 +135,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
         visit project_test_runs_path(
           _test_run.project.id,
           branch: _test_run.tracked_branch.branch_name)
-        page.wont_have_selector('.btn', text: "Cancel")
+        page.wont_have_selector('.btn', text: "CANCEL")
       end
 
       describe "on TestRun#show page" do
@@ -145,7 +145,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             _test_run.project.id,
             _test_run.id,
             branch: _test_run.tracked_branch.branch_name)
-          page.wont_have_content('Cancel')
+          page.wont_have_content('CANCEL')
         end
 
         it 'does not display the Cancel action when the run is PASSED', js: true do
@@ -154,7 +154,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             _test_run.project.id,
             _test_run.id,
             branch: _test_run.tracked_branch.branch_name)
-          page.wont_have_content('Cancel')
+          page.wont_have_content('CANCEL')
         end
 
         it 'does not display the Cancel action when the run is ERROR', js: true do
@@ -163,7 +163,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
             _test_run.project.id,
             _test_run.id,
             branch: _test_run.tracked_branch.branch_name)
-          page.wont_have_content('Cancel')
+          page.wont_have_content('CANCEL')
         end
 
         it 'does not display the Cancel action when the run is CANCELLED', js: true do
@@ -171,7 +171,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
           visit project_test_run_path(
             _test_run.project.id,
             _test_run.id)
-          page.wont_have_selector('.btn', text: "Cancel")
+          page.wont_have_selector('.btn', text: "CANCEL")
         end
       end
     end
@@ -186,7 +186,7 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       it 'must delete all test_jobs', js: true do
         _test_run.test_jobs.pluck(:id).must_equal [_test_job.id]
         page.wont_have_selector(".disabled.js-remote-submission")
-        page.find("#test-run-#{_test_run.id} .btn.btn-danger", text: "Cancel").click
+        page.find("#test-run-#{_test_run.id} .btn.btn-danger", text: "CANCEL").click
         wait_for_requests_to_finish
         page.must_have_selector("#test-run-#{_test_run.id}", text: "Cancelled")
         TestRun.cancelled.count.must_equal 1
@@ -221,8 +221,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
 
     it 'displays the retry action when the run is errored', js: true do
@@ -230,8 +230,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
 
     it 'displays the retry action when the run is failed', js: true do
@@ -239,8 +239,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
 
     it 'does not display the retry action when the run is queued', js: true do
@@ -248,8 +248,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
 
     it 'does not display the retry action when the run is running', js: true do
@@ -257,8 +257,8 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
 
     it 'does not display the retry action when the run is cancelled', js: true do
@@ -266,16 +266,16 @@ class TestRunActionsFeatureTest < Capybara::Rails::TestCase
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.all('td .btn.btn-danger', text: "Cancel").size.must_equal 0
+      page.wont_have_content('RETRY')
+      page.all('td .btn.btn-danger', text: "CANCEL").size.must_equal 0
     end
 
     it 'displays the cancel action', js: true do
       visit project_test_runs_path(
         _test_run.project.id,
         branch: _test_run.tracked_branch.branch_name)
-      page.wont_have_content('Retry')
-      page.wont_have_content('Cancel')
+      page.wont_have_content('RETRY')
+      page.wont_have_content('CANCEL')
     end
   end
 end
