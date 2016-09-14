@@ -11,7 +11,7 @@
 }
 
 .project-settings-header {
-  margin: 10px -20px 0px 0px;
+  margin: 10px 0 0 0;
 }
 
 .breadcrumb > span {
@@ -335,13 +335,20 @@
 
 .panelized {
   border: 1px solid #e9e9e9;
-  margin: 0px -20px 0px 0px;
   background-color: #fff;
   border-radius: 4px;
   padding: 10px;
 
   h3 {
     margin-top: px;
+  }
+
+  &--space-btm {
+    margin-bottom: 10px;
+  }
+
+  &:last-child {
+    margin-bottom: 10px;
   }
 }
 
@@ -384,7 +391,7 @@
 
 .project-links {
   ul{
-    @media screen and (min-width: $screen-md-max) {
+    @media screen and (min-width: $screen-sm-min) {
       float: right;
     }
 
@@ -611,9 +618,6 @@ body.settings, body.project_files {
   }
 }
 
-.alert {
-  margin-left: 15px;
-}
 .label {
   display: inline;
   padding: .2em .6em .3em;

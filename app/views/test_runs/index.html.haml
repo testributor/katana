@@ -15,23 +15,24 @@
         - if can?(:create, TrackedBranch)
           %i.fa.fa-plus
           %span= 'Track a branch'
-  .col-no-pad{ class: "#{current_project.bare_repo? ? 'col-sm-12' : 'col-sm-9' }" }
-    .row.panelized.search-bar
-      .col-sm-6.m-t-5
-        %strong Builds
-      .col-sm-6.text-right
-        - if can? :create, TrackedBranch
-          - if current_project.bare_repo?
-            %button.btn.btn-raised.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
-              %i.fa.fa-plus-square
-              Add a Build
-          - else
-            - if @tracked_branch
-              = link_to project_test_runs_path(branch_id: @tracked_branch.id), method: :post, remote: true,
-                data: { disable_with: with_dots("Adding build") },
-                action: :create, class: 'disabled btn  btn-raised btn-success js-remote-submission' do
-                %i.fa.fa-plus-square.m-r-5
+  %div{ class: "#{current_project.bare_repo? ? 'col-sm-12' : 'col-sm-9' }" }
+    .panelized.search-bar
+      .row
+        .col-sm-6.m-t-5
+          %strong Builds
+        .col-sm-6.text-right
+          - if can? :create, TrackedBranch
+            - if current_project.bare_repo?
+              %button.btn.btn-raised.btn-success.btn-xs{ data: { toggle: "modal", target: "#newTestRunModal" } }
+                %i.fa.fa-plus-square
                 Add a Build
+            - else
+              - if @tracked_branch
+                = link_to project_test_runs_path(branch_id: @tracked_branch.id), method: :post, remote: true,
+                  data: { disable_with: with_dots("Adding build") },
+                  action: :create, class: 'disabled btn  btn-raised btn-success js-remote-submission' do
+                  %i.fa.fa-plus-square.m-r-5
+                  Add a Build
     .m-t-10
       = react_component 'TestRunPresenter',
         { testRuns: @test_runs.map(&:serialized_run),

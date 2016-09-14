@@ -1,48 +1,49 @@
 = render 'settings_common_header'
-.row.panelized
-  .col-xs-12
-    %h3 General Settings
-  .project-settings
-    - if can? :manage, current_project
-      - if current_project.is_private?
-        .col-xs-9
-          %strong Make your project public: <br>
-          Anyone will be able to access your public pages.
-          Users who do not participate will not have access to project configuration,
-          credentials or be able to add/remove builds.
-        .col-xs-3
-          = button_to "Public", toggle_private_project_path(current_project), method: :post,
-            data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
-            class: 'btn  btn-raised btn-success'
-      - else
-        .col-xs-9
-          %strong Make your project private: <br>
-          User which are not members of this project will <strong> NOT </strong> be able
-          to access your pages.
-        .col-xs-3
-          = button_to "Private", toggle_private_project_path(current_project), method: :post,
-            data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
-            class: 'btn  btn-raised btn-danger'
+.panelized
+  .row
+    .col-xs-12
+      %h3 General Settings
+    .project-settings
+      - if can? :manage, current_project
+        - if current_project.is_private?
+          .col-xs-9
+            %strong Make your project public: <br>
+            Anyone will be able to access your public pages.
+            Users who do not participate will not have access to project configuration,
+            credentials or be able to add/remove builds.
+          .col-xs-3
+            = button_to "Public", toggle_private_project_path(current_project), method: :post,
+              data: { confirm: "'#{current_project.name}' project will become public. Are you sure?" },
+              class: 'btn  btn-raised btn-success'
+        - else
+          .col-xs-9
+            %strong Make your project private: <br>
+            User which are not members of this project will <strong> NOT </strong> be able
+            to access your pages.
+          .col-xs-3
+            = button_to "Private", toggle_private_project_path(current_project), method: :post,
+              data: { confirm: "'#{current_project.name}' project will become private. Are you sure?" },
+              class: 'btn  btn-raised btn-danger'
 
-      .col-xs-9
-        %strong Delete project from Testributor: <br>
-        This action cannot be reverted. All your builds will be discarded.
-      .col-xs-3
-        = button_to "Delete", project_path(current_project), method: :delete,
-          data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
-          class: 'btn  btn-raised btn-danger'
-    = simple_form_for current_project do |f|
-      - repo_provider = current_project.repository_provider
-      - if repo_provider == 'bare_repo'
-        - #TODO: In the future we might be able to avoid restarting by sending
-        - # the new repository_url to the active workers
-        .col-xs-12
-          = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
-      - else
         .col-xs-9
-          %strong Auto-tracking branches <br>
-          = "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
+          %strong Delete project from Testributor: <br>
+          This action cannot be reverted. All your builds will be discarded.
         .col-xs-3
-          = f.input :auto_track_branches, as: :boolean, label: false
-      .col-xs-12
-        = f.submit "Save", class: "btn btn-raised btn-primary"
+          = button_to "Delete", project_path(current_project), method: :delete,
+            data: { confirm: "'#{current_project.name}' project will be deleted. Are you sure?" },
+            class: 'btn  btn-raised btn-danger'
+      = simple_form_for current_project do |f|
+        - repo_provider = current_project.repository_provider
+        - if repo_provider == 'bare_repo'
+          - #TODO: In the future we might be able to avoid restarting by sending
+          - # the new repository_url to the active workers
+          .col-xs-12
+            = f.input :repository_url, hint: "You will need to restart your workers after changing this setting"
+        - else
+          .col-xs-9
+            %strong Auto-tracking branches <br>
+            = "Automatically track a branch when it is pushed to #{repo_provider == "github" ? "GitHub" : "Bitbucket" }"
+          .col-xs-3
+            = f.input :auto_track_branches, as: :boolean, label: false
+        .col-xs-12
+          = f.submit "Save", class: "btn btn-raised btn-primary"

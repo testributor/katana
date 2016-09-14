@@ -43,14 +43,15 @@
         - if flash[:alert].present?
           .alert.alert-danger= flash[:alert].html_safe
         - if current_project
-          .col-sm-9
-            = render 'project_header', project: current_project
-            = yield
-          .col-sm-3
-            - if content_for(:help)
-              = content_for(:help)
-            - else
-              = render 'right_help_bar'
+          .row
+            .col-md-9
+              = render 'project_header', project: current_project
+              = yield
+            .col-md-3
+              - if content_for(:help)
+                = content_for(:help)
+              - else
+                = render 'right_help_bar'
         - else
           = yield
 

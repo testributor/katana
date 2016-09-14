@@ -3,10 +3,11 @@
 - content_for :page_title do
   Invite user
 
-.row.panelized
-  .col-xs-12
-    %h2= "Invite user on project #{current_project.name}"
-  .col-xs-12
-    = simple_form_for [current_project, @invitation] do |f|
-      = f.input :email, placeholder: "Enter the email of the user to be invited", required: false
-      = f.submit "Send invitation", class: 'btn btn-raised btn-default'
+.panelized
+  .row
+    .col-xs-12
+      %h2= "Invite user on project #{current_project.name}"
+    .col-xs-12
+      = simple_form_for [current_project, @invitation] do |f|
+        = f.input :email, placeholder: "Enter the email of the user to be invited", required: false
+        = f.submit "Send invitation", class: 'btn btn-raised btn-default'
