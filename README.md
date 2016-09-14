@@ -1,3 +1,6 @@
+[![Build Status](http://www.testributor.com/projects/34-testributor/status?branch=master)][testributor]
+[testributor]: http://www.testributor.com/projects/34-testributor
+
 # Testributor - Katana
 
 Katana is part of the [Testributor](http://about.testributor.com) open source
