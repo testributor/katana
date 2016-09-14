@@ -90,7 +90,7 @@ class ProjectsController < DashboardController
         last_run_with_terminal_status = branch.test_runs.
           terminal_status.order(:created_at).last
         if last_run_with_terminal_status
-          last_run_with_terminal_status.status.text.downcase
+          status = last_run_with_terminal_status.status.text.downcase
         end
       end
     end
