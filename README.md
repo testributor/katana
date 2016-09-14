@@ -1,5 +1,7 @@
-[![Build Status](http://www.testributor.com/projects/34-testributor/status?branch=master)][testributor]
+[![Build Status](http://www.testributor.com/projects/34-testributor/status?branch=master)][testributor] [![Gitter](https://img.shields.io/gitter/room/gitterHQ/gitter.svg)][gitter-chat]
+
 [testributor]: http://www.testributor.com/projects/34-testributor
+[gitter-chat]: https://gitter.im/testributor/testributor
 
 # Testributor - Katana
 
