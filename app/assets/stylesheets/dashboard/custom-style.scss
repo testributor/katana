@@ -12,6 +12,19 @@
 
 .project-settings-header {
   margin: 10px 0 0 0;
+
+  .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+    @media screen and (min-width: $screen-sm-min) {
+      margin-left: -15px;
+    }
+
+    > li > a{
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
 }
 
 .breadcrumb > span {
