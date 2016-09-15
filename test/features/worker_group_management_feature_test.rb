@@ -20,14 +20,14 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
     end
 
     it "shows the SSH key field on the edit modal", js: true do
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       page.must_have_selector(
         "#edit_worker_group_#{project.worker_groups.first.id} .worker_group_ssh_key_private",
         visible: true)
     end
 
     it "shows validation errors", js: true do
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       fill_in "worker_group_ssh_key_private", with: "invalid_key"
       find(".modal-footer .btn[value='Save']").click
       page.must_have_content "Ssh key private is invalid"
@@ -35,7 +35,7 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
 
     it "updates the values when no validation error exists", js: true do
       new_ssh_key = FactoryGirl.build(:worker_group).ssh_key_private.strip
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       fill_in "worker_group_ssh_key_private", with: new_ssh_key
       fill_in "worker_group_friendly_name", with: "The new friendly name"
       find(".modal-footer .btn[value='Save']").click
@@ -86,13 +86,13 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
     end
 
     it "doesn't show the SSH key field on the edit modal", js: true do
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       page.wont_have_selector(
         "#edit_worker_group_#{project.worker_groups.first.id} .worker_group_ssh_key_private")
     end
 
     it "shows validation errors", js: true do
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       fill_in "worker_group_friendly_name", with: ""
       find(".modal-footer .btn[value='Save']").click
       page.must_have_content "Friendly name can't be blank"
@@ -100,7 +100,7 @@ class WorkerGroupManagementFeatureTest < Capybara::Rails::TestCase
 
     it "updates the values when no validation error exists", js: true do
       new_ssh_key = FactoryGirl.build(:worker_group).ssh_key_private.strip
-      find(".worker-group-info .btn", text: "Edit").click
+      find(".worker-group-info .btn", text: "EDIT").click
       fill_in "worker_group_friendly_name", with: "The new friendly name"
       find(".modal-footer .btn[value='Save']").click
       worker_group = project.worker_groups.first.reload

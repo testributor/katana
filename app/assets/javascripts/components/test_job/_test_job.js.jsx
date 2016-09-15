@@ -29,7 +29,7 @@ var TestJob = React.createClass({
       if (this.props.user_can_manage_run && this.props.test_job.status_is_terminal) {
         return (
           <a href={ this.props.test_job.retry_url }
-            className="btn btn-primary btn-sm js-remote-submission"
+            className="btn btn-raised btn-primary btn-sm js-remote-submission"
             data-remote='true'
             style={{ marginTop: '-4px' }}
             data-disable-with={ withDots('Retrying') }

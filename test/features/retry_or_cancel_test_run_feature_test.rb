@@ -38,7 +38,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Passed"
     page.wont_have_selector(".disabled.js-remote-submission")
-    find(".btn-primary", text: "Retry").click
+    find(".btn-primary", text: "RETRY").click
     page.must_have_content "Setup"
   end
 
@@ -62,7 +62,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.wont_have_selector(".disabled.js-remote-submission")
     page.must_have_content "Error"
-    find(".btn-primary", text: "Retry").click
+    find(".btn-primary", text: "RETRY").click
     page.must_have_content "Setup"
   end
 
@@ -72,7 +72,7 @@ class RetryOrCancelTestRunFeatureTest < Capybara::Rails::TestCase
     visit project_test_runs_path(project, branch: branch.branch_name)
     page.must_have_content "Cancelled"
     page.must_have_content "Cancelled"
-    page.wont_have_selector ".btn-primary", text: "Retry"
+    page.wont_have_selector ".btn-primary", text: "RETRY"
   end
 
   it "user is able to cancel a queued test_run", js: true do

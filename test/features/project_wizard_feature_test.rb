@@ -31,8 +31,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   it "creates a project with correct attributes after successful completion", js: true do
     VCR.use_cassette (self.class.name + "::" + self.__name__) do
       visit project_wizard_path(:select_repository)
-      page.must_have_content "GitHub"
-      find('label', text: "GitHub").click
+      page.must_have_content "GITHUB"
+      find('label', text: "GITHUB").click
       page.must_have_content repo_name
       click_on repo_name
       wait_for_requests_to_finish
@@ -81,8 +81,8 @@ class ProjectWizardFeatureTest < Capybara::Rails::TestCase
   it 'displays the correct badges', js: true do
     VCR.use_cassette (self.class.name + "::" + self.__name__) do
       visit project_wizard_path(:select_repository)
-      page.must_have_content "GitHub"
-      find('label', text: "GitHub").click
+      page.must_have_content "GITHUB"
+      find('label', text: "GITHUB").click
       page.must_have_content repo_name
     end
 

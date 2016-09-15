@@ -6,7 +6,7 @@ var ViewCommit = React.createClass({
       if (this.props.provider != 'bare_repo') {
         return (
           <div className='source-button'>
-            <a className='source-link btn btn-default btn-md' href={ this.props.commit_url } target="_blank">
+            <a className='source-link btn btn-default ' href={ this.props.commit_url } target="_blank">
               <img className='source-logo' alt={ viewOnProvider } src={ source_logo } />
               View commit
             </a>

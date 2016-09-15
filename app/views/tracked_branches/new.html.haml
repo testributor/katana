@@ -1,6 +1,6 @@
 .row.m-t-10.panelized
-  .row
-    .col-sm-12.track-branch-title
+  .col-xs-12
+    .col-xs-12.track-branch-title
       %h4
         Select a branch to track from the
         %strong
@@ -9,7 +9,7 @@
         %span{ data: { toggle: "tooltip",
           title: "Change the project's settings if you want to track all new branches and avoid tracking them manually." } }
           %i.fa.fa-info-circle
-  .row
+  .col-xs-12
     .col-sm-12
       %br
       - if @response_data[:branches].any?
@@ -33,6 +33,7 @@
               class: "list-group-item #{klass}" }.merge(tooltip_options) do
               .list-group-item-heading
                 #{branch[:name]}
+            .list-group-separator
           - if current_project.repository_provider == 'github'
             - page_manager = GithubPageManager.new(@response_data[:last_response])
             - if page_manager.all_pages_number > 1 && (next_page = page_manager.next_page_number)
@@ -57,4 +58,4 @@
                       project_branches_path(current_project,
                       branch_name: branch.branch_name),
                       method: :post,
-                      class: 'btn btn-default btn-custom btn-block m-b-5'
+                      class: 'btn btn-raised btn-default btn-custom btn-block m-b-5'

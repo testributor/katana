@@ -20,11 +20,11 @@
         .col-xs-12
           .pull-right.m-t-15
             = link_to "Done!", project_wizard_path, method: :put,
-              class: 'btn btn-success', id: "done_button",
+              class: 'btn btn-raised btn-success', id: "done_button",
               style: @project.active_workers.count < 1 ? "display: none" : ''
 
             #waiting_for_worker{ data: { 'live_update_resource_id' => @project.redis_live_update_resource_key }}
-              = link_to "Skip", project_wizard_path, method: :put, class: 'btn btn-default',
+              = link_to "Skip", project_wizard_path, method: :put, class: 'btn btn-raised btn-default',
                 data: { confirm: "You will still need to add a worker or you won't be able to do anything useful" }
               %span.btn.btn-primary.disabled
                 Waiting for worker...

@@ -26,7 +26,7 @@ class TestRunStatusNotificationFeatureTest < Capybara::Rails::TestCase
 
       it "creates a notification when user retries a test run", js: true do
          VcsStatusNotifier.expects(:perform_later).once
-         find(".btn-primary", text: "Retry").click
+         find(".btn-primary", text: "RETRY").click
          wait_for_requests_to_finish
       end
     end

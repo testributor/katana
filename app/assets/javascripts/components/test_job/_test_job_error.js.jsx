@@ -4,7 +4,7 @@ var TestJobError = React.createClass({
       return (
         <div className='row'>
           <div className='display-error col-xs-12'>
-            <div id={ this.props.errorId } className="danger collapse well console">
+            <div id={ this.props.errorId } className="danger collapse console">
               <span className='command'>Command: { this.props.command }</span><br/><br/>
               <span className='js-html-to-ansi'>
                 { this.props.result }

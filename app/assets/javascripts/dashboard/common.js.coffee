@@ -1,4 +1,5 @@
 $(document).on 'ready', ->
+  $.material.init()
   # Disable all links that have 'disabled' class
   $('body').on 'click', 'a.disabled', (e) ->
     e.preventDefault()

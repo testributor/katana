@@ -3,6 +3,30 @@
     line-height: inherit;
   }
 }
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.project-settings-header {
+  margin: 10px 0 0 0;
+
+  .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+    @media screen and (min-width: $screen-sm-min) {
+      margin-left: -15px;
+    }
+
+    > li > a{
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+}
+
 .breadcrumb > span {
   margin-right: 10px;
 }
@@ -66,10 +90,54 @@
 .breadcrumb {
   margin-bottom: 10px;
 }
-.panel {
-  min-width: 800px;
+
+/* Devise */
+
+
+.devise-form {
+  width: 380px;
+  margin: 30px auto 140px;
 }
 
+.devise-form {
+
+  .panel {
+    min-width: initial;
+  }
+
+  .alert {
+    margin: 0;
+  }
+
+  .form-group {
+    margin: 14px 0 0 0;
+  }
+
+  .btn-social {
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &>:first-child {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 32px;
+      line-height: 34px;
+      font-size: 1.6em;
+      text-align: center;
+      border-right: 1px solid rgba(0,0,0,0.2);
+    }
+  }
+
+  .control-label.label-static {
+    top: -40px;
+  }
+}
+
+/* Devise - end */
 .commit-info {
   clear: both;
   height: 45px;
@@ -198,25 +266,13 @@
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
 
+
 .branch {
-  margin: 0px -20px 0px 0px;
-  border: 1px solid #eee;
+  padding: 8px 10px;
   display: block;
-  padding: 10px;
-  vertical-align: middle;
+  margin: 0;
   text-align: left;
-
-  &.btn-default {
-    border-color: #e9e9e9;
-  }
-
-  .status {
-    margin-top: 10px;
-  }
-
-  .time {
-    margin-top: 10px;
-  }
+  text-transform: none;
 
   .name {
     text-overflow: ellipsis;
@@ -234,6 +290,14 @@
       background: image-url("branch_icon")  no-repeat center center;
       background-size: 18px 18px;
     }
+  }
+
+  .remove-branch-btn {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+    z-index: 10;
   }
 }
 
@@ -265,7 +329,7 @@
 .badge-area {
   text-align: right;
   float: right;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .provider-list {
@@ -289,13 +353,20 @@
 
 .panelized {
   border: 1px solid #e9e9e9;
-  margin: 0px -20px 0px 0px;
   background-color: #fff;
   border-radius: 4px;
   padding: 10px;
 
   h3 {
     margin-top: px;
+  }
+
+  &--space-btm {
+    margin-bottom: 10px;
+  }
+
+  &:last-child {
+    margin-bottom: 10px;
   }
 }
 
@@ -338,7 +409,7 @@
 
 .project-links {
   ul{
-    @media screen and (min-width: $screen-md-max) {
+    @media screen and (min-width: $screen-sm-min) {
       float: right;
     }
 
@@ -392,9 +463,7 @@
 }
 
 .test-run-action {
-  @media screen and (min-width: $screen-md-max) {
-    margin-top: 10px;
-  }
+  margin-top: 20px;
 }
 
 .right-side {
@@ -415,6 +484,7 @@
   border: none;
   padding: 5px;
   min-height: 470px;
+  margin: 14px 0 0 0;
 }
 
 .CodeMirror {
@@ -439,6 +509,10 @@
     margin-left: -30px;
     left: 50%;
     top: 50%;
+  }
+
+  .loading-spinner-image {
+    max-width: 60px;
   }
 }
 
@@ -524,8 +598,160 @@
   float: left;
   margin-top: 0px;
   margin-right: 5px;
+
+  .test-run-header-lbl {
+    font-size: large;
+  }
 }
+
 
 .clear-floats {
   clear: both;
 }
+
+/* Bootstrap overrides */
+
+body.settings, body.project_files {
+  .form-group {
+    margin: 14px 0 0 0;
+  }
+}
+
+.list-group .list-group-separator:before {
+  width: 100%;
+}
+
+.form-group select {
+  -webkit-appearance: menulist;
+  appearance: menulist;
+  -moz-appearance: menulist;
+}
+
+.btn-group-vertical {
+  width: 100%;
+}
+
+.modal-footer {
+  input {
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: auto;
+  }
+}
+
+.label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 90%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
+}
+
+.checkbox-material {
+  margin-right: 10px;
+}
+
+/* Our custom classes */
+
+.col-no-pad {
+  padding-left: 0;
+}
+.m-r-0 {
+  margin-right: 0px;
+}
+
+.m-l-0 {
+  margin-left: 0px;
+}
+
+.m-t-0 {
+  margin-top: 0px;
+}
+
+.m-b-0 {
+  margin-bottom: 0px;
+}
+
+.m-r-5 {
+  margin-right: 5px;
+}
+
+.m-l-5 {
+  margin-left: 5px;
+}
+
+.m-t-5 {
+  margin-top: 5px;
+}
+
+.m-b-5 {
+  margin-bottom: 5px;
+}
+
+
+.m-r-10 {
+  margin-right: 10px;
+}
+
+.m-l-10 {
+  margin-left: 10px;
+}
+
+.m-t-10 {
+  margin-top: 10px;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
+}
+
+.m-r-15 {
+  margin-right: 15px;
+}
+
+.m-l-15 {
+  margin-left: 15px;
+}
+
+.m-t-15 {
+  margin-top: 15px;
+}
+
+.m-b-15 {
+  margin-bottom: 15px;
+}
+
+.m-r-20 {
+  margin-right: 20px;
+}
+
+.m-l-20 {
+  margin-left: 20px;
+}
+
+.m-t-20 {
+  margin-top: 20px;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+/* Error pages */
+.error-page {
+  min-height: 80%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 100%;
+  }
+}
+/* Error pages - End */

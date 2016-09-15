@@ -7,8 +7,8 @@ class Testributor.Pages.ProjectWizard
     $('.provider-box input[type="radio"]').on "change", (e)=>
       $('.provider-list').addClass('hidden')
       $target = $(e.currentTarget)
-      $target.closest('form').find('label').removeClass('selected')
-      $target.closest('label').addClass('selected')
+      $target.closest('form').find('label').removeClass('active')
+      $target.closest('label').addClass('active')
 
       currentPath = $target.data('current-path')
       if currentPath

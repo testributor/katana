@@ -34,7 +34,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.optional :readonly
 
-    b.wrapper tag: 'div', class: 'checkbox' do |ba|
+    b.wrapper tag: 'div', class: 'togglebutton' do |ba|
       ba.use :label_input
     end
 
@@ -86,7 +86,7 @@ SimpleForm.setup do |config|
     b.optional :readonly
 
     b.wrapper tag: 'div', class: 'col-sm-offset-3 col-sm-9' do |wr|
-      wr.wrapper tag: 'div', class: 'checkbox' do |ba|
+      wr.wrapper tag: 'div', class: 'togglebutton' do |ba|
         ba.use :label_input
       end
 

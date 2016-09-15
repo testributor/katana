@@ -1,53 +1,53 @@
 - if @response_data[:repos].any?
-  .panel-title
-    %h3 Select a Bitbucket repository:
-  .panel-body
-    .list-group
-      - @response_data[:repos].each do |repo|
-        :ruby
-          if repo[:cannot_import_message]
-            url = "#"
-            klass = "disabled"
-            link_method = nil
-            tooltip_options =
-              { data: {toggle: 'tooltip'}, title: repo[:cannot_import_message] }
-          else
-            url = project_wizard_path(repository_owner: repo[:owner],
-              repository_name: repo[:name], repository_slug: repo[:slug],
-              is_private: repo[:is_private],
-              repository_provider: 'bitbucket')
-            klass = ""
-            link_method = :put
-            tooltip_options = {}
-          end
+  .clearfix
+    .pull-left
+      %h3 Select a Bitbucket repository:
+  .list-group
+    - @response_data[:repos].each do |repo|
+      :ruby
+        if repo[:cannot_import_message]
+          url = "#"
+          klass = "disabled"
+          link_method = nil
+          tooltip_options =
+            { data: {toggle: 'tooltip'}, title: repo[:cannot_import_message] }
+        else
+          url = project_wizard_path(repository_owner: repo[:owner],
+            repository_name: repo[:name], repository_slug: repo[:slug],
+            is_private: repo[:is_private],
+            repository_provider: 'bitbucket')
+          klass = ""
+          link_method = :put
+          tooltip_options = {}
+        end
 
-        = link_to url, { method: link_method,
-          class: "list-group-item #{klass}" }.merge(tooltip_options) do
-          .badge-area
-            - if repo[:is_fork]
-              %span.badge
-                %i.fa.fa-code-fork.m-r-5
-                FORK
-            - if repo[:is_private] == false
-              %span.badge{title: 'Everyone can access your build pages. You can change this in your project settings page.'}
-                %i.fa.fa-unlock.m-r-5
-                PUBLIC
-            - else
-              %span.badge{title: 'Your project build pages will be visible ONLY to project members. You can change this in your project settings page.'}
-                %i.fa.fa-lock.m-r-5
-                PRIVATE
-          .list-group-item-heading
-            #{repo[:full_name]}
-          .list-group-item-text
-            #{repo[:description]}
-
-
+      = link_to url, { method: link_method,
+        class: "list-group-item #{klass}" }.merge(tooltip_options) do
+        .clearfix
+          .pull-left
+            .list-group-item-heading
+              #{repo[:full_name]}
+            .list-group-item-text
+              #{repo[:description]}
+          .pull-right
+            .badge-area
+              - if repo[:is_fork]
+                %span.badge
+                  %i.fa.fa-code-fork.m-r-5
+                  FORK
+              - if repo[:is_private] == false
+                %span.badge{title: 'Everyone can access your build pages. You can change this in your project settings page.'}
+                  %i.fa.fa-unlock.m-r-5
+                  PUBLIC
+              - else
+                %span.badge{title: 'Your project build pages will be visible ONLY to project members. You can change this in your project settings page.'}
+                  %i.fa.fa-lock.m-r-5
+                  PRIVATE
 
     -# TODO Add pagination support when migrate to using BitBucket API v2
 - else
-  .panel-title
-    %h3 No repositories found! None. Zero. Zilch. Nada.
-    We were unable to find any repositories. If this is unexpected for you,
-    please check if you need to manually approve access of Testributor to
-    those organisations you are member of or create at least one personal
-    repository and then refresh this page.
+  %h3 No repositories found! None. Zero. Zilch. Nada.
+  We were unable to find any repositories. If this is unexpected for you,
+  please check if you need to manually approve access of Testributor to
+  those organisations you are member of or create at least one personal
+  repository and then refresh this page.

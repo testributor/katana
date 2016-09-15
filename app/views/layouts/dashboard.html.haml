@@ -19,7 +19,9 @@
     %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
     %meta{content: "width=device-width, initial-scale=1.0", name: "viewport"}
     = render "layouts/favicon"
-    %link{href: "//fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,600,700,900,400italic", rel: "stylesheet"}
+    %link{rel:"stylesheet", href:"http://fonts.googleapis.com/css?family=Roboto:300,400,500,700", type:"text/css"}
+    %link{href:"https://fonts.googleapis.com/icon?family=Material+Icons", rel:"stylesheet"}
+    %link{href: "//fonts.googleapis.com/css?family=Source+Sans+Pro:100,300,400,500,600,700,900,400italic", rel: "stylesheet"}
 
     = stylesheet_link_tag    'dashboard', media: 'all'
     = csrf_meta_tags
@@ -41,16 +43,15 @@
         - if flash[:alert].present?
           .alert.alert-danger= flash[:alert].html_safe
         - if current_project
-          .col-sm-9
-            = render 'project_header', project: current_project
-            .row
-              .col-sm-12
-                = yield
-          .col-sm-3
-            - if content_for(:help)
-              = content_for(:help)
-            - else
-              = render 'right_help_bar'
+          .row
+            .col-md-9
+              = render 'project_header', project: current_project
+              = yield
+            .col-md-3
+              - if content_for(:help)
+                = content_for(:help)
+              - else
+                = render 'right_help_bar'
         - else
           = yield
 

@@ -6,7 +6,7 @@ body.settings {
       }
 
       .form-row {
-        margin-top: 10px;
+        margin-top: 20px;
       }
     }
   }
@@ -24,4 +24,17 @@ body.settings {
       margin-left: 10px;
     }
   }
+
+  .notification-settings-cards {
+    .form-group {
+      margin: 0;
+    }
+  }
+
+  .technology-selections {
+    .multi-select {
+      width: 100%;
+    }
+  }
+
 }

@@ -1,14 +1,14 @@
-.row.m-t-10
-  .col-md-12
-    = render 'settings/settings_common_header'
-    .row.panelized
-      .col-xs-12-offset-1
-        %h3
-          Users
-          - if can? :manage, current_project
-            = link_to new_project_user_invitation_path(current_project), class: 'm-l-10 btn btn-default' do
-              %i.fa.fa-users
-              %span.nav-label= t('invite_users')
+= render 'settings/settings_common_header'
+.panelized
+  .row
+    .col-xs-12
+      %h3
+        Users
+        - if can? :manage, current_project
+          = link_to new_project_user_invitation_path(current_project), class: 'm-l-10 btn btn-default' do
+            %i.fa.fa-users
+            %span.nav-label= t('invite_users')
+    .col-xs-12
       - if @participations.any?
         %table.table
           %thead
@@ -31,7 +31,7 @@
                       end
 
                     = link_to(project_settings_participation_path(current_project, participation),
-                      method: :delete, class: 'btn btn-danger',
+                      method: :delete, class: 'btn btn-raised btn-danger',
                       data: { confirm: message }) do
                       %i.fa.fa-remove
                       Revoke access
@@ -56,11 +56,11 @@
                 %td
                   .btn-toolbar
                     = link_to(resend_project_user_invitation_path(current_project, invitation),
-                      method: :post, class: 'btn btn-default') do
+                      method: :post, class: 'btn btn-raised btn-default') do
                       %i.fa.fa-envelope-o
                       Resend invitation
                     = link_to(project_user_invitation_path(current_project, invitation),
-                      method: :delete, class: 'btn btn-danger',
+                      method: :delete, class: 'btn btn-raised btn-danger',
                       data: { confirm: "Are you sure?" }) do
                       %i.fa.fa-remove
                       Cancel invitation

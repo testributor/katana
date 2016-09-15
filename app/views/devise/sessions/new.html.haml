@@ -1,37 +1,27 @@
 = content_for :title do
   Testributor: Log in to your account
-
-.wrapper-page.animated.fadeInDown
-  .panel.panel-color.panel-primary
-    .panel-heading
-      %h3.text-center.m-t-10
-        = link_to root_path do
-          %div.logo-front
-            %img{alt: "logo", src: image_path("logo.png")}
-            %h2 Log in to Testributor
-    = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal m-t-40' }) do |f|
+= content_for :header_title do
+  Log in to Testributor
+= render layout: 'layouts/devise' do
+  .col-xs-12
+    = form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: 'form-horizontal' }) do |f|
       = flash_messages
       .form-group
-        .col-xs-12
-          = f.email_field :email, autofocus: true, class: "form-control",
-            type: "text", placeholder: 'E-mail', required: true
+        = f.email_field :email, autofocus: true, class: "form-control",
+            placeholder: "E-mail", type: "text", required: true
       .form-group
-        .col-xs-12
-          = f.password_field :password, autocomplete: "off", class: "form-control",
+        = f.password_field :password, autocomplete: "off", class: "form-control",
             placeholder: "Password", type: "password", required: true
 
       - if devise_mapping.rememberable?
         .form-group
-          .col-xs-12
-            = f.check_box :remember_me
-            = f.label :remember_me, class: 'cr-styled'
-      .form-group.text-right
-        .col-xs-12
-          = f.submit "Log in", class: "btn btn-primary w-md"
+          .checkbox
+            = f.label :remember_me do
+              = f.check_box :remember_me
+              = "Remember me"
+        .form-group
+          = f.submit "Log in", class: "btn btn-block btn-raised btn-primary"
 
       = render "devise/shared/links"
-      .form-group.m-t-30
-        .col-sm-7
-        - if devise_mapping.registerable? && controller_name != 'registrations'
-          .col-sm-5.text-right
-            = link_to "Create an account", new_registration_path(resource_name)
+      - if devise_mapping.registerable? && controller_name != 'registrations'
+        = link_to "Create an account", new_registration_path(resource_name)
