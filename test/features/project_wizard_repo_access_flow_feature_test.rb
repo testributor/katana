@@ -53,8 +53,8 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
         visit project_wizard_path(:select_repository)
         find('label', text: "GITHUB").click
         page.must_have_selector('.private-repo-access .btn')
-        panel_body = page.all('.panel-body')[1]
-        within panel_body do
+        list_group = page.find('.list-group')
+        within list_group do
           page.wont_have_content('PRIVATE')
         end
       end
@@ -81,8 +81,8 @@ class ProjectWizardRepoAccessFlowFeatureTest< Capybara::Rails::TestCase
         visit project_wizard_path(:select_repository)
           find('label', text: "GITHUB").click
           page.must_have_content 'ispyropoulos/aroma-kouzinas'
-        panel_body = page.all('.panel-body')[1]
-        within panel_body do
+        list_group = page.find('.list-group')
+        within list_group do
           page.must_have_content('PRIVATE')
         end
       end
