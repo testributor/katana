@@ -91,10 +91,6 @@
   margin-bottom: 10px;
 }
 
-.panel {
-  min-width: 800px;
-}
-
 /* Devise */
 
 
@@ -324,7 +320,7 @@
 .badge-area {
   text-align: right;
   float: right;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .provider-list {
@@ -504,6 +500,10 @@
     margin-left: -30px;
     left: 50%;
     top: 50%;
+  }
+
+  .loading-spinner-image {
+    max-width: 60px;
   }
 }
 

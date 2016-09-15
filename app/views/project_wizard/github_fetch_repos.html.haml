@@ -1,76 +1,77 @@
 - if @response_data[:repos].any?
-  .panel-title
+  .clearfix
     .pull-left
       %h3 Select a GitHub repository:
-    .pull-right.private-repo-access
-      - if current_user.github_client && !current_user.github_client.scopes.include?('repo')
+    - if current_user.github_client && !current_user.github_client.scopes.include?('repo')
+      .pull-right.private-repo-access
         = link_to github_private_repo_oauth_authorize_url, class: 'btn btn-raised btn-default' do
           %i.fa.fa-unlock-alt
           Grant private repository access
-  .panel-body.clear-floats
-    .list-group
-      - @response_data[:repos].each do |repo|
-        :ruby
-          if repo[:cannot_import_message]
-            url = "#"
-            klass = "disabled"
-            method = nil
-            tooltip_options =
-              { data: {toggle: 'tooltip', trigger: 'hover'}, title: repo[:cannot_import_message] }
-          else
-            url = project_wizard_path(repository_owner: repo[:owner],
-              repository_url: repo[:repository_url],
-              repository_name: repo[:name], repository_id: repo[:id],
-              is_private: repo[:is_private],
-              repository_provider: 'github')
-            klass = ""
-            method = :put
-            tooltip_options = {}
-          end
+  .list-group
+    - @response_data[:repos].each do |repo|
+      :ruby
+        if repo[:cannot_import_message]
+          url = "#"
+          klass = "disabled"
+          method = nil
+          tooltip_options =
+            { data: {toggle: 'tooltip', trigger: 'hover'}, title: repo[:cannot_import_message] }
+        else
+          url = project_wizard_path(repository_owner: repo[:owner],
+            repository_url: repo[:repository_url],
+            repository_name: repo[:name], repository_id: repo[:id],
+            is_private: repo[:is_private],
+            repository_provider: 'github')
+          klass = ""
+          method = :put
+          tooltip_options = {}
+        end
 
-        = link_to url, { method: method,
-          class: "list-group-item #{klass}" }.merge(tooltip_options) do
-          .badge-area
-            - if repo[:is_fork]
-              %span.badge
-                %i.fa.fa-code-fork.m-r-5
-                FORK
-            - if repo[:is_private] == false
-              %span.badge{title: 'Everyone can access your build pages. You can change this in your project settings page.'}
-                %i.fa.fa-unlock.m-r-5
-                PUBLIC
-            - else
-              %span.badge{title: 'Your project build pages will be visible ONLY to project members. You can change this in your project settings page.'}
-                %i.fa.fa-lock.m-r-5
-                PRIVATE
-          .list-group-item-heading
-            #{repo[:full_name]}
-          .list-group-item-text
-            #{repo[:description]}
+      = link_to url, { method: method,
+        class: "list-group-item #{klass}" }.merge(tooltip_options) do
+        .clearfix
+          .pull-left
+            .list-group-item-heading
+              #{repo[:full_name]}
+            .list-group-item-text
+              #{repo[:description]}
+          .pull-right
+            .badge-area
+              - if repo[:is_fork]
+                %span.badge
+                  %i.fa.fa-code-fork.m-r-5
+                  FORK
+              - if repo[:is_private] == false
+                %span.badge{title: 'Everyone can access your build pages. You can change this in your project settings page.'}
+                  %i.fa.fa-unlock.m-r-5
+                  PUBLIC
+              - else
+                %span.badge{title: 'Your project build pages will be visible ONLY to project members. You can change this in your project settings page.'}
+                  %i.fa.fa-lock.m-r-5
+                  PRIVATE
 
 
-      - page_manager = GithubPageManager.new(@response_data[:last_response])
-      - if page_manager.all_pages_number > 1
-        %ul.pagination.m-b-5
-          - if previous_page = page_manager.previous_page_number
-            %li
-              = link_to fetch_repos_project_wizard_path(page: previous_page,
-                repository_provider: "github"), aria_label: 'Previous' do
-                %i.fa.fa-angle-left
-          - (1..page_manager.all_pages_number).each do |i|
-            %li{ class: ('active' if i == page_manager.current_page_number) }
-              = link_to i, fetch_repos_project_wizard_path(page: i,
-                repository_provider: "github")
-          - if next_page = page_manager.next_page_number
-            %li
-              = link_to fetch_repos_project_wizard_path(page: next_page,
-                repository_provider: "github"), aria_label: 'Next' do
-                %i.fa.fa-angle-right
+    - page_manager = GithubPageManager.new(@response_data[:last_response])
+    - if page_manager.all_pages_number > 1
+      %ul.pagination.m-b-5
+        - if previous_page = page_manager.previous_page_number
+          %li
+            = link_to fetch_repos_project_wizard_path(page: previous_page,
+              repository_provider: "github"), aria_label: 'Previous' do
+              %i.fa.fa-angle-left
+        - (1..page_manager.all_pages_number).each do |i|
+          %li{ class: ('active' if i == page_manager.current_page_number) }
+            = link_to i, fetch_repos_project_wizard_path(page: i,
+              repository_provider: "github")
+        - if next_page = page_manager.next_page_number
+          %li
+            = link_to fetch_repos_project_wizard_path(page: next_page,
+              repository_provider: "github"), aria_label: 'Next' do
+              %i.fa.fa-angle-right
 
 - else
-  .panel-title
-    %h3 No repositories found! None. Zero. Zilch. Nada.
-    We were unable to find any repositories. If this is unexpected for you,
-    please check if you need to manually approve access of Testributor to
-    those organisations you are member of or create at least one personal
-    repository and then refresh this page.
+  %h3 No repositories found! None. Zero. Zilch. Nada.
+  We were unable to find any repositories. If this is unexpected for you,
+  please check if you need to manually approve access of Testributor to
+  those organisations you are member of or create at least one personal
+  repository and then refresh this page.

@@ -1,148 +1,135 @@
-.col-xs-12
-  = render 'layouts/wizard_steps'
-.col-xs-12
-  .panel.panel-default
-    .panel-heading
-      %h3 Select a repository provider:
-    .panel-body
-      .col-md-12.m-t-10
+.row
+  .col-xs-12
+    = render 'layouts/wizard_steps'
+  .col-xs-12
+    .panel.panel-default
+      .panel-heading
+        %h3 Select a repository provider:
+      .panel-body
         = form_tag project_wizard_path(id: step), method: :put do
-          .col-sm-4
-            .row
-              .col-sm-12
-                - if current_user.github_access_token
-                  .m-t-0
-                    %label.provider-box.btn.btn-default
-                      = radio_button_tag "repository_provider", "github",
-                        params[:repository_provider] == "github",
-                        data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
-                                repository_provider: "github") }
+          .row
+            .col-sm-4
+              - if current_user.github_access_token
+                %label.provider-box.btn.btn-raised.btn-primary
+                  = radio_button_tag "repository_provider", "github",
+                    params[:repository_provider] == "github",
+                    data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
+                            repository_provider: "github") }
 
-                      %i.fa.fa-github
-                      GitHub
-                    %i.help-block
-                      %i.fa.fa-check{style: 'color: green;'}
-                      - if current_user.github_client && current_user.github_client.scopes.include?('repo')
-                        Access to public & private repositories granted
-                      - else
-                        Access to public repositories granted
-                - else
-                  = link_to github_public_repo_oauth_authorize_url do
-                    .provider-box.btn.btn-default
-                      %i.fa.fa-github
-                      GitHub
-                  %i.help-block
-                    %i.fa.fa-info{style: 'color: orange;'}
-                    You will be redirected to authorize public repository access
-                    %br
-                    Note: You can upgrade access to private repositories later
-            .row
-              .col-sm-12.provider-list
-                %ul.list-unstyled
-                  %li
-                    %i.fa.fa-circle-thin
-                    Automatic integration
-                  %li
-                    %i.fa.fa-circle-thin
-                    New branches automatically tracked
-                  %li
-                    %i.fa.fa-circle-thin
-                    Builds added automatically
-                  %li
-                    %i.fa.fa-circle-thin
-                    Pull Request status integration
-          .col-sm-4
-            .row
-              .col-sm-12
-                - if current_user.bitbucket_access_token
-                  .m-t-0
-                    %label.provider-box.btn.btn-default
-                      = radio_button_tag "repository_provider", "bitbucket",
-                        params[:repository_provider] == "bitbucket",
-                        data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
-                                repository_provider: "bitbucket") }
-                      %i.fa.fa-bitbucket
-                      Bitbucket
-                  %i.help-block
-                    %i.fa.fa-check{style: 'color: green;'}
+                  %i.fa.fa-github
+                  GitHub
+                %i.help-block
+                  %i.fa.fa-check{style: 'color: green;'}
+                  - if current_user.github_client && current_user.github_client.scopes.include?('repo')
                     Access to public & private repositories granted
-                - else
-                  = link_to authorize_bitbucket_access_path do
-                    .provider-box.btn.btn-default
-                      %i.fa.fa-bitbucket
-                      Bitbucket
-                  %i.help-block
-                    %i.fa.fa-info{style: 'color: orange;'}
-                    You will be redirected to authorize public & private repository access
-                    %br
-                    Note: Bitbucket authorises access to both public and private repositories without distinction.
-                    This is not a Testributor limitation.
-            .row
-              .col-sm-12.provider-list
-                %ul.list-unstyled
-                  %li
-                    %i.fa.fa-circle-thin
-                    Automatic integration
-                  %li
-                    %i.fa.fa-circle-thin
-                    New branches automatically tracked
-                  %li
-                    %i.fa.fa-circle-thin
-                    Builds added automatically
-          .col-sm-4
-            .row
-              .col-sm-12
-                .m-t-0
-                  %label.provider-box.btn.btn-default
-                    = radio_button_tag "repository_provider", "bare_repo",
-                      params[:repository_provider] == "bare_repo"
-                    %i.fa.fa-git-square
-                    Bare repo
-                  %i.help-block
-                    %i.fa.fa-info{style: 'color: orange;'}
-                    Access only to the provided repository url
-            .row
-              .col-sm-12.provider-list
-                %ul.list-unstyled
-                  %li
-                    %i.fa.fa-circle-thin
-                    Manual integration (repository url & SSH key)
-                  %li
-                    %i.fa.fa-circle-thin
-                    No third party authorisation needed
-                  %li
-                    %i.fa.fa-circle-thin
-                    Builds added manually
-                  %li
-                    %i.fa.fa-circle-thin
-                    No Pull Request status integration
-                  %li
-                    %i.fa.fa-circle-thin
-                    Increased Privacy
-                  %li
-                    %i.fa.fa-circle-thin
-                    Compatible with any Git repository provider
+                  - else
+                    Access to public repositories granted
+              - else
+                = link_to github_public_repo_oauth_authorize_url do
+                  .provider-box.btn.btn-raised.btn-primary
+                    %i.fa.fa-github
+                    GitHub
+                %i.help-block
+                  %i.fa.fa-info{style: 'color: orange;'}
+                  You will be redirected to authorize public repository access
+                  %br
+                  Note: You can upgrade access to private repositories later
+              %ul.list-unstyled.provider-list
+                %li
+                  %i.fa.fa-circle-thin
+                  Automatic integration
+                %li
+                  %i.fa.fa-circle-thin
+                  New branches automatically tracked
+                %li
+                  %i.fa.fa-circle-thin
+                  Builds added automatically
+                %li
+                  %i.fa.fa-circle-thin
+                  Pull Request status integration
+            .col-sm-4
+              - if current_user.bitbucket_access_token
+                %label.provider-box.btn.btn-raised.btn-primary
+                  = radio_button_tag "repository_provider", "bitbucket",
+                    params[:repository_provider] == "bitbucket",
+                    data: { current_path: fetch_repos_project_wizard_path(page: params[:page],
+                            repository_provider: "bitbucket") }
+                  %i.fa.fa-bitbucket
+                  Bitbucket
+                %i.help-block
+                  %i.fa.fa-check{style: 'color: green;'}
+                  Access to public & private repositories granted
+              - else
+                = link_to authorize_bitbucket_access_path do
+                  .provider-box.btn.btn-raised.btn-primary
+                    %i.fa.fa-bitbucket
+                    Bitbucket
+                %i.help-block
+                  %i.fa.fa-info{style: 'color: orange;'}
+                  You will be redirected to authorize public & private repository access
+                  %br
+                  Note: Bitbucket authorises access to both public and private repositories without distinction.
+                  This is not a Testributor limitation.
+              %ul.list-unstyled.provider-list
+                %li
+                  %i.fa.fa-circle-thin
+                  Automatic integration
+                %li
+                  %i.fa.fa-circle-thin
+                  New branches automatically tracked
+                %li
+                  %i.fa.fa-circle-thin
+                  Builds added automatically
+            .col-sm-4
+              %label.provider-box.btn.btn-raised.btn-primary
+                = radio_button_tag "repository_provider", "bare_repo",
+                  params[:repository_provider] == "bare_repo"
+                %i.fa.fa-git-square
+                Bare repo
+              %i.help-block
+                %i.fa.fa-info{style: 'color: orange;'}
+                Access only to the provided repository url
+              %ul.list-unstyled.provider-list
+                %li
+                  %i.fa.fa-circle-thin
+                  Manual integration (repository url & SSH key)
+                %li
+                  %i.fa.fa-circle-thin
+                  No third party authorisation needed
+                %li
+                  %i.fa.fa-circle-thin
+                  Builds added manually
+                %li
+                  %i.fa.fa-circle-thin
+                  No Pull Request status integration
+                %li
+                  %i.fa.fa-circle-thin
+                  Increased Privacy
+                %li
+                  %i.fa.fa-circle-thin
+                  Compatible with any Git repository provider
 
-          .col-xs-12.fetch-repos
-            .js-fetching-repos.text-center.loading-overlay
-              %h3 Fetching your repositories. Please give us a few seconds...
-              %p= image_tag('loading_spinner.gif')
-            .js-fetch-repos
+          .row
+            .col-xs-12.fetch-repos
+              .js-fetching-repos.text-center.loading-overlay
+                %h3 Fetching your repositories. Please give us a few seconds...
+                %p= image_tag('loading_spinner.gif', class: 'loading-spinner-image')
+              .js-fetch-repos
 
-            .bare-repo{ style: "display: none" }
-              %h3 Git bare repository
-              .form-group
-                = label_tag :repository_name, "Name"
-                = text_field_tag :repository_name, params[:repository_name], class: "form-control", placeholder: "Enter the desired name of your project"
-              .form-group
-                = label_tag :repository_url
-                = text_field_tag :repository_url, params[:repository_url],
-                  placeholder: "Enter the Git repository url here (e.g. git@github:username/repository.git)",
-                  class: "form-control"
+              .bare-repo{ style: "display: none" }
+                %h3 Git bare repository
+                .form-group
+                  = label_tag :repository_name, "Name"
+                  = text_field_tag :repository_name, params[:repository_name], class: "form-control", placeholder: "Enter the desired name of your project"
+                .form-group
+                  = label_tag :repository_url
+                  = text_field_tag :repository_url, params[:repository_url],
+                    placeholder: "Enter the Git repository url here (e.g. git@github:username/repository.git)",
+                    class: "form-control"
 
-              .form-group
-                = label_tag :private_key
-                = text_area_tag :private_key, params[:private_key],
-                  placeholder: 'Paste the private SSH key here',
-                  class: 'form-control'
-              = submit_tag "Next", class: "btn btn-raised btn-primary w-lg btn-lg pull-right"
+                .form-group
+                  = label_tag :private_key
+                  = text_area_tag :private_key, params[:private_key],
+                    placeholder: 'Paste the private SSH key here',
+                    class: 'form-control'
+                = submit_tag "Next", class: "btn btn-raised btn-primary w-lg btn-lg pull-right"
