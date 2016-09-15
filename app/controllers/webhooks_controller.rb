@@ -76,7 +76,7 @@ class WebhooksController < ApplicationController
         commit_message:    head_commit[:message],
         commit_timestamp:  head_commit[:date],
         commit_url:        head_commit[:links][:html][:href],
-        commit_committer_photo_url: head_commit[:author][:user][:links][:avatar][:href],
+        commit_committer_photo_url: bitbucket_photo_url(head_commit),
         tracked_branch_id: tracked_branch.id,
       })
     end
@@ -112,5 +112,9 @@ class WebhooksController < ApplicationController
     else
       project.tracked_branches.find_by(branch_name: branch_name)
     end
+  end
+
+  def bitbucket_photo_url(commit)
+    commit["author"].try(:[], "user").try(:[], "links").try(:[],"avatar").try(:[], "href")
   end
 end
