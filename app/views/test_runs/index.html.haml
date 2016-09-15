@@ -9,11 +9,10 @@
               .name
                 = branch.branch_name
             - if can? :untrack_branch, branch
-              .col-xs-1
-                = button_to project_branch_path(current_project, branch),
-                  method: :delete, style: "background-color: #fff; border: none; width: 0px; padding: 0px; z-index: 1;",
-                  data: { confirm: "Branch will be removed from this project. Are you sure?" } do
-                  %i.fa.fa-times-circle
+              = button_to project_branch_path(current_project, branch),
+                method: :delete, class: 'remove-branch-btn',
+                data: { confirm: "Branch will be removed from this project. Are you sure?" } do
+                %i.fa.fa-times-circle
       = link_to new_project_branch_path(current_project), class: 'track-a-branch' do
         - if can?(:create, TrackedBranch)
           %i.fa.fa-plus
