@@ -68,6 +68,9 @@ group :production do
 end
 
 group :test do
+  # As of rails 5 the `assigns` method of ActionController::TestCase is 
+  # deprecated. To continue using it, we us the rails-controller-testing gem
+  gem 'rails-controller-testing'
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'poltergeist'
