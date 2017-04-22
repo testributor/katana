@@ -20,6 +20,8 @@ services:
       RAILS_ENV: development
       SECRET_KEY_BASE: e9744e038fb87c6bfb52d5aa0f2f1a865fbd242a6ce162cb6e5cae9e5e90c558c32f369d3d68ea0ae5325916fb55507a164011964edc4ac2bf1a31a0573efe73
       REDIS_URL: redis://redis:6379
+    env_file:
+      - .env
     ports:
       - "3000:3000"
   postgres:
